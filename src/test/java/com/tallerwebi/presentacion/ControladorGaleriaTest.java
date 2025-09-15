@@ -1,11 +1,19 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.EstadoDisponibilidad;
 import com.tallerwebi.dominio.Obra;
 import com.tallerwebi.dominio.ServicioObra;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.web.servlet.ModelAndView;
 
-import static org.mockito.Mockito.mock;
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.Matchers.*;
+import static org.mockito.Mockito.*;
 
 public class ControladorGaleriaTest {
 
@@ -19,19 +27,34 @@ public class ControladorGaleriaTest {
     }
 
     @Test
-    public void listarObrasDeberiaRetornarVistaGaleriaConObras() {
+    public void listarObrasDeberiaRetornarVistaGaleriaConObrasSiExistenObrasAlmacenadas() {
         // preparación
-        Obra obra1 = new Obra(1L, "Obra 1", "Descripción 1", 100.0);
-        Obra obra2 = new Obra(2L, "Obra 2", "Descripción 2", 200.0);
+        Obra obra1 = new Obra("Obra 1", "Descripción de obra 1", "30 x 20", LocalDate.now(), EstadoDisponibilidad.DISPONIBLE, 10);
+        Obra obra2 = new Obra("Obra 2", "Descripción de obra 2", "40 x 30", LocalDate.now(), EstadoDisponibilidad.DISPONIBLE, 5);
         List<Obra> obras = Arrays.asList(obra1, obra2);
-        when(obraServiceMock.listarObras()).thenReturn(obras);
+        when(servicioObraMock.listarObras()).thenReturn(obras);
 
         // ejecución
-        ModelAndView mav = galeriaController.listarObras();
+        ModelAndView mav = controladorGaleria.listarObras();
 
         // validación
         assertThat(mav.getViewName(), equalToIgnoringCase("galeria"));
         assertThat((List<Obra>) mav.getModel().get("obras"), hasSize(2));
-        verify(obraServiceMock, times(1)).listarObras();
+        verify(servicioObraMock, times(1)).listarObras();
     }
+
+    @Test
+    public void listarObrasDeberiaRetornarVistaGaleriaConListaVaciaSiListarObrasEsNull() {
+        // preparación
+        when(servicioObraMock.listarObras()).thenReturn(null);
+
+        // ejecución
+        ModelAndView mav = controladorGaleria.listarObras();
+
+        // validación
+        assertThat(mav.getViewName(), equalToIgnoringCase("galeria"));
+        assertThat((List<Obra>) mav.getModel().get("obras"), hasSize(0));
+        verify(servicioObraMock, times(1)).listarObras();
+    }
+
 }

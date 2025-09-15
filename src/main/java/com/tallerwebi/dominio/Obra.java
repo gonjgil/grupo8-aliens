@@ -1,5 +1,9 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.entidad.Categoria;
+import com.tallerwebi.dominio.entidad.Formato;
+import com.tallerwebi.dominio.entidad.Medio;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
@@ -24,6 +28,15 @@ public class Obra {
     private List<Resenia> resenias;
     @OneToMany (mappedBy="obra")
     private List<Subasta> subastas;
+
+    public Obra(String titulo, String descripcion, String dimensiones, LocalDate fechaCreacion, EstadoDisponibilidad estadoDisponibilidad, int cantidadVistas) {
+        this.titulo = titulo;
+        this.descripcion = descripcion;
+        this.dimensiones = dimensiones;
+        this.fechaCreacion = fechaCreacion;
+        this.estadoDisponibilidad = estadoDisponibilidad;
+        this.cantidadVistas = cantidadVistas;
+    }
 
     public Long getId() {
         return id;
