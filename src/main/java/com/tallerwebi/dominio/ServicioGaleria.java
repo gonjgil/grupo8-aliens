@@ -2,7 +2,7 @@ package com.tallerwebi.dominio;
 
 import java.util.List;
 
-import com.tallerwebi.presentacion.ObraDto;
+import com.tallerwebi.infraestructura.ObraDto;
 
 public interface ServicioGaleria {
 
