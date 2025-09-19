@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aliens - Portfolio de Artistas</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" th:href="@{/css/welcome.css}" />
+  </head>
+  <body>
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm">
+        <div class="container-fluid">
+          <a class="navbar-brand fw-bold text-primary">Grupo 8</a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div
+            class="collapse navbar-collapse justify-content-end"
+            id="navbarNav"
+          >
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="btn btn-sm btn-primary rounded-pill px-3">
+                  Iniciar Sesión
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-fluid mt-5 pt-5">
+      <h1 class="text-center my-4 fw-light section-title">ALIENS</h1>
+      <h2 class="text-center my-4 fw-bold">Obras Aleatorias</h2>
+      <div class="carousel-wrapper">
+        <button
+          class="carousel-control-prev"
+          type="button"
+          data-bs-target="#carouselRandom"
+          data-bs-slide="prev"
+        >
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Anterior</span>
+        </button>
+        <div
+          id="carouselRandom"
+          class="carousel slide carousel-container"
+          data-bs-ride="carousel"
+        >
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <div class="carousel-item-multiple">
+                <div class="carousel-card-item">
+                  <div class="card">
+                    <img
+                      src="https://placehold.co/400x250/5a2e9b/ffffff?text=Aleatorio+1"
+                      class="card-img-top"
+                      alt="Aleatorio 1"
+                    />
+                    <div class="card-body">
+                      <h5 class="card-title fw-bold">Título Aleatorio 1</h5>
+                      <p class="card-text">Artista A</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="carousel-card-item">
+                  <div class="card">
+                    <img
+                      src="https://placehold.co/400x250/007bff/ffffff?text=Aleatorio+2"
+                      class="card-img-top"
+                      alt="Aleatorio 2"
+                    />
+                    <div class="card-body">
+                      <h5 class="card-title fw-bold">Título Aleatorio 2</h5>
+                      <p class="card-text">Artista B</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="carousel-card-item">
+                  <div class="card">
+                    <img
+                      src="https://placehold.co/400x250/5a2e9b/ffffff?text=Aleatorio+3"
+                      class="card-img-top"
+                      alt="Aleatorio 3"
+                    />
+                    <div class="card-body">
+                      <h5 class="card-title fw-bold">Título Aleatorio 3</h5>
+                      <p class="card-text">Artista C</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="carousel-card-item">
+                  <div class="card">
+                    <img
+                      src="https://placehold.co/400x250/007bff/ffffff?text=Aleatorio+4"
+                      class="card-img-top"
+                      alt="Aleatorio 4"
+                    />
+                    <div class="card-body">
+                      <h5 class="card-title fw-bold">Título Aleatorio 4</h5>
+                      <p class="card-text">Artista D</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <div class="carousel-item-multiple">
+                <div class="carousel-card-item">
+                  <div class="card">
+                    <img
+                      src="https://placehold.co/400x250/5a2e9b/ffffff?text=Aleatorio+5"
+                      class="card-img-top"
+                      alt="Aleatorio 5"
+                    />
+                    <div class="card-body">
+                      <h5 class="card-title fw-bold">Título Aleatorio 5</h5>
+                      <p class="card-text">Artista E</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="carousel-card-item">
+                  <div class="card">
+                    <img
+                      src="https://placehold.co/400x250/007bff/ffffff?text=Aleatorio+6"
+                      class="card-img-top"
+                      alt="Aleatorio 6"
+                    />
+                    <div class="card-body">
+                      <h5 class="card-title fw-bold">Título Aleatorio 6</h5>
+                      <p class="card-text">Artista F</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="carousel-card-item">
+                  <div class="card">
+                    <img
+                      src="https://placehold.co/400x250/5a2e9b/ffffff?text=Aleatorio+7"
+                      class="card-img-top"
+                      alt="Aleatorio 7"
+                    />
+                    <div class="card-body">
+                      <h5 class="card-title fw-bold">Título Aleatorio 7</h5>
+                      <p class="card-text">Artista G</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="carousel-card-item">
+                  <div class="card">
+                    <img
+                      src="https://placehold.co/400x250/007bff/ffffff?text=Aleatorio+8"
+                      class="card-img-top"
+                      alt="Aleatorio 8"
+                    />
+                    <div class="card-body">
+                      <h5 class="card-title fw-bold">Título Aleatorio 8</h5>
+                      <p class="card-text">Artista H</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button
+          class="carousel-control-next"
+          type="button"
+          data-bs-target="#carouselRandom"
+          data-bs-slide="next"
+        >
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Siguiente</span>
+        </button>
+      </div>
+
+      <h2 class="text-center my-4 fw-bold">Obras Temáticas</h2>
+      <div class="carousel-wrapper">
+        <button
+          class="carousel-control-prev"
+          type="button"
+          data-bs-target="#carouselRandom"
+          data-bs-slide="prev"
+        >
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Anterior</span>
+        </button>
+        <div
+          id="carouselThematic"
+          class="carousel slide carousel-container"
+          data-bs-ride="carousel"
+        >
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <div class="carousel-item-multiple">
+                <div class="carousel-card-item">
+                  <div class="card">
+                    <img
+                      src="https://placehold.co/400x250/ff6b6b/ffffff?text=Tema+1"
+                      class="card-img-top"
+                      alt="Tema 1"
+                    />
+                    <div class="card-body">
+                      <h5 class="card-title fw-bold">Título Temático 1</h5>
+                      <p class="card-text">Artista G</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="carousel-card-item">
+                  <div class="card">
+                    <img
+                      src="https://placehold.co/400x250/4ecdc4/ffffff?text=Tema+2"
+                      class="card-img-top"
+                      alt="Tema 2"
+                    />
+                    <div class="card-body">
+                      <h5 class="card-title fw-bold">Título Temático 2</h5>
+                      <p class="card-text">Artista H</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="carousel-card-item">
+                  <div class="card">
+                    <img
+                      src="https://placehold.co/400x250/ff6b6b/ffffff?text=Tema+3"
+                      class="card-img-top"
+                      alt="Tema 3"
+                    />
+                    <div class="card-body">
+                      <h5 class="card-title fw-bold">Título Temático 3</h5>
+                      <p class="card-text">Artista I</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="carousel-card-item">
+                  <div class="card">
+                    <img
+                      src="https://placehold.co/400x250/4ecdc4/ffffff?text=Tema+4"
+                      class="card-img-top"
+                      alt="Tema 4"
+                    />
+                    <div class="card-body">
+                      <h5 class="card-title fw-bold">Título Temático 4</h5>
+                      <p class="card-text">Artista J</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <div class="carousel-item-multiple">
+                <div class="carousel-card-item">
+                  <div class="card">
+                    <img
+                      src="https://placehold.co/400x250/ff6b6b/ffffff?text=Tema+5"
+                      class="card-img-top"
+                      alt="Tema 5"
+                    />
+                    <div class="card-body">
+                      <h5 class="card-title fw-bold">Título Temático 5</h5>
+                      <p class="card-text">Artista K</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="carousel-card-item">
+                  <div class="card">
+                    <img
+                      src="https://placehold.co/400x250/4ecdc4/ffffff?text=Tema+6"
+                      class="card-img-top"
+                      alt="Tema 6"
+                    />
+                    <div class="card-body">
+                      <h5 class="card-title fw-bold">Título Temático 6</h5>
+                      <p class="card-text">Artista L</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="carousel-card-item">
+                  <div class="card">
+                    <img
+                      src="https://placehold.co/400x250/ff6b6b/ffffff?text=Tema+7"
+                      class="card-img-top"
+                      alt="Tema 7"
+                    />
+                    <div class="card-body">
+                      <h5 class="card-title fw-bold">Título Temático 7</h5>
+                      <p class="card-text">Artista M</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="carousel-card-item">
+                  <div class="card">
+                    <img
+                      src="https://placehold.co/400x250/4ecdc4/ffffff?text=Tema+8"
+                      class="card-img-top"
+                      alt="Tema 8"
+                    />
+                    <div class="card-body">
+                      <h5 class="card-title fw-bold">Título Temático 8</h5>
+                      <p class="card-text">Artista N</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button
+          class="carousel-control-next"
+          type="button"
+          data-bs-target="#carouselThematic"
+          data-bs-slide="next"
+        >
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Siguiente</span>
+        </button>
+      </div>
+
+      <h2 class="text-center my-4 fw-bold">Obras de Artista Destacado</h2>
+      <div class="carousel-wrapper">
+        <button
+          class="carousel-control-prev"
+          type="button"
+          data-bs-target="#carouselRandom"
+          data-bs-slide="prev"
+        >
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Anterior</span>
+        </button>
+        <div
+          id="carouselFeatured"
+          class="carousel slide carousel-container"
+          data-bs-ride="carousel"
+        >
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <div class="carousel-item-multiple">
+                <div class="carousel-card-item">
+                  <div class="card">
+                    <img
+                      src="https://placehold.co/400x250/ffcd4d/ffffff?text=Destacado+1"
+                      class="card-img-top"
+                      alt="Destacado 1"
+                    />
+                    <div class="card-body">
+                      <h5 class="card-title fw-bold">Título Destacado 1</h5>
+                      <p class="card-text">Artista M</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="carousel-card-item">
+                  <div class="card">
+                    <img
+                      src="https://placehold.co/400x250/ffa62b/ffffff?text=Destacado+2"
+                      class="card-img-top"
+                      alt="Destacado 2"
+                    />
+                    <div class="card-body">
+                      <h5 class="card-title fw-bold">Título Destacado 2</h5>
+                      <p class="card-text">Artista M</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="carousel-card-item">
+                  <div class="card">
+                    <img
+                      src="https://placehold.co/400x250/ffcd4d/ffffff?text=Destacado+3"
+                      class="card-img-top"
+                      alt="Destacado 3"
+                    />
+                    <div class="card-body">
+                      <h5 class="card-title fw-bold">Título Destacado 3</h5>
+                      <p class="card-text">Artista M</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="carousel-card-item">
+                  <div class="card">
+                    <img
+                      src="https://placehold.co/400x250/ffa62b/ffffff?text=Destacado+4"
+                      class="card-img-top"
+                      alt="Destacado 4"
+                    />
+                    <div class="card-body">
+                      <h5 class="card-title fw-bold">Título Destacado 4</h5>
+                      <p class="card-text">Artista M</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <div class="carousel-item-multiple">
+                <div class="carousel-card-item">
+                  <div class="card">
+                    <img
+                      src="https://placehold.co/400x250/ffcd4d/ffffff?text=Destacado+5"
+                      class="card-img-top"
+                      alt="Destacado 5"
+                    />
+                    <div class="card-body">
+                      <h5 class="card-title fw-bold">Título Destacado 5</h5>
+                      <p class="card-text">Artista M</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="carousel-card-item">
+                  <div class="card">
+                    <img
+                      src="https://placehold.co/400x250/ffa62b/ffffff?text=Destacado+6"
+                      class="card-img-top"
+                      alt="Destacado 6"
+                    />
+                    <div class="card-body">
+                      <h5 class="card-title fw-bold">Título Destacado 6</h5>
+                      <p class="card-text">Artista M</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="carousel-card-item">
+                  <div class="card">
+                    <img
+                      src="https://placehold.co/400x250/ffcd4d/ffffff?text=Destacado+7"
+                      class="card-img-top"
+                      alt="Destacado 7"
+                    />
+                    <div class="card-body">
+                      <h5 class="card-title fw-bold">Título Destacado 7</h5>
+                      <p class="card-text">Artista M</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="carousel-card-item">
+                  <div class="card">
+                    <img
+                      src="https://placehold.co/400x250/ffa62b/ffffff?text=Destacado+8"
+                      class="card-img-top"
+                      alt="Destacado 8"
+                    />
+                    <div class="card-body">
+                      <h5 class="card-title fw-bold">Título Destacado 8</h5>
+                      <p class="card-text">Artista M</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button
+          class="carousel-control-next"
+          type="button"
+          data-bs-target="#carouselFeatured"
+          data-bs-slide="next"
+        >
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Siguiente</span>
+        </button>
+      </div>
+    </main>
+
+    <footer class="footer mt-auto py-3 text-center shadow-lg">
+      <div class="container">
+        <span class="text-muted">© 2025 Aliens.</span>
+      </div>
+    </footer>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cwae"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
