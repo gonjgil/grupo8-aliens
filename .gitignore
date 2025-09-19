@@ -22,3 +22,5 @@ hs_err_pid*
 **/node_modules/
 .vscode/
 .idea/
+resumen.md
+git_commands.md
