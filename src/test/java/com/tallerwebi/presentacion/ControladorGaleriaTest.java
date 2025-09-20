@@ -10,6 +10,7 @@ import com.tallerwebi.infraestructura.ObraDto;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.text.IsEqualIgnoringCase.equalToIgnoringCase;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -63,7 +64,7 @@ public class ControladorGaleriaTest {
     }
 
     @Test
-    public void alMostrarseLaGaleriaDeberianMostrarseUnaListaRandomUnaListaDeUnAutorYUnaListaDeUnTema() {
+    public void alMostrarseLaGaleriaDeberianMostrarseTresListasDiferentes() {
         ServicioGaleria servicioGaleria = Mockito.mock(ServicioGaleria.class);
 
         List<ObraDto> randomObras = new ArrayList<>();
@@ -77,6 +78,11 @@ public class ControladorGaleriaTest {
         ControladorGaleria controladorGaleria = new ControladorGaleria(servicioGaleria);
 
         ModelAndView modelAndView = controladorGaleria.mostrarGaleria();
+
+        assertEquals("galeria", modelAndView.getViewName());
+        assertEquals(randomObras, modelAndView.getModel().get("randomObras"));
+        assertEquals(autorObras, modelAndView.getModel().get("autorObras"));
+        assertEquals(temaObras, modelAndView.getModel().get("temaObras"));
     }
 
 }
