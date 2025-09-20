@@ -1,6 +1,7 @@
 package com.tallerwebi.presentacion;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.tallerwebi.dominio.ServicioGaleria;
@@ -15,18 +16,19 @@ import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.doThrow;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ControladorGaleriaTest {
 
     @Test
-    public void mostrarObras_deberiaRetornarListaVaciaSiNoHayObras() throws NoHayObrasExistentes {
+    public void mostrarGaleria_deberiaRetornarListaVaciaSiNoHayObras() throws NoHayObrasExistentes {
         ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
 
         ControladorGaleria controladorGaleria = new ControladorGaleria(servicioGaleria);
         doThrow(NoHayObrasExistentes.class).when(servicioGaleria).obtener();
 
-        ModelAndView modelAndView = controladorGaleria.mostarObras();
+        ModelAndView modelAndView = controladorGaleria.mostrarGaleria();
 
         assertThat(modelAndView.getViewName(), equalToIgnoringCase("galeria"));
         List<ObraDto> obrasDtoObtenidas = (List<ObraDto>) modelAndView.getModel().get("obras");
@@ -35,7 +37,7 @@ public class ControladorGaleriaTest {
     }
 
     @Test
-    public void siHay4obras_mostrarObras_deberiaRetornar4obras() {
+    public void siHay4obrasDeberiaRetornar4obras() {
         ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
         ObraDto obraDto1 = mock(ObraDto.class);
         ObraDto obraDto2 = mock(ObraDto.class);
@@ -47,17 +49,34 @@ public class ControladorGaleriaTest {
         obrasDto.add(obraDto3);
         obrasDto.add(obraDto4);
         when(servicioGaleria.obtener()).thenReturn(obrasDto);
-        
+
         ControladorGaleria controladorGaleria = new ControladorGaleria(servicioGaleria);
-         
+
         // ejecucion
-        ModelAndView  modelAndView = controladorGaleria.mostarObras();
-        
-        //verificacion
+        ModelAndView modelAndView = controladorGaleria.mostrarGaleria();
+
+        // verificacion
         assertThat(modelAndView.getViewName(), equalToIgnoringCase("galeria"));
         List<ObraDto> obrasDtoObtenidas = (List<ObraDto>) modelAndView.getModel().get("obras");
         assertThat(obrasDtoObtenidas.size(), equalTo(4));
         assertThat(modelAndView.getModel().get("exito").toString(), equalToIgnoringCase("Hay obras."));
+    }
+
+    @Test
+    public void alMostrarseLaGaleriaDeberianMostrarseUnaListaRandomUnaListaDeUnAutorYUnaListaDeUnTema() {
+        ServicioGaleria servicioGaleria = Mockito.mock(ServicioGaleria.class);
+
+        List<ObraDto> randomObras = new ArrayList<>();
+        List<ObraDto> autorObras = new ArrayList<>();
+        List<ObraDto> temaObras = new ArrayList<>();
+
+        Mockito.when(servicioGaleria.ordenarRandom()).thenReturn(randomObras);
+        Mockito.when(servicioGaleria.obtenerPorAutor(Mockito.anyString())).thenReturn(autorObras);
+        Mockito.when(servicioGaleria.obtenerPorCategoria(Mockito.anyString())).thenReturn(temaObras);
+
+        ControladorGaleria controladorGaleria = new ControladorGaleria(servicioGaleria);
+
+        ModelAndView modelAndView = controladorGaleria.mostrarGaleria();
     }
 
 }

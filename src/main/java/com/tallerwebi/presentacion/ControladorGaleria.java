@@ -17,34 +17,38 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @Controller
 @RequestMapping("/galeria")
-// PREGUNTAR como hacer para definir distintas vistas y esto sirva tanto para el home como para las diferentes galerias?
+// PREGUNTAR como hacer para definir distintas vistas y esto sirva tanto para el
+// home como para las diferentes galerias?
 public class ControladorGaleria {
 
-private List<ObraDto> obras;
+    private List<ObraDto> obras;
 
-@Autowired
-private ServicioGaleria servicioGaleria;
+    @Autowired
+    private ServicioGaleria servicioGaleria;
 
-public ControladorGaleria(ServicioGaleria servicioGaleria) {
-    this.obras = new ArrayList<>();
-    this.servicioGaleria = servicioGaleria;
-}
-
-@RequestMapping(path = "/", method = RequestMethod.GET)
-public ModelAndView mostarObras() {
-    
-    ModelMap model = new ModelMap();
-    
-    try {
-        List<ObraDto> obrasDto = this.servicioGaleria.obtener();
-        model.put("obras", obrasDto);
-        model.put("exito", "Hay obras.");
-    } catch (NoHayObrasExistentes e) {
-        model.put("obras", new ArrayList<>());
-        model.put("error", "No hay obras.");
+    public ControladorGaleria(ServicioGaleria servicioGaleria) {
+        this.obras = new ArrayList<>();
+        this.servicioGaleria = servicioGaleria;
     }
-    
-    return new ModelAndView("galeria", model);
-    // PREGUNTAR como hacer para que tambien apunte a "/galeria/autor" y replicar para otras url que definamos como filtro (estilo, favoritos, etc)
+
+    @RequestMapping(path = "/", method = RequestMethod.GET)
+    public ModelAndView mostrarGaleria() {
+
+        ModelMap model = new ModelMap();
+
+        try {
+            List<ObraDto> obrasDto = this.servicioGaleria.obtener();
+            model.put("obras", obrasDto);
+            model.put("exito", "Hay obras.");
+        } catch (NoHayObrasExistentes e) {
+            model.put("obras", new ArrayList<>());
+            model.put("error", "No hay obras.");
+        }
+        
+        model.put("randomObras", servicioGaleria.ordenarRandom());
+        model.put("autorObras", servicioGaleria.obtenerPorAutor("autorRandom"));
+        model.put("temaObras", servicioGaleria.obtenerPorCategoria("temaRandom"));
+
+        return new ModelAndView("galeria", model);
     }
 }
