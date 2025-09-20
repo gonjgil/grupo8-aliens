@@ -1,6 +1,7 @@
 package com.tallerwebi.infraestructura;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,28 @@ public class ServicioGaleriaImpl implements ServicioGaleria {
     }
 
     @Override
-    public List<ObraDto> obtenerPorAutor(String categoria) {
+    public List<ObraDto> ordenarRandom() {
+        List<Obra> todas = repositorioObra.obtenerTodas();
+        Collections.shuffle(todas);
+        List<ObraDto> ordenRandom = new ArrayList<>();
+        for (Obra obra : todas) {
+            ordenRandom.add(new ObraDto(obra));
+        }
+        return ordenRandom;
+    }
+
+    @Override
+    public List<ObraDto> obtenerPorAutor(String autor) {
+        List<Obra> obras = repositorioObra.obtenerPorAutor(autor);
+        List<ObraDto> dtos = new ArrayList<>();
+        for (Obra obra : obras) {
+            dtos.add(new ObraDto(obra));
+        }
+        return dtos;
+    }
+
+    @Override
+    public List<ObraDto> obtenerPorCategoria(String categoria) {
         List<Obra> obras = repositorioObra.obtenerPorAutor(categoria);
         List<ObraDto> dtos = new ArrayList<>();
         for (Obra obra : obras) {
@@ -54,4 +76,5 @@ public class ServicioGaleriaImpl implements ServicioGaleria {
         }
         return obraDto;
     }
+
 }

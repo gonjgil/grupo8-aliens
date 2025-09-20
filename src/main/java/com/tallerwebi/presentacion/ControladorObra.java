@@ -25,6 +25,7 @@ public class ControladorObra {
         this.servicioGaleria = servicioGaleria;
     }
 
+    // hablar con el profe sobre esta anotacion @PathVariable
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
     public ModelAndView verObra(@PathVariable Long id) {
         ModelMap model = new ModelMap();
