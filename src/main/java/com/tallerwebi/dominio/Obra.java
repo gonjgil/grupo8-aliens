@@ -1,5 +1,8 @@
 package com.tallerwebi.dominio;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -11,19 +14,26 @@ public class Obra {
     private String autor;
     private String imagenUrl;
     private String descripcion;
+    private LinkedHashMap<Usuario, Boolean> likes;
+    
+    public Obra() {
+        this.likes = new LinkedHashMap<>();
+    }
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-
+    
     public String getTitulo() { return titulo; }
     public void setTitulo(String titulo) { this.titulo = titulo; }
-
+    
     public String getAutor() { return autor; }
     public void setAutor(String autor) { this.autor = autor; }
-
+    
     public String getImagenUrl() { return imagenUrl; }
     public void setImagenUrl(String imagenUrl) { this.imagenUrl = imagenUrl; }
-
+    
     public String getDescripcion() { return descripcion; }
     public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
+
+    public Map<Usuario, Boolean> getLikes() { return likes; }
 }

@@ -1,6 +1,10 @@
 package com.tallerwebi.infraestructura;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import com.tallerwebi.dominio.Obra;
+import com.tallerwebi.dominio.Usuario;
 
 public class ObraDto {
     private Long id;
@@ -8,6 +12,7 @@ public class ObraDto {
     private String autor;
     private String imagenUrl;
     private String descripcion;
+    private LinkedHashMap<Usuario, Boolean> likes;
 
     public ObraDto(Obra obra) {
         this.id = obra.getId();
@@ -15,6 +20,11 @@ public class ObraDto {
         this.autor = obra.getAutor();
         this.imagenUrl = obra.getImagenUrl();
         this.descripcion = obra.getDescripcion();
+        this.likes = new LinkedHashMap<Usuario, Boolean>();
+    }
+
+    public ObraDto() {
+        this.likes = new LinkedHashMap<>();
     }
 
     public Long getId() { return id; }
@@ -31,4 +41,6 @@ public class ObraDto {
 
     public String getDescripcion() { return descripcion; }
     public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
+
+    public Map<Usuario, Boolean> getLikes() { return likes; }
 }
