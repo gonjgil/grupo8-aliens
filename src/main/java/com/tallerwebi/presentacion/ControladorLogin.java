@@ -74,7 +74,15 @@ public class ControladorLogin {
 
     @RequestMapping(path = "/", method = RequestMethod.GET)
     public ModelAndView inicio() {
-        return new ModelAndView("redirect:/login");
+        return new ModelAndView("redirect:/galeria_alt");
+    }
+    // METODO TEMPORARIO HASTA CONFIRMAR QUE PAGINA USAREMOS DE INICIO
+    @RequestMapping("/galeria_alt")
+    public ModelAndView irAInicio() {
+
+        ModelMap modelo = new ModelMap();
+        modelo.put("datosLogin", new DatosLogin());
+        return new ModelAndView("galeria_alt", modelo);
     }
 }
 
