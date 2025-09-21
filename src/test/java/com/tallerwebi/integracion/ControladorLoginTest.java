@@ -45,21 +45,22 @@ public class ControladorLoginTest {
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
 	}
 
-	// @Test
-	// public void debeRetornarLaPaginaLoginCuandoSeNavegaALaRaiz() throws Exception {
+	@Test
+	public void debeRetornarLaPaginaLoginCuandoSeNavegaALaRaiz() throws Exception {
 
-	// 	MvcResult result = this.mockMvc.perform(get("/"))
-	// 			/*.andDo(print())*/
-	// 			.andExpect(status().is3xxRedirection())
-	// 			.andReturn();
+		MvcResult result = this.mockMvc.perform(get("/"))
+				/*.andDo(print())*/
+				.andExpect(status().is3xxRedirection())
+				.andReturn();
 
-	// 	ModelAndView modelAndView = result.getModelAndView();
-    //     assert modelAndView != null;
-	// 	assertThat("redirect:/login", equalToIgnoringCase(Objects.requireNonNull(modelAndView.getViewName())));
-	// 	assertThat(true, is(modelAndView.getModel().isEmpty()));
-	// }
+		ModelAndView modelAndView = result.getModelAndView();
+        assert modelAndView != null;
+		// CAMBIO TEMPORARIO HASTA CONFIRMAR QUE PAGINA USAREMOS DE INICIO
+		// assertThat("redirect:/login", equalToIgnoringCase(Objects.requireNonNull(modelAndView.getViewName())));
+		assertThat("redirect:/galeria_alt", equalToIgnoringCase(Objects.requireNonNull(modelAndView.getViewName())));
+		assertThat(true, is(modelAndView.getModel().isEmpty()));
+	}
 
-	// METODO TEMPORARIO HASTA CONFIRMAR QUE PAGINA USAREMOS DE INICIO
 	@Test
 	public void debeRetornarLaPaginaInicialCuandoSeNavegaALaRaiz() throws Exception {
 
