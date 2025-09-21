@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.text.IsEqualIgnoringCase.equalToIgnoringCase;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 public class ControladorLoginTest {
@@ -61,7 +62,9 @@ public class ControladorLoginTest {
 		ModelAndView modelAndView = controladorLogin.validarLogin(datosLoginMock, requestMock);
 
 		// validacion
-		assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/home"));
+		// CAMBIO TEMPORARIO HASTA CONFIRMAR QUE PAGINA USAREMOS DE INICIO
+		// assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/home"));
+		assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/galeria_alt"));
 		verify(sessionMock, times(1)).setAttribute("ROL", usuarioEncontradoMock.getRol());
 	}
 
