@@ -9,15 +9,14 @@ import com.tallerwebi.dominio.excepcion.NoHayObrasExistentes;
 import com.tallerwebi.infraestructura.ObraDto;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.text.IsEqualIgnoringCase.equalToIgnoringCase;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.doThrow;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ControladorGaleriaTest {
@@ -31,10 +30,10 @@ public class ControladorGaleriaTest {
 
         ModelAndView modelAndView = controladorGaleria.mostrarGaleria();
 
-        assertThat(modelAndView.getViewName(), equalToIgnoringCase("galeria"));
+        assertThat(modelAndView.getViewName(), is(equalToIgnoringCase("galeria")));
         List<ObraDto> obrasDtoObtenidas = (List<ObraDto>) modelAndView.getModel().get("obras");
-        assertThat(obrasDtoObtenidas.size(), equalTo(0));
-        assertThat(modelAndView.getModel().get("error").toString(), equalToIgnoringCase("No hay obras."));
+        assertThat(obrasDtoObtenidas.size(), is(equalTo(0)));
+        assertThat(modelAndView.getModel().get("error").toString(), is(equalToIgnoringCase("No hay obras.")));
     }
 
     @Test
@@ -59,8 +58,8 @@ public class ControladorGaleriaTest {
         // verificacion
         assertThat(modelAndView.getViewName(), equalToIgnoringCase("galeria"));
         List<ObraDto> obrasDtoObtenidas = (List<ObraDto>) modelAndView.getModel().get("obras");
-        assertThat(obrasDtoObtenidas.size(), equalTo(4));
-        assertThat(modelAndView.getModel().get("exito").toString(), equalToIgnoringCase("Hay obras."));
+        assertThat(obrasDtoObtenidas.size(), is(equalTo(4)));
+        assertThat(modelAndView.getModel().get("exito").toString(), is(equalToIgnoringCase("Hay obras.")));
     }
 
     @Test
@@ -79,10 +78,10 @@ public class ControladorGaleriaTest {
 
         ModelAndView modelAndView = controladorGaleria.mostrarGaleria();
 
-        assertEquals("galeria", modelAndView.getViewName());
-        assertEquals(randomObras, modelAndView.getModel().get("randomObras"));
-        assertEquals(autorObras, modelAndView.getModel().get("autorObras"));
-        assertEquals(temaObras, modelAndView.getModel().get("temaObras"));
+        assertThat(modelAndView.getViewName(), is(equalTo("galeria")));
+        assertThat(modelAndView.getModel().get("randomObras"), is(equalTo(randomObras)));
+        assertThat(modelAndView.getModel().get("autorObras"), is(equalTo(autorObras)));
+        assertThat(modelAndView.getModel().get("temaObras"), is(equalTo(temaObras)));
     }
 
 }
