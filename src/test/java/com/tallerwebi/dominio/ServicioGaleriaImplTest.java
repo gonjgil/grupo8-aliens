@@ -1,8 +1,8 @@
 package com.tallerwebi.dominio;
 
-import com.tallerwebi.dominio.excepcion.NoHayObrasExistentes;
-import com.tallerwebi.infraestructura.ObraDto;
-import com.tallerwebi.infraestructura.ServicioGaleriaImpl;
+import com.tallerwebi.dominio.excepcion.*;
+import com.tallerwebi.presentacion.ObraDto;
+import com.tallerwebi.dominio.ServicioGaleriaImpl;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

@@ -3,14 +3,23 @@ package com.tallerwebi.infraestructura;
 import com.tallerwebi.dominio.Obra;
 import com.tallerwebi.dominio.RepositorioObra;
 
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@Repository
+@Repository("repositorioObra")
 public class RepositorioObraImpl implements RepositorioObra {
+
+    private SessionFactory sessionFactory;
+
+    @Autowired
+    public RepositorioObraImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     @Override
     public List<Obra> obtenerTodas() {

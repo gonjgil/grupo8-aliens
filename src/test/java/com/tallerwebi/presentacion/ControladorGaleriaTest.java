@@ -6,7 +6,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.tallerwebi.dominio.ServicioGaleria;
 import com.tallerwebi.dominio.excepcion.NoHayObrasExistentes;
-import com.tallerwebi.infraestructura.ObraDto;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.text.IsEqualIgnoringCase.equalToIgnoringCase;
@@ -17,7 +16,6 @@ import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.doThrow;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ControladorGaleriaTest {

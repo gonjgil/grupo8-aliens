@@ -1,6 +1,6 @@
 package com.tallerwebi.dominio;
 
-import com.tallerwebi.infraestructura.ObraDto;
+import com.tallerwebi.presentacion.ObraDto;
 
 public interface ServicioLike {
 

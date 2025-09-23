@@ -1,10 +1,9 @@
 package com.tallerwebi.dominio;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Obra {
@@ -14,11 +13,15 @@ public class Obra {
     private String autor;
     private String imagenUrl;
     private String descripcion;
-    private LinkedHashMap<Usuario, Boolean> likes;
+    @ManyToMany
+    @JoinTable(
+            name = "obra_likes",
+            joinColumns = @JoinColumn(name = "obra_id"),
+            inverseJoinColumns = @JoinColumn(name = "usuario_id")
+    )
+    private Set<Usuario> usuariosQueDieronLike = new HashSet<>();
     
-    public Obra() {
-        this.likes = new LinkedHashMap<>();
-    }
+    public Obra() { }
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -35,5 +38,6 @@ public class Obra {
     public String getDescripcion() { return descripcion; }
     public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
 
-    public Map<Usuario, Boolean> getLikes() { return likes; }
+    public Set<Usuario> getUsuariosQueDieronLike() { return usuariosQueDieronLike; }
+    public void setUsuariosQueDieronLike(Set<Usuario> usuariosQueDieronLike) { this.usuariosQueDieronLike = usuariosQueDieronLike; }
 }

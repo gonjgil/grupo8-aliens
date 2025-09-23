@@ -1,19 +1,18 @@
-package com.tallerwebi.infraestructura;
+package com.tallerwebi.dominio;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.tallerwebi.presentacion.ObraDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.tallerwebi.dominio.Obra;
 import com.tallerwebi.dominio.RepositorioObra;
-import com.tallerwebi.dominio.ServicioGaleria;
 import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
 import com.tallerwebi.dominio.excepcion.NoHayObrasExistentes;
 
-@Service
+@Service("servicioGaleria")
 public class ServicioGaleriaImpl implements ServicioGaleria {
 
     private final RepositorioObra repositorioObra;

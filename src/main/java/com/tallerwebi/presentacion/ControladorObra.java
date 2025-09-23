@@ -10,7 +10,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.tallerwebi.dominio.ServicioGaleria;
 import com.tallerwebi.dominio.ServicioObra;
-import com.tallerwebi.infraestructura.ObraDto;
 
 @Controller
 @RequestMapping("/obra")
