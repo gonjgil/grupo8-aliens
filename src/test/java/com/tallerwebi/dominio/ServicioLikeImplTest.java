@@ -8,6 +8,11 @@ import org.junit.jupiter.api.Test;
 
 import com.tallerwebi.presentacion.ObraDto;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.empty;
+
 public class ServicioLikeImplTest {
 
     @Test
@@ -19,8 +24,8 @@ public class ServicioLikeImplTest {
         
         Boolean resultado = servicio.darLike(usuario, obraDto);
         
-        assertTrue(resultado);
-        assertEquals(true, obraDto.getLikes().get(usuario));
+        assertThat(true, is(equalTo(resultado)));
+        assertThat(obraDto.getLikes().get(usuario), is(true));
         
     }
     
@@ -34,8 +39,8 @@ public class ServicioLikeImplTest {
         Boolean resultado = servicio.darLike(usuario, obraDto);
         Boolean resultado2 = servicio.darLike(usuario, obraDto);
         
-        assertTrue(resultado);
-        assertFalse(resultado2);
+        assertThat(resultado, is(true));
+        assertThat(resultado2, is(false));
     }
 
     @Test
@@ -46,13 +51,13 @@ public class ServicioLikeImplTest {
         ObraDto obraDto = new ObraDto(obra);
         
         Boolean resultado = servicio.darLike(usuario, obraDto);
-        assertTrue(resultado);
-        assertEquals(true, obraDto.getLikes().get(usuario));
-        assertEquals(1, obraDto.getLikes().size());
+        assertThat(resultado, is(true));
+        assertThat(obraDto.getLikes().get(usuario), is(true));
+        assertThat(obraDto.getLikes().size(), is(1));
         
         Boolean resultado2 = servicio.quitarLike(usuario, obraDto);
-        assertTrue(resultado2);
-        assertEquals(0, obraDto.getLikes().size());
+        assertThat(resultado2, is(true));
+        assertThat(obraDto.getLikes().entrySet(), is(empty()));
     }
 
     public void queNoSePuedaDarLikeSiNoEstaLogueado() {
