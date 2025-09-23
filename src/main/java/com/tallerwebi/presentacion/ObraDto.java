@@ -1,7 +1,9 @@
 package com.tallerwebi.presentacion;
 
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 import com.tallerwebi.dominio.Obra;
 import com.tallerwebi.dominio.Usuario;
@@ -12,7 +14,7 @@ public class ObraDto {
     private String autor;
     private String imagenUrl;
     private String descripcion;
-    private LinkedHashMap<Usuario, Boolean> likes;
+    private Set<Usuario> usuariosQueDieronLike;
 
     public ObraDto(Obra obra) {
         this.id = obra.getId();
@@ -20,11 +22,11 @@ public class ObraDto {
         this.autor = obra.getAutor();
         this.imagenUrl = obra.getImagenUrl();
         this.descripcion = obra.getDescripcion();
-        this.likes = new LinkedHashMap<Usuario, Boolean>();
+        this.usuariosQueDieronLike = obra.getUsuariosQueDieronLike();
     }
 
     public ObraDto() {
-        this.likes = new LinkedHashMap<>();
+        this.usuariosQueDieronLike = new HashSet<>();
     }
 
     public Long getId() { return id; }
@@ -42,5 +44,6 @@ public class ObraDto {
     public String getDescripcion() { return descripcion; }
     public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
 
-    public Map<Usuario, Boolean> getLikes() { return likes; }
+    public Set<Usuario> getUsuariosQueDieronLike() { return this.usuariosQueDieronLike; }
+    public void setUsuariosQueDieronLike(Set<Usuario> usuariosQueDieronLike) { this.usuariosQueDieronLike = usuariosQueDieronLike; }
 }

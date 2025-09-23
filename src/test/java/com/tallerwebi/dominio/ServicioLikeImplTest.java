@@ -25,7 +25,7 @@ public class ServicioLikeImplTest {
         Boolean resultado = servicio.darLike(usuario, obraDto);
         
         assertThat(true, is(equalTo(resultado)));
-        assertThat(obraDto.getLikes().get(usuario), is(true));
+        assertThat(obraDto.getUsuariosQueDieronLike().contains(usuario), is(true));
         
     }
     
@@ -52,12 +52,12 @@ public class ServicioLikeImplTest {
         
         Boolean resultado = servicio.darLike(usuario, obraDto);
         assertThat(resultado, is(true));
-        assertThat(obraDto.getLikes().get(usuario), is(true));
-        assertThat(obraDto.getLikes().size(), is(1));
+        assertThat(obraDto.getUsuariosQueDieronLike().contains(usuario), is(true));
+        assertThat(obraDto.getUsuariosQueDieronLike().size(), is(1));
         
         Boolean resultado2 = servicio.quitarLike(usuario, obraDto);
         assertThat(resultado2, is(true));
-        assertThat(obraDto.getLikes().entrySet(), is(empty()));
+        assertThat(obraDto.getUsuariosQueDieronLike().isEmpty(), is(true));
     }
 
     public void queNoSePuedaDarLikeSiNoEstaLogueado() {
