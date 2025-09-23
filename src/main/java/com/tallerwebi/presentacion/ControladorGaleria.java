@@ -21,13 +21,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 // home como para las diferentes galerias?
 public class ControladorGaleria {
 
-    private List<ObraDto> obras;
 
     @Autowired
     private ServicioGaleria servicioGaleria;
 
     public ControladorGaleria(ServicioGaleria servicioGaleria) {
-        this.obras = new ArrayList<>();
         this.servicioGaleria = servicioGaleria;
     }
 

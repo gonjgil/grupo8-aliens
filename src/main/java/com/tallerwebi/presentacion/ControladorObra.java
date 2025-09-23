@@ -9,14 +9,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.tallerwebi.dominio.ServicioGaleria;
-import com.tallerwebi.dominio.ServicioObra;
 import com.tallerwebi.infraestructura.ObraDto;
 
 @Controller
 @RequestMapping("/obra")
 public class ControladorObra {
-
-    private ObraDto obraDto;
 
     @Autowired
     private ServicioGaleria servicioGaleria;

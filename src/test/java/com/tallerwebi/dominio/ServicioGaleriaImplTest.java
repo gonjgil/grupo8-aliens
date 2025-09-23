@@ -62,7 +62,6 @@ class ServicioGaleriaImplTest {
         obra2.setTitulo("Obra B");
         obra2.setAutor("Autor B");
 
-        List<Obra> obras = Arrays.asList(obra1, obra2);
         when(repositorioObra.obtenerPorAutor("Autor A")).thenReturn(List.of(obra1));
 
         ServicioGaleriaImpl servicio = new ServicioGaleriaImpl(repositorioObra);
