@@ -6,7 +6,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.tallerwebi.dominio.ServicioGaleria;
 import com.tallerwebi.dominio.excepcion.NoHayObrasExistentes;
-import com.tallerwebi.infraestructura.ObraDto;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;

@@ -1,11 +1,9 @@
-package com.tallerwebi.infraestructura;
+package com.tallerwebi.dominio;
 
+import com.tallerwebi.presentacion.ObraDto;
 import org.springframework.stereotype.Service;
 
-import com.tallerwebi.dominio.ServicioLike;
-import com.tallerwebi.dominio.Usuario;
-
-@Service
+@Service("servicioLike")
 public class ServicioLikeImpl implements ServicioLike {
 
     @Override

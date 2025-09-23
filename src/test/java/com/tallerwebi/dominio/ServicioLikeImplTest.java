@@ -1,9 +1,12 @@
 package com.tallerwebi.dominio;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.Test;
 
-import com.tallerwebi.infraestructura.ObraDto;
-import com.tallerwebi.infraestructura.ServicioLikeImpl;
+import com.tallerwebi.presentacion.ObraDto;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;

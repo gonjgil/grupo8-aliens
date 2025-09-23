@@ -10,8 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.tallerwebi.dominio.ServicioGaleria;
-import com.tallerwebi.dominio.excepcion.NoHayObrasExistentes;
-import com.tallerwebi.infraestructura.ObraDto;
+import com.tallerwebi.dominio.excepcion.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
