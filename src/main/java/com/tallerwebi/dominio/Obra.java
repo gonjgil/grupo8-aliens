@@ -40,4 +40,10 @@ public class Obra {
 
     public Set<Usuario> getUsuariosQueDieronLike() { return usuariosQueDieronLike; }
     public void setUsuariosQueDieronLike(Set<Usuario> usuariosQueDieronLike) { this.usuariosQueDieronLike = usuariosQueDieronLike; }
+
+    public int getCantidadLikes() { return usuariosQueDieronLike.size(); }
+    
+    public void darLike(Usuario usuario) { this.usuariosQueDieronLike.add(usuario); }
+    
+    public void quitarLike(Usuario usuario) { this.usuariosQueDieronLike.remove(usuario); }
 }

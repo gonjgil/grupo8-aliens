@@ -6,7 +6,7 @@ import com.tallerwebi.presentacion.ObraDto;
 
 public interface ServicioGaleria {
     List<ObraDto> obtener();
-    Object ordenarRandom();
+    List<ObraDto> ordenarRandom();
     List<ObraDto> obtenerPorAutor(String autor);
     List<ObraDto> obtenerPorCategoria(String categoria);
     ObraDto obtenerPorId(Long id);
