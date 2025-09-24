@@ -1,24 +1,23 @@
 package com.tallerwebi.dominio;
 
-import com.tallerwebi.presentacion.ObraDto;
 import org.springframework.stereotype.Service;
 
 @Service("servicioLike")
 public class ServicioLikeImpl implements ServicioLike {
 
     @Override
-    public boolean darLike(Usuario usuario, ObraDto obra) {
+    public boolean darLike(Usuario usuario, Obra obra) {
         if (usuario != null && !obra.getUsuariosQueDieronLike().contains(usuario)) {
-            obra.getUsuariosQueDieronLike().add(usuario);
+            obra.darLike(usuario);
             return true;
         }
             return false;
     };
 
     @Override
-    public boolean quitarLike(Usuario usuario, ObraDto obra) {
+    public boolean quitarLike(Usuario usuario, Obra obra) {
         if (usuario != null && obra.getUsuariosQueDieronLike().contains(usuario)){
-            obra.getUsuariosQueDieronLike().remove(usuario);
+            obra.quitarLike(usuario);;
             return true;
         }
         return false;

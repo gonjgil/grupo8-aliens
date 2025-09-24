@@ -1,8 +1,5 @@
 package com.tallerwebi.presentacion;
 
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Set;
 
 import com.tallerwebi.dominio.Obra;
@@ -23,10 +20,6 @@ public class ObraDto {
         this.imagenUrl = obra.getImagenUrl();
         this.descripcion = obra.getDescripcion();
         this.usuariosQueDieronLike = obra.getUsuariosQueDieronLike();
-    }
-
-    public ObraDto() {
-        this.usuariosQueDieronLike = new HashSet<>();
     }
 
     public Long getId() { return id; }

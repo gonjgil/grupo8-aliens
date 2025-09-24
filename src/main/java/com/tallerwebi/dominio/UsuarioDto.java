@@ -1,20 +1,20 @@
 package com.tallerwebi.dominio;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+public class UsuarioDto {
 
-@Entity
-public class Usuario {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String email;
     private String password;
     private String rol;
     private Boolean activo = false;
+
+    public UsuarioDto (Usuario usuario) {
+        this.id = usuario.getId();
+        this.email = usuario.getEmail();
+        this.password = usuario.getPassword();
+        this.rol = usuario.getRol();
+        this.activo = getActivo();
+    }
 
     public Long getId() {
         return id;
@@ -45,9 +45,5 @@ public class Usuario {
     }
     public void setActivo(Boolean activo) {
         this.activo = activo;
-    }
-
-    public void activar() {
-        activo = true;
     }
 }
