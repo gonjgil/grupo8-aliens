@@ -5,7 +5,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.tallerwebi.dominio.Obra;
 import com.tallerwebi.dominio.ServicioGaleria;
-import com.tallerwebi.dominio.ServicioObra;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;

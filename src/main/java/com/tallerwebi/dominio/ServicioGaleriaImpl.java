@@ -8,7 +8,6 @@ import com.tallerwebi.presentacion.ObraDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.tallerwebi.dominio.RepositorioObra;
 import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
 import com.tallerwebi.dominio.excepcion.NoHayObrasExistentes;
 
