@@ -29,7 +29,7 @@ public class ControladorGaleriaTest {
 
         ModelAndView modelAndView = controladorGaleria.mostrarGaleria();
 
-        assertThat(modelAndView.getViewName(), is(equalToIgnoringCase("galeria")));
+        assertThat(modelAndView.getViewName(), is(equalToIgnoringCase("galeria_alt")));
         List<ObraDto> obrasDtoObtenidas = (List<ObraDto>) modelAndView.getModel().get("obras");
         assertThat(obrasDtoObtenidas.size(), is(equalTo(0)));
         assertThat(modelAndView.getModel().get("error").toString(), is(equalToIgnoringCase("No hay obras.")));
@@ -55,7 +55,7 @@ public class ControladorGaleriaTest {
         ModelAndView modelAndView = controladorGaleria.mostrarGaleria();
 
         // verificacion
-        assertThat(modelAndView.getViewName(), equalToIgnoringCase("galeria"));
+        assertThat(modelAndView.getViewName(), equalToIgnoringCase("galeria_alt"));
         List<ObraDto> obrasDtoObtenidas = (List<ObraDto>) modelAndView.getModel().get("obras");
         assertThat(obrasDtoObtenidas.size(), is(equalTo(4)));
         assertThat(modelAndView.getModel().get("exito").toString(), is(equalToIgnoringCase("Hay obras.")));
@@ -77,7 +77,7 @@ public class ControladorGaleriaTest {
 
         ModelAndView modelAndView = controladorGaleria.mostrarGaleria();
 
-        assertThat(modelAndView.getViewName(), is(equalTo("galeria")));
+        assertThat(modelAndView.getViewName(), is(equalTo("galeria_alt")));
         assertThat(modelAndView.getModel().get("randomObras"), is(equalTo(randomObras)));
         assertThat(modelAndView.getModel().get("autorObras"), is(equalTo(autorObras)));
         assertThat(modelAndView.getModel().get("temaObras"), is(equalTo(temaObras)));

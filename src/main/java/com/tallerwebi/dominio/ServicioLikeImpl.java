@@ -19,7 +19,6 @@ public class ServicioLikeImpl implements ServicioLike {
     public boolean quitarLike(Usuario usuario, Obra obra) {
         if (usuario != null && obra.getUsuariosQueDieronLike().contains(usuario)) {
             obra.quitarLike(usuario);
-            ;
             return true;
         }
         return false;
