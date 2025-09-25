@@ -23,6 +23,14 @@ public class Obra {
     
     public Obra() { }
 
+    public Obra(Long id, String titulo, String autor, String imagenUrl, String descripcion) {
+        this.id = id;
+        this.titulo = titulo;
+        this.autor = autor;
+        this.imagenUrl = imagenUrl;
+        this.descripcion = descripcion;
+    }
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     

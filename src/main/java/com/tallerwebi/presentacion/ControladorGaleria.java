@@ -15,7 +15,7 @@ import com.tallerwebi.dominio.excepcion.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Controller
-@RequestMapping("/galeria")
+//@RequestMapping("/galeria")
 // PREGUNTAR como hacer para definir distintas vistas y esto sirva tanto para el
 // home como para las diferentes galerias?
 public class ControladorGaleria {
@@ -28,7 +28,7 @@ public class ControladorGaleria {
         this.servicioGaleria = servicioGaleria;
     }
 
-    @RequestMapping(path = "/", method = RequestMethod.GET)
+    @RequestMapping(path = "/galeria_alt", method = RequestMethod.GET)
     public ModelAndView mostrarGaleria() {
 
         ModelMap model = new ModelMap();
@@ -43,9 +43,9 @@ public class ControladorGaleria {
         }
         
         model.put("randomObras", servicioGaleria.ordenarRandom());
-        model.put("autorObras", servicioGaleria.obtenerPorAutor("autorRandom"));
+        model.put("autorObras", servicioGaleria.obtenerPorAutor("J. Doe"));
         model.put("temaObras", servicioGaleria.obtenerPorCategoria("temaRandom"));
 
-        return new ModelAndView("galeria", model);
+        return new ModelAndView("galeria_alt", model);
     }
 }

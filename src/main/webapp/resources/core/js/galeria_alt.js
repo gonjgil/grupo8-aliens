@@ -79,9 +79,11 @@
         });
       }
 
+      /*
       // Crear los carruseles al cargar la página
       window.onload = function () {
         createCarousel('spotlight', images);
         createCarousel('author', images);
         createCarousel('theme', images);
       };
+      */

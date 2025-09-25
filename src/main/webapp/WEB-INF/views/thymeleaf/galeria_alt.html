@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ALIENS - Portfolio</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- <link rel="stylesheet" href="../../../resources/core/css/galeria_alt.css" /> -->
+      <!-- Boostrap core css -->
+      <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
      <link rel="stylesheet" th:href="@{/css/galeria_alt.css}"/>
   </head>
   <body class="bg-gray-100 text-gray-800">
@@ -15,7 +17,7 @@
         ALIENS
       </h1>
       <button
-        th:onclick="'location.href=\'' + @{/login} + '\';'"
+        th:onclick="|location.href='@{/login}'|"
         class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg"
       >
         Iniciar Sesión
@@ -29,6 +31,12 @@
         <div class="carousel-container relative">
           <div id="spotlight-track" class="carousel-track">
             <!-- Carousel items will be injected here by JS -->
+              <div th:each="obra : ${randomObras}" class="carousel-item group cursor-pointer transition-transform duration-300 transform hover:scale-105" th:style="|background-image: url('${obra.imagenUrl}')|">
+                <div class="image-overlay">
+                  <p class="text-sm font-semibold text-white" th:text="${obra.titulo}"></p>
+                  <p class="text-xs text-gray-300" th:text="${obra.autor}"></p>
+                </div>
+              </div>
           </div>
           <button
             class="scroll-button left-button"
@@ -77,6 +85,12 @@
         <div class="carousel-container relative">
           <div id="author-track" class="carousel-track">
             <!-- Carousel items will be injected here by JS -->
+              <div th:each="obra : ${autorObras}" class="carousel-item group cursor-pointer transition-transform duration-300 transform hover:scale-105" th:style="|background-image: url('${obra.imagenUrl}')|">
+                  <div class="image-overlay">
+                      <p class="text-sm font-semibold text-white" th:text="${obra.titulo}"></p>
+                      <p class="text-xs text-gray-300" th:text="${obra.autor}"></p>
+                  </div>
+              </div>
           </div>
           <button
             class="scroll-button left-button"
@@ -125,6 +139,12 @@
         <div class="carousel-container relative">
           <div id="theme-track" class="carousel-track">
             <!-- Carousel items will be injected here by JS -->
+              <div th:each="obra : ${temaObras}" class="carousel-item group cursor-pointer transition-transform duration-300 transform hover:scale-105" th:style="|background-image: url('${obra.imagenUrl}')|">
+                  <div class="image-overlay">
+                      <p class="text-sm font-semibold text-white" th:text="${obra.titulo}"></p>
+                      <p class="text-xs text-gray-300" th:text="${obra.autor}"></p>
+                  </div>
+              </div>
           </div>
           <button
             class="scroll-button left-button"
