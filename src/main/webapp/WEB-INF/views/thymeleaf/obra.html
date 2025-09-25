@@ -58,10 +58,13 @@
 
         <div class="obra-meta flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="likes flex items-center gap-2">
-                <button class="like-button px-4 py-2 rounded-full border border-gray-300 hover:bg-blue-50"
-                        aria-pressed="false">&#x2764</button> <!-- Corazón unicode -->
+                <form th:action="@{/obra/{id}/dar-like(id=${obra.id})}" method="post">
+                    <button type="submit"
+                            class="like-button px-4 py-2 rounded-full border border-gray-300 hover:bg-blue-50"
+                            aria-pressed="false">&#x2764;</button>
+                </form>
                 <div class="likes flex items-center gap-1">
-                    <span th:text="${obra.usuariosQueDieronLike.size()}"></span>
+                    <span th:text="${obra.getCantidadLikes()}"></span>
                     <span class="likes-label text-gray-500 text-sm">personas dieron like</span>
                 </div>
             </div>

@@ -64,4 +64,13 @@ public class ServicioGaleriaImpl implements ServicioGaleria {
         ObraDto obraDto = new ObraDto(obra);
         return obraDto;
     }
+
+    @Override
+    public void darLike(Long id, Usuario usuario) throws NoExisteLaObra {
+        Obra obra = repositorioObra.obtenerPorId(id);
+        if (obra == null) {
+            throw new NoExisteLaObra();
+        }
+        obra.darLike(usuario);
+    }
 }

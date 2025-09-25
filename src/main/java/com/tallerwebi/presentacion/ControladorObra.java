@@ -36,4 +36,17 @@ public class ControladorObra {
         model.put("obra", obraDto);
         return new ModelAndView("obra", model);
     }
+
+    @RequestMapping(path = "{id}/dar-like", method = RequestMethod.POST)
+    public ModelAndView darLike(@PathVariable Long id, HttpServletRequest request) {
+        ModelMap model = new ModelMap();
+
+        Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
+        model.put("usuario", usuario);
+
+        this.servicioGaleria.darLike(id, usuario);
+        ObraDto obraDto = this.servicioGaleria.obtenerPorId(id);
+        model.put("obra", obraDto);
+        return new ModelAndView("obra", model);
+    }
 }
