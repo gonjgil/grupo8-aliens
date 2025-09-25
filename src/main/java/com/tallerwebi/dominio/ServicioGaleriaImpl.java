@@ -51,7 +51,8 @@ public class ServicioGaleriaImpl implements ServicioGaleria {
 
     @Override
     public List<ObraDto> obtenerPorCategoria(String categoria) {
-        return convertirYValidar(repositorioObra.obtenerPorAutor(categoria));
+        // return convertirYValidar(repositorioObra.obtenerPorCategoria(categoria));
+        return new ArrayList<>(); // No implementado
     }
 
     @Override

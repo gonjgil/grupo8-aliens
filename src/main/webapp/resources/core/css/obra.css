@@ -1,0 +1,162 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+body {
+    font-family: 'Inter', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
+    background-color: #f3f4f6; /* Fondo gris claro */
+    color: #1f2937; /* Texto gris oscuro */
+}
+
+/* Layout principal */
+.obra-page {
+    width: 100%;
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column; /* mobile */
+    padding: 16px; /* padding lateral en móvil */
+    box-sizing: border-box; /* para que padding no afecte el ancho total */
+}
+
+@media(min-width: 768px) {
+    .obra-page {
+        flex-direction: row;
+        align-items: center; /* centra contenido verticalmente */
+        max-height: 80vh; /* limita altura total */
+        padding-left: 40px; /* padding lateral en desktop */
+        padding-right: 40px;
+    }
+}
+
+/* Imagen izquierda */
+.obra-left {
+    width: 100%;
+}
+
+@media(min-width: 768px) {
+    .obra-left { width: 45%; }
+}
+
+.obra-visual {
+    width: 100%;
+    max-height: 500px; /* limita altura en desktop */
+    object-fit: cover;  /* mantiene cobertura como background-size: cover */
+    object-position: center; /* centra la imagen */
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+}
+
+.obra-visual:hover {
+    transform: scale(1.02);
+}
+
+@media(max-width: 767px) {
+    .obra-visual {
+        height: 280px;
+    }
+}
+
+/* Columna derecha */
+.obra-right {
+    width: 100%;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* centra verticalmente */
+    max-height: 500px; /* opcional */
+}
+
+@media(min-width: 768px) {
+    .obra-right { width: 55%; }
+}
+
+/* Header, título y autor */
+.obra-header {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+@media(min-width: 768px) {
+    .obra-header { text-align: left; }
+}
+
+.obra-titulo {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.obra-autor {
+    font-size: 1rem;
+    color: #6b7280;
+}
+
+/* Descripción */
+.obra-descripcion {
+    font-size: 1rem;
+    line-height: 1.5;
+    max-height: 200px; /* opcional */
+    overflow-y: auto;
+}
+
+/* Likes y botón */
+.obra-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 1rem;
+}
+
+@media(min-width: 640px) {
+    .obra-meta {
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+    }
+}
+
+/* Botones y likes (mantener iguales) */
+.like-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: 1px solid rgba(31,41,55,0.1);
+    padding: 8px 12px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: transform 0.12s ease, background 0.12s ease;
+}
+
+.like-button:hover { transform: translateY(-2px); }
+
+.like-button.liked {
+    background: linear-gradient(90deg, rgba(59,130,246,0.12), rgba(59,130,246,0.08));
+    border-color: rgba(59,130,246,0.22);
+    color: #3b82f6;
+}
+
+.likes-label {
+    color: #6b7280;
+    font-size: 0.9rem;
+}
+
+.btn-primary {
+    background-color: #3b82f6;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 999px;
+    font-weight: 600;
+    text-decoration: none;
+    text-align: center;
+    transition: background 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #2563eb;
+}
+
+/* Responsive móviles */
+@media(max-width: 767px) {
+    .obra-visual { height: 280px; }
+    .obra-titulo { font-size: 2rem; }
+    .obra-autor { font-size: 1rem; }
+}

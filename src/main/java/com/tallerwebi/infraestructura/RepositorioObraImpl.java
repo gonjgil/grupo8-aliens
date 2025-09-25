@@ -50,6 +50,12 @@ public class RepositorioObraImpl implements RepositorioObra {
         return resultado;
     }
 
+    @Override
+    public List<Obra> obtenerPorCategoria(String categoria) {
+        // Implementacion pendiente
+        return Collections.emptyList();
+    }
+
      @Override
      public Obra obtenerPorId(Long id) {
         for (Obra obra : this.obras) {
