@@ -18,10 +18,16 @@
             ALIENS
         </a>
     </h1>
-    <button th:onclick="|location.href='@{/login}'|"
-            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg">
-        Iniciar Sesión
-    </button>
+    <div th:if="${usuario != null}">
+        <div th:text=" 'Hola, ' + ${usuario.email}"></div>
+    </div>
+    <div th:unless="${usuario != null}">
+        <button th:onclick="|location.href='@{/login}'|"
+                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg">
+            Iniciar Sesión
+        </button>
+    </div>
+
 </header>
 
 <main class="obra-page flex flex-col md:flex-row w-full min-h-screen">

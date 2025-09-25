@@ -1,11 +1,16 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.Usuario;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.tallerwebi.dominio.ServicioGaleria;
 import com.tallerwebi.dominio.excepcion.NoHayObrasExistentes;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -20,6 +25,18 @@ import java.util.List;
 
 public class ControladorGaleriaTest {
 
+    private HttpServletRequest request;
+
+    @BeforeEach
+    public void setUp() {
+        this.request = mock(HttpServletRequest.class);
+        HttpSession session = mock(HttpSession.class); // mock de la sesión
+        Usuario usuario = mock(Usuario.class);
+
+        when(this.request.getSession()).thenReturn(session); // la request devuelve la sesión
+        when(session.getAttribute("usuarioLogueado")).thenReturn(usuario); // la sesión devuelve el usuario
+    }
+
     @Test
     public void mostrarGaleria_deberiaRetornarListaVaciaSiNoHayObras() throws NoHayObrasExistentes {
         ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
@@ -27,7 +44,7 @@ public class ControladorGaleriaTest {
         ControladorGaleria controladorGaleria = new ControladorGaleria(servicioGaleria);
         doThrow(NoHayObrasExistentes.class).when(servicioGaleria).obtener();
 
-        ModelAndView modelAndView = controladorGaleria.mostrarGaleria();
+        ModelAndView modelAndView = controladorGaleria.mostrarGaleria(this.request);
 
         assertThat(modelAndView.getViewName(), is(equalToIgnoringCase("galeria_alt")));
         List<ObraDto> obrasDtoObtenidas = (List<ObraDto>) modelAndView.getModel().get("obras");
@@ -52,7 +69,7 @@ public class ControladorGaleriaTest {
         ControladorGaleria controladorGaleria = new ControladorGaleria(servicioGaleria);
 
         // ejecucion
-        ModelAndView modelAndView = controladorGaleria.mostrarGaleria();
+        ModelAndView modelAndView = controladorGaleria.mostrarGaleria(this.request);
 
         // verificacion
         assertThat(modelAndView.getViewName(), equalToIgnoringCase("galeria_alt"));
@@ -75,7 +92,7 @@ public class ControladorGaleriaTest {
 
         ControladorGaleria controladorGaleria = new ControladorGaleria(servicioGaleria);
 
-        ModelAndView modelAndView = controladorGaleria.mostrarGaleria();
+        ModelAndView modelAndView = controladorGaleria.mostrarGaleria(this.request);
 
         assertThat(modelAndView.getViewName(), is(equalTo("galeria_alt")));
         assertThat(modelAndView.getModel().get("randomObras"), is(equalTo(randomObras)));
