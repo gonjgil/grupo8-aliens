@@ -3,6 +3,7 @@ package com.tallerwebi.presentacion;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tallerwebi.dominio.Usuario;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.ui.ModelMap;
@@ -13,6 +14,8 @@ import com.tallerwebi.dominio.ServicioGaleria;
 import com.tallerwebi.dominio.excepcion.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 // @RequestMapping("/galeria")
@@ -29,11 +32,13 @@ public class ControladorGaleria {
     }
 
     @RequestMapping(path = "/galeria_alt", method = RequestMethod.GET)
-    public ModelAndView mostrarGaleria() {
+    public ModelAndView mostrarGaleria(HttpServletRequest request) {
 
         ModelMap model = new ModelMap();
 
         try {
+            Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
+            model.put("usuario", usuario);
             List<ObraDto> obrasDto = this.servicioGaleria.obtener();
             model.put("obras", obrasDto);
             model.put("exito", "Hay obras.");
