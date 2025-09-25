@@ -1,5 +1,7 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.enums.Categoria;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,6 +15,7 @@ public class Obra {
     private String autor;
     private String imagenUrl;
     private String descripcion;
+
     @ManyToMany
     @JoinTable(
             name = "obra_likes",
@@ -20,15 +23,22 @@ public class Obra {
             inverseJoinColumns = @JoinColumn(name = "usuario_id")
     )
     private Set<Usuario> usuariosQueDieronLike = new HashSet<>();
+
+    @ElementCollection(targetClass = Categoria.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "obra_categorias", joinColumns = @JoinColumn(name = "obra_id"))
+    @Enumerated(EnumType.STRING)
+    @Column(name = "categoria")
+    private Set<Categoria> categorias = new HashSet<>();
     
     public Obra() { }
 
-    public Obra(Long id, String titulo, String autor, String imagenUrl, String descripcion) {
+    public Obra(Long id, String titulo, String autor, String imagenUrl, String descripcion, Set<Categoria> categorias) {
         this.id = id;
         this.titulo = titulo;
         this.autor = autor;
         this.imagenUrl = imagenUrl;
         this.descripcion = descripcion;
+        this.categorias = categorias;
     }
 
     public Long getId() { return id; }
@@ -54,4 +64,7 @@ public class Obra {
     public void darLike(Usuario usuario) { this.usuariosQueDieronLike.add(usuario); }
     
     public void quitarLike(Usuario usuario) { this.usuariosQueDieronLike.remove(usuario); }
+
+    public Set<Categoria> getCategorias() { return categorias; }
+    public void setCategorias(Set<Categoria> categorias) { this.categorias = categorias; }
 }

@@ -1,9 +1,11 @@
 package com.tallerwebi.presentacion;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import com.tallerwebi.dominio.Obra;
 import com.tallerwebi.dominio.Usuario;
+import com.tallerwebi.dominio.enums.Categoria;
 
 public class ObraDto {
     private Long id;
@@ -12,6 +14,7 @@ public class ObraDto {
     private String imagenUrl;
     private String descripcion;
     private Set<Usuario> usuariosQueDieronLike;
+    private Set<Categoria> categorias = new HashSet<>();
 
     public ObraDto(Obra obra) {
         this.id = obra.getId();
@@ -20,6 +23,7 @@ public class ObraDto {
         this.imagenUrl = obra.getImagenUrl();
         this.descripcion = obra.getDescripcion();
         this.usuariosQueDieronLike = obra.getUsuariosQueDieronLike();
+        this.categorias = obra.getCategorias();
     }
 
     public Long getId() { return id; }
@@ -39,4 +43,8 @@ public class ObraDto {
 
     public Set<Usuario> getUsuariosQueDieronLike() { return this.usuariosQueDieronLike; }
     public void setUsuariosQueDieronLike(Set<Usuario> usuariosQueDieronLike) { this.usuariosQueDieronLike = usuariosQueDieronLike; }
+    public int getCantidadLikes() { return this.usuariosQueDieronLike.size(); }
+
+    public Set<Categoria> getCategorias() { return categorias; }
+    public void setCategorias(Set<Categoria> categorias) { this.categorias = categorias; }
 }

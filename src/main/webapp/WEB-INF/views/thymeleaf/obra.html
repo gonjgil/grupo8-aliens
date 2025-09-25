@@ -37,6 +37,13 @@
              alt="Imagen de la obra"
              class="obra-visual"
              tabindex="0" />
+
+        <div class="obra-categorias flex flex-wrap gap-2 mt-4">
+            <span th:each="categoria : ${obra.categorias}"
+                  th:text="${categoria.categoria}"
+                  class="categoria-tag px-3 py-1 bg-gray-200 text-gray-700 rounded-full text-sm hover:bg-gray-300 transition">
+            </span>
+        </div>
     </div>
 
     <div class="obra-right w-full md:w-1/2 p-8 flex flex-col justify-between">
