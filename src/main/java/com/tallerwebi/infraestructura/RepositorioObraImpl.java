@@ -3,6 +3,7 @@ package com.tallerwebi.infraestructura;
 import com.tallerwebi.dominio.Obra;
 import com.tallerwebi.dominio.RepositorioObra;
 
+import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.enums.Categoria;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,13 +59,19 @@ public class RepositorioObraImpl implements RepositorioObra {
         return Collections.emptyList();
     }
 
-     @Override
-     public Obra obtenerPorId(Long id) {
+    @Override
+    public Obra obtenerPorId(Long id) {
         for (Obra obra : this.obras) {
             if (obra.getId().equals(id)) {
                 return obra;
             }
         }
         return null; // o lanzar una excepción si no se encuentra
-     }
+    }
+
+    @Override
+    public void darLike(Obra obra, Usuario usuario) {
+        obra.darLike(usuario);
+        // obra.getUsuariosQueDieronLike().add(usuario);
+    }
 }

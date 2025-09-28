@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.tallerwebi.dominio.excepcion.UsuarioAnonimoException;
 import com.tallerwebi.presentacion.ObraDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -66,11 +67,15 @@ public class ServicioGaleriaImpl implements ServicioGaleria {
     }
 
     @Override
-    public void darLike(Long id, Usuario usuario) throws NoExisteLaObra {
+    public void darLike(Long id, Usuario usuario) throws NoExisteLaObra, UsuarioAnonimoException {
+        if (usuario == null) {
+            throw new UsuarioAnonimoException();
+        }
         Obra obra = repositorioObra.obtenerPorId(id);
         if (obra == null) {
             throw new NoExisteLaObra();
         }
-        obra.darLike(usuario);
+        repositorioObra.darLike(obra, usuario);
+        //obra.darLike(usuario);
     }
 }

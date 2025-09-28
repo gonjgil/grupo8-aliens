@@ -7,4 +7,5 @@ public interface RepositorioObra {
     List<Obra> obtenerPorAutor(String autor);
     List<Obra> obtenerPorCategoria(String categoria);
     Obra obtenerPorId(Long id);
+    void darLike(Obra obra, Usuario usuario);
 }

@@ -32,9 +32,14 @@ public class ControladorObra {
         Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
         model.put("usuario", usuario);
 
-        ObraDto obraDto = this.servicioGaleria.obtenerPorId(id);
-        model.put("obra", obraDto);
-        return new ModelAndView("obra", model);
+        try {
+            ObraDto obraDto = this.servicioGaleria.obtenerPorId(id);
+            model.put("obra", obraDto);
+            return new ModelAndView("obra", model);
+        } catch (Exception e) {
+            model.put("error", "No existe la obra solicitada.");
+            return new ModelAndView("redirect:/galeria_alt", model);
+        }
     }
 
     @RequestMapping(path = "{id}/dar-like", method = RequestMethod.POST)
