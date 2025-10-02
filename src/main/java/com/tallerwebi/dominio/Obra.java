@@ -3,6 +3,7 @@ package com.tallerwebi.dominio;
 import com.tallerwebi.dominio.enums.Categoria;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -15,6 +16,7 @@ public class Obra {
     private String autor;
     private String imagenUrl;
     private String descripcion;
+    private Integer stock;
 
     @ManyToMany
     @JoinTable(
@@ -32,12 +34,14 @@ public class Obra {
     
     public Obra() { }
 
-    public Obra(Long id, String titulo, String autor, String imagenUrl, String descripcion, Set<Categoria> categorias) {
+
+    public Obra(Long id, String titulo, String autor, String imagenUrl, String descripcion, Integer stock, Set<Categoria> categorias) {
         this.id = id;
         this.titulo = titulo;
         this.autor = autor;
         this.imagenUrl = imagenUrl;
         this.descripcion = descripcion;
+        this.stock = stock;
         this.categorias = categorias;
     }
 
@@ -67,4 +71,19 @@ public class Obra {
 
     public Set<Categoria> getCategorias() { return categorias; }
     public void setCategorias(Set<Categoria> categorias) { this.categorias = categorias; }
+
+    public Integer getStock() { return stock; }
+    public void setStock(Integer stock) { this.stock = stock; }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Obra obra = (Obra) o;
+        return Objects.equals(id, obra.id) && Objects.equals(titulo, obra.titulo) && Objects.equals(autor, obra.autor) && Objects.equals(imagenUrl, obra.imagenUrl) && Objects.equals(descripcion, obra.descripcion) && Objects.equals(categorias, obra.categorias);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, titulo, autor, imagenUrl, descripcion, categorias);
+    }
 }

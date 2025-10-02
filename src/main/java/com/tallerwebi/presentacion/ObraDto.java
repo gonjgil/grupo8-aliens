@@ -13,6 +13,7 @@ public class ObraDto {
     private String autor;
     private String imagenUrl;
     private String descripcion;
+    private Integer stock;
     private Set<Usuario> usuariosQueDieronLike;
     private Set<Categoria> categorias = new HashSet<>();
 
@@ -22,6 +23,7 @@ public class ObraDto {
         this.autor = obra.getAutor();
         this.imagenUrl = obra.getImagenUrl();
         this.descripcion = obra.getDescripcion();
+        this.stock = obra.getStock();
         this.usuariosQueDieronLike = obra.getUsuariosQueDieronLike();
         this.categorias = obra.getCategorias();
     }
@@ -47,4 +49,7 @@ public class ObraDto {
 
     public Set<Categoria> getCategorias() { return categorias; }
     public void setCategorias(Set<Categoria> categorias) { this.categorias = categorias; }
+
+    public void setStock(Integer stock) {this.stock = stock; }
+    public Integer getStock() {return stock;}
 }
