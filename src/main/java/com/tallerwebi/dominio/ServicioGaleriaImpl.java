@@ -22,48 +22,43 @@ public class ServicioGaleriaImpl implements ServicioGaleria {
         this.repositorioObra = repositorioObra;
     }
 
-    private List<ObraDto> convertirYValidar (List<Obra> obras) throws NoHayObrasExistentes {
+    private List<Obra> convertirYValidar (List<Obra> obras) throws NoHayObrasExistentes {
         if (obras == null || obras.isEmpty()) {
             throw new NoHayObrasExistentes();
         }
-        List<ObraDto> dtos = new ArrayList<>();
-        for (Obra obra : obras) {
-            dtos.add(new ObraDto(obra));
-        }
-        return dtos;
+        return obras;
     }
 
     @Override
-    public List<ObraDto> obtener() throws NoHayObrasExistentes {
+    public List<Obra> obtener() throws NoHayObrasExistentes {
         return convertirYValidar(repositorioObra.obtenerTodas());
     }
 
     @Override
-    public List<ObraDto> ordenarRandom() {
+    public List<Obra> ordenarRandom() {
         List<Obra> todas = repositorioObra.obtenerTodas();
         Collections.shuffle(todas);
         return convertirYValidar(todas);
     }
 
     @Override
-    public List<ObraDto> obtenerPorAutor(String autor) {
-        return convertirYValidar((repositorioObra.obtenerPorAutor(autor)));
+    public List<Obra> obtenerPorAutor(String autor) {
+        return convertirYValidar(repositorioObra.obtenerPorAutor(autor));
     }
 
     @Override
-    public List<ObraDto> obtenerPorCategoria(String categoria) {
+    public List<Obra> obtenerPorCategoria(String categoria) {
         // return convertirYValidar(repositorioObra.obtenerPorCategoria(categoria));
         return new ArrayList<>(); // No implementado
     }
 
     @Override
-    public ObraDto obtenerPorId(Long id) throws NoExisteLaObra {
+    public Obra obtenerPorId(Long id) throws NoExisteLaObra {
         Obra obra = repositorioObra.obtenerPorId(id);
         if (obra == null) {
             throw new NoExisteLaObra();
         }
-        ObraDto obraDto = new ObraDto(obra);
-        return obraDto;
+        return obra;
     }
 
     @Override
@@ -76,6 +71,5 @@ public class ServicioGaleriaImpl implements ServicioGaleria {
             throw new NoExisteLaObra();
         }
         repositorioObra.darLike(obra, usuario);
-        //obra.darLike(usuario);
     }
 }

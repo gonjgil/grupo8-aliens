@@ -13,7 +13,7 @@ public class ServicioLikeImpl implements ServicioLike {
             return true;
         }
         return false;
-    };
+    }
 
     @Override
     public boolean quitarLike(Usuario usuario, Obra obra) {

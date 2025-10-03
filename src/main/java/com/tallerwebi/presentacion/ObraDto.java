@@ -1,6 +1,7 @@
 package com.tallerwebi.presentacion;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import com.tallerwebi.dominio.Obra;
@@ -47,4 +48,28 @@ public class ObraDto {
 
     public Set<Categoria> getCategorias() { return categorias; }
     public void setCategorias(Set<Categoria> categorias) { this.categorias = categorias; }
+
+    public Obra toObra() {
+        Obra obra = new Obra();
+        obra.setId(this.id);
+        obra.setTitulo(this.titulo);
+        obra.setAutor(this.autor);
+        obra.setImagenUrl(this.imagenUrl);
+        obra.setDescripcion(this.descripcion);
+        obra.setUsuariosQueDieronLike(this.usuariosQueDieronLike);
+        obra.setCategorias(this.categorias);
+        return obra;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        ObraDto obraDto = (ObraDto) o;
+        return Objects.equals(id, obraDto.id) && Objects.equals(titulo, obraDto.titulo) && Objects.equals(autor, obraDto.autor);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, titulo, autor);
+    }
 }

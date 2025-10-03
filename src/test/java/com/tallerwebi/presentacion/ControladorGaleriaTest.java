@@ -1,5 +1,6 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.Obra;
 import com.tallerwebi.dominio.Usuario;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -55,16 +56,16 @@ public class ControladorGaleriaTest {
     @Test
     public void siHay4obrasDeberiaRetornar4obras() {
         ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
-        ObraDto obraDto1 = mock(ObraDto.class);
-        ObraDto obraDto2 = mock(ObraDto.class);
-        ObraDto obraDto3 = mock(ObraDto.class);
-        ObraDto obraDto4 = mock(ObraDto.class);
-        List<ObraDto> obrasDto = new ArrayList<>();
-        obrasDto.add(obraDto1);
-        obrasDto.add(obraDto2);
-        obrasDto.add(obraDto3);
-        obrasDto.add(obraDto4);
-        when(servicioGaleria.obtener()).thenReturn(obrasDto);
+        Obra obra1 = mock(Obra.class);
+        Obra obra2 = mock(Obra.class);
+        Obra obra3 = mock(Obra.class);
+        Obra obra4 = mock(Obra.class);
+        List<Obra> obras = new ArrayList<>();
+        obras.add(obra1);
+        obras.add(obra2);
+        obras.add(obra3);
+        obras.add(obra4);
+        when(servicioGaleria.obtener()).thenReturn(obras);
 
         ControladorGaleria controladorGaleria = new ControladorGaleria(servicioGaleria);
 
@@ -82,9 +83,9 @@ public class ControladorGaleriaTest {
     public void alMostrarseLaGaleriaDeberianMostrarseTresListasDiferentes() {
         ServicioGaleria servicioGaleria = Mockito.mock(ServicioGaleria.class);
 
-        List<ObraDto> randomObras = new ArrayList<>();
-        List<ObraDto> autorObras = new ArrayList<>();
-        List<ObraDto> temaObras = new ArrayList<>();
+        List<Obra> randomObras = new ArrayList<>();
+        List<Obra> autorObras = new ArrayList<>();
+        List<Obra> temaObras = new ArrayList<>();
 
         Mockito.when(servicioGaleria.ordenarRandom()).thenReturn(randomObras);
         Mockito.when(servicioGaleria.obtenerPorAutor(Mockito.anyString())).thenReturn(autorObras);

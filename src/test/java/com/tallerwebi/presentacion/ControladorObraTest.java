@@ -40,15 +40,15 @@ public class ControladorObraTest {
     public void verObra_deberiaMostrarVistaConDatosDeLaObra() throws Exception {
         ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
         Obra obra = mock(Obra.class);
-        ObraDto obraDto = new ObraDto(obra);
-        obraDto.setId(1L);
-        obraDto.setTitulo("Obra A");
-        obraDto.setAutor("Autor A");
-        obraDto.setDescripcion("Lorem Ipsum");
-        
-        when(servicioGaleria.obtenerPorId(1L)).thenReturn(obraDto);
+        obra.setId(1L);
+        obra.setTitulo("Obra A");
+        obra.setAutor("Autor A");
+        obra.setDescripcion("Lorem Ipsum");
+
+        when(servicioGaleria.obtenerPorId(1L)).thenReturn(obra);
 
         ControladorObra controladorObra = new ControladorObra(servicioGaleria);
+        ObraDto obraDto = new ObraDto(obra);
 
         ModelAndView modelAndView = controladorObra.verObra(1L, request);
 
@@ -70,21 +70,22 @@ public class ControladorObraTest {
     @Test
     public void queUnUsuarioLoggeadoPuedaDarLikeAUnaObra() throws NoExisteLaObra {
         ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
-        Obra obra = mock(Obra.class);
-        ObraDto obraDto = new ObraDto(obra);
-        obraDto.setId(1L);
-        obraDto.setTitulo("Obra A");
-        obraDto.setAutor("Autor A");
-        obraDto.setDescripcion("Lorem Ipsum");
+        Obra obra = new Obra();
+        obra.setId(1L);
+        obra.setTitulo("Obra A");
+        obra.setAutor("Autor A");
+        obra.setDescripcion("Lorem Ipsum");
 
-        when(servicioGaleria.obtenerPorId(1L)).thenReturn(obraDto);
+        when(servicioGaleria.obtenerPorId(1L)).thenReturn(obra);
+
         doAnswer(invoc -> {
-            obraDto.setUsuariosQueDieronLike(Set.of(usuario));
+            obra.setUsuariosQueDieronLike(Set.of(usuario));
             return null;
         }).when(servicioGaleria).darLike(1L, this.usuario);
 
         ControladorObra controladorObra = new ControladorObra(servicioGaleria);
         ModelAndView modelAndView = controladorObra.darLike(1L, request);
+        ObraDto obraDto = new ObraDto(obra);
         ObraDto obraDtoEnModel = (ObraDto) modelAndView.getModel().get("obra");
 
         assertThat(modelAndView.getViewName(), is(equalTo("obra")));
@@ -96,17 +97,17 @@ public class ControladorObraTest {
     public void queUnUsuarioAnonimoNoPuedaDarLikeAUnaObra() throws NoExisteLaObra {
         ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
         Obra obra = mock(Obra.class);
-        ObraDto obraDto = new ObraDto(obra);
-        obraDto.setId(1L);
-        obraDto.setTitulo("Obra A");
-        obraDto.setAutor("Autor A");
-        obraDto.setDescripcion("Lorem Ipsum");
+        obra.setId(1L);
+        obra.setTitulo("Obra A");
+        obra.setAutor("Autor A");
+        obra.setDescripcion("Lorem Ipsum");
 
-        when(servicioGaleria.obtenerPorId(1L)).thenReturn(obraDto);
+        when(servicioGaleria.obtenerPorId(1L)).thenReturn(obra);
         doThrow(new UsuarioAnonimoException()).when(servicioGaleria).darLike(1L, null);
         when(this.request.getSession().getAttribute("usuarioLogueado")).thenReturn(null);
 
         ControladorObra controladorObra = new ControladorObra(servicioGaleria);
+        ObraDto obraDto = new ObraDto(obra);
         assertThrows(UsuarioAnonimoException.class, () -> controladorObra.darLike(1L, request));
         assertThat(obraDto.getUsuariosQueDieronLike().size(), is(equalTo(0)));
     }
