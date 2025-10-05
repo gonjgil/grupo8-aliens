@@ -74,4 +74,9 @@ public class RepositorioObraImpl implements RepositorioObra {
         obra.darLike(usuario);
         // obra.getUsuariosQueDieronLike().add(usuario);
     }
+
+    @Override
+    public void quitarLike(Obra obra, Usuario usuario) {
+        obra.quitarLike(usuario);
+    }
 }

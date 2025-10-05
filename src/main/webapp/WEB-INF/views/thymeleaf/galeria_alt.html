@@ -6,32 +6,48 @@
     <title>ALIENS - Portfolio</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- <link rel="stylesheet" href="../../../resources/core/css/galeria_alt.css" /> -->
-      <!-- Boostrap core css -->
-      <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
-     <link rel="stylesheet" th:href="@{/css/galeria_alt.css}"/>
+    <!-- Boostrap core css -->
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/galeria_alt.css}"/>
+    <link rel="stylesheet" th:href="@{/css/header.css}"/>
   </head>
   <body class="bg-gray-100 text-gray-800">
     <!-- Header -->
     <header class="bg-white p-6 flex justify-between items-center shadow-md">
-        <h1 class="text-4xl font-extrabold text-gray-900 tracking-wider">
-            <a th:href="@{/galeria_alt}" class="hover:text-blue-600 transition-colors">
-                ALIENS
-            </a>
-        </h1>
+      <!-- IZQUIERDA -->
+      <h1 class="text-4xl font-extrabold text-gray-900 tracking-wider">
+        <a th:href="@{/galeria_alt}" class="hover:text-blue-600 transition-colors">
+          ALIENS
+        </a>
+      </h1>
 
-        <div th:if="${usuario != null}">
-            <div th:text=" 'Hola, ' + ${usuario.email}"></div>
-        </div>
-        <div th:unless="${usuario != null}">
-            <button
-                    th:onclick="|location.href='@{/login}'|"
-                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg"
-            >
-                Iniciar Sesión
+      <!-- DERECHA -->
+      <div class="flex items-center gap-6">
+        <div th:if="${usuario != null}" class="flex items-center gap-4">
+          <div class="cart-icon relative">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+              <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+            </svg>
+            <span class="badge badge-warning" id="lblCartCount" th:text="${cartCount}"></span>
+          </div>
+
+          <div th:text="'Hola, ' + ${usuario.email}" class="text-gray-700 font-medium"></div>
+
+          <form th:action="@{/logout}" method="post">
+            <button type="submit"
+                    class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-md">
+              Cerrar sesión
             </button>
+          </form>
         </div>
 
-
+        <div th:unless="${usuario != null}">
+          <button th:onclick="|location.href='@{/login}'|"
+                  class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg">
+            Iniciar Sesión
+          </button>
+        </div>
+      </div>
     </header>
 
     <main class="container mx-auto py-12 px-4">

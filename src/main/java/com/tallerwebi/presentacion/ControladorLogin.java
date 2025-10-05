@@ -85,5 +85,13 @@ public class ControladorLogin {
 //        modelo.put("datosLogin", new DatosLogin());
 //        return new ModelAndView("galeria_alt", modelo);
 //    }
+
+    @RequestMapping(path = "/logout", method = RequestMethod.POST)
+    public ModelAndView logout(HttpServletRequest request) {
+        if (request.getSession() != null) {
+            request.getSession().invalidate();
+        }
+        return new ModelAndView("redirect:/galeria_alt");
+    }
 }
 

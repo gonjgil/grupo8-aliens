@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 
 import com.tallerwebi.dominio.excepcion.UsuarioAnonimoException;
-import com.tallerwebi.presentacion.ObraDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -62,14 +61,43 @@ public class ServicioGaleriaImpl implements ServicioGaleria {
     }
 
     @Override
-    public void darLike(Long id, Usuario usuario) throws NoExisteLaObra, UsuarioAnonimoException {
-        if (usuario == null) {
+    public void darLike(Obra obra, Usuario usuario) {
+        /*if (usuario == null) {
             throw new UsuarioAnonimoException();
         }
         Obra obra = repositorioObra.obtenerPorId(id);
         if (obra == null) {
             throw new NoExisteLaObra();
-        }
+        }*/
         repositorioObra.darLike(obra, usuario);
+    }
+
+    @Override
+    public void quitarLike(Obra obra, Usuario usuario) {
+        /*if (usuario == null) {
+            throw new UsuarioAnonimoException();
+        }
+        Obra obra = repositorioObra.obtenerPorId(id);
+        if (obra == null) {
+            throw new NoExisteLaObra();
+        }*/
+        repositorioObra.quitarLike(obra, usuario);
+    }
+
+    @Override
+    public void toggleLike(Long obraId, Usuario usuario) throws NoExisteLaObra, UsuarioAnonimoException {
+        if (usuario == null) {
+            throw new UsuarioAnonimoException();
+        }
+        Obra obra = repositorioObra.obtenerPorId(obraId);
+        if (obra == null) {
+            throw new NoExisteLaObra();
+        }
+
+        if (obra.getUsuariosQueDieronLike().contains(usuario)) {
+            this.quitarLike(obra, usuario);
+        } else {
+            this.darLike(obra, usuario);
+        }
     }
 }

@@ -13,6 +13,7 @@ import com.tallerwebi.dominio.ServicioGaleria;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -68,47 +69,81 @@ public class ControladorObraTest {
     }
 
     @Test
-    public void queUnUsuarioLoggeadoPuedaDarLikeAUnaObra() throws NoExisteLaObra {
+    public void queUnUsuarioLoggeadoPuedaDarLikeAUnaObra() throws NoExisteLaObra, UsuarioAnonimoException {
         ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
+        Long id = 1L;
         Obra obra = new Obra();
-        obra.setId(1L);
+        obra.setId(id);
         obra.setTitulo("Obra A");
         obra.setAutor("Autor A");
         obra.setDescripcion("Lorem Ipsum");
+        obra.setUsuariosQueDieronLike(new HashSet<>());
 
-        when(servicioGaleria.obtenerPorId(1L)).thenReturn(obra);
+        when(servicioGaleria.obtenerPorId(id)).thenReturn(obra);
 
+        // Simula que toggle agrega el like si no estaba
         doAnswer(invoc -> {
-            obra.setUsuariosQueDieronLike(Set.of(usuario));
+            obra.getUsuariosQueDieronLike().add(usuario);
             return null;
-        }).when(servicioGaleria).darLike(1L, this.usuario);
+        }).when(servicioGaleria).toggleLike(id, this.usuario);
 
         ControladorObra controladorObra = new ControladorObra(servicioGaleria);
-        ModelAndView modelAndView = controladorObra.darLike(1L, request);
+        ModelAndView modelAndView = controladorObra.toggleLike(id, request);
         ObraDto obraDto = new ObraDto(obra);
         ObraDto obraDtoEnModel = (ObraDto) modelAndView.getModel().get("obra");
 
-        assertThat(modelAndView.getViewName(), is(equalTo("obra")));
+        assertThat(modelAndView.getViewName(), is(equalTo("redirect:/obra/" + id)));
         assertThat(modelAndView.getModel().get("obra"), is(equalTo(obraDto)));
         assertThat(obraDtoEnModel.getUsuariosQueDieronLike().size(), is(equalTo(1)));
     }
 
     @Test
-    public void queUnUsuarioAnonimoNoPuedaDarLikeAUnaObra() throws NoExisteLaObra {
+    public void queUnUsuarioAnonimoNoPuedaDarLikeAUnaObra() throws NoExisteLaObra, UsuarioAnonimoException {
         ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
-        Obra obra = mock(Obra.class);
-        obra.setId(1L);
+        Long id = 1L;
+        Obra obra = new Obra();
+        obra.setId(id);
         obra.setTitulo("Obra A");
         obra.setAutor("Autor A");
         obra.setDescripcion("Lorem Ipsum");
 
-        when(servicioGaleria.obtenerPorId(1L)).thenReturn(obra);
-        doThrow(new UsuarioAnonimoException()).when(servicioGaleria).darLike(1L, null);
+        when(servicioGaleria.obtenerPorId(id)).thenReturn(obra);
+        doThrow(new UsuarioAnonimoException()).when(servicioGaleria).toggleLike(id, null);
         when(this.request.getSession().getAttribute("usuarioLogueado")).thenReturn(null);
 
         ControladorObra controladorObra = new ControladorObra(servicioGaleria);
-        ObraDto obraDto = new ObraDto(obra);
-        assertThrows(UsuarioAnonimoException.class, () -> controladorObra.darLike(1L, request));
-        assertThat(obraDto.getUsuariosQueDieronLike().size(), is(equalTo(0)));
+        ModelAndView modelAndView = controladorObra.toggleLike(id, request);
+
+        assertThat(modelAndView.getViewName(), is(equalTo("redirect:/obra/" + id)));
+        assertThat(modelAndView.getModel().get("error"), is(equalTo("Debe estar logueado para dar/quitar like.")));
     }
+
+    @Test
+    public void queUnUsuarioLoggeadoPuedaQuitarLikeAUnaObra() throws NoExisteLaObra, UsuarioAnonimoException {
+        ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
+        Long id = 1L;
+        Obra obra = new Obra();
+        obra.setId(id);
+        obra.setTitulo("Obra A");
+        obra.setAutor("Autor A");
+        obra.setDescripcion("Lorem Ipsum");
+        obra.setUsuariosQueDieronLike(new HashSet<>(Set.of(usuario))); // ya tenía el like
+
+        when(servicioGaleria.obtenerPorId(id)).thenReturn(obra);
+
+        doAnswer(invoc -> {
+            obra.getUsuariosQueDieronLike().remove(usuario);
+            return null;
+        }).when(servicioGaleria).toggleLike(id, this.usuario);
+
+        ControladorObra controladorObra = new ControladorObra(servicioGaleria);
+        ModelAndView modelAndView = controladorObra.toggleLike(id, request);
+        ObraDto obraDto = new ObraDto(obra);
+        ObraDto obraDtoEnModel = (ObraDto) modelAndView.getModel().get("obra");
+
+        assertThat(modelAndView.getViewName(), is(equalTo("redirect:/obra/" + id)));
+        assertThat(modelAndView.getModel().get("obra"), is(equalTo(obraDto)));
+        assertThat(obraDtoEnModel.getUsuariosQueDieronLike().size(), is(equalTo(0)));
+    }
+
 }
