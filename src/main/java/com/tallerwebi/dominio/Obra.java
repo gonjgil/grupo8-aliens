@@ -100,5 +100,5 @@ public class Obra {
     public void quitarLike(Usuario usuario) { this.usuariosQueDieronLike.remove(usuario); }
 
     public Set<Categoria> getCategorias() { return categorias; }
-    public void setCategorias(Set<Categoria> categorias) { this.categorias = categorias; }
+    public void agregarCategoria(Categoria categoria) { this.categorias.add(categoria); }
 }

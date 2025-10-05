@@ -1,6 +1,8 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.Usuario;
+import com.tallerwebi.dominio.enums.Categoria;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -88,7 +90,7 @@ public class ControladorGaleriaTest {
 
         Mockito.when(servicioGaleria.ordenarRandom()).thenReturn(randomObras);
         Mockito.when(servicioGaleria.obtenerPorAutor(Mockito.anyString())).thenReturn(autorObras);
-        Mockito.when(servicioGaleria.obtenerPorCategoria(Mockito.anyString())).thenReturn(temaObras);
+        Mockito.when(servicioGaleria.obtenerPorCategoria(Mockito.any(Categoria.class))).thenReturn(temaObras);
 
         ControladorGaleria controladorGaleria = new ControladorGaleria(servicioGaleria);
 

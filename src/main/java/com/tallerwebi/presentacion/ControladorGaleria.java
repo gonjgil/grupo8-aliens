@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.tallerwebi.dominio.Usuario;
+import com.tallerwebi.dominio.enums.Categoria;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.ui.ModelMap;
@@ -48,7 +50,7 @@ public class ControladorGaleria {
         
         model.put("randomObras", servicioGaleria.ordenarRandom());
         model.put("autorObras", servicioGaleria.obtenerPorAutor("J. Doe"));
-        model.put("temaObras", servicioGaleria.obtenerPorCategoria("ABSTRACTO"));
+        model.put("temaObras", servicioGaleria.obtenerPorCategoria(Categoria.ABSTRACTO));
 
         return new ModelAndView("galeria", model);
     }

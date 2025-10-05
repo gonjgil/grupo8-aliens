@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.tallerwebi.dominio.enums.Categoria;
 import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
 import com.tallerwebi.dominio.excepcion.NoHayObrasExistentes;
 
@@ -63,7 +64,7 @@ public class ServicioGaleriaImpl implements ServicioGaleria {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ObraDto> obtenerPorCategoria(String categoria) {
+    public List<ObraDto> obtenerPorCategoria(Categoria categoria) {
         try {
             return convertirYValidar(repositorioObra.obtenerPorCategoria(categoria));
         } catch (NoHayObrasExistentes e) {
