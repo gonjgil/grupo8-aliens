@@ -18,9 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
-// @RequestMapping("/galeria")
-// PREGUNTAR como hacer para definir distintas vistas y esto sirva tanto para el
-// home como para las diferentes galerias?
 public class ControladorGaleria {
 
 
@@ -31,7 +28,7 @@ public class ControladorGaleria {
         this.servicioGaleria = servicioGaleria;
     }
 
-    @RequestMapping(path = "/galeria_alt", method = RequestMethod.GET)
+    @RequestMapping(path = "/galeria", method = RequestMethod.GET)
     public ModelAndView mostrarGaleria(HttpServletRequest request) {
 
         ModelMap model = new ModelMap();
@@ -40,18 +37,19 @@ public class ControladorGaleria {
             Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
             model.put("usuario", usuario);
             List<ObraDto> obrasDto = this.servicioGaleria.obtener();
+            
             model.put("obras", obrasDto);
             model.put("exito", "Hay obras.");
         } catch (NoHayObrasExistentes e) {
             model.put("obras", new ArrayList<>());
             model.put("error", "No hay obras.");
-            return  new ModelAndView("galeria_alt", model);
+            return  new ModelAndView("galeria", model);
         }
         
         model.put("randomObras", servicioGaleria.ordenarRandom());
         model.put("autorObras", servicioGaleria.obtenerPorAutor("J. Doe"));
-        model.put("temaObras", servicioGaleria.obtenerPorCategoria("temaRandom"));
+        model.put("temaObras", servicioGaleria.obtenerPorCategoria("ABSTRACTO"));
 
-        return new ModelAndView("galeria_alt", model);
+        return new ModelAndView("galeria", model);
     }
 }

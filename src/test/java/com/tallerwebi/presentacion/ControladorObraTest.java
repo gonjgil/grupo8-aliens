@@ -36,7 +36,6 @@ public class ControladorObraTest {
         ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
         Obra obra = mock(Obra.class);
         ObraDto obraDto = new ObraDto(obra);
-        obraDto.setId(1L);
         obraDto.setTitulo("Obra A");
         obraDto.setAutor("Autor A");
         obraDto.setDescripcion("Lorem Ipsum");
