@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ElementCollection;
@@ -21,19 +22,18 @@ import javax.persistence.FetchType;
 
 @Entity
 public class Obra {
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(length = 100, nullable = false, insertable = true, updatable = true)
+    
+    public String codigo; // valor único para cada obra, ver como generarlo
     private String titulo;
-    @Column(length = 100, nullable = false, insertable = true, updatable = true)
     private String autor;
-    @Column(length = 200, nullable = false, insertable = true, updatable = true)
     private String imagenUrl;
-    @Column(length = 500, nullable = false, insertable = true, updatable = true)
     private String descripcion;
-    @Column(nullable = false, insertable = true, updatable = true)
+    
+    @Column(nullable = false)
     private Double precio;
 
     @ManyToMany
@@ -49,22 +49,14 @@ public class Obra {
     @Enumerated(EnumType.STRING)
     @Column(name = "categoria")
     private Set<Categoria> categorias = new HashSet<>();
-    public String codigo;
-    
+
+    @ManyToOne
+    @JoinColumn(name = "artista")
+    private Artista artista;
+
     public Obra() { }
 
-    public Obra(Long id, String titulo, String autor, String imagenUrl, String descripcion, Set<Categoria> categorias) {
-        this.id = id;
-        this.titulo = titulo;
-        this.autor = autor;
-        this.imagenUrl = imagenUrl;
-        this.descripcion = descripcion;
-        this.categorias = categorias;
-        this.precio = 5000.0; // precio por defecto
-    }
-
-    public Obra(Long id, String titulo, String autor, String imagenUrl, String descripcion, Set<Categoria> categorias, Double precio) {
-        this.id = id;
+      public Obra(String titulo, String autor, String imagenUrl, String descripcion, Set<Categoria> categorias, Double precio) {
         this.titulo = titulo;
         this.autor = autor;
         this.imagenUrl = imagenUrl;
@@ -101,4 +93,8 @@ public class Obra {
 
     public Set<Categoria> getCategorias() { return categorias; }
     public void agregarCategoria(Categoria categoria) { this.categorias.add(categoria); }
+
+    public Artista getArtista() { return artista; }
+    public void setArtista(Artista artista) { this.artista = artista; }
+
 }

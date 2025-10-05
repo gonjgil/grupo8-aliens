@@ -1,131 +1,312 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ALIENS - Obra</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
     <!-- <link rel="stylesheet" href="../../../resources/core/css/galeria.css" /> -->
     <!-- Boostrap core css -->
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
-    <link rel="stylesheet" th:href="@{/css/obra.css}"/>
-</head>
-<body class="bg-gray-100 text-gray-800">
-<!-- Header -->
-<header class="bg-white p-6 flex justify-between items-center shadow-md">
-    <h1 class="text-4xl font-extrabold text-gray-900 tracking-wider">
+    <link
+      rel="stylesheet"
+      th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"
+    />
+    <link rel="stylesheet" th:href="@{/css/obra.css}" />
+  </head>
+  <body class="bg-gray-100 text-gray-800">
+    <!-- Header -->
+    <header class="bg-white p-6 flex justify-between items-center shadow-md">
+      <h1 class="text-4xl font-extrabold text-gray-900 tracking-wider">
         <a th:href="@{/galeria}" class="hover:text-blue-600 transition-colors">
-            ALIENS
+          ALIENS
         </a>
-    </h1>
-    <div th:if="${usuario != null}">
-        <div th:text=" 'Hola, ' + ${usuario.email}"></div>
-    </div>
-    <div th:unless="${usuario != null}">
-        <button th:onclick="|location.href='@{/login}'|"
-                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg">
+      </h1>
+
+      <div class="flex items-center space-x-4">
+        <div th:if="${usuario != null}" class="flex items-center space-x-4">
+          <a href="/spring/carrito" class="text-blue-600 font-semibold">
+            <i class="fas fa-shopping-cart"></i>
+            Carrito
+            <span
+              th:if="${cantidadItems > 0}"
+              class="bg-red-500 text-white rounded-full px-2 py-1 text-xs ml-1"
+              th:text="${cantidadItems}"
+            ></span>
+          </a>
+          <div th:text=" 'Hola, ' + ${usuario.email}"></div>
+          <a
+            th:href="@{/logout}"
+            class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg"
+          >
+            Cerrar Sesión
+          </a>
+        </div>
+        <div th:unless="${usuario != null}">
+          <button
+            th:onclick="|location.href='@{/login}'|"
+            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg"
+          >
             Iniciar Sesión
-        </button>
-    </div>
+          </button>
+        </div>
+      </div>
+    </header>
 
-</header>
-
-<main class="obra-page flex flex-col md:flex-row w-full min-h-screen">
-
-    <div class="obra-left">
-        <img th:src="${obra.imagenUrl}"
-             alt="Imagen de la obra"
-             class="obra-visual"
-             tabindex="0" />
+    <main class="obra-page flex flex-col md:flex-row w-full min-h-screen">
+      <div class="obra-left">
+        <img
+          th:src="${obra.imagenUrl}"
+          alt="Imagen de la obra"
+          class="obra-visual"
+          tabindex="0"
+        />
 
         <div class="obra-categorias flex flex-wrap gap-2 mt-4">
-            <span th:each="categoria : ${obra.categorias}"
-                  th:text="${categoria.categoria}"
-                  class="categoria-tag px-3 py-1 bg-gray-200 text-gray-700 rounded-full text-sm hover:bg-gray-300 transition">
-            </span>
+          <span
+            th:each="categoria : ${obra.categorias}"
+            th:text="${categoria.categoria}"
+            class="categoria-tag px-3 py-1 bg-gray-200 text-gray-700 rounded-full text-sm hover:bg-gray-300 transition"
+          ></span>
         </div>
-    </div>
+      </div>
 
-    <div class="obra-right w-full md:w-1/2 p-8 flex flex-col justify-between">
+      <div class="obra-right w-full md:w-1/2 p-8 flex flex-col justify-between">
         <div class="obra-header mb-8 text-center md:text-left">
-            <h1 class="obra-titulo text-4xl font-bold mb-2" th:text="${obra.titulo}"></h1>
-            <p class="obra-autor text-xl text-gray-600" th:text="${obra.autor}"></p>
+          <h1
+            class="obra-titulo text-4xl font-bold mb-2"
+            th:text="${obra.titulo}"
+          ></h1>
+          <p
+            class="obra-autor text-xl text-gray-600"
+            th:text="${obra.autor}"
+          ></p>
         </div>
 
         <div class="obra-body flex-grow mb-8">
-            <p class="obra-descripcion text-lg" th:text="${obra.descripcion}"></p>
+          <p class="obra-descripcion text-lg" th:text="${obra.descripcion}"></p>
         </div>
 
-        <div class="obra-meta flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div class="likes flex items-center gap-2">
-                <form th:action="@{/obra/{id}/dar-like(id=${obra.id})}" method="post">
-                    <button type="submit"
-                            class="like-button px-4 py-2 rounded-full border border-gray-300 hover:bg-blue-50"
-                            aria-pressed="false">&#x2764;</button>
-                </form>
-                <div class="likes flex items-center gap-1">
-                    <span th:text="${obra.getCantidadLikes()}"></span>
-                    <span class="likes-label text-gray-500 text-sm">personas dieron like</span>
-                </div>
-            </div>
-            <a class="btn btn-primary bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300"
-               href="#" id="comprarBtn">Comprar</a>
+        <div class="likes flex items-center gap-1">
+          <button
+            type="submit"
+            class="like-button px-4 py-2 rounded-full border border-gray-300 hover:bg-blue-50"
+            aria-pressed="false"
+          >
+            &#x2764;
+          </button>
+          <span th:text="${obra.getCantidadLikes()}"></span>
+          <span class="likes-label text-gray-500 text-sm">
+            personas dieron like
+          </span>
         </div>
-    </div>
-</main>
+        <div
+          class="obra-meta flex flex-col sm:flex-row justify-between items-center gap-4"
+        >
+          <div class="precio-container">
+            <span
+              class="precio text-2xl font-bold text-green-600"
+              th:text="'$' + ${#numbers.formatDecimal(obra.precio, 1, 'COMMA', 2, 'POINT')}"
+            ></span>
+          </div>
 
-<!-- Footer -->
-<footer
-        class="bg-gray-300 p-6 text-center text-gray-700 mt-12 shadow-inner"
->
-    <p>&copy; 2025 Grupo 8</p>
-    <p class="integrantes">Gil - Solodujin - Landín - Santillan - Torrico</p>
-</footer>
+          <div class="likes flex items-center gap-2">
+            <form
+              th:action="@{/obra/{id}/dar-like(id=${obra.id})}"
+              method="post"
+            ></form>
+          </div>
+          <div class="flex gap-2">
+            <form th:action="@{/carrito/agregar}" method="post">
+              <input type="hidden" name="obraId" th:value="${obra.id}" />
+              <input type="hidden" name="cantidad" value="1" />
+              <button
+                type="submit"
+                class="btn bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full transition duration-300"
+              >
+                <i class="fas fa-shopping-cart mr-2"></i>
+                Agregar al Carrito
+              </button>
+            </form>
+            <a
+              class="btn btn-primary bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300"
+              href="#"
+              id="comprarBtn"
+            >
+              Comprar Ahora
+            </a>
+          </div>
+        </div>
+      </div>
+    </main>
 
-</body>
+    <!-- Footer -->
+    <footer
+      class="bg-gray-300 p-6 text-center text-gray-700 mt-12 shadow-inner"
+    >
+      <p>&copy; 2025 Grupo 8</p>
+      <p class="integrantes">Gil - Solodujin - Landín - Santillan - Torrico</p>
+    </footer>
+  </body>
 
-<script th:inline="javascript">
-document.getElementById('comprarBtn').addEventListener('click', async () => {
-  // Usar los datos reales de la obra
-  const items = [{
-    id: 'obra-' + /*[[${obra.id}]]*/ '1',
-    title: /*[[${obra.titulo}]]*/ 'Obra de arte',
-    quantity: 1,
-    unit_price: /*[[${obra.precio}]]*/ 5000
-  }];
+  <script th:inline="javascript">
+    document
+      .getElementById('comprarBtn')
+      .addEventListener('click', async () => {
+        // Usar los datos reales de la obra
+        const items = [
+          {
+            id: 'obra-' + /*[[${obra.id}]]*/ '1',
+            title: /*[[${obra.titulo}]]*/ 'Obra de arte',
+            quantity: 1,
+            unit_price: /*[[${obra.precio}]]*/ 5000,
+          },
+        ];
 
-  try {
-    // Usar la URL correcta de tu aplicación Spring
-    const response = await fetch('/spring/api/pagos', {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify({ items })
-    });
-    
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Error response:', errorText);
-      throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
+        try {
+          // Usar la URL correcta de tu aplicación Spring
+          const response = await fetch('/spring/api/pagos', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Accept: 'application/json',
+            },
+            body: JSON.stringify({ items }),
+          });
+
+          if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Error response:', errorText);
+            throw new Error(
+              `HTTP error! status: ${response.status} - ${errorText}`
+            );
+          }
+
+          const data = await response.json();
+
+          // Verificar que tenemos la URL de sandbox para testing
+
+          if (data.init_point) {
+            // Redirigir al link de Mercado Pago
+            window.location.href = data.init_point;
+          } else {
+            alert(
+              'Error al generar el pago: ' +
+                (data.error || 'Respuesta inválida')
+            );
+          }
+        } catch (err) {
+          console.error('Error completo:', err);
+          alert('Error de conexión: ' + err.message);
+        }
+      });
+
+    // Función para actualizar el contador del carrito
+    function actualizarContadorCarrito() {
+      fetch('/spring/carrito/count')
+        .then((response) => response.json())
+        .then((count) => {
+          const contador = document.querySelector('[data-carrito-count]');
+          if (contador) {
+            if (count > 0) {
+              contador.textContent = count;
+              contador.classList.remove('hidden');
+            } else {
+              contador.classList.add('hidden');
+            }
+          }
+        })
+        .catch((error) => console.error('Error actualizando contador:', error));
     }
-    
-    const data = await response.json();
-    
-    // Verificar que tenemos la URL de sandbox para testing
-    
-    if (data.init_point) {
-      // Redirigir al link de Mercado Pago
-      window.location.href = data.init_point;
-    } else {
-      alert('Error al generar el pago: ' + (data.error || 'Respuesta inválida'));
-    }
-  } catch (err) {
-    console.error('Error completo:', err);
-    alert('Error de conexión: ' + err.message);
-  }
-});
-</script>
 
+    // Actualizar contador al cargar la página
+    actualizarContadorCarrito();
+
+    // Manejar el formulario de agregar al carrito con AJAX
+    const carritoForm = document.querySelector(
+      'form[action*="/carrito/agregar"]'
+    );
+    if (carritoForm) {
+      carritoForm.addEventListener('submit', function (e) {
+        e.preventDefault(); // Prevenir envío normal del formulario
+
+        const formData = new FormData(this);
+        const obraId = formData.get('obraId');
+        const cantidad = formData.get('cantidad') || 1;
+
+        // Hacer petición AJAX
+        fetch('/spring/carrito/agregar/ajax', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: `obraId=${obraId}&cantidad=${cantidad}`,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              // Actualizar contador
+              const contador = document.querySelector('[data-carrito-count]');
+              if (contador) {
+                if (data.carritoCount > 0) {
+                  contador.textContent = data.carritoCount;
+                  contador.classList.remove('hidden');
+                } else {
+                  contador.classList.add('hidden');
+                }
+              }
+
+              // Efecto visual en el botón
+              const button = this.querySelector('button');
+              const originalText = button.innerHTML;
+              button.innerHTML = '<i class="fas fa-check mr-2"></i>¡Agregado!';
+              button.classList.add('bg-green-500');
+
+              // Mostrar notificación
+              mostrarNotificacion(
+                'Obra agregada al carrito exitosamente',
+                'success'
+              );
+
+              // Después de 2 segundos, redirigir a galería
+              setTimeout(() => {
+                window.location.href = '/spring/galeria';
+              }, 2000);
+            } else {
+              mostrarNotificacion(data.message, 'error');
+            }
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+            mostrarNotificacion('Error de conexión', 'error');
+          });
+      });
+    }
+
+    // Función para mostrar notificaciones
+    function mostrarNotificacion(mensaje, tipo) {
+      const tipoClases = {
+        success: 'bg-green-100 text-green-700 border border-green-300',
+        error: 'bg-red-100 text-red-700 border border-red-300',
+        info: 'bg-blue-100 text-blue-700 border border-blue-300',
+      };
+
+      const notificacion = document.createElement('div');
+      notificacion.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg ${
+        tipoClases[tipo] || tipoClases.info
+      }`;
+      notificacion.innerHTML = `<p>${mensaje}</p>`;
+
+      document.body.appendChild(notificacion);
+
+      // Auto-remover después de 3 segundos
+      setTimeout(() => {
+        notificacion.style.opacity = '0';
+        setTimeout(() => notificacion.remove(), 300);
+      }, 3000);
+    }
+  </script>
 </html>

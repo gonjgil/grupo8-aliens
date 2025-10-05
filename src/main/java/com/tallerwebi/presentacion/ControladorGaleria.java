@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.tallerwebi.dominio.ServicioGaleria;
+import com.tallerwebi.dominio.ServicioCarrito;
 import com.tallerwebi.dominio.excepcion.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +23,15 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class ControladorGaleria {
 
-
     @Autowired
     private ServicioGaleria servicioGaleria;
+    
+    @Autowired
+    private ServicioCarrito servicioCarrito;
 
-    public ControladorGaleria(ServicioGaleria servicioGaleria) {
+    public ControladorGaleria(ServicioGaleria servicioGaleria, ServicioCarrito servicioCarrito) {
         this.servicioGaleria = servicioGaleria;
+        this.servicioCarrito = servicioCarrito;
     }
 
     @RequestMapping(path = "/galeria", method = RequestMethod.GET)
@@ -38,6 +42,15 @@ public class ControladorGaleria {
         try {
             Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
             model.put("usuario", usuario);
+            
+            // Agregar cantidad de items en el carrito
+            if (usuario != null) {
+                Integer cantidadItems = servicioCarrito.contarItemsEnCarrito(usuario);
+                model.put("cantidadItems", cantidadItems);
+            } else {
+                model.put("cantidadItems", 0);
+            }
+            
             List<ObraDto> obrasDto = this.servicioGaleria.obtener();
             
             model.put("obras", obrasDto);

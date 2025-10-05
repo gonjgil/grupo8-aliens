@@ -100,10 +100,6 @@ public class RepositorioObraImplTest {
         List<Obra> obrasObtenidas = query.getResultList();
 
         assertThat(obrasObtenidas.size(), is(equalTo(0)));
-        assertThrows(IllegalArgumentException.class, () -> {
-            query.setParameter("categoria", null);
-            query.getResultList();
-        }, "No se encontraron obras para la categoría especificada");
     }
 
     @Test

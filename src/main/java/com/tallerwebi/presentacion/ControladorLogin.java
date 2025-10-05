@@ -37,6 +37,8 @@ public class ControladorLogin {
 
         Usuario usuarioBuscado = servicioLogin.consultarUsuario(datosLogin.getEmail(), datosLogin.getPassword());
         if (usuarioBuscado != null) {
+            // Configurar la sesión para que persista
+            request.getSession().setMaxInactiveInterval(3600); // 1 hora
             request.getSession().setAttribute("ROL", usuarioBuscado.getRol());
             request.getSession().setAttribute("usuarioLogueado", usuarioBuscado);
             return new ModelAndView("redirect:/galeria");
@@ -44,6 +46,12 @@ public class ControladorLogin {
             model.put("error", "Usuario o clave incorrecta");
         }
         return new ModelAndView("login", model);
+    }
+
+    @RequestMapping(path = "/logout", method = RequestMethod.GET)
+    public ModelAndView logout(HttpServletRequest request) {
+        request.getSession().invalidate();
+        return new ModelAndView("redirect:/login");
     }
 
     @RequestMapping(path = "/registrarme", method = RequestMethod.POST)
