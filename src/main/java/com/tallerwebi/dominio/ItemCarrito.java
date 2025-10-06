@@ -26,18 +26,17 @@ public class ItemCarrito {
 
     public ItemCarrito() {}
 
-    public ItemCarrito(Carrito carrito, Obra obra, Integer cantidad) {
+    public ItemCarrito(Carrito carrito, Obra obra) {
         this.carrito = carrito;
         this.obra = obra;
-        this.cantidad = cantidad;
         this.precioUnitario = obra.getPrecio();
+        this.cantidad = 1;
     }
 
     public Double getSubtotal() {
         return precioUnitario * cantidad;
     }
 
-    // Getters y Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

@@ -38,17 +38,16 @@ public class Carrito {
     }
 
     public Carrito(Usuario usuario) {
-        this();
+        this(); // llamada al constructor vacio para inicializar fechas y estado
         this.usuario = usuario;
     }
 
-    // Métodos de negocio
-    public void agregarItem(Obra obra, Integer cantidad) {
+    public void agregarItem(Obra obra) {
         ItemCarrito itemExistente = buscarItemPorObra(obra);
         if (itemExistente != null) {
-            itemExistente.setCantidad(itemExistente.getCantidad() + cantidad);
+            itemExistente.setCantidad(itemExistente.getCantidad() + 1);
         } else {
-            ItemCarrito nuevoItem = new ItemCarrito(this, obra, cantidad);
+            ItemCarrito nuevoItem = new ItemCarrito(this, obra);
             this.items.add(nuevoItem);
         }
         this.fechaActualizacion = LocalDateTime.now();
@@ -77,25 +76,30 @@ public class Carrito {
     }
 
     public Double getTotal() {
-        return items.stream()
-                .mapToDouble(ItemCarrito::getSubtotal)
-                .sum();
+        Double total = 0.0;
+        for (ItemCarrito item : items) {
+            total += item.getSubtotal();
+        }
+        return total;
     }
-
+        
     public Integer getCantidadTotalItems() {
-        return items.stream()
-                .mapToInt(ItemCarrito::getCantidad)
-                .sum();
+        Integer totalCantidad = 0;
+        for (ItemCarrito item : items) {
+            totalCantidad += item.getCantidad();
+        }
+        return totalCantidad;
     }
 
     private ItemCarrito buscarItemPorObra(Obra obra) {
-        return items.stream()
-                .filter(item -> item.getObra().getId().equals(obra.getId()))
-                .findFirst()
-                .orElse(null);
+        for (ItemCarrito item : items) {
+            if (item.getObra().getId().equals(obra.getId())) {
+                return item;
+            }
+        }
+        return null;
     }
 
-    // Getters y Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

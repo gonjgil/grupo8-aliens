@@ -27,7 +27,7 @@ public class Obra {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    public String codigo; // valor único para cada obra, ver como generarlo
+    public String codigo; // valor único para cada obra? ver como generarlo automaticamente
     private String titulo;
     private String autor;
     private String imagenUrl;
@@ -66,7 +66,8 @@ public class Obra {
     }
 
     public Long getId() { return id; }
-
+    public void setId(Long id) { this.id = id; }
+    
     public String getTitulo() { return titulo; }
     public void setTitulo(String titulo) { this.titulo = titulo; }
     
