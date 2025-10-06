@@ -1,182 +1,328 @@
 <!DOCTYPE html>
-<html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
   <head>
-    <title>ALIENS</title>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, user-scalable=no"
-    />
-    <link rel="stylesheet" th:href="@{/css/html5up/main.css}"/>
-    <noscript><link rel="stylesheet" th:href="@{/css/html5up/noscript.css}" /></noscript>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ALIENS - Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+      <!-- Boostrap core css -->
+      <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+     <link rel="stylesheet" th:href="@{/css/galeria.css}"/>
   </head>
-  <body class="is-preload">
-    <div id="wrapper">
-      <section id="main">
-        <div class="items">
-          <div class="item intro span-2">
-            <h1>ALIENS</h1>
-            <p>by Grupo 8</p>
+  <body class="bg-gray-100 text-gray-800">
+    <!-- Header -->
+    <header class="bg-white p-6 flex justify-between items-center shadow-md">
+        <h1 class="text-4xl font-extrabold text-gray-900 tracking-wider">
+            <a th:href="@{/galeria}" class="hover:text-blue-600 transition-colors">
+                ALIENS
+            </a>
+        </h1>
+
+        <div class="flex items-center space-x-4">
+            <div th:if="${usuario != null}" class="flex items-center space-x-4">
+                <div th:text=" 'Hola, ' + ${usuario.email}"></div>
+                <a th:href="@{/logout}" 
+                   class="bg-red-600 hover:bg-red-700 fa-solid fa-right-from-bracket text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg">
+                </a>
+            </div>
+            <div th:unless="${usuario != null}">
+                <button
+                        th:onclick="|location.href='@{/login}'|"
+                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg"
+                >
+                    Iniciar Sesión
+                </button>
+            </div>
+        </div>
+
+
+    </header>
+
+    <main class="container mx-auto py-12 px-4">
+      <!-- Mock Payment Success Message -->
+      <div th:if="${param.payment != null and param.payment[0] == 'mock-success'}" 
+           class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
+        <strong>¡Pago simulado exitoso!</strong> En un entorno real, esto sería procesado por MercadoPago.
+        <span class="float-right cursor-pointer" onclick="this.parentElement.style.display='none'">&times;</span>
+      </div>
+      
+      <!-- Spotlight Carousel -->
+      <section class="mb-16">
+        <h2 class="text-3xl font-bold mb-6 text-gray-900">Spotlight</h2>
+        <div class="carousel-container relative">
+          <div id="spotlight-track" class="carousel-track">
+            <!-- Carousel items will be injected here by JS -->
+              <a th:href="@{/obra/{id}(id=${obra.id})}" th:each="obra : ${randomObras}" class="carousel-item group cursor-pointer transition-transform duration-300 transform hover:scale-105" th:style="|background-image: url('${obra.imagenUrl}')|">
+                <div class="image-overlay">
+                  <p class="text-sm font-semibold text-white" th:text="${obra.titulo}"></p>
+                  <p class="text-xs text-gray-300" th:text="${obra.autor}"></p>
+                </div>
+              </a>
           </div>
-
-          <article class="item thumb span-1"> 
-            <h2>You really got me</h2>
-            <a th:href="@{/images/html5up/fulls/01.jpg}" class="image">
-              <img th:src="@{/images/html5up/thumbs/01.jpg}" alt="" />
-            </a>
-          </article>
-
-          <article class="item thumb span-2">
-            <h2>Ad Infinitum</h2>
-            <a th:href="@{/images/html5up/fulls/02.jpg}" class="image">
-              <img th:src="@{/images/html5up/thumbs/02.jpg}" alt="" />
-            </a>
-          </article>
-
-          <article class="item thumb span-1">
-            <h2>Different.</h2>
-            <a th:href="@{/images/html5up/fulls/03.jpg}" class="image">
-              <img th:src="@{/images/html5up/thumbs/03.jpg}" alt="" />
-            </a>
-          </article>
-
-          <article class="item thumb span-1">
-            <h2>Elysium</h2>
-            <a th:href="@{/images/html5up/fulls/04.jpg}" class="image">
-              <img th:src="@{/images/html5up/thumbs/04.jpg}" alt="" />
-            </a>
-          </article>
-
-          <article class="item thumb span-3">
-            <h2>Kingdom of the Wind</h2>
-            <a th:href="@{/images/html5up/fulls/05.jpg}" class="image">
-              <img th:src="@{/images/html5up/thumbs/05.jpg}" alt="" />
-            </a>
-          </article>
-
-          <article class="item thumb span-1">
-            <h2>The Pursuit</h2>
-            <a th:href="@{/images/html5up/fulls/06.jpg}" class="image">
-              <img th:src="@{/images/html5up/thumbs/06.jpg}" alt="" />
-            </a>
-          </article>
-
-          <article class="item thumb span-2">
-            <h2>Boundless</h2>
-            <a th:href="@{/images/html5up/fulls/07.jpg}" class="image">
-              <img th:src="@{/images/html5up/thumbs/07.jpg}" alt="" />
-            </a>
-          </article>
-
-          <article class="item thumb span-2">
-            <h2>The Spectators</h2>
-            <a th:href="@{/images/html5up/fulls/08.jpg}" class="image">
-              <img th:src="@{/images/html5up/thumbs/08.jpg}" alt="" />
-            </a>
-          </article>
-        </div>
-
-        <div class="items">
-          <article class="item thumb span-3">
-            <h2>Kingdom of the Wind</h2>
-            <a th:href="@{/images/html5up/fulls/05.jpg}" class="image">
-              <img th:src="@{/images/html5up/thumbs/05.jpg}" alt="" />
-            </a>
-          </article>
-          <article class="item thumb span-1">
-            <h2>The Pursuit</h2>
-            <a th:href="@{/images/html5up/fulls/06.jpg}" class="image">
-              <img th:src="@{/images/html5up/thumbs/06.jpg}" alt="" />
-            </a>
-          </article>
-          <article class="item thumb span-2">
-            <h2>Boundless</h2>
-            <a th:href="@{/images/html5up/fulls/07.jpg}" class="image">
-              <img th:src="@{/images/html5up/thumbs/07.jpg}" alt="" />
-            </a>
-          </article>
-          <article class="item thumb span-2">
-            <h2>The Spectators</h2>
-            <a th:href="@{/images/html5up/fulls/08.jpg}" class="image">
-              <img th:src="@{/images/html5up/thumbs/08.jpg}" alt="" />
-            </a>
-          </article>
-          <article class="item thumb span-1">
-            <h2>You really got me</h2>
-            <a th:href="@{/images/html5up/fulls/01.jpg}" class="image">
-              <img th:src="@{/images/html5up/thumbs/01.jpg}" alt="" />
-            </a>
-          </article>
-          <article class="item thumb span-2">
-            <h2>Ad Infinitum</h2>
-            <a th:href="@{/images/html5up/fulls/02.jpg}" class="image">
-              <img th:src="@{/images/html5up/thumbs/02.jpg}" alt="" />
-            </a>
-          </article>
-          <article class="item thumb span-1">
-            <h2>Different.</h2>
-            <a th:href="@{/images/html5up/fulls/03.jpg}" class="image">
-              <img th:src="@{/images/html5up/thumbs/03.jpg}" alt="" />
-            </a>
-          </article>
-          <article class="item thumb span-2">
-            <h2>Kingdom of the Wind</h2>
-            <a th:href="@{/images/html5up/fulls/05.jpg}" class="image">
-              <img th:src="@{/images/html5up/thumbs/05.jpg}" alt="" />
-            </a>
-          </article>
-          <article class="item thumb span-1">
-            <h2>Elysium</h2>
-            <a th:href="@{/images/html5up/fulls/04.jpg}" class="image">
-              <img th:src="@{/images/html5up/thumbs/04.jpg}" alt="" />
-            </a>
-          </article>
+          <button
+            class="scroll-button left-button"
+            onclick="scrollCarousel('spotlight', -1)"
+          >
+            <svg
+              class="w-10 h-10"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              ></path>
+            </svg>
+          </button>
+          <button
+            class="scroll-button right-button"
+            onclick="scrollCarousel('spotlight', 1)"
+          >
+            <svg
+              class="w-10 h-10"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              ></path>
+            </svg>
+          </button>
         </div>
       </section>
 
-      <section id="footer">
-        <section>
-          <div></div>
-        </section>
-        <section>
-          <ul class="icons">
-            <li>
-              <a href="#" class="icon brands fa-twitter">
-                <span class="label">Twitter</span>
+      <!-- Author Carousel -->
+      <section class="mb-16">
+        <h2 class="text-3xl font-bold mb-6 text-gray-900">Autor</h2>
+        <div class="carousel-container relative">
+          <div id="author-track" class="carousel-track">
+            <!-- Carousel items will be injected here by JS -->
+              <a th:href="@{/obra/{id}(id=${obra.id})}" th:each="obra : ${autorObras}" class="carousel-item group cursor-pointer transition-transform duration-300 transform hover:scale-105" th:style="|background-image: url('${obra.imagenUrl}')|">
+                  <div class="image-overlay">
+                      <p class="text-sm font-semibold text-white" th:text="${obra.titulo}"></p>
+                      <p class="text-xs text-gray-300" th:text="${obra.autor}"></p>
+                  </div>
               </a>
-            </li>
-            <li>
-              <a href="#" class="icon brands fa-instagram">
-                <span class="label">Instagram</span>
-              </a>
-            </li>
-            <li>
-              <a href="#" class="icon brands fa-facebook-f">
-                <span class="label">Facebook</span>
-              </a>
-            </li>
-            <li>
-              <a href="#" class="icon solid fa-envelope">
-                <span class="label">Email</span>
-              </a>
-            </li>
-          </ul>
-          <ul class="copyright">
-            <li>&copy; Grupo 8</li>
-            <li>
-              Diseño:
-              <a href="#">Gil - Solodujin - Brossard - Landin - Santillan</a>
-            </li>
-          </ul>
-        </section>
+          </div>
+          <button
+            class="scroll-button left-button"
+            onclick="scrollCarousel('author', -1)"
+          >
+            <svg
+              class="w-10 h-10"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              ></path>
+            </svg>
+          </button>
+          <button
+            class="scroll-button right-button"
+            onclick="scrollCarousel('author', 1)"
+          >
+            <svg
+              class="w-10 h-10"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              ></path>
+            </svg>
+          </button>
+        </div>
       </section>
-    </div>
 
-    <script th:src="@{/js/html5up/jquery.min.js}"></script>
-    <script th:src="@{/js/html5up/jquery.poptrox.min.js}"></script>
-    <script th:src="@{/js/html5up/browser.min.js}"></script>
-    <script th:src="@{/js/html5up/breakpoints.min.js}"></script>
-    <script th:src="@{/js/html5up/util.js}"></script>
-    <script th:src="@{/js/html5up/main.js}"></script>
+      <!-- Theme Carousel -->
+      <section>
+        <h2 class="text-3xl font-bold mb-6 text-gray-900">Tema</h2>
+        <div class="carousel-container relative">
+          <div id="theme-track" class="carousel-track">
+            <!-- Carousel items will be injected here by JS -->
+              <div th:each="obra : ${temaObras}" class="carousel-item group cursor-pointer transition-transform duration-300 transform hover:scale-105" th:style="|background-image: url('${obra.imagenUrl}')|">
+                  <div class="image-overlay">
+                      <p class="text-sm font-semibold text-white" th:text="${obra.titulo}"></p>
+                      <p class="text-xs text-gray-300" th:text="${obra.autor}"></p>
+                  </div>
+              </div>
+          </div>
+          <button
+            class="scroll-button left-button"
+            onclick="scrollCarousel('theme', -1)"
+          >
+            <svg
+              class="w-10 h-10"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              ></path>
+            </svg>
+          </button>
+          <button
+            class="scroll-button right-button"
+            onclick="scrollCarousel('theme', 1)"
+          >
+            <svg
+              class="w-10 h-10"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              ></path>
+            </svg>
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer
+      class="bg-gray-300 p-6 text-center text-gray-700 mt-12 shadow-inner"
+    >
+      <p>&copy; 2025 Grupo 8</p>
+      <p class="integrantes">Gil - Solodujin - Landín - Santillan - Torrico</p>
+    </footer>
+
+    <script th:src="@{/js/galeria.js}"></script>
+    <script>
+        // Función para actualizar el contador del carrito
+        function actualizarContadorCarrito() {
+            fetch('/spring/carrito/count')
+                .then(response => response.json())
+                .then(count => {
+                    const contador = document.querySelector('[data-carrito-count]');
+                    if (contador) {
+                        if (count > 0) {
+                            contador.textContent = count;
+                            contador.classList.remove('hidden');
+                        } else {
+                            contador.classList.add('hidden');
+                        }
+                    }
+                })
+                .catch(error => console.error('Error actualizando contador:', error));
+        }
+
+        // Mejorar los botones de "Agregar al Carrito" para usar AJAX
+        document.addEventListener('DOMContentLoaded', function() {
+            // Actualizar contador al cargar la página
+            actualizarContadorCarrito();
+
+            // Manejar clicks en botones de agregar al carrito
+            document.querySelectorAll('form[action*="/carrito/agregar"]').forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault(); // Prevenir envío normal del formulario
+                    
+                    const formData = new FormData(this);
+                    const obraId = formData.get('obraId');
+                    const cantidad = formData.get('cantidad') || 1;
+
+                    // Hacer petición AJAX
+                    fetch('/spring/carrito/agregar/ajax', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: `obraId=${obraId}&cantidad=${cantidad}`
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Actualizar contador
+                            const contador = document.querySelector('[data-carrito-count]');
+                            if (contador) {
+                                if (data.carritoCount > 0) {
+                                    contador.textContent = data.carritoCount;
+                                    contador.classList.remove('hidden');
+                                } else {
+                                    contador.classList.add('hidden');
+                                }
+                            }
+
+                            // Mostrar mensaje de éxito
+                            mostrarMensaje(data.message, 'success');
+                            
+                            // Efecto visual en el botón
+                            const button = this.querySelector('button');
+                            const originalText = button.innerHTML;
+                            button.innerHTML = '<i class="fas fa-check mr-2"></i>¡Agregado!';
+                            button.classList.add('bg-green-500');
+                            
+                            setTimeout(() => {
+                                button.innerHTML = originalText;
+                                button.classList.remove('bg-green-500');
+                            }, 2000);
+                        } else {
+                            mostrarMensaje(data.message, 'error');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        mostrarMensaje('Error de conexión', 'error');
+                    });
+                });
+            });
+        });
+
+        // Función para mostrar mensajes
+        function mostrarMensaje(mensaje, tipo) {
+            // Remover mensajes existentes
+            document.querySelectorAll('.mensaje-dinamico').forEach(el => el.remove());
+            
+            const tipoClases = {
+                'success': 'bg-green-100 text-green-700 border border-green-300',
+                'error': 'bg-red-100 text-red-700 border border-red-300',
+                'info': 'bg-blue-100 text-blue-700 border border-blue-300'
+            };
+
+            const mensajeEl = document.createElement('div');
+            mensajeEl.className = `mensaje-dinamico fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg ${tipoClases[tipo] || tipoClases.info}`;
+            mensajeEl.innerHTML = `<p>${mensaje}</p>`;
+
+            // Insertar en el body
+            document.body.appendChild(mensajeEl);
+
+            // Auto-remover después de 3 segundos
+            setTimeout(() => {
+                mensajeEl.style.opacity = '0';
+                setTimeout(() => mensajeEl.remove(), 300);
+            }, 3000);
+        }
+    </script>
   </body>
 </html>

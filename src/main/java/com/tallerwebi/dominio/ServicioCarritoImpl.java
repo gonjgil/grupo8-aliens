@@ -1,64 +1,110 @@
 package com.tallerwebi.dominio;
 
-import com.tallerwebi.presentacion.ObraDto;
+import com.tallerwebi.dominio.enums.EstadoCarrito;
+import com.tallerwebi.dominio.excepcion.CarritoVacioException;
+import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service("servicioCarrito")
-
 public class ServicioCarritoImpl implements ServicioCarrito {
 
-    private final List<Obra> obras;
-
+    private final RepositorioCarrito repositorioCarrito;
     private final RepositorioObra repositorioObra;
 
-//    @Autowired
-    public ServicioCarritoImpl(RepositorioObra repositorioObra) {
+    @Autowired
+    public ServicioCarritoImpl(RepositorioCarrito repositorioCarrito, RepositorioObra repositorioObra) {
+        this.repositorioCarrito = repositorioCarrito;
         this.repositorioObra = repositorioObra;
-        this.obras = new ArrayList<>();
     }
 
+    @Override
+    @Transactional
+    public Carrito obtenerOCrearCarritoParaUsuario(Usuario usuario) {
+        Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario);
+        if (carrito == null) {
+            carrito = repositorioCarrito.crearCarritoParaUsuario(usuario);
+        }
+        return carrito;
+    }
 
     @Override
-    public void agregarObraAlCarrito(Obra obra) { //debe verificar si la obra existe y si hay stock en caso de la obra sea fisica.
-        Obra obraEnRepo = repositorioObra.obtenerPorId(obra.getId());
-
-        if (obraEnRepo != null && repositorioObra.hayStock(obra.getId())) {
-            repositorioObra.descontarStock(obraEnRepo); //esto deberia descontarse cuando se confirma la compra?
-            obras.add(obraEnRepo);
-
+    @Transactional
+    public void agregarObraAlCarrito(Usuario usuario, Long obraId, Integer cantidad) throws NoExisteLaObra {
+        Obra obra = repositorioObra.obtenerPorId(obraId);
+        if (obra == null) {
+            throw new NoExisteLaObra();
         }
 
+        Carrito carrito = obtenerOCrearCarritoParaUsuario(usuario);
+        carrito.agregarItem(obra);
+        repositorioCarrito.guardar(carrito);
     }
 
     @Override
-    public void eliminarObraDelCarrito(Obra obra) {
-        this.obras.remove(obra); // elimina solo la primera coincidencia
-
-    }
-
-    @Override
-    public void vaciarCarrito() {
-        this.obras.clear();
-    }
-
-    @Override
-    public Integer getCantidadTotal() {
-        return obtenerObras().size();
-    }
-
-    @Override
-    public List<ObraDto> obtenerObras(){
-       List<ObraDto> obrasEnCarrito = new ArrayList<>();
-        for(Obra obra : obras){
-            obrasEnCarrito.add(new ObraDto(obra));
+    @Transactional
+    public void removerObraDelCarrito(Usuario usuario, Long obraId) {
+        Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario);
+        if (carrito != null) {
+            Obra obra = repositorioObra.obtenerPorId(obraId);
+            if (obra != null) {
+                carrito.removerItem(obra);
+                repositorioCarrito.guardar(carrito);
+            }
         }
-        return obrasEnCarrito;
     }
 
+    @Override
+    @Transactional
+    public void actualizarCantidadObra(Usuario usuario, Long obraId, Integer nuevaCantidad) {
+        Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario);
+        if (carrito != null) {
+            Obra obra = repositorioObra.obtenerPorId(obraId);
+            if (obra != null) {
+                carrito.actualizarCantidadItem(obra, nuevaCantidad);
+                repositorioCarrito.guardar(carrito);
+            }
+        }
+    }
 
+    @Override
+    @Transactional
+    public void limpiarCarrito(Usuario usuario) {
+        Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario);
+        if (carrito != null) {
+            carrito.limpiar();
+            repositorioCarrito.guardar(carrito);
+        }
+    }
 
+    @Override
+    @Transactional(readOnly = true)
+    public Carrito obtenerCarritoConItems(Usuario usuario) {
+        return repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Double calcularTotalCarrito(Usuario usuario) {
+        Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario);
+        return (carrito != null) ? carrito.getTotal() : 0.0;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Integer contarItemsEnCarrito(Usuario usuario) {
+        Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario);
+        return (carrito != null) ? carrito.getCantidadTotalItems() : 0;
+    }
+
+    @Override
+    @Transactional
+    public void finalizarCarrito(Usuario usuario) throws CarritoVacioException {
+        Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario);
+        if (carrito == null || carrito.getItems().isEmpty()) {
+            throw new CarritoVacioException();
+        }
+        repositorioCarrito.actualizarEstado(carrito.getId(), EstadoCarrito.FINALIZADO);
+    }
 }

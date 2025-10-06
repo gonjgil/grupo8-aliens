@@ -52,12 +52,10 @@ class ServicioGaleriaImplTest {
         RepositorioObra repositorioObra = mock(RepositorioObra.class);
 
         Obra obra1 = new Obra();
-        obra1.setId(1L);
         obra1.setTitulo("Obra A");
         obra1.setAutor("Autor A");
 
         Obra obra2 = new Obra();
-        obra2.setId(2L);
         obra2.setTitulo("Obra B");
         obra2.setAutor("Autor B");
 

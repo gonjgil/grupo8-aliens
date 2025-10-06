@@ -7,6 +7,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.tallerwebi.dominio.Obra;
 import com.tallerwebi.dominio.ServicioGaleria;
+import com.tallerwebi.dominio.ServicioCarrito;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -24,30 +25,36 @@ public class ControladorObraTest {
     @BeforeEach
     public void setUp() {
         this.request = mock(HttpServletRequest.class);
-        HttpSession session = mock(HttpSession.class); // mock de la sesión
+        HttpSession session = mock(HttpSession.class);
         Usuario usuario = mock(Usuario.class);
 
-        when(this.request.getSession()).thenReturn(session); // la request devuelve la sesión
-        when(session.getAttribute("usuarioLogueado")).thenReturn(usuario); // la sesión devuelve el usuario
+        when(this.request.getSession()).thenReturn(session);
+        when(session.getAttribute("usuarioLogueado")).thenReturn(usuario);
     }
 
     @Test
     public void verObra_deberiaMostrarVistaConDatosDeLaObra() throws Exception {
         ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
+        ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
+        
+        Usuario usuario = (Usuario) this.request.getSession().getAttribute("usuarioLogueado");
+        
         Obra obra = mock(Obra.class);
         ObraDto obraDto = new ObraDto(obra);
-        obraDto.setId(1L);
         obraDto.setTitulo("Obra A");
         obraDto.setAutor("Autor A");
         obraDto.setDescripcion("Lorem Ipsum");
         
         when(servicioGaleria.obtenerPorId(1L)).thenReturn(obraDto);
+        when(servicioCarrito.contarItemsEnCarrito(usuario)).thenReturn(2);
 
-        ControladorObra controladorObra = new ControladorObra(servicioGaleria);
+        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioCarrito);
 
         ModelAndView modelAndView = controladorObra.verObra(1L, request);
 
+
         assertThat(modelAndView.getViewName(), is(equalTo("obra")));
         assertThat(modelAndView.getModel().get("obra"), is(equalTo(obraDto)));
+        assertThat(modelAndView.getModel().get("cantidadItems"), is(equalTo(2)));
     }
 }

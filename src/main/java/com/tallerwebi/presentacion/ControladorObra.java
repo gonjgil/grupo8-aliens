@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.tallerwebi.dominio.ServicioGaleria;
+import com.tallerwebi.dominio.ServicioCarrito;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -19,18 +20,29 @@ public class ControladorObra {
 
     @Autowired
     private ServicioGaleria servicioGaleria;
+    
+    @Autowired
+    private ServicioCarrito servicioCarrito;
 
-    public ControladorObra(ServicioGaleria servicioGaleria) {
+    public ControladorObra(ServicioGaleria servicioGaleria, ServicioCarrito servicioCarrito) {
         this.servicioGaleria = servicioGaleria;
+        this.servicioCarrito = servicioCarrito;
     }
 
-    // hablar con el profe sobre esta anotacion @PathVariable
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
     public ModelAndView verObra(@PathVariable Long id, HttpServletRequest request) {
         ModelMap model = new ModelMap();
 
         Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
         model.put("usuario", usuario);
+        
+        // Agregar cantidad de items en el carrito
+        if (usuario != null) {
+            Integer cantidadItems = servicioCarrito.contarItemsEnCarrito(usuario);
+            model.put("cantidadItems", cantidadItems);
+        } else {
+            model.put("cantidadItems", 0);
+        }
 
         ObraDto obraDto = this.servicioGaleria.obtenerPorId(id);
         model.put("obra", obraDto);
