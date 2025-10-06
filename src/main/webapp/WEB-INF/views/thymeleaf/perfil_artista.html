@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Perfil del Artista</title>
+
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/perfil_artista.css}"/>
+</head>
+
+<body>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top shadow">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="#">ALIENS</a>
+    </div>
+</nav>
+
+<main role="main" class="container perfil-container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card perfil-card text-center p-4">
+                <div class="foto-container">
+                    <img th:src="${mostrarArtista.urlFotoPerfil}" alt="Foto perfil"
+                         class="foto-perfil mb-3">
+                </div>
+
+                <h3 class="nombre-artista" th:text="${mostrarArtista.nombre}">Nombre del artista</h3>
+                <p class="bio-artista" th:text="${mostrarArtista.biografia}"></p>
+
+                <div class="redes mt-3">
+                    <a th:href="${mostrarArtista.urlFacebook}" target="_blank" class="link-red">Facebook</a>
+                    <a th:href="${mostrarArtista.urlInstagram}" target="_blank" class="link-red">Instagram</a>
+                    <a th:href="${mostrarArtista.urlTwitter}" target="_blank" class="link-red">Twitter</a>
+                </div>
+
+                <div class="mt-4">
+                    <button id="btn-editar" class="btn-editar">Editar Perfil</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script type="text/javascript" th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.bundle.min.js}"></script>
+<script type="module" th:src="@{/js/perfil_artista.js}"></script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-Proyecto base Taller Web I (Maven and Thymeleaf)
+ Proyecto base Taller Web I (Maven and Thymeleaf)
 ===============================
 
 ## 1. ¿Cómo iniciar el proyecto?
