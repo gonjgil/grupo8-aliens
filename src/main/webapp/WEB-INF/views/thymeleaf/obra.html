@@ -27,17 +27,11 @@
       </h1>
 
       <div class="flex items-center space-x-4">
-        <div th:if="${usuario != null}" class="flex items-center space-x-4">
-          <a href="/spring/carrito" class="text-blue-600 font-semibold">
-            <i class="fas fa-shopping-cart"></i>
-            Carrito
-            <span
-              th:if="${cantidadItems > 0}"
-              class="bg-red-500 text-white rounded-full px-2 py-1 text-xs ml-1"
-              th:text="${cantidadItems}"
-            ></span>
-          </a>
-          <div th:text=" 'Hola, ' + ${usuario.email}"></div>
+        <div
+          th:if="${usuario != null}"
+          th:text="'Hola, ' + ${usuario.email}"
+        ></div>
+        <div th:if="${usuario != null}">
           <a
             th:href="@{/logout}"
             class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg"
