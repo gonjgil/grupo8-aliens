@@ -42,13 +42,12 @@ public class Carrito {
         this.usuario = usuario;
     }
 
-    // Métodos de negocio
-    public void agregarItem(Obra obra, Integer cantidad) {
+    public void agregarItem(Obra obra) {
         ItemCarrito itemExistente = buscarItemPorObra(obra);
         if (itemExistente != null) {
-            itemExistente.setCantidad(itemExistente.getCantidad() + cantidad);
+            itemExistente.setCantidad(itemExistente.getCantidad() + 1);
         } else {
-            ItemCarrito nuevoItem = new ItemCarrito(this, obra, cantidad);
+            ItemCarrito nuevoItem = new ItemCarrito(this, obra);
             this.items.add(nuevoItem);
         }
         this.fechaActualizacion = LocalDateTime.now();

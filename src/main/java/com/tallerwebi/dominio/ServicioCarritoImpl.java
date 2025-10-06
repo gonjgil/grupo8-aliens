@@ -38,7 +38,7 @@ public class ServicioCarritoImpl implements ServicioCarrito {
         }
 
         Carrito carrito = obtenerOCrearCarritoParaUsuario(usuario);
-        carrito.agregarItem(obra, cantidad);
+        carrito.agregarItem(obra);
         repositorioCarrito.guardar(carrito);
     }
 
