@@ -37,7 +37,7 @@
             <td th:text="${obra.titulo}"></td>
             <td>
                 <form th:action="@{/carrito/eliminar/{id}(id=${obra.id})}" method="post">
-                <button class="btn btn-danger btn-sm" type="submit">Eliminar</button>
+                    <button class="btn btn-danger btn-sm" type="submit">Eliminar</button>
                 </form>
             </td>
         </tr>
@@ -58,6 +58,7 @@
         </div>
 
     </div>
+</div>
 </body>
 <!-- Footer -->
 <footer class="bg-gray-300 p-6 text-center text-gray-700 mt-12 shadow-inner py-3">
