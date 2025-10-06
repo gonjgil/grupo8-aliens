@@ -3,6 +3,7 @@ package com.tallerwebi.dominio;
 import com.tallerwebi.dominio.enums.Categoria;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -67,4 +68,16 @@ public class Obra {
 
     public Set<Categoria> getCategorias() { return categorias; }
     public void setCategorias(Set<Categoria> categorias) { this.categorias = categorias; }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Obra)) return false;
+        Obra obra = (Obra) o;
+        return Objects.equals(id, obra.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 }

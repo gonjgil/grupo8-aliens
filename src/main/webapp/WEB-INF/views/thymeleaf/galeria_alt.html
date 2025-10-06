@@ -21,6 +21,12 @@
 
         <div th:if="${usuario != null}">
             <div th:text=" 'Hola, ' + ${usuario.email}"></div>
+            <a th:href="@{/carrito}"
+               class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg">
+                Carrito
+            </a>
+
+        </div>
         </div>
         <div th:unless="${usuario != null}">
             <button
@@ -30,6 +36,7 @@
                 Iniciar Sesión
             </button>
         </div>
+
 
 
     </header>

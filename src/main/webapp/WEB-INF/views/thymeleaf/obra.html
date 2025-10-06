@@ -67,6 +67,13 @@
                     <span th:text="${obra.getCantidadLikes()}"></span>
                     <span class="likes-label text-gray-500 text-sm">personas dieron like</span>
                 </div>
+                <form th:action="@{/carrito/agregar}" method="post" accept-charset="UTF-8">
+                    <input type="hidden" name="id" th:value="${obra.id}">
+                    <input type="hidden" th:field="${obra.titulo}">
+                    <button type="submit" class="btn btn-success">
+                        Agregar al carrito
+                    </button>
+                </form>
             </div>
             <a class="btn btn-primary bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300"
                href="#" id="comprarBtn">Comprar / Más info</a>
