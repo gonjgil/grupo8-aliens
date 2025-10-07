@@ -4,14 +4,15 @@ import java.util.List;
 
 import com.tallerwebi.dominio.enums.Categoria;
 import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
-import com.tallerwebi.presentacion.ObraDto;
+import com.tallerwebi.dominio.excepcion.UsuarioAnonimoException;
 
 public interface ServicioGaleria {
-    List<ObraDto> obtener();
-    List<ObraDto> ordenarRandom();
-    List<ObraDto> obtenerPorAutor(String autor);
-    List<ObraDto> obtenerPorCategoria(Categoria categoria);
-    ObraDto obtenerPorId(Long id);
-
-    void darLike(Long id, Usuario usuario) throws NoExisteLaObra;
+    List<Obra> obtener();
+    List<Obra> ordenarRandom();
+    List<Obra> obtenerPorAutor(String autor);
+    List<Obra> obtenerPorCategoria(Categoria categoria);
+    Obra obtenerPorId(Long id);
+    void darLike(Long obra, Usuario usuario);
+    void quitarLike(Long obra, Usuario usuario);
+    void toggleLike(Long id, Usuario usuario) throws NoExisteLaObra, UsuarioAnonimoException;
 }

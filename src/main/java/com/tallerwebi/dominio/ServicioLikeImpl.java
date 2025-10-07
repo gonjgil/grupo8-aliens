@@ -14,7 +14,7 @@ public class ServicioLikeImpl implements ServicioLike {
             return true;
         }
         return false;
-    };
+    }
 
     @Override
     @Transactional

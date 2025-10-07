@@ -49,6 +49,14 @@ public class ServicioLikeImplTest {
         assertThat(obra.getCantidadLikes(), is(0));
     }
 
+    @Test
     public void queNoSePuedaDarLikeSiNoEstaLogueado() {
+        ServicioLikeImpl servicio = new ServicioLikeImpl();
+        Obra obra = new Obra();
+
+        Boolean resultado = servicio.darLike(null, obra);
+
+        assertThat(false, is(equalTo(resultado)));
+        assertThat(obra.getUsuariosQueDieronLike().contains(null), is(false));
     }
 }

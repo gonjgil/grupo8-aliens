@@ -11,44 +11,41 @@
     />
     <!-- <link rel="stylesheet" href="../../../resources/core/css/galeria.css" /> -->
     <!-- Boostrap core css -->
-    <link
-      rel="stylesheet"
-      th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"
-    />
-    <link rel="stylesheet" th:href="@{/css/obra.css}" />
-  </head>
-  <body class="bg-gray-100 text-gray-800">
-    <!-- Header -->
-    <header class="bg-white p-6 flex justify-between items-center shadow-md">
-      <h1 class="text-4xl font-extrabold text-gray-900 tracking-wider">
+      <link
+              rel="stylesheet"
+              th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"
+      />
+      <link rel="stylesheet" th:href="@{/css/obra.css}" />
+    <link rel="stylesheet" th:href="@{/css/header.css}"/>
+</head>
+<body class="bg-gray-100 text-gray-800">
+<!-- Header -->
+<header class="bg-white p-6 flex justify-between items-center shadow-md">
+    <h1 class="text-4xl font-extrabold text-gray-900 tracking-wider">
         <a th:href="@{/galeria}" class="hover:text-blue-600 transition-colors">
-          ALIENS
+            ALIENS
         </a>
-      </h1>
+    </h1>
 
-      <div class="flex items-center space-x-4">
-        <div
-          th:if="${usuario != null}"
-          th:text="'Hola, ' + ${usuario.email}"
-        ></div>
-        <div th:if="${usuario != null}">
-          <a
-            th:href="@{/logout}"
-            class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg"
-          >
-            Cerrar Sesión
-          </a>
+    <div class="flex items-center space-x-4">
+        <div th:if="${usuario != null}" class="flex items-center space-x-4">
+            <div th:text=" 'Hola, ' + ${usuario.email}"></div>
+            <a th:href="@{/logout}"
+               class="bg-red-600 hover:bg-red-700 fa-solid fa-right-from-bracket text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg">
+            </a>
         </div>
         <div th:unless="${usuario != null}">
-          <button
-            th:onclick="|location.href='@{/login}'|"
-            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg"
-          >
-            Iniciar Sesión
-          </button>
+            <button
+                    th:onclick="|location.href='@{/login}'|"
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg"
+            >
+                Iniciar Sesión
+            </button>
         </div>
-      </div>
-    </header>
+    </div>
+
+
+</header>
 
     <main class="obra-page flex flex-col md:flex-row w-full min-h-screen">
       <div class="obra-left">
@@ -84,57 +81,66 @@
           <p class="obra-descripcion text-lg" th:text="${obra.descripcion}"></p>
         </div>
 
-        <div class="likes flex items-center gap-1">
-          <button
-            type="submit"
-            class="like-button px-4 py-2 rounded-full border border-gray-300 hover:bg-blue-50"
-            aria-pressed="false"
-          >
-            &#x2764;
-          </button>
-          <span th:text="${obra.getCantidadLikes()}"></span>
-          <span class="likes-label text-gray-500 text-sm">
+        <!-- <div class="obra-meta flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="likes flex items-center gap-2">
+                <form th:action="@{/obra/{id}/like(id=${obra.id})}" method="post">
+                    <button type="submit"
+                            class="like-button px-4 py-2 rounded-full border border-gray-300 hover:bg-blue-50"
+                            aria-pressed="false">&#x2764;</button>
+                </form>
+                <div class="likes flex items-center gap-1">
+                    <span th:text="${obra.getCantidadLikes()}"></span>
+                    <span class="likes-label text-gray-500 text-sm">personas dieron like</span>
+                </div>
+            </div>
+            <a class="btn btn-primary bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300"
+               href="#" id="comprarBtn">Comprar / Más info</a>
+        </div>
+      </div> -->
+          <div class="likes flex items-center gap-1">
+              <form th:action="@{/obra/{id}/like(id=${obra.id})}" method="post">
+                  <button type="submit"
+                          class="like-button px-4 py-2 rounded-full border border-gray-300 hover:bg-blue-50"
+                          aria-pressed="false">&#x2764;</button>
+              </form>
+              <span th:text="${obra.getCantidadLikes()}"></span>
+              <span class="likes-label text-gray-500 text-sm">
             personas dieron like
           </span>
-        </div>
-        <div
-          class="obra-meta flex flex-col sm:flex-row justify-between items-center gap-4"
-        >
-          <div class="precio-container">
+          </div>
+          <div
+                  class="obra-meta flex flex-col sm:flex-row justify-between items-center gap-4"
+          >
+              <div class="precio-container">
             <span
-              class="precio text-2xl font-bold text-green-600"
-              th:text="'$' + ${#numbers.formatDecimal(obra.precio, 1, 'COMMA', 2, 'POINT')}"
+                    class="precio text-2xl font-bold text-green-600"
+                    th:text="'$' + ${#numbers.formatDecimal(obra.precio, 1, 'COMMA', 2, 'POINT')}"
             ></span>
-          </div>
+              </div>
 
-          <div class="likes flex items-center gap-2">
-            <form
-              th:action="@{/obra/{id}/dar-like(id=${obra.id})}"
-              method="post"
-            ></form>
+              <div class="flex gap-2">
+                  <form th:action="@{/carrito/agregar}" method="post">
+                      <input type="hidden" name="obraId" th:value="${obra.id}" />
+                      <input type="hidden" name="cantidad" value="1" />
+                      <button
+                              type="submit"
+                              class="btn bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full transition duration-300"
+                      >
+                          <i class="fas fa-shopping-cart mr-2"></i>
+                          Agregar al Carrito
+                      </button>
+                  </form>
+                  <a
+                          class="btn btn-primary bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300"
+                          href="#"
+                          id="comprarBtn"
+                  >
+                      Comprar Ahora
+                  </a>
+              </div>
           </div>
-          <div class="flex gap-2">
-            <form th:action="@{/carrito/agregar}" method="post">
-              <input type="hidden" name="obraId" th:value="${obra.id}" />
-              <input type="hidden" name="cantidad" value="1" />
-              <button
-                type="submit"
-                class="btn bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full transition duration-300"
-              >
-                <i class="fas fa-shopping-cart mr-2"></i>
-                Agregar al Carrito
-              </button>
-            </form>
-            <a
-              class="btn btn-primary bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300"
-              href="#"
-              id="comprarBtn"
-            >
-              Comprar Ahora
-            </a>
-          </div>
-        </div>
       </div>
+
     </main>
 
     <!-- Footer -->
