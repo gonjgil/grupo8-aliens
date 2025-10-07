@@ -121,7 +121,7 @@ public class ControladorObra {
             return new ModelAndView("redirect:/obra/" + id, model);
         } catch (NoExisteLaObra e) {
             model.put("error", "No existe la obra solicitada.");
-            return new ModelAndView("redirect:/galeria_alt", model);
+            return new ModelAndView("redirect:/galeria", model);
         }
     }
 }

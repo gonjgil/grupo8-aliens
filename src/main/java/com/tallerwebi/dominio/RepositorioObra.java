@@ -10,6 +10,6 @@ public interface RepositorioObra {
     List<Obra> obtenerPorAutor(String autor);
     List<Obra> obtenerPorCategoria(Categoria categoria);
     Obra obtenerPorId(Long id);
-    void darLike(Obra obra, Usuario usuario);
-    void quitarLike(Obra obra, Usuario usuario);
+    void darLike(Long id, Usuario usuario);
+    void quitarLike(Long id, Usuario usuario);
 }

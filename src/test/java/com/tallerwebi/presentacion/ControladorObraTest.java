@@ -32,7 +32,7 @@ public class ControladorObraTest {
     public void setUp() {
         this.request = mock(HttpServletRequest.class);
         HttpSession session = mock(HttpSession.class);
-        Usuario usuario = mock(Usuario.class);
+        this.usuario = mock(Usuario.class);
 
         when(this.request.getSession()).thenReturn(session);
         when(session.getAttribute("usuarioLogueado")).thenReturn(usuario);
@@ -68,9 +68,10 @@ public class ControladorObraTest {
     @Test
     public void queAlIntentarAccederAUnaObraNoValidaSeRedirijaAVistaGaleria() throws NoExisteLaObra {
         ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
+        ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
         when(servicioGaleria.obtenerPorId(999L)).thenThrow(new NoExisteLaObra());
 
-        ControladorObra controladorObra = new ControladorObra(servicioGaleria);
+        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioCarrito);
         ModelAndView modelAndView = controladorObra.verObra(999L, request);
 
         assertThat(modelAndView.getViewName(), is(equalTo("redirect:/galeria_alt")));
@@ -79,6 +80,7 @@ public class ControladorObraTest {
     @Test
     public void queUnUsuarioLoggeadoPuedaDarLikeAUnaObra() throws NoExisteLaObra, UsuarioAnonimoException {
         ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
+        ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
         Long id = 1L;
         Obra obra = new Obra();
         obra.setId(id);
@@ -95,7 +97,7 @@ public class ControladorObraTest {
             return null;
         }).when(servicioGaleria).toggleLike(id, this.usuario);
 
-        ControladorObra controladorObra = new ControladorObra(servicioGaleria);
+        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioCarrito);
         ModelAndView modelAndView = controladorObra.toggleLike(id, request);
         ObraDto obraDto = new ObraDto(obra);
         ObraDto obraDtoEnModel = (ObraDto) modelAndView.getModel().get("obra");
@@ -108,6 +110,7 @@ public class ControladorObraTest {
     @Test
     public void queUnUsuarioAnonimoNoPuedaDarLikeAUnaObra() throws NoExisteLaObra, UsuarioAnonimoException {
         ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
+        ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
         Long id = 1L;
         Obra obra = new Obra();
         obra.setId(id);
@@ -119,7 +122,7 @@ public class ControladorObraTest {
         doThrow(new UsuarioAnonimoException()).when(servicioGaleria).toggleLike(id, null);
         when(this.request.getSession().getAttribute("usuarioLogueado")).thenReturn(null);
 
-        ControladorObra controladorObra = new ControladorObra(servicioGaleria);
+        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioCarrito);
         ModelAndView modelAndView = controladorObra.toggleLike(id, request);
 
         assertThat(modelAndView.getViewName(), is(equalTo("redirect:/obra/" + id)));
@@ -129,6 +132,7 @@ public class ControladorObraTest {
     @Test
     public void queUnUsuarioLoggeadoPuedaQuitarLikeAUnaObra() throws NoExisteLaObra, UsuarioAnonimoException {
         ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
+        ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
         Long id = 1L;
         Obra obra = new Obra();
         obra.setId(id);
@@ -144,7 +148,7 @@ public class ControladorObraTest {
             return null;
         }).when(servicioGaleria).toggleLike(id, this.usuario);
 
-        ControladorObra controladorObra = new ControladorObra(servicioGaleria);
+        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioCarrito);
         ModelAndView modelAndView = controladorObra.toggleLike(id, request);
         ObraDto obraDto = new ObraDto(obra);
         ObraDto obraDtoEnModel = (ObraDto) modelAndView.getModel().get("obra");

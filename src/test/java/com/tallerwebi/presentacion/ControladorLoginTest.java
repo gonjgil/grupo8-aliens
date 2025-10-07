@@ -115,7 +115,7 @@ public class ControladorLoginTest {
 		ModelAndView modelAndView = controladorLogin.logout(requestMock);
 
 		// validacion
-		assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/galeria_alt"));
+		assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/galeria"));
 		verify(sessionMock, times(1)).invalidate();
 	}
 
@@ -128,7 +128,7 @@ public class ControladorLoginTest {
 		ModelAndView modelAndView = controladorLogin.logout(requestMock);
 
 		// validacion
-		assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/galeria_alt"));
+		assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/galeria"));
 		verify(requestMock, times(1)).getSession();
 	}
 }

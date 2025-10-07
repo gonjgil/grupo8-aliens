@@ -56,14 +56,9 @@ public class ObraDto {
     public void setPrecio(Double precio) { this.precio = precio; }
 
     public Obra toObra() {
-        Obra obra = new Obra();
+        Obra obra = new Obra(this.titulo, this.autor, this.imagenUrl, this.descripcion, this.categorias, this.precio);
         obra.setId(this.id);
-        obra.setTitulo(this.titulo);
-        obra.setAutor(this.autor);
-        obra.setImagenUrl(this.imagenUrl);
-        obra.setDescripcion(this.descripcion);
         obra.setUsuariosQueDieronLike(this.usuariosQueDieronLike);
-        obra.setCategorias(this.categorias);
         return obra;
     }
 

@@ -80,17 +80,18 @@ public class ServicioGaleriaImpl implements ServicioGaleria {
 
     @Override
     @Transactional
-    public void darLike(Obra obra, Usuario usuario) throws NoExisteLaObra {
-        repositorioObra.darLike(obra, usuario);
+    public void darLike(Long obraId, Usuario usuario) throws NoExisteLaObra {
+        repositorioObra.darLike(obraId, usuario);
     }
 
     @Override
     @Transactional
-    public void quitarLike(Obra obra, Usuario usuario) {
-        repositorioObra.quitarLike(obra, usuario);
+    public void quitarLike(Long obraId, Usuario usuario) {
+        repositorioObra.quitarLike(obraId, usuario);
     }
 
     @Override
+    @Transactional
     public void toggleLike(Long obraId, Usuario usuario) throws NoExisteLaObra, UsuarioAnonimoException {
         if (usuario == null) {
             throw new UsuarioAnonimoException();
@@ -101,9 +102,9 @@ public class ServicioGaleriaImpl implements ServicioGaleria {
         }
 
         if (obra.getUsuariosQueDieronLike().contains(usuario)) {
-            this.quitarLike(obra, usuario);
+            this.quitarLike(obraId, usuario);
         } else {
-            this.darLike(obra, usuario);
+            this.darLike(obraId, usuario);
         }
     }
 }

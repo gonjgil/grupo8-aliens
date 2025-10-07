@@ -75,13 +75,26 @@ public class RepositorioObraImpl implements RepositorioObra {
     }
 
     @Override
-    public void darLike(Obra obra, Usuario usuario) {
-        obra.darLike(usuario);
-        // obra.getUsuariosQueDieronLike().add(usuario);
+    public void darLike(Long id, Usuario usuario) {
+        Obra obra = obtenerPorId(id);
+        if (obra == null) {
+            throw new IllegalArgumentException("No existe la obra con id: " + id);
+        }
+        obra.getUsuariosQueDieronLike().add(usuario);
+        this.sessionFactory.getCurrentSession().merge(obra);
     }
 
     @Override
-    public void quitarLike(Obra obra, Usuario usuario) {
-        obra.quitarLike(usuario);
+    public void quitarLike(Long id, Usuario usuario) {
+        Obra obra = obtenerPorId(id);
+        if (obra != null) {
+            boolean removed = obra.getUsuariosQueDieronLike().remove(usuario);
+            if (removed) {
+                sessionFactory.getCurrentSession().merge(obra);
+                System.out.println("✅ Like removido exitosamente.");
+            } else {
+                System.out.println("⚠️ No se encontró el usuario en la colección para quitar el like.");
+            }
+        }
     }
 }
