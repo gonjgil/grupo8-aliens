@@ -50,9 +50,9 @@ public class Obra {
     @Column(name = "categoria")
     private Set<Categoria> categorias = new HashSet<>();
 
-    @ManyToOne
-    @JoinColumn(name = "artista")
-    private Artista artista;
+    // @ManyToOne
+    // @JoinColumn(name = "artista")
+    // private Artista artista;
 
     public Obra() { }
 
@@ -92,7 +92,7 @@ public class Obra {
     public Set<Categoria> getCategorias() { return categorias; }
     public void agregarCategoria(Categoria categoria) { this.categorias.add(categoria); }
 
-    public Artista getArtista() { return artista; }
-    public void setArtista(Artista artista) { this.artista = artista; }
+    // public Artista getArtista() { return artista; }
+    // public void setArtista(Artista artista) { this.artista = artista; }
 
 }
