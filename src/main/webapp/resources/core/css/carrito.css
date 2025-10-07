@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+body {
+    font-family: 'Inter', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
+    background-color: #f3f4f6; /* Fondo gris claro */
+    color: #1f2937; /* Texto gris oscuro */
+}
+
+main {
+    flex: 1;
+}
+
+
+.carrito-container {
+    max-width: 900px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    padding: 25px;
+}
+
+.producto-img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.total {
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+.btn-checkout {
+    background-color: #0d6efd;
+    color: white;
+    font-weight: bold;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-checkout:hover {
+    background-color: #0b5ed7;
+}
+
+.table td, .table th {
+    vertical-align: middle;
+}
