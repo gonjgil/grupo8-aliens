@@ -57,7 +57,7 @@ public class ControladorLoginTest {
         assert modelAndView != null;
 		// CAMBIO TEMPORARIO HASTA CONFIRMAR QUE PAGINA USAREMOS DE INICIO
 		// assertThat("redirect:/login", equalToIgnoringCase(Objects.requireNonNull(modelAndView.getViewName())));
-		assertThat("redirect:/galeria_alt", equalToIgnoringCase(Objects.requireNonNull(modelAndView.getViewName())));
+		assertThat("redirect:/galeria", equalToIgnoringCase(Objects.requireNonNull(modelAndView.getViewName())));
 		assertThat(true, is(modelAndView.getModel().isEmpty()));
 	}
 
@@ -71,7 +71,7 @@ public class ControladorLoginTest {
 
 		ModelAndView modelAndView = result.getModelAndView();
         assert modelAndView != null;
-		assertThat("redirect:/galeria_alt", equalToIgnoringCase(Objects.requireNonNull(modelAndView.getViewName())));
+		assertThat("redirect:/galeria", equalToIgnoringCase(Objects.requireNonNull(modelAndView.getViewName())));
 		assertThat(true, is(modelAndView.getModel().isEmpty()));
 	}
 

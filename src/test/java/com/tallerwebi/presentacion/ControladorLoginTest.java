@@ -64,7 +64,7 @@ public class ControladorLoginTest {
 		// validacion
 		// CAMBIO TEMPORARIO HASTA CONFIRMAR QUE PAGINA USAREMOS DE INICIO
 		// assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/home"));
-		assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/galeria_alt"));
+		assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/galeria"));
 		verify(sessionMock, times(1)).setAttribute("ROL", usuarioEncontradoMock.getRol());
 	}
 

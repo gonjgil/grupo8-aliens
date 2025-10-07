@@ -15,7 +15,8 @@ public enum Categoria {
     MODERNO("Moderno"),
     COSMICO("Cosmico"),
     RETRATO("Retrato"),
-    SURREALISMO("Surrealismo");
+    SURREALISMO("Surrealismo"),
+    TEST("Solo usada para testing");
 
     private final String categoria;
 
