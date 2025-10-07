@@ -16,6 +16,7 @@ public class Obra {
     private String autor;
     private String imagenUrl;
     private String descripcion;
+    private Double precio;
 
     @ManyToMany
     @JoinTable(
@@ -33,8 +34,9 @@ public class Obra {
     
     public Obra() { }
 
-    public Obra(Long id, String titulo, String autor, String imagenUrl, String descripcion, Set<Categoria> categorias) {
+    public Obra(Long id, Double precio, String titulo, String autor, String imagenUrl, String descripcion, Set<Categoria> categorias) {
         this.id = id;
+        this.precio = precio;
         this.titulo = titulo;
         this.autor = autor;
         this.imagenUrl = imagenUrl;
@@ -68,6 +70,9 @@ public class Obra {
 
     public Set<Categoria> getCategorias() { return categorias; }
     public void setCategorias(Set<Categoria> categorias) { this.categorias = categorias; }
+
+    public Double getPrecio() { return precio;  }
+    public void setPrecio(Double precio) {  this.precio = precio;  }
 
     @Override
     public boolean equals(Object o) {

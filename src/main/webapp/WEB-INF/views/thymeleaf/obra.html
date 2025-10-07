@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ALIENS - Obra</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- <link rel="stylesheet" href="../../../resources/core/css/galeria_alt.css" /> -->
-    <!-- Boostrap core css -->
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
     <link rel="stylesheet" th:href="@{/css/obra.css}"/>
 </head>
@@ -18,15 +16,21 @@
             ALIENS
         </a>
     </h1>
-    <div th:if="${usuario != null}">
-        <div th:text=" 'Hola, ' + ${usuario.email}"></div>
-    </div>
+    <!--Comentar primeras 2 lineas para hacer pruebas sin iniciar sesion(el boton se mueve al medio)-->
+            <div th:if="${usuario != null}">
+                <div th:text=" 'Hola, ' + ${usuario.email}"></div>
+    <a th:href="@{/carrito}"
+       class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg">
+        Carrito
+    </a>
+            </div>
     <div th:unless="${usuario != null}">
         <button th:onclick="|location.href='@{/login}'|"
                 class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg">
             Iniciar Sesión
         </button>
     </div>
+
 
 </header>
 
@@ -56,7 +60,7 @@
             <p class="obra-descripcion text-lg" th:text="${obra.descripcion}"></p>
         </div>
 
-        <div class="obra-meta flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div th:if="${usuario != null}" class="obra-meta flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="likes flex items-center gap-2">
                 <form th:action="@{/obra/{id}/dar-like(id=${obra.id})}" method="post">
                     <button type="submit"
@@ -68,16 +72,20 @@
                     <span class="likes-label text-gray-500 text-sm">personas dieron like</span>
                 </div>
                 <form th:action="@{/carrito/agregar}" method="post" accept-charset="UTF-8">
-                    <input type="hidden" name="id" th:value="${obra.id}">
-                    <input type="hidden" th:field="${obra.titulo}">
+                    <input type="hidden" name="id" th:value="*{obra.id}">
+                    <input type="hidden" th:field="*{obra.titulo}">
+                    <input type="hidden" th:field="*{obra.precio}">
                     <button type="submit" class="btn btn-success">
                         Agregar al carrito
                     </button>
+
                 </form>
             </div>
             <a class="btn btn-primary bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300"
                href="#" id="comprarBtn">Comprar / Más info</a>
         </div>
+        <div th:if="${mensaje}" class="alert alert-success" th:text="${mensaje}"></div>
+
     </div>
 </main>
 

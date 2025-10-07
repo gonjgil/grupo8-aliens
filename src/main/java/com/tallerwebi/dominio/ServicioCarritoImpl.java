@@ -1,14 +1,13 @@
 package com.tallerwebi.dominio;
 
-import com.tallerwebi.presentacion.ObraDto;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
-import java.util.List;
+
+import java.util.Set;
 
 @Service("servicioCarrito")
 public class ServicioCarritoImpl implements ServicioCarrito {
 
-    private Carrito carrito = new Carrito();
+    private final Carrito carrito = new Carrito();
 
     public void agregar(Obra obra) {
         carrito.agregarObra(obra);
@@ -22,7 +21,7 @@ public class ServicioCarritoImpl implements ServicioCarrito {
         carrito.vaciarCarrito();
     }
 
-    public Iterable<Obra> obtenerItems() {
+    public Set<Obra> obtenerItems() {
         return carrito.getObras();
     }
 }

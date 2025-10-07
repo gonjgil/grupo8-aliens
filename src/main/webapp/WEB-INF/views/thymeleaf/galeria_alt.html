@@ -18,7 +18,7 @@
                 ALIENS
             </a>
         </h1>
-
+<!--Comentar primeras 2 lineas para hacer pruebas sin iniciar sesion(el boton se mueve al medio)-->
         <div th:if="${usuario != null}">
             <div th:text=" 'Hola, ' + ${usuario.email}"></div>
             <a th:href="@{/carrito}"

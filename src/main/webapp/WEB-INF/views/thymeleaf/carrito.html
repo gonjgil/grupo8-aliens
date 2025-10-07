@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>ALIENS - Carrito de Compras</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- <link rel="stylesheet" href="../../../resources/core/css/main.css" /> -->
-    <!-- Boostrap core css -->
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
     <link rel="stylesheet" th:href="@{/css/carrito.css}"/>
 </head>
@@ -21,23 +19,25 @@
 </header>
 <body class="bg-gray-100 text-gray-800">
 <div class="container carrito-container">
-    <h2 class="text-center mb-4">Tu Carrito de Compras</h2>
+    <h2 class="text-center mb-4">Carrito de Compras</h2>
 
     <!-- Tabla de productos -->
     <table class="table align-middle">
         <thead class="table-light">
         <tr>
             <th>Obra</th>
-            <th>Cantidad</th>
+            <th>Precio</th>
+            <th></th>
         </tr>
         </thead>
 
         <tbody>
         <tr th:each="obra : ${items}">
             <td th:text="${obra.titulo}"></td>
+            <td th:text="'$' + ${#numbers.formatDecimal(obra.precio, 1, 2)}"></td>
             <td>
                 <form th:action="@{/carrito/eliminar/{id}(id=${obra.id})}" method="post">
-                    <button class="btn btn-danger btn-sm" type="submit">Eliminar</button>
+                <button class="btn btn-danger btn-sm" type="submit">Eliminar</button>
                 </form>
             </td>
         </tr>
@@ -47,6 +47,9 @@
 
     <div th:if="${!#lists.isEmpty(items)}">
         <!-- Total y botones -->
+        <p class="fw-bold text-end fs-5">
+            Total: $<span th:text="${#numbers.formatDecimal(total, 1, 2)}"></span>
+        </p>
         <div class="d-flex justify-content-between align-items-center mt-4">
             <form th:action="@{/carrito/vaciar}" method="post">
                 <button class="btn btn-danger btn-sm" type="submit">Vaciar carrito</button>
@@ -56,9 +59,8 @@
                 <button class="btn btn-checkout">Finalizar compra</button>
             </div>
         </div>
-
     </div>
-</div>
+    </div>
 </body>
 <!-- Footer -->
 <footer class="bg-gray-300 p-6 text-center text-gray-700 mt-12 shadow-inner py-3">

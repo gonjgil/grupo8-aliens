@@ -9,15 +9,17 @@ import com.tallerwebi.dominio.enums.Categoria;
 
 public class ObraDto {
     private Long id;
+    private Double precio;
     private String titulo;
     private String autor;
     private String imagenUrl;
     private String descripcion;
     private Set<Usuario> usuariosQueDieronLike;
-    private Set<Categoria> categorias = new HashSet<>();
+    private Set<Categoria> categorias;
 
     public ObraDto(Obra obra) {
         this.id = obra.getId();
+        this.precio = obra.getPrecio();
         this.titulo = obra.getTitulo();
         this.autor = obra.getAutor();
         this.imagenUrl = obra.getImagenUrl();
@@ -28,6 +30,9 @@ public class ObraDto {
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
+
+    public Double getPrecio() { return precio; }
+    public void setPrecio(Double precio) { this.precio = precio; }
 
     public String getTitulo() { return titulo; }
     public void setTitulo(String titulo) { this.titulo = titulo; }
