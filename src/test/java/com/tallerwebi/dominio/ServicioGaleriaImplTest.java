@@ -13,6 +13,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -29,7 +30,11 @@ class ServicioGaleriaImplTest {
 
         ServicioGaleriaImpl servicio = new ServicioGaleriaImpl(repositorioObra);
 
-        List<ObraDto> resultado = servicio.obtener();
+        List<Obra> _resultado = servicio.obtener();
+        List<ObraDto> resultado = new ArrayList<>();
+        for (Obra obra : _resultado) {
+            resultado.add(new ObraDto(obra));
+        }
 
         assertThat(resultado.size(), is(2));
         assertThat(resultado.get(0).getId(), is(equalTo(obra1.getId())));
@@ -63,7 +68,11 @@ class ServicioGaleriaImplTest {
 
         ServicioGaleriaImpl servicio = new ServicioGaleriaImpl(repositorioObra);
 
-        List<ObraDto> resultado = servicio.obtenerPorAutor("Autor A");
+        List<Obra> _resultado = servicio.obtenerPorAutor("Autor A");
+        List<ObraDto> resultado = new ArrayList<>();
+        for (Obra obra : _resultado) {
+            resultado.add(new ObraDto(obra));
+        }
 
         assertThat(resultado.size(), is(1));
         assertThat(resultado.get(0).getAutor(), is(equalTo("Autor A")));

@@ -1,6 +1,7 @@
 package com.tallerwebi.presentacion;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import com.tallerwebi.dominio.Obra;
@@ -44,8 +45,8 @@ public class ObraDto {
 
     public Set<Usuario> getUsuariosQueDieronLike() { return this.usuariosQueDieronLike; }
     public void setUsuariosQueDieronLike(Set<Usuario> usuariosQueDieronLike) { this.usuariosQueDieronLike = usuariosQueDieronLike; }
-    public int getCantidadLikes() { 
-        return this.usuariosQueDieronLike != null ? this.usuariosQueDieronLike.size() : 0; 
+    public int getCantidadLikes() {
+        return this.usuariosQueDieronLike != null ? this.usuariosQueDieronLike.size() : 0;
     }
 
     public Set<Categoria> getCategorias() { return categorias; }
@@ -53,4 +54,23 @@ public class ObraDto {
 
     public Double getPrecio() { return precio; }
     public void setPrecio(Double precio) { this.precio = precio; }
+
+    public Obra toObra() {
+        Obra obra = new Obra(this.titulo, this.autor, this.imagenUrl, this.descripcion, this.categorias, this.precio);
+        obra.setId(this.id);
+        obra.setUsuariosQueDieronLike(this.usuariosQueDieronLike);
+        return obra;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        ObraDto obraDto = (ObraDto) o;
+        return Objects.equals(id, obraDto.id) && Objects.equals(titulo, obraDto.titulo) && Objects.equals(autor, obraDto.autor);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, titulo, autor);
+    }
 }

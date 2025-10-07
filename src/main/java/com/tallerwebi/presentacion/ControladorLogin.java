@@ -50,8 +50,10 @@ public class ControladorLogin {
 
     @RequestMapping(path = "/logout", method = RequestMethod.GET)
     public ModelAndView logout(HttpServletRequest request) {
-        request.getSession().invalidate();
-        return new ModelAndView("redirect:/login");
+        if (request.getSession() != null) {
+            request.getSession().invalidate();
+        }
+        return new ModelAndView("redirect:/galeria");
     }
 
     @RequestMapping(path = "/registrarme", method = RequestMethod.POST)
