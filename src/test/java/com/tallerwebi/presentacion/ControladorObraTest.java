@@ -9,7 +9,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.tallerwebi.dominio.Obra;
 import com.tallerwebi.dominio.ServicioGaleria;
-import com.tallerwebi.dominio.ServicioCarrito;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -20,7 +19,6 @@ import java.util.Set;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 public class ControladorObraTest {
@@ -41,7 +39,6 @@ public class ControladorObraTest {
     @Test
     public void verObra_deberiaMostrarVistaConDatosDeLaObra() throws Exception {
         ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
-        ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
 
         Usuario usuario = (Usuario) this.request.getSession().getAttribute("usuarioLogueado");
 
@@ -54,7 +51,7 @@ public class ControladorObraTest {
         when(servicioGaleria.obtenerPorId(1L)).thenReturn(obra);
         // when(servicioCarrito.contarItemsEnCarrito(usuario)).thenReturn(2);
 
-        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioCarrito);
+        ControladorObra controladorObra = new ControladorObra(servicioGaleria);
         ObraDto obraDto = new ObraDto(obra);
 
         ModelAndView modelAndView = controladorObra.verObra(1L, request);
@@ -68,10 +65,9 @@ public class ControladorObraTest {
     @Test
     public void queAlIntentarAccederAUnaObraNoValidaSeRedirijaAVistaGaleria() throws NoExisteLaObra {
         ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
-        ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
         when(servicioGaleria.obtenerPorId(999L)).thenThrow(new NoExisteLaObra());
 
-        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioCarrito);
+        ControladorObra controladorObra = new ControladorObra(servicioGaleria);
         ModelAndView modelAndView = controladorObra.verObra(999L, request);
 
         assertThat(modelAndView.getViewName(), is(equalTo("redirect:/galeria_alt")));
@@ -80,7 +76,6 @@ public class ControladorObraTest {
     @Test
     public void queUnUsuarioLoggeadoPuedaDarLikeAUnaObra() throws NoExisteLaObra, UsuarioAnonimoException {
         ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
-        ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
         Long id = 1L;
         Obra obra = new Obra();
         obra.setId(id);
@@ -97,7 +92,7 @@ public class ControladorObraTest {
             return null;
         }).when(servicioGaleria).toggleLike(id, this.usuario);
 
-        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioCarrito);
+        ControladorObra controladorObra = new ControladorObra(servicioGaleria);
         ModelAndView modelAndView = controladorObra.toggleLike(id, request);
         ObraDto obraDto = new ObraDto(obra);
         ObraDto obraDtoEnModel = (ObraDto) modelAndView.getModel().get("obra");
@@ -110,7 +105,6 @@ public class ControladorObraTest {
     @Test
     public void queUnUsuarioAnonimoNoPuedaDarLikeAUnaObra() throws NoExisteLaObra, UsuarioAnonimoException {
         ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
-        ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
         Long id = 1L;
         Obra obra = new Obra();
         obra.setId(id);
@@ -122,7 +116,7 @@ public class ControladorObraTest {
         doThrow(new UsuarioAnonimoException()).when(servicioGaleria).toggleLike(id, null);
         when(this.request.getSession().getAttribute("usuarioLogueado")).thenReturn(null);
 
-        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioCarrito);
+        ControladorObra controladorObra = new ControladorObra(servicioGaleria);
         ModelAndView modelAndView = controladorObra.toggleLike(id, request);
 
         assertThat(modelAndView.getViewName(), is(equalTo("redirect:/obra/" + id)));
@@ -132,7 +126,6 @@ public class ControladorObraTest {
     @Test
     public void queUnUsuarioLoggeadoPuedaQuitarLikeAUnaObra() throws NoExisteLaObra, UsuarioAnonimoException {
         ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
-        ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
         Long id = 1L;
         Obra obra = new Obra();
         obra.setId(id);
@@ -148,7 +141,7 @@ public class ControladorObraTest {
             return null;
         }).when(servicioGaleria).toggleLike(id, this.usuario);
 
-        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioCarrito);
+        ControladorObra controladorObra = new ControladorObra(servicioGaleria);
         ModelAndView modelAndView = controladorObra.toggleLike(id, request);
         ObraDto obraDto = new ObraDto(obra);
         ObraDto obraDtoEnModel = (ObraDto) modelAndView.getModel().get("obra");

@@ -12,7 +12,6 @@ import org.mockito.Mockito;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.tallerwebi.dominio.ServicioGaleria;
-import com.tallerwebi.dominio.ServicioCarrito;
 import com.tallerwebi.dominio.excepcion.NoHayObrasExistentes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +24,6 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.ArgumentMatchers.any;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,12 +45,10 @@ public class ControladorGaleriaTest {
     @Test
     public void mostrarGaleria_deberiaRetornarListaVaciaSiNoHayObras() throws NoHayObrasExistentes {
         ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
-        ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
 
         doThrow(NoHayObrasExistentes.class).when(servicioGaleria).obtener();
-        when(servicioCarrito.contarItemsEnCarrito(any(Usuario.class))).thenReturn(0);
 
-        ControladorGaleria controladorGaleria = new ControladorGaleria(servicioGaleria, servicioCarrito);
+        ControladorGaleria controladorGaleria = new ControladorGaleria(servicioGaleria);
 
         ModelAndView modelAndView = controladorGaleria.mostrarGaleria(this.request);
 
@@ -67,7 +63,6 @@ public class ControladorGaleriaTest {
     @Test
     public void siHay4obrasDeberiaRetornar4obras() {
         ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
-        ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
         Obra obra1 = mock(Obra.class);
         Obra obra2 = mock(Obra.class);
         Obra obra3 = mock(Obra.class);
@@ -78,9 +73,8 @@ public class ControladorGaleriaTest {
         obras.add(obra3);
         obras.add(obra4);
         when(servicioGaleria.obtener()).thenReturn(obras);
-        when(servicioCarrito.contarItemsEnCarrito(any(Usuario.class))).thenReturn(2);
 
-        ControladorGaleria controladorGaleria = new ControladorGaleria(servicioGaleria, servicioCarrito);
+        ControladorGaleria controladorGaleria = new ControladorGaleria(servicioGaleria);
 
         ModelAndView modelAndView = controladorGaleria.mostrarGaleria(this.request);
 
@@ -95,7 +89,6 @@ public class ControladorGaleriaTest {
     @Test
     public void alMostrarseLaGaleriaDeberianMostrarseTresListasDiferentes() {
         ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
-        ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
 
         List<Obra> obras = new ArrayList<>();
         obras.add(mock(Obra.class));
@@ -108,9 +101,8 @@ public class ControladorGaleriaTest {
         when(servicioGaleria.ordenarRandom()).thenReturn(randomObras);
         when(servicioGaleria.obtenerPorAutor(Mockito.anyString())).thenReturn(autorObras);
         when(servicioGaleria.obtenerPorCategoria(Mockito.any(Categoria.class))).thenReturn(temaObras);
-        when(servicioCarrito.contarItemsEnCarrito(any(Usuario.class))).thenReturn(1);
 
-        ControladorGaleria controladorGaleria = new ControladorGaleria(servicioGaleria, servicioCarrito);
+        ControladorGaleria controladorGaleria = new ControladorGaleria(servicioGaleria);
 
         ModelAndView modelAndView = controladorGaleria.mostrarGaleria(this.request);
 
