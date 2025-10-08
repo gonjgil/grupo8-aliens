@@ -1,38 +1,3 @@
-<!--<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="UTF-8">
-  <title>Nuevo Artista</title>
-  <link rel="stylesheet" th:href="@{/css/nuevo_artista.css}"/>
-</head>
-<body>
-<h2>Crear nuevo artista</h2>
-
-<form th:action="@{/perfilArtista/crear}" method="post">
-  <label>Nombre:</label>
-  <input type="text" name="nombre" required/><br><br>
-
-  <label>Biografia:</label>
-  <textarea name="biografia" required></textarea><br><br>
-
-  <label>Foto de perfil (URL):</label>
-  <input type="text" name="urlFotoPerfil"/><br><br>
-
-  <label>Facebook:</label>
-  <input type="text" name="urlFacebook"/><br><br>
-
-  <label>Instagram:</label>
-  <input type="text" name="urlInstagram"/><br><br>
-
-  <label>Twitter:</label>
-  <input type="text" name="urlTwitter"/><br><br>
-
-  <button type="submit">Guardar</button>
-</form>
-
-</body>
-</html> -->
-
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -44,7 +9,13 @@
 <div class="container">
   <h2> Crear nuevo artista</h2>
 
-  <form th:action="@{/perfilArtista/crear}" method="post" class="formulario-artista">
+  <form th:action="@{/perfilArtista/crear}" method="post" class="formulario-artista" enctype="multipart/form-data">
+
+    <div class="campo">
+      <label>Foto de perfil:</label>
+      <input type="file" name="fotoPerfil" accept="image/*" required>
+    </div>
+
     <div class="campo">
       <label>Nombre:</label>
       <input type="text" name="nombre" required>
@@ -56,27 +27,23 @@
     </div>
 
     <div class="campo">
-      <label>Foto de perfil (URL):</label>
-      <input type="text" name="urlFotoPerfil">
-    </div>
-
-    <div class="campo">
       <label>Facebook:</label>
-      <input type="text" name="urlFacebook">
+      <input type="text" name="urlFacebook" required>
     </div>
 
     <div class="campo">
       <label>Instagram:</label>
-      <input type="text" name="urlInstagram">
+      <input type="text" name="urlInstagram" required>
     </div>
 
     <div class="campo">
       <label>Twitter:</label>
-      <input type="text" name="urlTwitter">
+      <input type="text" name="urlTwitter" required>
     </div>
 
     <button type="submit" class="btn-guardar">Guardar</button>
   </form>
 </div>
+
 </body>
 </html>

@@ -1,10 +1,12 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.Artista;
+import com.tallerwebi.dominio.ServicioCloudinary;
 import com.tallerwebi.dominio.ServicioPerfilArtista;
 import com.tallerwebi.dominio.excepcion.NoExisteArtista;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,13 +21,15 @@ import static org.mockito.Mockito.when;
 public class ControladorPerfilArtistaTest {
     private ControladorPerfilArtista controladorPerfilArtista;
     private ServicioPerfilArtista servicioPerfilArtistaMock;
+    private ServicioCloudinary servicioCloudinaryMock;
     private HttpServletRequest requestMock;
     private HttpSession sessionMock;
 
     @BeforeEach
     public void init() {
         servicioPerfilArtistaMock = mock(ServicioPerfilArtista.class);
-        controladorPerfilArtista = new ControladorPerfilArtista(servicioPerfilArtistaMock);
+        servicioCloudinaryMock = mock(ServicioCloudinary.class);
+        controladorPerfilArtista = new ControladorPerfilArtista(servicioPerfilArtistaMock, servicioCloudinaryMock);
         requestMock = mock(HttpServletRequest.class);
         sessionMock = mock(HttpSession.class);
         when(requestMock.getSession()).thenReturn(sessionMock);
@@ -42,7 +46,7 @@ public class ControladorPerfilArtistaTest {
         ModelAndView modelAndView = controladorPerfilArtista.verPerfilArtista(idArtista, requestMock);
 
         // Validación
-        assertThat(modelAndView.getViewName(), equalToIgnoringCase("perfil-artista"));
+        assertThat(modelAndView.getViewName(), equalToIgnoringCase("perfil_artista"));
         assertThat(modelAndView.getModel().get("mostrarArtista"), equalTo(artistaMock));
 
     }
@@ -71,11 +75,18 @@ public class ControladorPerfilArtistaTest {
         Artista artistaCreado = new Artista("Artista", "Bio", null);
         artistaCreado.setId(10L); // Simula el ID
 
+        MultipartFile archivoMock = mock(MultipartFile.class);
+        when(archivoMock.isEmpty()).thenReturn(false);
+        when(servicioCloudinaryMock.subirImagen(any(MultipartFile.class)))
+                .thenReturn("https://cloudinary.com/foto.jpg");
+        when(servicioPerfilArtistaMock.crearPerfilArtista(any(PerfilArtistaDTO.class)))
+                .thenReturn(artistaCreado);
+
         //Cuando el metodo crearPerfilArtista del mock servicioPerfilArtistaMock sea llamado con CUALQUIER objeto de tipo PerfilArtistaDTO como argumento, entonces devuelve artistaCreado."
         when(servicioPerfilArtistaMock.crearPerfilArtista(any(PerfilArtistaDTO.class))).thenReturn(artistaCreado);
 
         // Ejecución
-        String redirectUrl = controladorPerfilArtista.crearArtista(dto);
+        String redirectUrl = controladorPerfilArtista.crearArtista(dto, archivoMock);
 
         // Validación
         assertThat(redirectUrl, is(equalTo("redirect:/perfilArtista/10"))); // Verifica la URL de redirección
