@@ -21,7 +21,7 @@ public class ControladorAtributosGlobalesTest {
         ControladorAtributosGlobales controlador = new ControladorAtributosGlobales(servicioCarrito);
 
         Usuario usuario = new Usuario();
-        when(servicioCarrito.contarItemsEnCarrito(any())).thenReturn(5);
+        when(servicioCarrito.getCantidadTotal()).thenReturn(5);
 
         int resultado = controlador.getContadorCarrito(usuario);
 
