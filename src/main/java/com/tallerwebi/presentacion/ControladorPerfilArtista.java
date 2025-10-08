@@ -1,12 +1,14 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.Artista;
+import com.tallerwebi.dominio.ServicioCloudinary;
 import com.tallerwebi.dominio.ServicioPerfilArtista;
 import com.tallerwebi.dominio.excepcion.NoExisteArtista;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,10 +19,12 @@ import javax.servlet.http.HttpServletRequest;
 public class ControladorPerfilArtista {
 
     private ServicioPerfilArtista servicioPerfilArtista;
+    private ServicioCloudinary servicioCloudinary;
 
     @Autowired
-    public ControladorPerfilArtista(ServicioPerfilArtista servicioPerfilArtista) {
+    public ControladorPerfilArtista(ServicioPerfilArtista servicioPerfilArtista, ServicioCloudinary servicioCloudinary) {
         this.servicioPerfilArtista = servicioPerfilArtista;
+        this.servicioCloudinary = servicioCloudinary;
     }
 
     // Muestra el perfil de un artista
@@ -45,10 +49,16 @@ public class ControladorPerfilArtista {
         return "nuevo_artista";
     }
 
+
     //POST para recibir los datos y guardar
     @PostMapping("/crear")
     //@ModelAttribute = Spring construya automáticamente el DTO a partir de los parámetros de la solicitud.
-    public String crearArtista(@ModelAttribute PerfilArtistaDTO dto) {
+    public String crearArtista(@ModelAttribute PerfilArtistaDTO dto, @RequestParam("fotoPerfil") MultipartFile archivo) {
+
+        if (!archivo.isEmpty()) {
+            String urlImagen = servicioCloudinary.subirImagen(archivo);
+            dto.setUrlFotoPerfil(urlImagen);
+        }
 
         Artista artista = servicioPerfilArtista.crearPerfilArtista(dto);
         return "redirect:/perfilArtista/" + artista.getId();
