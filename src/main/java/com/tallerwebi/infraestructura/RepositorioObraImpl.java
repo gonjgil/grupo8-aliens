@@ -72,9 +72,26 @@ public class RepositorioObraImpl implements RepositorioObra {
         } catch (IllegalArgumentException e) {
             return null;
         }
+     }
+
+    @Override
+    public boolean hayStockSuficiente(Obra obra) {
+        if(obra.getStock() >= 1){//si es fisica verificar si hay stock, si es digital no es necesario
+            return true;
+        }
+        return false;
     }
 
     @Override
+    public void descontarStock(Obra obra) {
+        obra.setStock(obra.getStock() - 1);
+    }
+
+    @Override
+    public void devolverStock(Obra obra) {
+        obra.setStock(obra.getStock() + 1);
+    }
+
     public void darLike(Long id, Usuario usuario) {
         Obra obra = obtenerPorId(id);
         if (obra == null) {

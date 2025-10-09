@@ -3,26 +3,14 @@ package com.tallerwebi.dominio;
 import com.tallerwebi.dominio.enums.Categoria;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ElementCollection;
-import javax.persistence.CollectionTable;
-import javax.persistence.Enumerated;
-import javax.persistence.EnumType;
-import javax.persistence.Column;
-import javax.persistence.FetchType;
+import javax.persistence.*;
 
 @Entity
 public class Obra {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,7 +20,12 @@ public class Obra {
     private String autor;
     private String imagenUrl;
     private String descripcion;
-    
+    private Integer stock;
+
+//    @Version
+//    //Cada vez que Hibernate actualiza la entidad, incrementa automáticamente el campo version. Si otro usuario modificó la misma entidad en paralelo, Hibernate lanza una OptimisticLockException.
+//    private Integer version;
+
     @Column(nullable = false)
     private Double precio;
 
@@ -56,11 +49,12 @@ public class Obra {
 
     public Obra() { }
 
-      public Obra(String titulo, String autor, String imagenUrl, String descripcion, Set<Categoria> categorias, Double precio) {
+      public Obra(String titulo, String autor, String imagenUrl, String descripcion, Integer stock, Set<Categoria> categorias, Double precio) {
         this.titulo = titulo;
         this.autor = autor;
         this.imagenUrl = imagenUrl;
         this.descripcion = descripcion;
+        this.stock = stock;
         this.categorias = categorias;
         this.precio = precio;
     }
@@ -95,4 +89,18 @@ public class Obra {
     // public Artista getArtista() { return artista; }
     // public void setArtista(Artista artista) { this.artista = artista; }
 
+    public Integer getStock() { return stock; }
+    public void setStock(Integer stock) { this.stock = stock; }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Obra obra = (Obra) o;
+        return Objects.equals(id, obra.id) && Objects.equals(titulo, obra.titulo) && Objects.equals(autor, obra.autor) && Objects.equals(imagenUrl, obra.imagenUrl) && Objects.equals(descripcion, obra.descripcion) && Objects.equals(categorias, obra.categorias);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, titulo, autor, imagenUrl, descripcion, categorias);
+    }
 }

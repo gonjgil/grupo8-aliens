@@ -34,6 +34,7 @@ public class ItemCarrito {
     }
 
     public Double getSubtotal() {
+
         return precioUnitario * cantidad;
     }
 

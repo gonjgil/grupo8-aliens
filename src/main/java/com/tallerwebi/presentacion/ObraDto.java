@@ -14,6 +14,7 @@ public class ObraDto {
     private String autor;
     private String imagenUrl;
     private String descripcion;
+    private Integer stock;
     private Set<Usuario> usuariosQueDieronLike;
     private Set<Categoria> categorias = new HashSet<>();
     private Double precio;
@@ -24,6 +25,7 @@ public class ObraDto {
         this.autor = obra.getAutor();
         this.imagenUrl = obra.getImagenUrl();
         this.descripcion = obra.getDescripcion();
+        this.stock = obra.getStock();
         this.usuariosQueDieronLike = obra.getUsuariosQueDieronLike() != null ? obra.getUsuariosQueDieronLike() : new HashSet<>();
         this.categorias = obra.getCategorias();
         this.precio = obra.getPrecio();
@@ -52,11 +54,14 @@ public class ObraDto {
     public Set<Categoria> getCategorias() { return categorias; }
     public void setCategorias(Set<Categoria> categorias) { this.categorias = categorias; }
 
+    public void setStock(Integer stock) {this.stock = stock; }
+    public Integer getStock() {return stock;}
+
     public Double getPrecio() { return precio; }
     public void setPrecio(Double precio) { this.precio = precio; }
 
     public Obra toObra() {
-        Obra obra = new Obra(this.titulo, this.autor, this.imagenUrl, this.descripcion, this.categorias, this.precio);
+        Obra obra = new Obra(this.titulo, this.autor, this.imagenUrl, this.descripcion, this.stock, this.categorias, this.precio);
         obra.setId(this.id);
         obra.setUsuariosQueDieronLike(this.usuariosQueDieronLike);
         return obra;

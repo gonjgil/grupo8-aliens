@@ -54,7 +54,17 @@ public class Carrito {
     }
 
     public void removerItem(Obra obra) {
-        this.items.removeIf(item -> item.getObra().getId().equals(obra.getId()));
+        ItemCarrito itemExistente = buscarItemPorObra(obra);
+   //     this.items.removeIf(item -> item.getObra().getId().equals(obra.getId()));
+        if (itemExistente != null) {
+            itemExistente.setCantidad(itemExistente.getCantidad() - 1);
+            if (itemExistente.getCantidad() <= 0) {
+                items.remove(itemExistente);
+            } else {
+                itemExistente.setCantidad(itemExistente.getCantidad());
+            }
+        }
+
         this.fechaActualizacion = LocalDateTime.now();
     }
 
