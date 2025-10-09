@@ -110,20 +110,33 @@ public class ServicioCarritoImpl implements ServicioCarrito {
         return (carrito != null) ? carrito.getCantidadTotalItems() : 0;
     }
 
+
     @Override
     public Integer getCantidadTotal() {
         return 0;
     }
 
-    @Override
-    public List<ObraDto> obtenerObras(Usuario usuario){
-        Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario);
-        List<ObraDto> obrasEnCarrito = new ArrayList<>();
-
-        for(ItemCarrito itemCarrito : carrito.getItems()) {
-            Obra obra = itemCarrito.getObra();
-            obrasEnCarrito.add(new ObraDto(obra));
+        @Override
+        @Transactional
+        public void finalizarCarrito (Usuario usuario) throws CarritoVacioException {
+            Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario);
+            if (carrito == null || carrito.getItems().isEmpty()) {
+                throw new CarritoVacioException();
+            }
+            repositorioCarrito.actualizarEstado(carrito.getId(), EstadoCarrito.FINALIZADO);
         }
-            return obrasEnCarrito;}
-    
+
+        @Override
+        public List<ObraDto> obtenerObras (Usuario usuario){
+            Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario);
+            List<ObraDto> obrasEnCarrito = new ArrayList<>();
+
+            for (ItemCarrito itemCarrito : carrito.getItems()) {
+                Obra obra = itemCarrito.getObra();
+                obrasEnCarrito.add(new ObraDto(obra));
+            }
+            return obrasEnCarrito;
+    }
 }
+
+
