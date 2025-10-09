@@ -1,5 +1,6 @@
 package com.tallerwebi.infraestructura;
 
+import com.tallerwebi.dominio.Usuario;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -91,4 +92,27 @@ public class RepositorioObraImpl implements RepositorioObra {
         obra.setStock(obra.getStock() + 1);
     }
 
+}
+    public void darLike(Long id, Usuario usuario) {
+        Obra obra = obtenerPorId(id);
+        if (obra == null) {
+            throw new IllegalArgumentException("No existe la obra con id: " + id);
+        }
+        obra.getUsuariosQueDieronLike().add(usuario);
+        this.sessionFactory.getCurrentSession().merge(obra);
+    }
+
+    @Override
+    public void quitarLike(Long id, Usuario usuario) {
+        Obra obra = obtenerPorId(id);
+        if (obra != null) {
+            boolean removed = obra.getUsuariosQueDieronLike().remove(usuario);
+            if (removed) {
+                sessionFactory.getCurrentSession().merge(obra);
+                System.out.println("✅ Like removido exitosamente.");
+            } else {
+                System.out.println("⚠️ No se encontró el usuario en la colección para quitar el like.");
+            }
+        }
+    }
 }

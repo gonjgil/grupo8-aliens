@@ -1,5 +1,6 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.Obra;
 import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.enums.Categoria;
 import com.tallerwebi.presentacion.ObraDto;
@@ -11,7 +12,6 @@ import org.mockito.Mockito;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.tallerwebi.dominio.ServicioGaleria;
-import com.tallerwebi.dominio.ServicioCarrito;
 import com.tallerwebi.dominio.excepcion.NoHayObrasExistentes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,7 +24,6 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.ArgumentMatchers.any;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,12 +45,10 @@ public class ControladorGaleriaTest {
     @Test
     public void mostrarGaleria_deberiaRetornarListaVaciaSiNoHayObras() throws NoHayObrasExistentes {
         ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
-        ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
-        
+
         doThrow(NoHayObrasExistentes.class).when(servicioGaleria).obtener();
-        when(servicioCarrito.contarItemsEnCarrito(any(Usuario.class))).thenReturn(0);
-        
-        ControladorGaleria controladorGaleria = new ControladorGaleria(servicioGaleria, servicioCarrito);
+
+        ControladorGaleria controladorGaleria = new ControladorGaleria(servicioGaleria);
 
         ModelAndView modelAndView = controladorGaleria.mostrarGaleria(this.request);
 
@@ -60,27 +57,24 @@ public class ControladorGaleriaTest {
         List<ObraDto> obrasDtoObtenidas = (List<ObraDto>) modelAndView.getModel().get("obras");
         assertThat(obrasDtoObtenidas.size(), is(equalTo(0)));
         assertThat(modelAndView.getModel().get("error").toString(), is(equalToIgnoringCase("No hay obras.")));
-        assertThat(modelAndView.getModel().get("cantidadItems"), is(equalTo(0)));
+        // assertThat(modelAndView.getModel().get("cantidadItems"), is(equalTo(0)));
     }
 
     @Test
     public void siHay4obrasDeberiaRetornar4obras() {
         ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
-        ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
-        
-        ObraDto obraDto1 = mock(ObraDto.class);
-        ObraDto obraDto2 = mock(ObraDto.class);
-        ObraDto obraDto3 = mock(ObraDto.class);
-        ObraDto obraDto4 = mock(ObraDto.class);
-        List<ObraDto> obrasDto = new ArrayList<>();
-        obrasDto.add(obraDto1);
-        obrasDto.add(obraDto2);
-        obrasDto.add(obraDto3);
-        obrasDto.add(obraDto4);
-        when(servicioGaleria.obtener()).thenReturn(obrasDto);
-        when(servicioCarrito.contarItemsEnCarrito(any(Usuario.class))).thenReturn(2);
+        Obra obra1 = mock(Obra.class);
+        Obra obra2 = mock(Obra.class);
+        Obra obra3 = mock(Obra.class);
+        Obra obra4 = mock(Obra.class);
+        List<Obra> obras = new ArrayList<>();
+        obras.add(obra1);
+        obras.add(obra2);
+        obras.add(obra3);
+        obras.add(obra4);
+        when(servicioGaleria.obtener()).thenReturn(obras);
 
-        ControladorGaleria controladorGaleria = new ControladorGaleria(servicioGaleria, servicioCarrito);
+        ControladorGaleria controladorGaleria = new ControladorGaleria(servicioGaleria);
 
         ModelAndView modelAndView = controladorGaleria.mostrarGaleria(this.request);
 
@@ -89,29 +83,26 @@ public class ControladorGaleriaTest {
         List<ObraDto> obrasDtoObtenidas = (List<ObraDto>) modelAndView.getModel().get("obras");
         assertThat(obrasDtoObtenidas.size(), is(equalTo(4)));
         assertThat(modelAndView.getModel().get("exito").toString(), is(equalToIgnoringCase("Hay obras.")));
-        assertThat(modelAndView.getModel().get("cantidadItems"), is(equalTo(2)));
+        // assertThat(modelAndView.getModel().get("cantidadItems"), is(equalTo(2)));
     }
 
     @Test
     public void alMostrarseLaGaleriaDeberianMostrarseTresListasDiferentes() {
         ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
-        ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
-        
-        List<ObraDto> obrasDto = new ArrayList<>();
-        ObraDto obra1 = mock(ObraDto.class);
-        obrasDto.add(obra1);
-        
-        List<ObraDto> randomObras = new ArrayList<>();
-        List<ObraDto> autorObras = new ArrayList<>();
-        List<ObraDto> temaObras = new ArrayList<>();
 
-        when(servicioGaleria.obtener()).thenReturn(obrasDto);
+        List<Obra> obras = new ArrayList<>();
+        obras.add(mock(Obra.class));
+
+        List<Obra> randomObras = new ArrayList<>();
+        List<Obra> autorObras = new ArrayList<>();
+        List<Obra> temaObras = new ArrayList<>();
+
+        when(servicioGaleria.obtener()).thenReturn(obras);
         when(servicioGaleria.ordenarRandom()).thenReturn(randomObras);
         when(servicioGaleria.obtenerPorAutor(Mockito.anyString())).thenReturn(autorObras);
         when(servicioGaleria.obtenerPorCategoria(Mockito.any(Categoria.class))).thenReturn(temaObras);
-        when(servicioCarrito.contarItemsEnCarrito(any(Usuario.class))).thenReturn(1);
 
-        ControladorGaleria controladorGaleria = new ControladorGaleria(servicioGaleria, servicioCarrito);
+        ControladorGaleria controladorGaleria = new ControladorGaleria(servicioGaleria);
 
         ModelAndView modelAndView = controladorGaleria.mostrarGaleria(this.request);
 
@@ -120,7 +111,7 @@ public class ControladorGaleriaTest {
         assertThat(modelAndView.getModel().get("randomObras"), is(equalTo(randomObras)));
         assertThat(modelAndView.getModel().get("autorObras"), is(equalTo(autorObras)));
         assertThat(modelAndView.getModel().get("temaObras"), is(equalTo(temaObras)));
-        assertThat(modelAndView.getModel().get("cantidadItems"), is(equalTo(1)));
+        // assertThat(modelAndView.getModel().get("cantidadItems"), is(equalTo(1)));
     }
 
 }

@@ -14,8 +14,8 @@ public class Obra {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    public String codigo; // valor único para cada obra, ver como generarlo
+    
+    public String codigo; // valor único para cada obra? ver como generarlo automaticamente
     private String titulo;
     private String autor;
     private String imagenUrl;
@@ -43,9 +43,9 @@ public class Obra {
     @Column(name = "categoria")
     private Set<Categoria> categorias = new HashSet<>();
 
-    @ManyToOne
-    @JoinColumn(name = "artista")
-    private Artista artista;
+    // @ManyToOne
+    // @JoinColumn(name = "artista")
+    // private Artista artista;
 
     public Obra() { }
 
@@ -61,7 +61,7 @@ public class Obra {
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-
+    
     public String getTitulo() { return titulo; }
     public void setTitulo(String titulo) { this.titulo = titulo; }
     
@@ -79,18 +79,15 @@ public class Obra {
 
     public Set<Usuario> getUsuariosQueDieronLike() { return usuariosQueDieronLike; }
     public void setUsuariosQueDieronLike(Set<Usuario> usuariosQueDieronLike) { this.usuariosQueDieronLike = usuariosQueDieronLike; }
-
     public int getCantidadLikes() { return usuariosQueDieronLike.size(); }
-    
     public void darLike(Usuario usuario) { this.usuariosQueDieronLike.add(usuario); }
-    
     public void quitarLike(Usuario usuario) { this.usuariosQueDieronLike.remove(usuario); }
 
     public Set<Categoria> getCategorias() { return categorias; }
     public void agregarCategoria(Categoria categoria) { this.categorias.add(categoria); }
 
-    public Artista getArtista() { return artista; }
-    public void setArtista(Artista artista) { this.artista = artista; }
+    // public Artista getArtista() { return artista; }
+    // public void setArtista(Artista artista) { this.artista = artista; }
 
     public Integer getStock() { return stock; }
     public void setStock(Integer stock) { this.stock = stock; }

@@ -30,6 +30,7 @@ public class ControladorCarrito {
     public ModelAndView mostrarCarrito(HttpServletRequest request) {
         ModelMap modelo = new ModelMap();
 
+        
         return new ModelAndView("carrito", modelo);
     }
 

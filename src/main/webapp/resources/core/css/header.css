@@ -1,0 +1,31 @@
+.badge {
+    padding-left: 9px;
+    padding-right: 9px;
+    border-radius: 9px;
+}
+
+.label-warning[href],
+.badge-warning[href] {
+    background-color: #c67605;
+}
+
+#lblCartCount {
+    position: absolute;        /* se superpone */
+    top: -8px;                 /* ajusta la altura */
+    right: -10px;              /* ajusta la distancia al borde derecho */
+    font-size: 12px;
+    background: #ff0000;
+    color: #fff;
+    padding: 0 5px;
+    border-radius: 50%;        /* lo hace circular */
+    min-width: 18px;           /* ancho mínimo para que se vea redondo */
+    height: 18px;              /* altura fija */
+    text-align: center;
+    line-height: 18px;         /* centra el texto verticalmente */
+    font-weight: bold;
+}
+
+.cart-icon {
+    position: relative;
+    display: inline-block;
+}

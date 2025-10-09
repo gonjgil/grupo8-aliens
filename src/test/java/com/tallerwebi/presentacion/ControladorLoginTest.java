@@ -105,4 +105,30 @@ public class ControladorLoginTest {
 		assertThat(modelAndView.getModel().get("error").toString(),
 				equalToIgnoringCase("Error al registrar el nuevo usuario"));
 	}
+
+	@Test
+	public void queAlCerrarSesionSeRedirijaAGaleriaYSeElimineLaSesion() {
+		// preparacion
+		when(requestMock.getSession()).thenReturn(sessionMock);
+
+		// ejecucion
+		ModelAndView modelAndView = controladorLogin.logout(requestMock);
+
+		// validacion
+		assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/galeria"));
+		verify(sessionMock, times(1)).invalidate();
+	}
+
+	@Test
+	public void queNoSePuedaAccederACierreDeSesionSiNoHaySesionIniciada() {
+		// preparacion
+		when(requestMock.getSession()).thenReturn(null);
+
+		// ejecucion
+		ModelAndView modelAndView = controladorLogin.logout(requestMock);
+
+		// validacion
+		assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/galeria"));
+		verify(requestMock, times(1)).getSession();
+	}
 }

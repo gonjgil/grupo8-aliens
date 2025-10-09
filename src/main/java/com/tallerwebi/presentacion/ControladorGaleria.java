@@ -3,6 +3,7 @@ package com.tallerwebi.presentacion;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tallerwebi.dominio.Obra;
 import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.enums.Categoria;
 
@@ -25,13 +26,11 @@ public class ControladorGaleria {
 
     @Autowired
     private ServicioGaleria servicioGaleria;
-    
-    @Autowired
-    private ServicioCarrito servicioCarrito;
 
-    public ControladorGaleria(ServicioGaleria servicioGaleria, ServicioCarrito servicioCarrito) {
+    @Autowired
+
+    public ControladorGaleria(ServicioGaleria servicioGaleria) {
         this.servicioGaleria = servicioGaleria;
-        this.servicioCarrito = servicioCarrito;
     }
 
     @RequestMapping(path = "/galeria", method = RequestMethod.GET)
@@ -42,17 +41,13 @@ public class ControladorGaleria {
         try {
             Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
             model.put("usuario", usuario);
-            
-            // Agregar cantidad de items en el carrito
-            if (usuario != null) {
-                Integer cantidadItems = servicioCarrito.contarItemsEnCarrito(usuario);
-                model.put("cantidadItems", cantidadItems);
-            } else {
-                model.put("cantidadItems", 0);
+
+            List<Obra> obras = this.servicioGaleria.obtener();
+            List<ObraDto> obrasDto = new ArrayList<>();
+            for (Obra obra : obras) {
+                obrasDto.add(new ObraDto(obra));
             }
-            
-            List<ObraDto> obrasDto = this.servicioGaleria.obtener();
-            
+
             model.put("obras", obrasDto);
             model.put("exito", "Hay obras.");
         } catch (NoHayObrasExistentes e) {

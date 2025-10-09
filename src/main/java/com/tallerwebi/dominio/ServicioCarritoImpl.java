@@ -111,13 +111,8 @@ public class ServicioCarritoImpl implements ServicioCarrito {
     }
 
     @Override
-    @Transactional
-    public void finalizarCarrito(Usuario usuario) throws CarritoVacioException {
-        Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario);
-        if (carrito == null || carrito.getItems().isEmpty()) {
-            throw new CarritoVacioException();
-        }
-        repositorioCarrito.actualizarEstado(carrito.getId(), EstadoCarrito.FINALIZADO);
+    public Integer getCantidadTotal() {
+        return 0;
     }
 
     @Override
@@ -130,4 +125,5 @@ public class ServicioCarritoImpl implements ServicioCarrito {
             obrasEnCarrito.add(new ObraDto(obra));
         }
             return obrasEnCarrito;}
+    
 }

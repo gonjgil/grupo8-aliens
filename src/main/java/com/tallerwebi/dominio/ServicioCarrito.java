@@ -17,4 +17,7 @@ public interface ServicioCarrito {
     Double calcularTotalCarrito(Usuario usuario);
     Integer contarItemsEnCarrito(Usuario usuario);
     void finalizarCarrito(Usuario usuario) throws CarritoVacioException;
+
+    Integer getCantidadTotal();
+
 }
