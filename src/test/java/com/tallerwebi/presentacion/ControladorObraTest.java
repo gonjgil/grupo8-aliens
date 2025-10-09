@@ -48,11 +48,11 @@ public class ControladorObraTest {
         obra.setAutor("Autor A");
         obra.setDescripcion("Lorem Ipsum");
 
-        when(servicioGaleria.obtenerPorId(1L)).thenReturn(obra);
+        ObraDto obraDto = new ObraDto(obra);
+        when(servicioGaleria.obtenerPorId(1L)).thenReturn(obraDto);
         // when(servicioCarrito.contarItemsEnCarrito(usuario)).thenReturn(2);
 
         ControladorObra controladorObra = new ControladorObra(servicioGaleria);
-        ObraDto obraDto = new ObraDto(obra);
 
         ModelAndView modelAndView = controladorObra.verObra(1L, request);
 
@@ -83,8 +83,9 @@ public class ControladorObraTest {
         obra.setAutor("Autor A");
         obra.setDescripcion("Lorem Ipsum");
         obra.setUsuariosQueDieronLike(new HashSet<>());
-
-        when(servicioGaleria.obtenerPorId(id)).thenReturn(obra);
+        
+        ObraDto obraDto = new ObraDto(obra);
+        when(servicioGaleria.obtenerPorId(id)).thenReturn(obraDto);
 
         // Simula que toggle agrega el like si no estaba
         doAnswer(invoc -> {
@@ -94,7 +95,6 @@ public class ControladorObraTest {
 
         ControladorObra controladorObra = new ControladorObra(servicioGaleria);
         ModelAndView modelAndView = controladorObra.toggleLike(id, request);
-        ObraDto obraDto = new ObraDto(obra);
         ObraDto obraDtoEnModel = (ObraDto) modelAndView.getModel().get("obra");
 
         assertThat(modelAndView.getViewName(), is(equalTo("redirect:/obra/" + id)));
@@ -112,7 +112,8 @@ public class ControladorObraTest {
         obra.setAutor("Autor A");
         obra.setDescripcion("Lorem Ipsum");
 
-        when(servicioGaleria.obtenerPorId(id)).thenReturn(obra);
+        ObraDto obraDto = new ObraDto(obra);
+        when(servicioGaleria.obtenerPorId(id)).thenReturn(obraDto);
         doThrow(new UsuarioAnonimoException()).when(servicioGaleria).toggleLike(id, null);
         when(this.request.getSession().getAttribute("usuarioLogueado")).thenReturn(null);
 
@@ -134,7 +135,8 @@ public class ControladorObraTest {
         obra.setDescripcion("Lorem Ipsum");
         obra.setUsuariosQueDieronLike(new HashSet<>(Set.of(usuario))); // ya tenía el like
 
-        when(servicioGaleria.obtenerPorId(id)).thenReturn(obra);
+        ObraDto obraDto = new ObraDto(obra);
+        when(servicioGaleria.obtenerPorId(id)).thenReturn(obraDto);
 
         doAnswer(invoc -> {
             obra.getUsuariosQueDieronLike().remove(usuario);
@@ -143,7 +145,6 @@ public class ControladorObraTest {
 
         ControladorObra controladorObra = new ControladorObra(servicioGaleria);
         ModelAndView modelAndView = controladorObra.toggleLike(id, request);
-        ObraDto obraDto = new ObraDto(obra);
         ObraDto obraDtoEnModel = (ObraDto) modelAndView.getModel().get("obra");
 
         assertThat(modelAndView.getViewName(), is(equalTo("redirect:/obra/" + id)));

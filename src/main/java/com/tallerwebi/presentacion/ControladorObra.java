@@ -39,9 +39,8 @@ public class ControladorObra {
         model.put("usuario", usuario);
         
         try {
-            Obra obra = this.servicioGaleria.obtenerPorId(id);
-            ObraDto obraDto = new ObraDto(obra);
-            model.put("obra", obraDto);
+            ObraDto obra = this.servicioGaleria.obtenerPorId(id);
+            model.put("obra", obra);
             return new ModelAndView("obra", model);
         } catch (Exception e) {
             model.put("error", "No existe la obra solicitada.");
@@ -101,8 +100,8 @@ public class ControladorObra {
 
         try {
             this.servicioGaleria.toggleLike(id, usuario);
-            Obra obra = this.servicioGaleria.obtenerPorId(id);
-            model.put("obra", new ObraDto(obra));
+            ObraDto obra = this.servicioGaleria.obtenerPorId(id);
+            model.put("obra", obra);
             return new ModelAndView("redirect:/obra/" + id, model);
 
         } catch (UsuarioAnonimoException e) {

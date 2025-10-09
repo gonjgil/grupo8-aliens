@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 
 import com.tallerwebi.dominio.excepcion.UsuarioAnonimoException;
+import com.tallerwebi.presentacion.ObraDto;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,24 +72,12 @@ public class ServicioGaleriaImpl implements ServicioGaleria {
 
     @Override
     @Transactional
-    public Obra obtenerPorId(Long id) throws NoExisteLaObra {
+    public ObraDto obtenerPorId(Long id) throws NoExisteLaObra {
         Obra obra = repositorioObra.obtenerPorId(id);
         if (obra == null) {
             throw new NoExisteLaObra();
         }
-        return obra;
-    }
-
-    @Override
-    @Transactional
-    public void darLike(Long obraId, Usuario usuario) throws NoExisteLaObra {
-        repositorioObra.darLike(obraId, usuario);
-    }
-
-    @Override
-    @Transactional
-    public void quitarLike(Long obraId, Usuario usuario) {
-        repositorioObra.quitarLike(obraId, usuario);
+        return new ObraDto(obra);
     }
 
     @Override
@@ -102,9 +92,9 @@ public class ServicioGaleriaImpl implements ServicioGaleria {
         }
 
         if (obra.getUsuariosQueDieronLike().contains(usuario)) {
-            this.quitarLike(obraId, usuario);
+            repositorioObra.darLike(obraId, usuario);
         } else {
-            this.darLike(obraId, usuario);
+            repositorioObra.quitarLike(obraId, usuario);
         }
     }
 }
