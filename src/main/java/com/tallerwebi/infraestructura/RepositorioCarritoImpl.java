@@ -20,6 +20,7 @@ public class RepositorioCarritoImpl implements RepositorioCarrito {
 
     @Override
     public void guardar(Carrito carrito) {
+
         this.sessionFactory.getCurrentSession().saveOrUpdate(carrito);
     }
 

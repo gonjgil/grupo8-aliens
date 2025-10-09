@@ -3,6 +3,7 @@ package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.*;
 import com.tallerwebi.dominio.excepcion.CarritoVacioException;
 import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
+import com.tallerwebi.dominio.excepcion.StockInsuficienteException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -60,6 +61,9 @@ public class ControladorCarrito {
             redirectAttributes.addFlashAttribute("tipoMensaje", "success");
         } catch (NoExisteLaObra e) {
             redirectAttributes.addFlashAttribute("mensaje", "La obra no existe");
+            redirectAttributes.addFlashAttribute("tipoMensaje", "error");
+        } catch (StockInsuficienteException e) {
+            redirectAttributes.addFlashAttribute("mensaje", "Stock insuficiente");
             redirectAttributes.addFlashAttribute("tipoMensaje", "error");
         }
 

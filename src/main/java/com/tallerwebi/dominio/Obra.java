@@ -6,20 +6,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ElementCollection;
-import javax.persistence.CollectionTable;
-import javax.persistence.Enumerated;
-import javax.persistence.EnumType;
-import javax.persistence.Column;
-import javax.persistence.FetchType;
+import javax.persistence.*;
 
 @Entity
 public class Obra {
@@ -34,6 +21,10 @@ public class Obra {
     private String imagenUrl;
     private String descripcion;
     private Integer stock;
+
+//    @Version
+//    //Cada vez que Hibernate actualiza la entidad, incrementa automáticamente el campo version. Si otro usuario modificó la misma entidad en paralelo, Hibernate lanza una OptimisticLockException.
+//    private Integer version;
 
     @Column(nullable = false)
     private Double precio;
@@ -58,7 +49,7 @@ public class Obra {
 
     public Obra() { }
 
-      public Obra(String titulo, String autor, String imagenUrl, String descripcion, Set<Categoria> categorias, Double precio) {
+      public Obra(String titulo, String autor, String imagenUrl, String descripcion, Integer stock, Set<Categoria> categorias, Double precio) {
         this.titulo = titulo;
         this.autor = autor;
         this.imagenUrl = imagenUrl;
@@ -103,6 +94,13 @@ public class Obra {
 
     public Integer getStock() { return stock; }
     public void setStock(Integer stock) { this.stock = stock; }
+
+    public boolean hayStock() {
+            if(this.getStock() >= 1){
+                return true;
+            }
+        return false;
+    }
 
     @Override
     public boolean equals(Object o) {
