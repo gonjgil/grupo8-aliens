@@ -95,13 +95,6 @@ public class Obra {
     public Integer getStock() { return stock; }
     public void setStock(Integer stock) { this.stock = stock; }
 
-    public boolean hayStock() {
-            if(this.getStock() >= 1){
-                return true;
-            }
-        return false;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

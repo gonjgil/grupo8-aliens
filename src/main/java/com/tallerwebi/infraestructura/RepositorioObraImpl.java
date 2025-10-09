@@ -74,16 +74,16 @@ public class RepositorioObraImpl implements RepositorioObra {
      }
 
     @Override
-    public boolean hayStockSuficiente(Obra obra, Integer cantidadSolicitada) {
-        if(obra.getStock() >= cantidadSolicitada){//si es fisica verificar si hay stock, si es digital no es necesario
+    public boolean hayStockSuficiente(Obra obra) {
+        if(obra.getStock() >= 1){//si es fisica verificar si hay stock, si es digital no es necesario
             return true;
         }
         return false;
     }
 
     @Override
-    public void descontarStock(Obra obra, Integer cantidadADescontar) {
-        obra.setStock(obra.getStock() - cantidadADescontar);
+    public void descontarStock(Obra obra) {
+        obra.setStock(obra.getStock() - 1);
     }
 
     @Override

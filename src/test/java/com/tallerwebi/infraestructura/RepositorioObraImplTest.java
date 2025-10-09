@@ -175,7 +175,8 @@ public class RepositorioObraImplTest {
 
         this.repositorioObra.guardar(obra1);
 
-        repositorioObra.descontarStock(obra1, 2);
+        repositorioObra.descontarStock(obra1);
+        repositorioObra.descontarStock(obra1);
 
 
         assertThat(obra1.getStock(), is(equalTo(3)));
@@ -190,8 +191,8 @@ public class RepositorioObraImplTest {
 
         this.repositorioObra.guardar(obra1);
 
-        repositorioObra.descontarStock(obra1, 2);
-
+        repositorioObra.descontarStock(obra1);
+        repositorioObra.descontarStock(obra1);
 
         repositorioObra.devolverStock(obra1);
         repositorioObra.devolverStock(obra1);
@@ -208,7 +209,7 @@ public class RepositorioObraImplTest {
         obra1.setStock(5);
         this.repositorioObra.guardar(obra1);
 
-        repositorioObra.descontarStock(obra1,1);
+        repositorioObra.descontarStock(obra1);
   //      sessionFactory.getCurrentSession().flush();
 
         String hql = "FROM Obra WHERE id = :id";
