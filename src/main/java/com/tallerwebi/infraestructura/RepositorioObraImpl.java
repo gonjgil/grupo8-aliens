@@ -92,7 +92,6 @@ public class RepositorioObraImpl implements RepositorioObra {
         obra.setStock(obra.getStock() + 1);
     }
 
-}
     public void darLike(Long id, Usuario usuario) {
         Obra obra = obtenerPorId(id);
         if (obra == null) {
