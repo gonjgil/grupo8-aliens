@@ -147,7 +147,7 @@ public class ServicioCarritoImplTest {
         servicioCarritoImpl.agregarObraAlCarrito(usuario, obra1Id);
         servicioCarritoImpl.agregarObraAlCarrito(usuario, obra2Id);
 
-        servicioCarritoImpl.removerObraDelCarrito(usuario, obra1Id);
+        servicioCarritoImpl.eliminarObraDelCarrito(usuario, obra1Id);
 
         assertThat(carrito.getItems().size(), is(equalTo(1)));
         assertThat(carrito.getItems().get(0).getObra().getId(), is(equalTo(obra2Id)));
@@ -164,7 +164,7 @@ public class ServicioCarritoImplTest {
         when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario)).thenReturn(carrito);
         when(repositorioObra.obtenerPorId(obraId)).thenReturn(obra);
 
-        servicioCarritoImpl.removerObraDelCarrito(usuario, obraId);
+        servicioCarritoImpl.eliminarObraDelCarrito(usuario, obraId);
 
         assertThat(carrito.getItems().size(), is(equalTo(0)));
 
@@ -262,7 +262,7 @@ public class ServicioCarritoImplTest {
 
         assertThat(carrito.getItems().get(0).getCantidad(), is(2));
 
-        servicioCarritoImpl.removerObraDelCarrito(usuario, obra1.getId());
+        servicioCarritoImpl.eliminarObraDelCarrito(usuario, obra1.getId());
 
         assertThat(carrito.getItems().get(0).getCantidad(), is(1));
 
@@ -293,84 +293,104 @@ public class ServicioCarritoImplTest {
         servicioCarritoImpl.agregarObraAlCarrito(usuario, obra2.getId());
         servicioCarritoImpl.vaciarCarrito(usuario);
 
-
+        assertThat(servicioCarritoImpl.contarItemsEnCarrito(usuario),is(equalTo(0)));
         assertThat(carrito.getItems().size(), is(0));
 
     }
-//
-//    @Test
-//    public void getCantidadTotal_devuelvaLaCantidadCorrectaDeObrasAgregadasAlCarrito() {
-//        Obra obra1 = new Obra();
-//        obra1.setId(1L);
-//
-//        Obra obra2 = new Obra();
-//        obra2.setId(2L);
-//
-//        Obra obra3 = new Obra();
-//        obra3.setId(3L);
-//
-//        when(repositorioObra.obtenerPorId(1L)).thenReturn(obra1);
-//        when(repositorioObra.obtenerPorId(2L)).thenReturn(obra2);
-//        when(repositorioObra.obtenerPorId(3L)).thenReturn(obra3);
-//
-//        when(repositorioObra.hayStock(1L)).thenReturn(true);
-//        when(repositorioObra.hayStock(2L)).thenReturn(true);
-//        when(repositorioObra.hayStock(3L)).thenReturn(true);
-//
-//        ServicioCarritoImpl servicio = new ServicioCarritoImpl(repositorioObra);
-//
-//        servicio.agregarObraAlCarrito(obra1);
-//        servicio.agregarObraAlCarrito(obra2);
-//
-//        List<ObraDto> resultado = servicio.obtenerObras();
-//
-//        assertThat(servicio.getCantidadTotal(), is(2));
-//        assertThat(resultado.get(0).getId(), is(equalTo(1L)));
-//        assertThat(resultado.get(1).getId(), is(equalTo(2L)));
-//
-//    }
 
-    //    @Override
-//    @Transactional
-//    public void actualizarCantidadObra(Usuario usuario, Long obraId, Integer nuevaCantidad) {
-//        Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario);
-//        if (carrito != null) {
-//            Obra obra = repositorioObra.obtenerPorId(obraId);
-//            if (obra != null) {
-//                carrito.actualizarCantidadItem(obra, nuevaCantidad);
-//                repositorioCarrito.guardar(carrito);
-//            }
-//        }
-//    }
-//
+    @Test
+    public void obtenerCarritoConItems_debeObtenerCarritoConItemsDeUsuarioEspecifico(){
+
+        Obra obra1 = new Obra();
+        obra1.setId(1L);
+
+        Obra obra2 = new Obra();
+        obra2.setId(2L);
+
+        Usuario usuario1 = new Usuario();
+        Usuario usuario2 = new Usuario();
+
+        Carrito carrito1 = new Carrito(usuario1);
+        carrito1.setId(1L);
+        Carrito carrito2 = new Carrito(usuario1);
+
+
+        when(repositorioObra.obtenerPorId(1L)).thenReturn(obra1);
+        when(repositorioObra.obtenerPorId(2L)).thenReturn(obra2);
+
+        when(this.repositorioObra.hayStockSuficiente(obra1)).thenReturn(true);
+        when(this.repositorioObra.hayStockSuficiente(obra2)).thenReturn(true);
+
+        when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario1)).thenReturn(carrito1);
+        when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario2)).thenReturn(carrito2);
+
+        servicioCarritoImpl.agregarObraAlCarrito(usuario1, obra1.getId());
+        servicioCarritoImpl.agregarObraAlCarrito(usuario1, obra1.getId());
+        servicioCarritoImpl.agregarObraAlCarrito(usuario1, obra2.getId());
+        servicioCarritoImpl.agregarObraAlCarrito(usuario2, obra2.getId());
+
+        assertThat(servicioCarritoImpl.obtenerCarritoConItems(usuario1),is(equalTo(carrito1)));
+        assertThat(servicioCarritoImpl.contarItemsEnCarrito(usuario1),is(equalTo(3)));
+        assertThat(servicioCarritoImpl.obtenerCarritoConItems(usuario2),is(equalTo(carrito2)));
+        assertThat(servicioCarritoImpl.contarItemsEnCarrito(usuario2),is(equalTo(1)));
+
+    }
+
+
+    @Test
+    public void dadoQueTengo3ObrasEnCarritoDosDe$3500YUnaDe5200DebeDevolver12200(){
+        Obra obra1 = new Obra();
+        obra1.setId(1L);
+        obra1.setPrecio(3500.0);
+
+        Obra obra2 = new Obra();
+        obra2.setId(2L);
+        obra2.setPrecio(3500.0);
+
+        Obra obra3 = new Obra();
+        obra3.setId(3L);
+        obra3.setPrecio(5200.0);
+
+        Usuario usuario = new Usuario();
+        Carrito carrito = new Carrito(usuario);
+
+        when(repositorioObra.obtenerPorId(1L)).thenReturn(obra1);
+        when(repositorioObra.obtenerPorId(2L)).thenReturn(obra2);
+        when(repositorioObra.obtenerPorId(3L)).thenReturn(obra3);
+
+
+        when(this.repositorioObra.hayStockSuficiente(obra1)).thenReturn(true);
+        when(this.repositorioObra.hayStockSuficiente(obra2)).thenReturn(true);
+        when(this.repositorioObra.hayStockSuficiente(obra3)).thenReturn(true);
+
+        when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario)).thenReturn(carrito);
+
+        servicioCarritoImpl.agregarObraAlCarrito(usuario, obra1.getId());
+        servicioCarritoImpl.agregarObraAlCarrito(usuario, obra2.getId());
+        servicioCarritoImpl.agregarObraAlCarrito(usuario, obra3.getId());
+
+        assertThat(servicioCarritoImpl.calcularPrecioTotalCarrito(usuario),is(equalTo(12200.0)));
+
+    }
+
+    @Test
+    public void dadoQueNoHayObrasEnCarritoElPrecioTotalDebeSer0(){
+
+        Usuario usuario = new Usuario();
+        Carrito carrito = new Carrito(usuario);
+
+        when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario)).thenReturn(carrito);
+
+        assertThat(servicioCarritoImpl.calcularPrecioTotalCarrito(usuario),is(equalTo(0.0)));
+
+    }
+
+
 //    @Override
-//    @Transactional(readOnly = true)
-//    public Carrito obtenerCarritoConItems(Usuario usuario) {
-//        return repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario);
-//    }
-//
-//    @Override
-//    @Transactional(readOnly = true)
-//    public Double calcularTotalCarrito(Usuario usuario) {
-//        Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario);
-//        return (carrito != null) ? carrito.getTotal() : 0.0;
-//    }
-//
-//    @Override
-//    @Transactional(readOnly = true)
 //    public Integer contarItemsEnCarrito(Usuario usuario) {
 //        Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario);
 //        return (carrito != null) ? carrito.getCantidadTotalItems() : 0;
 //    }
 //
-//    @Override
-//    @Transactional
-//    public void finalizarCarrito(Usuario usuario) throws CarritoVacioException {
-//        Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario);
-//        if (carrito == null || carrito.getItems().isEmpty()) {
-//            throw new CarritoVacioException();
-//        }
-//        repositorioCarrito.actualizarEstado(carrito.getId(), EstadoCarrito.FINALIZADO);
-//    }
 
 }

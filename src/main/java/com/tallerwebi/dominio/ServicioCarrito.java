@@ -9,12 +9,11 @@ import java.util.List;
 public interface ServicioCarrito {
     Carrito obtenerOCrearCarritoParaUsuario(Usuario usuario);
     boolean agregarObraAlCarrito(Usuario usuario, Long obraId) throws NoExisteLaObra;
-    void removerObraDelCarrito(Usuario usuario, Long obraId);
-    void actualizarCantidadObra(Usuario usuario, Long obraId, Integer nuevaCantidad);
+    void eliminarObraDelCarrito(Usuario usuario, Long obraId);
     void vaciarCarrito(Usuario usuario);
     List<ObraDto> obtenerObras(Usuario usuario);
     Carrito obtenerCarritoConItems(Usuario usuario);
-    Double calcularTotalCarrito(Usuario usuario);
+    Double calcularPrecioTotalCarrito(Usuario usuario);
     Integer contarItemsEnCarrito(Usuario usuario);
     void finalizarCarrito(Usuario usuario) throws CarritoVacioException;
 
