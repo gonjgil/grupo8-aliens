@@ -105,13 +105,8 @@ public class RepositorioObraImpl implements RepositorioObra {
     public void quitarLike(Long id, Usuario usuario) {
         Obra obra = obtenerPorId(id);
         if (obra != null) {
-            boolean removed = obra.getUsuariosQueDieronLike().remove(usuario);
-            if (removed) {
-                sessionFactory.getCurrentSession().merge(obra);
-                System.out.println("✅ Like removido exitosamente.");
-            } else {
-                System.out.println("⚠️ No se encontró el usuario en la colección para quitar el like.");
-            }
+            obra.getUsuariosQueDieronLike().remove(usuario);
+            sessionFactory.getCurrentSession().merge(obra);
         }
     }
 }

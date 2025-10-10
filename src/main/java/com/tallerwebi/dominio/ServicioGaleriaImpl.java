@@ -91,7 +91,7 @@ public class ServicioGaleriaImpl implements ServicioGaleria {
             throw new NoExisteLaObra();
         }
 
-        if (obra.getUsuariosQueDieronLike().contains(usuario)) {
+        if (!obra.getUsuariosQueDieronLike().contains(usuario)) {
             repositorioObra.darLike(obraId, usuario);
         } else {
             repositorioObra.quitarLike(obraId, usuario);
