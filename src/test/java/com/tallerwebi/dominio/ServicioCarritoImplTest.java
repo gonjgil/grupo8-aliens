@@ -337,7 +337,6 @@ public class ServicioCarritoImplTest {
         when(repositorioObra.obtenerPorId(2L)).thenReturn(obra2);
         when(repositorioObra.obtenerPorId(3L)).thenReturn(obra3);
 
-
         when(this.repositorioObra.hayStockSuficiente(obra1)).thenReturn(true);
         when(this.repositorioObra.hayStockSuficiente(obra2)).thenReturn(true);
         when(this.repositorioObra.hayStockSuficiente(obra3)).thenReturn(true);
@@ -362,11 +361,30 @@ public class ServicioCarritoImplTest {
     }
 
 
-//    @Override
-//    public Integer contarItemsEnCarrito(Usuario usuario) {
-//        Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario);
-//        return (carrito != null) ? carrito.getCantidadTotalItems() : 0;
-//    }
-//
+   @Test
+   public void contarCorrectamenteTotalDeItemsEnElCarrito() throws NoHayStockSuficiente {
+        Obra obra1 = new Obra();
+        obra1.setId(1L);
+
+        Obra obra2 = new Obra();
+        obra2.setId(2L);
+
+        Usuario usuario = new Usuario();
+        Carrito carrito = new Carrito(usuario);
+
+        when(repositorioObra.obtenerPorId(1L)).thenReturn(obra1);
+        when(repositorioObra.obtenerPorId(2L)).thenReturn(obra2);
+
+        when(this.repositorioObra.hayStockSuficiente(obra1)).thenReturn(true);
+        when(this.repositorioObra.hayStockSuficiente(obra2)).thenReturn(true);
+
+        when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario)).thenReturn(carrito);
+
+        servicioCarritoImpl.agregarObraAlCarrito(usuario, obra1.getId());
+        servicioCarritoImpl.agregarObraAlCarrito(usuario, obra2.getId());
+        servicioCarritoImpl.agregarObraAlCarrito(usuario, obra2.getId());
+
+        assertThat(servicioCarritoImpl.contarItemsEnCarrito(usuario), is(equalTo(3)));
+   }
 
 }

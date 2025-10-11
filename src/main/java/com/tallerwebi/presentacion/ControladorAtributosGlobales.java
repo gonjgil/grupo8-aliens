@@ -22,7 +22,7 @@ public class ControladorAtributosGlobales {
     @ModelAttribute("cartCount")
     public int getContadorCarrito(Usuario usuario) {
         if (usuario != null) {
-            return servicioCarrito.getCantidadTotal();
+            return servicioCarrito.contarItemsEnCarrito(usuario);
         }
         return 0;
     }

@@ -15,7 +15,5 @@ public interface ServicioCarrito {
     List<ObraDto> obtenerObras(Usuario usuario); //testeado
     Carrito obtenerCarritoConItems(Usuario usuario); //testeado
     Double calcularPrecioTotalCarrito(Usuario usuario); //testeado
-    Integer contarItemsEnCarrito(Usuario usuario);
-    void finalizarCarrito(Usuario usuario) throws CarritoVacioException;
-    Integer getCantidadTotal();
+    Integer contarItemsEnCarrito(Usuario usuario); //testeado
 }

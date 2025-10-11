@@ -95,19 +95,6 @@ public class ServicioCarritoImpl implements ServicioCarrito {
         return 0;
     }
 
-    @Override
-    public Integer getCantidadTotal() {
-        return 0;
-    }
-
-        @Override
-        public void finalizarCarrito (Usuario usuario) throws CarritoVacioException {
-            Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario);
-            if (carrito == null || carrito.getItems().isEmpty()) {
-                throw new CarritoVacioException();
-            }
-            repositorioCarrito.actualizarEstado(carrito.getId(), EstadoCarrito.FINALIZADO);
-        }
 
         @Override
         public List<ObraDto> obtenerObras (Usuario usuario){

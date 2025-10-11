@@ -16,12 +16,12 @@ import org.junit.jupiter.api.Test;
 public class ControladorAtributosGlobalesTest {
     
     @Test
-    void getContadorCarrito_devuelveLaCantidadCorrecta() {
+    public void getContadorCarrito_devuelveLaCantidadCorrecta() {
         ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
         ControladorAtributosGlobales controlador = new ControladorAtributosGlobales(servicioCarrito);
 
         Usuario usuario = new Usuario();
-        when(servicioCarrito.getCantidadTotal()).thenReturn(5);
+        when(servicioCarrito.contarItemsEnCarrito(usuario)).thenReturn(5);
 
         int resultado = controlador.getContadorCarrito(usuario);
 
