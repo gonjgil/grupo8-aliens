@@ -3,10 +3,10 @@ package com.tallerwebi.dominio;
 import com.tallerwebi.dominio.enums.EstadoCarrito;
 import com.tallerwebi.dominio.excepcion.CarritoVacioException;
 import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
+import com.tallerwebi.dominio.excepcion.NoHayStockSuficiente;
 import com.tallerwebi.presentacion.ObraDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,6 @@ public class ServicioCarritoImpl implements ServicioCarrito {
     public ServicioCarritoImpl(RepositorioCarrito repositorioCarrito, RepositorioObra repositorioObra) {
         this.repositorioCarrito = repositorioCarrito;
         this.repositorioObra = repositorioObra;
-
     }
 
 
@@ -35,13 +34,13 @@ public class ServicioCarritoImpl implements ServicioCarrito {
     }
 
     @Override
-    public boolean agregarObraAlCarrito(Usuario usuario, Long obraId) throws NoExisteLaObra {
+    public boolean agregarObraAlCarrito(Usuario usuario, Long obraId) throws NoExisteLaObra, NoHayStockSuficiente {
         Obra obra = repositorioObra.obtenerPorId(obraId);
         if (obra == null) {
             throw new NoExisteLaObra();
         }
         if (!repositorioObra.hayStockSuficiente(obra)) {
-            return false;
+            throw new NoHayStockSuficiente();
         }
 
         Carrito carrito = obtenerOCrearCarritoParaUsuario(usuario);

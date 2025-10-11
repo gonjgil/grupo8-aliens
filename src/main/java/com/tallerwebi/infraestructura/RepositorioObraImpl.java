@@ -66,7 +66,7 @@ public class RepositorioObraImpl implements RepositorioObra {
     public Obra obtenerPorId(Long id) {
         try {
             return this.sessionFactory.getCurrentSession()
-                    .createQuery("FROM Obra o LEFT JOIN FETCH o.usuariosQueDieronLike WHERE o.id = :id", Obra.class)
+                    .createQuery("FROM Obra o WHERE o.id = :id", Obra.class)
                     .setParameter("id", id)
                     .uniqueResult();
         } catch (IllegalArgumentException e) {
