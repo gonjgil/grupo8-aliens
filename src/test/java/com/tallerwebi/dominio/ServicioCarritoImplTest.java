@@ -308,7 +308,11 @@ public class ServicioCarritoImplTest {
         obra2.setId(2L);
 
         Usuario usuario1 = new Usuario();
+        usuario1.setId(1L);
+        usuario1.setEmail("usuario1@mail.com");
         Usuario usuario2 = new Usuario();
+        usuario2.setId(2L);
+        usuario2.setEmail("usuario2@mail.com");
 
         Carrito carrito1 = new Carrito(usuario1);
         carrito1.setId(1L);
@@ -335,7 +339,6 @@ public class ServicioCarritoImplTest {
         assertThat(servicioCarritoImpl.contarItemsEnCarrito(usuario2),is(equalTo(1)));
 
     }
-
 
     @Test
     public void dadoQueTengo3ObrasEnCarritoDosDe$3500YUnaDe5200DebeDevolver12200(){
