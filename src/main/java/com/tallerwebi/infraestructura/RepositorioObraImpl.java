@@ -91,22 +91,5 @@ public class RepositorioObraImpl implements RepositorioObra {
     public void devolverStock(Obra obra) {
         obra.setStock(obra.getStock() + 1);
     }
-
-    public void darLike(Long id, Usuario usuario) {
-        Obra obra = obtenerPorId(id);
-        if (obra == null) {
-            throw new IllegalArgumentException("No existe la obra con id: " + id);
-        }
-        obra.getUsuariosQueDieronLike().add(usuario);
-        this.sessionFactory.getCurrentSession().merge(obra);
-    }
-
-    @Override
-    public void quitarLike(Long id, Usuario usuario) {
-        Obra obra = obtenerPorId(id);
-        if (obra != null) {
-            obra.getUsuariosQueDieronLike().remove(usuario);
-            sessionFactory.getCurrentSession().merge(obra);
-        }
-    }
+    
 }

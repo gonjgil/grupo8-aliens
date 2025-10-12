@@ -13,5 +13,4 @@ public interface ServicioGaleria {
     List<Obra> obtenerPorAutor(String autor);
     List<Obra> obtenerPorCategoria(Categoria categoria);
     ObraDto obtenerPorId(Long id);
-    void toggleLike(Long id, Usuario usuario) throws NoExisteLaObra, UsuarioAnonimoException;
 }

@@ -80,21 +80,4 @@ public class ServicioGaleriaImpl implements ServicioGaleria {
         return new ObraDto(obra);
     }
 
-    @Override
-    @Transactional
-    public void toggleLike(Long obraId, Usuario usuario) throws NoExisteLaObra, UsuarioAnonimoException {
-        if (usuario == null) {
-            throw new UsuarioAnonimoException();
-        }
-        Obra obra = repositorioObra.obtenerPorId(obraId);
-        if (obra == null) {
-            throw new NoExisteLaObra();
-        }
-
-        if (!obra.getUsuariosQueDieronLike().contains(usuario)) {
-            repositorioObra.darLike(obraId, usuario);
-        } else {
-            repositorioObra.quitarLike(obraId, usuario);
-        }
-    }
 }
