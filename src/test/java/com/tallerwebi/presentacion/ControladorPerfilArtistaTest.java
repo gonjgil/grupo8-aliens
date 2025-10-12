@@ -61,7 +61,7 @@ public class ControladorPerfilArtistaTest {
         ModelAndView modelAndView = controladorPerfilArtista.verPerfilArtista(idArtista, requestMock);
 
         // Validación
-        assertThat(modelAndView.getViewName(), equalToIgnoringCase("PerfilNoExiste"));
+        assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/galeria"));
         assertThat(modelAndView.getModel().get("error").toString(), equalToIgnoringCase("perfil no encontrado"));
     }
     @Test

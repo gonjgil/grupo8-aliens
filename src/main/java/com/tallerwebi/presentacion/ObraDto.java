@@ -29,9 +29,9 @@ public class ObraDto {
         this.usuariosQueDieronLike = obra.getUsuariosQueDieronLike() != null ? obra.getUsuariosQueDieronLike() : new HashSet<>();
         this.categorias = obra.getCategorias();
         this.precio = obra.getPrecio();
+        this.autor = obra.getAutor();
         if (obra.getArtista() != null) {
             this.artista = new PerfilArtistaDTO(obra.getArtista());
-            this.autor = artista.getNombre();
         }
     }
 
