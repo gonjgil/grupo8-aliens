@@ -1,10 +1,9 @@
 package com.tallerwebi.dominio;
 
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Artista {
@@ -17,6 +16,9 @@ public class Artista {
     private String urlFacebook;
     private String urlInstagram;
     private String urlTwitter;
+
+    @OneToMany(mappedBy = "artista", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Obra> obras = new ArrayList<>();
 
     public Artista(String nombre, String biografia, String urlFotoPerfil) {
         this.nombre = nombre;

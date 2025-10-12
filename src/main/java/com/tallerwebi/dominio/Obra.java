@@ -43,13 +43,13 @@ public class Obra {
     @Column(name = "categoria")
     private Set<Categoria> categorias = new HashSet<>();
 
-    // @ManyToOne
-    // @JoinColumn(name = "artista")
-    // private Artista artista;
+    @ManyToOne
+    @JoinColumn(name = "artista")
+    private Artista artista;
 
     public Obra() { }
 
-      public Obra(String titulo, String autor, String imagenUrl, String descripcion, Integer stock, Set<Categoria> categorias, Double precio) {
+    public Obra(String titulo, String autor, String imagenUrl, String descripcion, Integer stock, Set<Categoria> categorias, Double precio) {
         this.titulo = titulo;
         this.autor = autor;
         this.imagenUrl = imagenUrl;
@@ -57,6 +57,17 @@ public class Obra {
         this.stock = stock;
         this.categorias = categorias;
         this.precio = precio;
+    }
+
+    public Obra(String titulo, String autor, String imagenUrl, String descripcion, Integer stock, Set<Categoria> categorias, Double precio, Artista artista) {
+        this.titulo = titulo;
+        this.autor = autor;
+        this.imagenUrl = imagenUrl;
+        this.descripcion = descripcion;
+        this.stock = stock;
+        this.categorias = categorias;
+        this.precio = precio;
+        this.artista = artista;
     }
 
     public Long getId() { return id; }
@@ -86,8 +97,8 @@ public class Obra {
     public Set<Categoria> getCategorias() { return categorias; }
     public void agregarCategoria(Categoria categoria) { this.categorias.add(categoria); }
 
-    // public Artista getArtista() { return artista; }
-    // public void setArtista(Artista artista) { this.artista = artista; }
+     public Artista getArtista() { return artista; }
+     public void setArtista(Artista artista) { this.artista = artista; }
 
     public Integer getStock() { return stock; }
     public void setStock(Integer stock) { this.stock = stock; }
