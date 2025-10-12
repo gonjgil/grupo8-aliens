@@ -34,9 +34,10 @@ public class RepositorioCarritoImpl implements RepositorioCarrito {
 
     @Override
     public Carrito obtenerCarritoActivoPorUsuario(Usuario usuario) {
+        Long usuarioId = usuario.getId();
         return this.sessionFactory.getCurrentSession()
-                .createQuery("FROM Carrito c LEFT JOIN FETCH c.items WHERE c.usuario = :usuario AND c.estado = :estado", Carrito.class)
-                .setParameter("usuario", usuario)
+                .createQuery("FROM Carrito c LEFT JOIN FETCH c.items WHERE c.usuario = :usuarioId AND c.estado = :estado", Carrito.class)
+                .setParameter("usuarioId", usuarioId)
                 .setParameter("estado", EstadoCarrito.ACTIVO)
                 .uniqueResult();
     }

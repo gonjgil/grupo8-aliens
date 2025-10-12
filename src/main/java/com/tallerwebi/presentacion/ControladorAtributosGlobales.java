@@ -3,11 +3,8 @@ package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.ServicioCarrito;
 import com.tallerwebi.dominio.Usuario;
 
-import javax.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 @ControllerAdvice(assignableTypes = { ControladorObra.class, ControladorGaleria.class })
 public class ControladorAtributosGlobales {

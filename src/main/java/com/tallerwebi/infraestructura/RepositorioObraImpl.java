@@ -24,7 +24,7 @@ public class RepositorioObraImpl implements RepositorioObra {
 
     @Override // testeado
     public void guardar(Obra obra) {
-        this.sessionFactory.getCurrentSession().save(obra);
+        this.sessionFactory.getCurrentSession().saveOrUpdate(obra);
     }
 
     @Override // testeado

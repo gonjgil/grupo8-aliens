@@ -15,8 +15,6 @@ import com.tallerwebi.dominio.ServicioGaleria;
 import com.tallerwebi.dominio.ServicioLike;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @RequestMapping("/obra")
