@@ -71,10 +71,9 @@
             class="obra-titulo text-4xl font-bold mb-2"
             th:text="${obra.titulo}"
           ></h1>
-          <p
-            class="obra-autor text-xl text-gray-600"
-            th:text="${obra.autor}"
-          ></p>
+          <a th:href="@{/perfilArtista/{id}(id=${obra.artista.id})}" class="hover:underline">
+            <p class="obra-autor text-xl text-gray-600" th:text="${obra.artista.nombre}"></p>
+          </a>
         </div>
 
         <div class="obra-body flex-grow mb-8">

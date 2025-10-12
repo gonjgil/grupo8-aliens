@@ -1,5 +1,7 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.Artista;
+
 public class PerfilArtistaDTO {
 
         private Long id;
@@ -20,6 +22,16 @@ public class PerfilArtistaDTO {
         this.urlFacebook = urlFacebook;
         this.urlInstagram = urlInstagram;
         this.urlTwitter = urlTwitter;
+    }
+
+    public PerfilArtistaDTO(Artista artista) {
+        this.id = artista.getId();
+        this.nombre = artista.getNombre();
+        this.biografia = artista.getBiografia();
+        this.urlFotoPerfil = artista.getUrlFotoPerfil();
+        this.urlFacebook = artista.getUrlFacebook();
+        this.urlInstagram = artista.getUrlInstagram();
+        this.urlTwitter = artista.getUrlTwitter();
     }
 
     public PerfilArtistaDTO() {
@@ -80,6 +92,18 @@ public class PerfilArtistaDTO {
 
     public void setUrlTwitter(String urlTwitter) {
         this.urlTwitter = urlTwitter;
+    }
+
+    public Artista toArtista() {
+        Artista artista = new Artista();
+        artista.setId(this.id);
+        artista.setNombre(this.nombre);
+        artista.setBiografia(this.biografia);
+        artista.setUrlFotoPerfil(this.urlFotoPerfil);
+        artista.setUrlFacebook(this.urlFacebook);
+        artista.setUrlInstagram(this.urlInstagram);
+        artista.setUrlTwitter(this.urlTwitter);
+        return artista;
     }
 }
 

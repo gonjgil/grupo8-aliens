@@ -18,17 +18,21 @@ public class ObraDto {
     private Set<Usuario> usuariosQueDieronLike;
     private Set<Categoria> categorias = new HashSet<>();
     private Double precio;
+    private PerfilArtistaDTO artista;
 
     public ObraDto(Obra obra) {
         this.id = obra.getId();
         this.titulo = obra.getTitulo();
-        this.autor = obra.getAutor();
         this.imagenUrl = obra.getImagenUrl();
         this.descripcion = obra.getDescripcion();
         this.stock = obra.getStock();
         this.usuariosQueDieronLike = obra.getUsuariosQueDieronLike() != null ? obra.getUsuariosQueDieronLike() : new HashSet<>();
         this.categorias = obra.getCategorias();
         this.precio = obra.getPrecio();
+        if (obra.getArtista() != null) {
+            this.artista = new PerfilArtistaDTO(obra.getArtista());
+            this.autor = artista.getNombre();
+        }
     }
 
     public Long getId() { return id; }
@@ -60,8 +64,11 @@ public class ObraDto {
     public Double getPrecio() { return precio; }
     public void setPrecio(Double precio) { this.precio = precio; }
 
+    public PerfilArtistaDTO getArtista() { return artista; }
+    public void setArtista(PerfilArtistaDTO artista) { this.artista = artista; }
+
     public Obra toObra() {
-        Obra obra = new Obra(this.titulo, this.autor, this.imagenUrl, this.descripcion, this.stock, this.categorias, this.precio);
+        Obra obra = new Obra(this.titulo, this.autor, this.imagenUrl, this.descripcion, this.stock, this.categorias, this.precio, this.artista.toArtista());
         obra.setId(this.id);
         obra.setUsuariosQueDieronLike(this.usuariosQueDieronLike);
         return obra;
