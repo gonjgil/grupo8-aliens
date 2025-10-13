@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Perfil del Artista</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/perfil_artista.css}"/>
+</head>
+<body>
+<header class="bg-white p-6 flex justify-between items-center shadow-md">
+    <h1 class="text-4xl font-extrabold text-gray-900 tracking-wider">
+        <a th:href="@{/galeria}" class="hover:text-blue-600 transition-colors">
+            ALIENS
+        </a>
+    </h1>
+
+    <div class="flex items-center space-x-4">
+        <div th:if="${usuario != null}" class="flex items-center space-x-4">
+            <div th:text=" 'Hola, ' + ${usuario.email}"></div>
+            <a th:href="@{/logout}"
+               class="bg-red-600 hover:bg-red-700 fa-solid fa-right-from-bracket text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg">
+            </a>
+        </div>
+        <div th:unless="${usuario != null}">
+            <button
+                    th:onclick="|location.href='@{/login}'|"
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg"
+            >
+                Iniciar Sesión
+            </button>
+        </div>
+    </div>
+
+
+</header>
+
+<main role="main" class="container perfil-container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card perfil-card text-center p-4">
+                <div class="foto-container">
+                    <img th:src="${mostrarArtista.urlFotoPerfil}" alt="Foto perfil"
+                         class="foto-perfil mb-3">
+                </div>
+
+                <h3 class="nombre-artista" th:text="${mostrarArtista.nombre}">Nombre del artista</h3>
+                <p class="bio-artista" th:text="${mostrarArtista.biografia}"></p>
+
+                <div class="redes mt-3">
+                    <a th:href="${mostrarArtista.urlFacebook}" target="_blank" class="link-red">Facebook</a>
+                    <a th:href="${mostrarArtista.urlInstagram}" target="_blank" class="link-red">Instagram</a>
+                    <a th:href="${mostrarArtista.urlTwitter}" target="_blank" class="link-red">Twitter</a>
+                </div>
+
+                <div class="mt-4">
+                    <button id="btn-editar" class="btn-editar">Editar Perfil</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script type="text/javascript" th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.bundle.min.js}"></script>
+<script type="module" th:src="@{/js/perfil_artista.js}"></script>
+</body>
+</html>

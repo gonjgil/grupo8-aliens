@@ -10,12 +10,23 @@ import javax.persistence.*;
 
 @Entity
 public class Obra {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    public String codigo; // valor único para cada obra? ver como generarlo automaticamente
     private String titulo;
     private String autor;
     private String imagenUrl;
     private String descripcion;
+    private Integer stock;
+
+//    @Version
+//    //Cada vez que Hibernate actualiza la entidad, incrementa automáticamente el campo version. Si otro usuario modificó la misma entidad en paralelo, Hibernate lanza una OptimisticLockException.
+//    private Integer version;
+
+    @Column(nullable = false)
     private Double precio;
 
     @ManyToMany
@@ -31,17 +42,32 @@ public class Obra {
     @Enumerated(EnumType.STRING)
     @Column(name = "categoria")
     private Set<Categoria> categorias = new HashSet<>();
-    
+
+    @ManyToOne
+    @JoinColumn(name = "artista")
+    private Artista artista;
+
     public Obra() { }
 
-    public Obra(Long id, Double precio, String titulo, String autor, String imagenUrl, String descripcion, Set<Categoria> categorias) {
-        this.id = id;
-        this.precio = precio;
+    public Obra(String titulo, String autor, String imagenUrl, String descripcion, Integer stock, Set<Categoria> categorias, Double precio) {
         this.titulo = titulo;
         this.autor = autor;
         this.imagenUrl = imagenUrl;
         this.descripcion = descripcion;
+        this.stock = stock;
         this.categorias = categorias;
+        this.precio = precio;
+    }
+
+    public Obra(String titulo, String autor, String imagenUrl, String descripcion, Integer stock, Set<Categoria> categorias, Double precio, Artista artista) {
+        this.titulo = titulo;
+        this.autor = autor;
+        this.imagenUrl = imagenUrl;
+        this.descripcion = descripcion;
+        this.stock = stock;
+        this.categorias = categorias;
+        this.precio = precio;
+        this.artista = artista;
     }
 
     public Long getId() { return id; }
@@ -59,30 +85,33 @@ public class Obra {
     public String getDescripcion() { return descripcion; }
     public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
 
+    public Double getPrecio() { return precio; }
+    public void setPrecio(Double precio) { this.precio = precio; }
+
     public Set<Usuario> getUsuariosQueDieronLike() { return usuariosQueDieronLike; }
     public void setUsuariosQueDieronLike(Set<Usuario> usuariosQueDieronLike) { this.usuariosQueDieronLike = usuariosQueDieronLike; }
-
     public int getCantidadLikes() { return usuariosQueDieronLike.size(); }
-    
     public void darLike(Usuario usuario) { this.usuariosQueDieronLike.add(usuario); }
-    
     public void quitarLike(Usuario usuario) { this.usuariosQueDieronLike.remove(usuario); }
 
     public Set<Categoria> getCategorias() { return categorias; }
-    public void setCategorias(Set<Categoria> categorias) { this.categorias = categorias; }
+    public void agregarCategoria(Categoria categoria) { this.categorias.add(categoria); }
 
-    public Double getPrecio() { return precio;  }
-    public void setPrecio(Double precio) {  this.precio = precio;  }
+     public Artista getArtista() { return artista; }
+     public void setArtista(Artista artista) { this.artista = artista; }
+
+    public Integer getStock() { return stock; }
+    public void setStock(Integer stock) { this.stock = stock; }
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof Obra)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         Obra obra = (Obra) o;
-        return Objects.equals(id, obra.id);
+        return Objects.equals(id, obra.id) && Objects.equals(titulo, obra.titulo) && Objects.equals(autor, obra.autor) && Objects.equals(imagenUrl, obra.imagenUrl) && Objects.equals(descripcion, obra.descripcion) && Objects.equals(categorias, obra.categorias);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hash(id, titulo, autor, imagenUrl, descripcion, categorias);
     }
 }

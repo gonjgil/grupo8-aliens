@@ -1,5 +1,6 @@
 package com.tallerwebi.integracion;
 
+import com.tallerwebi.integracion.config.CloudinaryTestConfig;
 import com.tallerwebi.integracion.config.HibernateTestConfig;
 import com.tallerwebi.integracion.config.SpringWebTestConfig;
 import com.tallerwebi.dominio.Usuario;
@@ -28,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @WebAppConfiguration
-@ContextConfiguration(classes = {SpringWebTestConfig.class, HibernateTestConfig.class})
+@ContextConfiguration(classes = {SpringWebTestConfig.class, HibernateTestConfig.class, CloudinaryTestConfig.class})
 public class ControladorLoginTest {
 
 	private Usuario usuarioMock;
@@ -57,7 +58,7 @@ public class ControladorLoginTest {
         assert modelAndView != null;
 		// CAMBIO TEMPORARIO HASTA CONFIRMAR QUE PAGINA USAREMOS DE INICIO
 		// assertThat("redirect:/login", equalToIgnoringCase(Objects.requireNonNull(modelAndView.getViewName())));
-		assertThat("redirect:/galeria_alt", equalToIgnoringCase(Objects.requireNonNull(modelAndView.getViewName())));
+		assertThat("redirect:/galeria", equalToIgnoringCase(Objects.requireNonNull(modelAndView.getViewName())));
 		assertThat(true, is(modelAndView.getModel().isEmpty()));
 	}
 
@@ -71,7 +72,7 @@ public class ControladorLoginTest {
 
 		ModelAndView modelAndView = result.getModelAndView();
         assert modelAndView != null;
-		assertThat("redirect:/galeria_alt", equalToIgnoringCase(Objects.requireNonNull(modelAndView.getViewName())));
+		assertThat("redirect:/galeria", equalToIgnoringCase(Objects.requireNonNull(modelAndView.getViewName())));
 		assertThat(true, is(modelAndView.getModel().isEmpty()));
 	}
 

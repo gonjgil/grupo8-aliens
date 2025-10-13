@@ -1,70 +1,112 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.Obra;
-import com.tallerwebi.dominio.RepositorioObra;
-
-import com.tallerwebi.dominio.enums.Categoria;
+import com.tallerwebi.dominio.Usuario;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import com.tallerwebi.dominio.Obra;
+import com.tallerwebi.dominio.RepositorioObra;
+import com.tallerwebi.dominio.enums.Categoria;
 
-@Repository("repositorioObra")
+import java.util.ArrayList;
+import java.util.List;
+
+@Repository
 public class RepositorioObraImpl implements RepositorioObra {
 
     private SessionFactory sessionFactory;
-    private List<Obra> obras;
 
     @Autowired
     public RepositorioObraImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
-
-        this.obras = new ArrayList<>();
-        this.obras.add(new Obra(1L, 1200.0, "Abstracta No. 1", "J. Doe", "https://placehold.co/400x400/ef4444/FFF?text=Obra+1", "Una obra de arte abstracta llena de colores vibrantes y formas dinámicas.", Set.of(Categoria.ABSTRACTO, Categoria.MODERNO)));
-        this.obras.add(new Obra(2L, 1400.0,"Noche Cósmica", "S. Smith", "https://placehold.co/400x400/10b981/FFF?text=Obra+2", "Una representación artística del cosmos nocturno con estrellas brillantes y nebulosas.", Set.of(Categoria.COSMICO, Categoria.MODERNO)));
-        this.obras.add(new Obra(3L, 2400.0,"Retrato de un Sueño", "A. García", "https://placehold.co/400x400/3b82f6/FFF?text=Obra+3", "Un retrato surrealista que captura la esencia de un sueño vívido.", Set.of(Categoria.RETRATO, Categoria.SURREALISMO)));
-        this.obras.add(new Obra(4L, 1700.0,"Viaje al Infinito", "L. Wang", "https://placehold.co/400x400/f97316/FFF?text=Obra+4", "Una obra que explora la idea del infinito a través de patrones repetitivos y colores profundos.", Set.of(Categoria.ABSTRACTO, Categoria.COSMICO)));
-        this.obras.add(new Obra(5L, 2100.0,"Horizonte Perdido", "M. Khan", "https://placehold.co/400x400/d946ef/FFF?text=Obra+5", "Una pintura que muestra un horizonte misterioso y evocador.", Set.of(Categoria.MODERNO, Categoria.SURREALISMO)));
-        this.obras.add(new Obra(6L, 1600.0,"El Alma del Mar", "J. Doe", "https://placehold.co/400x400/84cc16/FFF?text=Obra+6", "Una obra que captura la esencia y el movimiento del mar.", Set.of(Categoria.RETRATO, Categoria.ABSTRACTO)));
-        this.obras.add(new Obra(7L, 1500.0,"La Danza del Aire", "S. Smith", "https://placehold.co/400x400/06b6d4/FFF?text=Obra+7", "Una representación artística del aire en movimiento.", Set.of(Categoria.MODERNO, Categoria.ABSTRACTO)));
-        this.obras.add(new Obra(8L, 2200.0,"Ciudad Silenciosa", "A. García", "https://placehold.co/400x400/ec4899/FFF?text=Obra+8", "Una pintura que muestra una ciudad en calma y silencio.", Set.of(Categoria.SURREALISMO, Categoria.MODERNO)));
-        this.obras.add(new Obra(9L, 1800.0,"Despertar Cromático", "L. Wang", "https://placehold.co/400x400/a855f7/FFF?text=Obra+9", "Una obra llena de colores vivos que simbolizan un despertar.", Set.of(Categoria.ABSTRACTO, Categoria.MODERNO)));
-        this.obras.add(new Obra(10L, 1400.0,"Geometría Natural", "M. Khan", "https://placehold.co/400x400/14b8a6/FFF?text=Obra+10", "Una pintura que combina formas geométricas con elementos naturales.", Set.of(Categoria.ABSTRACTO, Categoria.MODERNO)));
     }
 
-    @Override
+    @Override // testeado
+    public void guardar(Obra obra) {
+        this.sessionFactory.getCurrentSession().save(obra);
+    }
+
+    @Override // testeado
     public List<Obra> obtenerTodas() {
-        return this.obras;
+        try {
+            return this.sessionFactory.getCurrentSession()
+                    .createQuery("FROM Obra", Obra.class)
+                    .getResultList();
+        } catch (IllegalArgumentException e) {
+            return new ArrayList<>();
+        }
     }
 
-    @Override
+    @Override // testeado
     public List<Obra> obtenerPorAutor(String autor) {
-        List<Obra> resultado = new ArrayList<>();
-        for (Obra obra : this.obras) {
-            if (obra.getAutor().equalsIgnoreCase(autor)) {
-                resultado.add(obra);
-            }
+        try {
+            return this.sessionFactory.getCurrentSession()
+                    .createQuery("FROM Obra WHERE autor = :autor", Obra.class)
+                    .setParameter("autor", autor)
+                    .getResultList();
+        } catch (IllegalArgumentException e) {
+            return new ArrayList<>();
         }
-        return resultado;
+    }
+
+    @Override // testeado
+    public List<Obra> obtenerPorCategoria(Categoria categoria) {
+        try {
+            return this.sessionFactory.getCurrentSession()
+                    .createQuery("SELECT DISTINCT o FROM Obra o JOIN o.categorias c WHERE c = :categoria", Obra.class)
+                    .setParameter("categoria", Categoria.valueOf(categoria.name()))
+                    .getResultList();
+        } catch (IllegalArgumentException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    @Override // testeado
+    public Obra obtenerPorId(Long id) {
+        try {
+            return this.sessionFactory.getCurrentSession()
+                    .createQuery("FROM Obra o LEFT JOIN FETCH o.usuariosQueDieronLike WHERE o.id = :id", Obra.class)
+                    .setParameter("id", id)
+                    .uniqueResult();
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+     }
+
+    @Override
+    public boolean hayStockSuficiente(Obra obra) {
+        if(obra.getStock() >= 1){//si es fisica verificar si hay stock, si es digital no es necesario
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public List<Obra> obtenerPorCategoria(String categoria) {
-        // Implementacion pendiente
-        return Collections.emptyList();
+    public void descontarStock(Obra obra) {
+        obra.setStock(obra.getStock() - 1);
     }
 
-     @Override
-     public Obra obtenerPorId(Long id) {
-        for (Obra obra : this.obras) {
-            if (obra.getId().equals(id)) {
-                return obra;
-            }
+    @Override
+    public void devolverStock(Obra obra) {
+        obra.setStock(obra.getStock() + 1);
+    }
+
+    public void darLike(Long id, Usuario usuario) {
+        Obra obra = obtenerPorId(id);
+        if (obra == null) {
+            throw new IllegalArgumentException("No existe la obra con id: " + id);
         }
-        return null; // o lanzar una excepción si no se encuentra
-     }
+        obra.getUsuariosQueDieronLike().add(usuario);
+        this.sessionFactory.getCurrentSession().merge(obra);
+    }
+
+    @Override
+    public void quitarLike(Long id, Usuario usuario) {
+        Obra obra = obtenerPorId(id);
+        if (obra != null) {
+            obra.getUsuariosQueDieronLike().remove(usuario);
+            sessionFactory.getCurrentSession().merge(obra);
+        }
+    }
 }

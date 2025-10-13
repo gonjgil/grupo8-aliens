@@ -37,13 +37,23 @@ public class ControladorLogin {
 
         Usuario usuarioBuscado = servicioLogin.consultarUsuario(datosLogin.getEmail(), datosLogin.getPassword());
         if (usuarioBuscado != null) {
+            // Configurar la sesión para que persista
+            request.getSession().setMaxInactiveInterval(3600); // 1 hora
             request.getSession().setAttribute("ROL", usuarioBuscado.getRol());
             request.getSession().setAttribute("usuarioLogueado", usuarioBuscado);
-            return new ModelAndView("redirect:/galeria_alt");
+            return new ModelAndView("redirect:/galeria");
         } else {
             model.put("error", "Usuario o clave incorrecta");
         }
         return new ModelAndView("login", model);
+    }
+
+    @RequestMapping(path = "/logout", method = RequestMethod.GET)
+    public ModelAndView logout(HttpServletRequest request) {
+        if (request.getSession() != null) {
+            request.getSession().invalidate();
+        }
+        return new ModelAndView("redirect:/galeria");
     }
 
     @RequestMapping(path = "/registrarme", method = RequestMethod.POST)
@@ -68,22 +78,9 @@ public class ControladorLogin {
         return new ModelAndView("nuevo-usuario", model);
     }
 
-//    @RequestMapping(path = "/home", method = RequestMethod.GET)
-//    public ModelAndView irAHome() {
-//        return new ModelAndView("home");
-//    }
-//
     @RequestMapping(path = "/", method = RequestMethod.GET)
     public ModelAndView inicio() {
-        return new ModelAndView("redirect:/galeria_alt");
+        return new ModelAndView("redirect:/galeria");
     }
-    // METODO TEMPORARIO HASTA CONFIRMAR QUE PAGINA USAREMOS DE INICIO
-//    @RequestMapping("/galeria_alt")
-//    public ModelAndView irAInicio() {
-//
-//        ModelMap modelo = new ModelMap();
-//        modelo.put("datosLogin", new DatosLogin());
-//        return new ModelAndView("galeria_alt", modelo);
-//    }
 }
 

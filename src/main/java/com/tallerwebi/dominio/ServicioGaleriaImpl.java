@@ -4,10 +4,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.tallerwebi.dominio.excepcion.UsuarioAnonimoException;
 import com.tallerwebi.presentacion.ObraDto;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.tallerwebi.dominio.enums.Categoria;
 import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
 import com.tallerwebi.dominio.excepcion.NoHayObrasExistentes;
 
@@ -21,56 +25,76 @@ public class ServicioGaleriaImpl implements ServicioGaleria {
         this.repositorioObra = repositorioObra;
     }
 
-    private List<ObraDto> convertirYValidar (List<Obra> obras) throws NoHayObrasExistentes {
+    private List<Obra> convertirYValidar (List<Obra> obras) throws NoHayObrasExistentes {
         if (obras == null || obras.isEmpty()) {
             throw new NoHayObrasExistentes();
         }
-        List<ObraDto> dtos = new ArrayList<>();
-        for (Obra obra : obras) {
-            dtos.add(new ObraDto(obra));
-        }
-        return dtos;
+        return obras;
     }
 
     @Override
-    public List<ObraDto> obtener() throws NoHayObrasExistentes {
+    @Transactional(readOnly = true)
+    public List<Obra> obtener() throws NoHayObrasExistentes {
         return convertirYValidar(repositorioObra.obtenerTodas());
     }
 
     @Override
-    public List<ObraDto> ordenarRandom() {
-        List<Obra> todas = repositorioObra.obtenerTodas();
-        Collections.shuffle(todas);
-        return convertirYValidar(todas);
+    @Transactional(readOnly = true)
+    public List<Obra> ordenarRandom() {
+        try {
+            List<Obra> todas = repositorioObra.obtenerTodas();
+            Collections.shuffle(todas);
+            return convertirYValidar(todas);
+        } catch (NoHayObrasExistentes e) {
+            return new ArrayList<>();
+        }
     }
 
     @Override
-    public List<ObraDto> obtenerPorAutor(String autor) {
-        return convertirYValidar((repositorioObra.obtenerPorAutor(autor)));
+    @Transactional(readOnly = true)
+    public List<Obra> obtenerPorAutor(String autor) {
+        try {
+            return convertirYValidar((repositorioObra.obtenerPorAutor(autor)));
+        } catch (NoHayObrasExistentes e) {
+            return new ArrayList<>();
+        }
     }
 
     @Override
-    public List<ObraDto> obtenerPorCategoria(String categoria) {
-        // return convertirYValidar(repositorioObra.obtenerPorCategoria(categoria));
-        return new ArrayList<>(); // No implementado
+    @Transactional(readOnly = true)
+    public List<Obra> obtenerPorCategoria(Categoria categoria) {
+        try {
+            return convertirYValidar(repositorioObra.obtenerPorCategoria(categoria));
+        } catch (NoHayObrasExistentes e) {
+            return new ArrayList<>();
+        }
     }
 
     @Override
+    @Transactional
     public ObraDto obtenerPorId(Long id) throws NoExisteLaObra {
         Obra obra = repositorioObra.obtenerPorId(id);
         if (obra == null) {
             throw new NoExisteLaObra();
         }
-        ObraDto obraDto = new ObraDto(obra);
-        return obraDto;
+        return new ObraDto(obra);
     }
 
     @Override
-    public void darLike(Long id, Usuario usuario) throws NoExisteLaObra {
-        Obra obra = repositorioObra.obtenerPorId(id);
+    @Transactional
+    public void toggleLike(Long obraId, Usuario usuario) throws NoExisteLaObra, UsuarioAnonimoException {
+        if (usuario == null) {
+            throw new UsuarioAnonimoException();
+        }
+        Obra obra = repositorioObra.obtenerPorId(obraId);
         if (obra == null) {
             throw new NoExisteLaObra();
         }
-        obra.darLike(usuario);
+
+        if (!obra.getUsuariosQueDieronLike().contains(usuario)) {
+            repositorioObra.darLike(obraId, usuario);
+        } else {
+            repositorioObra.quitarLike(obraId, usuario);
+        }
     }
 }

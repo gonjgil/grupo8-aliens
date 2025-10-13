@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+body {
+  background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Contenedor principal */
+.perfil-container {
+  margin-top: 100px;
+  margin-bottom: 40px;
+}
+
+/* Card perfil */
+.perfil-card {
+  background: rgba(255, 255, 255, 0.8);
+  border: none;
+  border-radius: 20px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(8px);
+  transition: transform 0.2s ease;
+}
+
+.perfil-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Foto del artista */
+.foto-container {
+  display: flex;
+  justify-content: center;
+}
+
+.foto-perfil {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 5px solid #6c63ff;
+  box-shadow: 0 0 15px rgba(108, 99, 255, 0.3);
+  transition: transform 0.3s ease;
+}
+
+.foto-perfil:hover {
+  transform: scale(1.05);
+}
+
+/* Nombre y bio */
+.nombre-artista {
+  color: #2f2f7f;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.bio-artista {
+  font-size: 15px;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+/* Redes */
+.redes .link-red {
+  margin: 0 10px;
+  color: #6c63ff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.redes .link-red:hover {
+  color: #4a42d4;
+  text-decoration: underline;
+}
+
+/* Botón Editar */
+.btn-editar {
+  background-color: #6c63ff;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.1s ease;
+}
+
+.btn-editar:hover {
+  background-color: #5848e4;
+  transform: scale(1.03);
+}

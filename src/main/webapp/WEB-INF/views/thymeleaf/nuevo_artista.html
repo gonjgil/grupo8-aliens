@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Nuevo Artista</title>
+  <link rel="stylesheet" th:href="@{/css/nuevo_artista.css}"/>
+</head>
+<body>
+<div class="container">
+  <h2> Crear nuevo artista</h2>
+
+  <form th:action="@{/perfilArtista/crear}" method="post" class="formulario-artista" enctype="multipart/form-data">
+
+    <div class="campo">
+      <label>Foto de perfil:</label>
+      <input type="file" name="fotoPerfil" accept="image/*" required>
+    </div>
+
+    <div class="campo">
+      <label>Nombre:</label>
+      <input type="text" name="nombre" required>
+    </div>
+
+    <div class="campo">
+      <label>Biografía:</label>
+      <textarea name="biografia" required></textarea>
+    </div>
+
+    <div class="campo">
+      <label>Facebook:</label>
+      <input type="text" name="urlFacebook" required>
+    </div>
+
+    <div class="campo">
+      <label>Instagram:</label>
+      <input type="text" name="urlInstagram" required>
+    </div>
+
+    <div class="campo">
+      <label>Twitter:</label>
+      <input type="text" name="urlTwitter" required>
+    </div>
+
+    <button type="submit" class="btn-guardar">Guardar</button>
+  </form>
+</div>
+
+</body>
+</html>
