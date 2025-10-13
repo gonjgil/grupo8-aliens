@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.tallerwebi.dominio.excepcion.UsuarioAnonimoException;
 import com.tallerwebi.presentacion.ObraDto;
 
 import org.springframework.beans.factory.annotation.Autowired;

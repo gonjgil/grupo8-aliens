@@ -1,10 +1,7 @@
 package com.tallerwebi.presentacion;
 
-import java.util.HashMap;
-import java.util.Map;
 
 import com.tallerwebi.dominio.*;
-import com.tallerwebi.dominio.excepcion.NoHayStockSuficiente;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

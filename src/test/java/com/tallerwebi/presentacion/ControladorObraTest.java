@@ -42,8 +42,6 @@ public class ControladorObraTest {
         ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
         ServicioLike servicioLike = mock(ServicioLike.class);
 
-        Usuario usuario = (Usuario) this.request.getSession().getAttribute("usuarioLogueado");
-
         Obra obra = mock(Obra.class);
         obra.setId(1L);
         obra.setTitulo("Obra A");
