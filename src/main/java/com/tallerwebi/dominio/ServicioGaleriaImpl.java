@@ -16,6 +16,7 @@ import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
 import com.tallerwebi.dominio.excepcion.NoHayObrasExistentes;
 
 @Service("servicioGaleria")
+@Transactional
 public class ServicioGaleriaImpl implements ServicioGaleria {
 
     private final RepositorioObra repositorioObra;
@@ -33,13 +34,11 @@ public class ServicioGaleriaImpl implements ServicioGaleria {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Obra> obtener() throws NoHayObrasExistentes {
         return convertirYValidar(repositorioObra.obtenerTodas());
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Obra> ordenarRandom() {
         try {
             List<Obra> todas = repositorioObra.obtenerTodas();
@@ -51,7 +50,6 @@ public class ServicioGaleriaImpl implements ServicioGaleria {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Obra> obtenerPorAutor(String autor) {
         try {
             return convertirYValidar((repositorioObra.obtenerPorAutor(autor)));
@@ -61,7 +59,6 @@ public class ServicioGaleriaImpl implements ServicioGaleria {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Obra> obtenerPorCategoria(Categoria categoria) {
         try {
             return convertirYValidar(repositorioObra.obtenerPorCategoria(categoria));
@@ -71,7 +68,6 @@ public class ServicioGaleriaImpl implements ServicioGaleria {
     }
 
     @Override
-    @Transactional
     public ObraDto obtenerPorId(Long id) throws NoExisteLaObra {
         Obra obra = repositorioObra.obtenerPorId(id);
         if (obra == null) {

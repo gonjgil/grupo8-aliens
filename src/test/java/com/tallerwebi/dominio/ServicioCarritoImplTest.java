@@ -40,7 +40,7 @@ public class ServicioCarritoImplTest {
         Usuario usuario = new Usuario();
         Carrito carritoExistente = new Carrito(usuario);
 
-        when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario)).thenReturn(carritoExistente);
+        when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId())).thenReturn(carritoExistente);
 
         Carrito resultado = servicioCarritoImpl.obtenerOCrearCarritoParaUsuario(usuario);
 
@@ -52,7 +52,7 @@ public class ServicioCarritoImplTest {
         Usuario usuario = new Usuario();
         Carrito carritoNuevo = new Carrito(usuario);
 
-        when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario)).thenReturn(null);
+        when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId())).thenReturn(null);
         when(repositorioCarrito.crearCarritoParaUsuario(usuario)).thenReturn(carritoNuevo);
 
         Carrito resultado = servicioCarritoImpl.obtenerOCrearCarritoParaUsuario(usuario);
@@ -70,7 +70,7 @@ public class ServicioCarritoImplTest {
 
         when(repositorioObra.obtenerPorId(obra1.getId())).thenReturn(obra1);
         when(repositorioObra.hayStockSuficiente(obra1)).thenReturn(true);
-        when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario)).thenReturn(carrito);
+        when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId())).thenReturn(carrito);
 
         servicioCarritoImpl.agregarObraAlCarrito(usuario, obraId);
 
@@ -96,7 +96,7 @@ public class ServicioCarritoImplTest {
         when(this.repositorioObra.hayStockSuficiente(eq(obra1))).thenReturn(true);
         when(this.repositorioObra.hayStockSuficiente(eq(obra2))).thenReturn(false);
 
-        when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario)).thenReturn(carrito);
+        when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId())).thenReturn(carrito);
 
         servicioCarritoImpl.agregarObraAlCarrito(usuario, obra1.getId());
         try {
@@ -127,7 +127,7 @@ public class ServicioCarritoImplTest {
         when(repositorioObra.hayStockSuficiente(obra1)).thenReturn(true);
         when(repositorioObra.hayStockSuficiente(obra2)).thenReturn(true);
 
-        when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario)).thenReturn(carrito);
+        when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId())).thenReturn(carrito);
 
         servicioCarritoImpl.agregarObraAlCarrito(usuario, obra1Id);
         servicioCarritoImpl.agregarObraAlCarrito(usuario, obra2Id);
@@ -146,7 +146,7 @@ public class ServicioCarritoImplTest {
         obra.setId(obraId);
         Carrito carrito = new Carrito(usuario);
 
-        when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario)).thenReturn(carrito);
+        when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId())).thenReturn(carrito);
         when(repositorioObra.obtenerPorId(obraId)).thenReturn(obra);
 
         servicioCarritoImpl.eliminarObraDelCarrito(usuario, obraId);
@@ -180,7 +180,7 @@ public class ServicioCarritoImplTest {
         when(this.repositorioObra.hayStockSuficiente(obra2)).thenReturn(true);
         when(this.repositorioObra.hayStockSuficiente(obra3)).thenReturn(true);
 
-        when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario)).thenReturn(carrito);
+        when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId())).thenReturn(carrito);
 
         servicioCarritoImpl.agregarObraAlCarrito(usuario, obra1.getId());
         servicioCarritoImpl.agregarObraAlCarrito(usuario, obra2.getId());
@@ -204,7 +204,7 @@ public class ServicioCarritoImplTest {
         when(repositorioObra.obtenerPorId(1L)).thenReturn(obra1);
         when(repositorioObra.hayStockSuficiente(obra1)).thenReturn(true);
 
-        when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario)).thenReturn(carrito);
+        when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId())).thenReturn(carrito);
 
         servicioCarritoImpl.agregarObraAlCarrito(usuario, obra1.getId());
         servicioCarritoImpl.agregarObraAlCarrito(usuario, obra1.getId());
@@ -234,7 +234,7 @@ public class ServicioCarritoImplTest {
         when(repositorioObra.obtenerPorId(1L)).thenReturn(obra1);
         when(repositorioObra.hayStockSuficiente(obra1)).thenReturn(true);
 
-        when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario)).thenReturn(carrito);
+        when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId())).thenReturn(carrito);
 
         servicioCarritoImpl.agregarObraAlCarrito(usuario,obra1.getId());
         servicioCarritoImpl.agregarObraAlCarrito(usuario,obra1.getId());
@@ -265,7 +265,7 @@ public class ServicioCarritoImplTest {
         when(this.repositorioObra.hayStockSuficiente(obra1)).thenReturn(true);
         when(this.repositorioObra.hayStockSuficiente(obra2)).thenReturn(true);
 
-        when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario)).thenReturn(carrito);
+        when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId())).thenReturn(carrito);
 
         servicioCarritoImpl.agregarObraAlCarrito(usuario, obra1.getId());
         servicioCarritoImpl.agregarObraAlCarrito(usuario, obra2.getId());
@@ -301,8 +301,8 @@ public class ServicioCarritoImplTest {
         when(this.repositorioObra.hayStockSuficiente(obra1)).thenReturn(true);
         when(this.repositorioObra.hayStockSuficiente(obra2)).thenReturn(true);
 
-        when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario1)).thenReturn(carrito1);
-        when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario2)).thenReturn(carrito2);
+        when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario1.getId())).thenReturn(carrito1);
+        when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario2.getId())).thenReturn(carrito2);
 
         servicioCarritoImpl.agregarObraAlCarrito(usuario1, obra1.getId());
         servicioCarritoImpl.agregarObraAlCarrito(usuario1, obra1.getId());
@@ -341,7 +341,7 @@ public class ServicioCarritoImplTest {
         when(this.repositorioObra.hayStockSuficiente(obra2)).thenReturn(true);
         when(this.repositorioObra.hayStockSuficiente(obra3)).thenReturn(true);
 
-        when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario)).thenReturn(carrito);
+        when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId())).thenReturn(carrito);
 
         servicioCarritoImpl.agregarObraAlCarrito(usuario, obra1.getId());
         servicioCarritoImpl.agregarObraAlCarrito(usuario, obra2.getId());
@@ -355,7 +355,7 @@ public class ServicioCarritoImplTest {
         Usuario usuario = new Usuario();
         Carrito carrito = new Carrito(usuario);
 
-        when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario)).thenReturn(carrito);
+        when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId())).thenReturn(carrito);
 
         assertThat(servicioCarritoImpl.calcularPrecioTotalCarrito(usuario),is(equalTo(0.0)));
     }
@@ -378,7 +378,7 @@ public class ServicioCarritoImplTest {
         when(this.repositorioObra.hayStockSuficiente(obra1)).thenReturn(true);
         when(this.repositorioObra.hayStockSuficiente(obra2)).thenReturn(true);
 
-        when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario)).thenReturn(carrito);
+        when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId())).thenReturn(carrito);
 
         servicioCarritoImpl.agregarObraAlCarrito(usuario, obra1.getId());
         servicioCarritoImpl.agregarObraAlCarrito(usuario, obra2.getId());

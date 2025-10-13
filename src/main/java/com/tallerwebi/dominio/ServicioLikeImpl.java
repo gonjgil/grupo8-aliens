@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service("servicioLike")
-
+@Transactional
 public class ServicioLikeImpl implements ServicioLike {
 
     private final RepositorioObra repositorioObra;
@@ -18,7 +18,6 @@ public class ServicioLikeImpl implements ServicioLike {
     }
 
     @Override
-    @Transactional
     public void toggleLike(Usuario usuario, Long obraId) {
         Obra obra = this.repositorioObra.obtenerPorId(obraId);
         if (usuario != null && obra != null) {
@@ -32,13 +31,11 @@ public class ServicioLikeImpl implements ServicioLike {
     }
 
     @Override
-    @Transactional
     public Integer contarLikes(Long obraId) {
         return 0;
     }
 
     @Override
-    @Transactional
     public List<Obra> obtenerObrasLikeadasPorUsuario(Usuario usuario) {
         return null;
     }

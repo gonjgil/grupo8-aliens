@@ -2,7 +2,6 @@ package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
 import com.tallerwebi.dominio.excepcion.NoHayStockSuficiente;
-import com.tallerwebi.dominio.excepcion.CarritoVacioException;
 import com.tallerwebi.presentacion.ObraDto;
 
 import java.util.List;

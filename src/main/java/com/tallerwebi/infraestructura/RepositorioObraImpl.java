@@ -66,7 +66,8 @@ public class RepositorioObraImpl implements RepositorioObra {
     public Obra obtenerPorId(Long id) {
         try {
             return this.sessionFactory.getCurrentSession()
-                    .createQuery("FROM Obra o WHERE o.id = :id", Obra.class)
+            // se usa left join fetch para inicializar la coleccion usuariosQueDieronLike y evitar problemas de LazyInitializationException
+                    .createQuery("FROM Obra o LEFT JOIN FETCH o.usuariosQueDieronLike WHERE o.id = :id", Obra.class)
                     .setParameter("id", id)
                     .uniqueResult();
         } catch (IllegalArgumentException e) {
