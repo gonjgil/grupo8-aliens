@@ -5,17 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ALIENS - Obra</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-      rel="stylesheet"
-    />
-    <!-- <link rel="stylesheet" href="../../../resources/core/css/galeria.css" /> -->
-    <!-- Boostrap core css -->
-      <link
-              rel="stylesheet"
-              th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"
-      />
-      <link rel="stylesheet" th:href="@{/css/obra.css}" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" th:href="@{/css/obra.css}" />
     <link rel="stylesheet" th:href="@{/css/header.css}"/>
 </head>
 <body class="bg-gray-100 text-gray-800">
@@ -30,9 +23,10 @@
     <div class="flex items-center space-x-4">
         <div th:if="${usuario != null}" class="flex items-center space-x-4">
             <div th:text=" 'Hola, ' + ${usuario.email}"></div>
-            <a th:href="@{/logout}"
-               class="bg-red-600 hover:bg-red-700 fa-solid fa-right-from-bracket text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg">
-            </a>
+                <a th:href="@{/logout}" 
+                   class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg">
+                    <i class="bi bi-box-arrow-right"></i>
+                </a>
         </div>
         <div th:unless="${usuario != null}">
             <button
@@ -126,7 +120,7 @@
                               type="submit"
                               class="btn bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full transition duration-300"
                       >
-                          <i class="fas fa-shopping-cart mr-2"></i>
+                          <i class="bi bi-cart mr-2"></i>
                           Agregar al Carrito
                       </button>
                   </form>
@@ -262,7 +256,7 @@
               // Efecto visual en el botón
               const button = this.querySelector('button');
               const originalText = button.innerHTML;
-              button.innerHTML = '<i class="fas fa-check mr-2"></i>¡Agregado!';
+              button.innerHTML = '<i class="bi bi-check mr-2"></i>¡Agregado!';
               button.classList.add('bg-green-500');
 
               // Mostrar notificación
