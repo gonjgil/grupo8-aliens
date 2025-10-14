@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-@ControllerAdvice(assignableTypes = { ControladorObra.class, ControladorGaleria.class })
+@ControllerAdvice(assignableTypes = { ControladorObra.class, ControladorGaleria.class, ControladorCarrito.class })
 public class ControladorAtributosGlobales {
 
     private final ServicioCarrito servicioCarrito;

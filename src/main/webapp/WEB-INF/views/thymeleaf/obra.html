@@ -30,6 +30,9 @@
     <div class="flex items-center space-x-4">
         <div th:if="${usuario != null}" class="flex items-center space-x-4">
             <div th:text=" 'Hola, ' + ${usuario.email}"></div>
+            <a th:href="@{/carrito}"
+               class="bg-blue-600 hover:bg-blue-700 fas fa-shopping-cart mr-2 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg">
+            </a>
             <a th:href="@{/logout}"
                class="bg-red-600 hover:bg-red-700 fa-solid fa-right-from-bracket text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg">
             </a>
@@ -118,7 +121,7 @@
               </div>
 
               <div class="flex gap-2">
-                  <form th:action="@{/carrito/agregar}" method="post">
+                  <form th:action="@{/carrito/agregar/${obra.id}}" method="post">
                       <input type="hidden" name="obraId" th:value="${obra.id}" />
                       <input type="hidden" name="cantidad" value="1" />
                       <button

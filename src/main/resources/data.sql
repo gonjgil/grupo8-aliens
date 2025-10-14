@@ -1,7 +1,7 @@
 INSERT INTO Usuario(id, email, password, rol, activo) VALUES(null, 'test@unlam.edu.ar', 'test', 'ADMIN', true);
 
 -- Insertar artistas
-INSERT INTO artista (id, nombre, biografia) VALUES
+INSERT INTO Artista (id, nombre, biografia) VALUES
 (1, 'J. Doe', 'Artista contemporáneo especializado en paisajismo y retratos modernos.'),
 (2, 'María García', 'Fotógrafa urbana que captura la esencia de la vida nocturna en las ciudades.'),
 (3, 'Carlos López', 'Pintor naturalista enfocado en la flora y fauna de su entorno.'),

@@ -30,7 +30,9 @@ public class ControladorCarrito {
     public ModelAndView mostrarCarrito(HttpServletRequest request) {
         ModelMap modelo = new ModelMap();
 
-        
+        Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
+        modelo.put("usuario", usuario);
+
         return new ModelAndView("carrito", modelo);
     }
 
