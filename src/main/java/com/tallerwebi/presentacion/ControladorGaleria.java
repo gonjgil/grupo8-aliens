@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.tallerwebi.dominio.ServicioGaleria;
-import com.tallerwebi.dominio.ServicioCarrito;
 import com.tallerwebi.dominio.excepcion.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +27,6 @@ public class ControladorGaleria {
     private ServicioGaleria servicioGaleria;
 
     @Autowired
-
     public ControladorGaleria(ServicioGaleria servicioGaleria) {
         this.servicioGaleria = servicioGaleria;
     }
@@ -62,4 +60,5 @@ public class ControladorGaleria {
 
         return new ModelAndView("galeria", model);
     }
+
 }

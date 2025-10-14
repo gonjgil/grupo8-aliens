@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository("repositorioArtista")
-
 public class RepositorioArtistaImpl implements RepositorioArtista {
 
     private SessionFactory sessionFactory;

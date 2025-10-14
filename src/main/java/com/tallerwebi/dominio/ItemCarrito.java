@@ -17,11 +17,7 @@ public class ItemCarrito {
     @ManyToOne
     @JoinColumn(name = "obra_id")
     private Obra obra;
-
-    @Column(name = "cantidad")
     private Integer cantidad;
-
-    @Column(name = "precio_unitario")
     private Double precioUnitario;
 
     public ItemCarrito() {}

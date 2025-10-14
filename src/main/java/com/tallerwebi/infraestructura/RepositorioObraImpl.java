@@ -1,6 +1,5 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.Usuario;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -24,7 +23,7 @@ public class RepositorioObraImpl implements RepositorioObra {
 
     @Override // testeado
     public void guardar(Obra obra) {
-        this.sessionFactory.getCurrentSession().save(obra);
+        this.sessionFactory.getCurrentSession().saveOrUpdate(obra);
     }
 
     @Override // testeado
@@ -66,6 +65,7 @@ public class RepositorioObraImpl implements RepositorioObra {
     public Obra obtenerPorId(Long id) {
         try {
             return this.sessionFactory.getCurrentSession()
+            // se usa left join fetch para inicializar la coleccion usuariosQueDieronLike y evitar problemas de LazyInitializationException
                     .createQuery("FROM Obra o LEFT JOIN FETCH o.usuariosQueDieronLike WHERE o.id = :id", Obra.class)
                     .setParameter("id", id)
                     .uniqueResult();
@@ -91,22 +91,5 @@ public class RepositorioObraImpl implements RepositorioObra {
     public void devolverStock(Obra obra) {
         obra.setStock(obra.getStock() + 1);
     }
-
-    public void darLike(Long id, Usuario usuario) {
-        Obra obra = obtenerPorId(id);
-        if (obra == null) {
-            throw new IllegalArgumentException("No existe la obra con id: " + id);
-        }
-        obra.getUsuariosQueDieronLike().add(usuario);
-        this.sessionFactory.getCurrentSession().merge(obra);
-    }
-
-    @Override
-    public void quitarLike(Long id, Usuario usuario) {
-        Obra obra = obtenerPorId(id);
-        if (obra != null) {
-            obra.getUsuariosQueDieronLike().remove(usuario);
-            sessionFactory.getCurrentSession().merge(obra);
-        }
-    }
+    
 }
