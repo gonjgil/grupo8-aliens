@@ -27,7 +27,6 @@ public class ControladorGaleria {
     private ServicioGaleria servicioGaleria;
 
     @Autowired
-
     public ControladorGaleria(ServicioGaleria servicioGaleria) {
         this.servicioGaleria = servicioGaleria;
     }
@@ -61,4 +60,5 @@ public class ControladorGaleria {
 
         return new ModelAndView("galeria", model);
     }
+
 }
