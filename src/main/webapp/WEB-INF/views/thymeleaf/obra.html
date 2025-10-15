@@ -121,9 +121,11 @@
               </div>
 
               <div class="flex gap-2">
-                  <form th:action="@{/carrito/agregar/${obra.id}}" method="post">
-                      <input type="hidden" name="obraId" th:value="${obra.id}" />
-                      <input type="hidden" name="cantidad" value="1" />
+                  <form th:action="@{/carrito/agregar}" method="post">
+                      <input type="hidden" name="id" th:value="${obra.id}" />
+                      <input type="hidden" name="titulo" th:value="${obra.titulo}" />
+                      <input type="hidden" name="precio" th:value="${obra.precio}" />
+
                       <button
                               type="submit"
                               class="btn bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full transition duration-300"
@@ -140,7 +142,10 @@
                       Comprar Ahora
                   </a>
               </div>
+
           </div>
+          <p th:if="${mensaje}" class="alert alert-success mt-3" th:text="${mensaje}">
+          <p th:if="${error != null}" class="alert alert-danger mt-3" th:text="${error}">
       </div>
 
     </main>
@@ -227,66 +232,66 @@
     // Actualizar contador al cargar la página
     actualizarContadorCarrito();
 
-    // Manejar el formulario de agregar al carrito con AJAX
-    const carritoForm = document.querySelector(
-      'form[action*="/carrito/agregar"]'
-    );
-    if (carritoForm) {
-      carritoForm.addEventListener('submit', function (e) {
-        e.preventDefault(); // Prevenir envío normal del formulario
-
-        const formData = new FormData(this);
-        const obraId = formData.get('obraId');
-        const cantidad = formData.get('cantidad') || 1;
-
-        // Hacer petición AJAX
-        fetch('/spring/carrito/agregar/ajax', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body: `obraId=${obraId}&cantidad=${cantidad}`,
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.success) {
-              // Actualizar contador
-              const contador = document.querySelector('[data-carrito-count]');
-              if (contador) {
-                if (data.carritoCount > 0) {
-                  contador.textContent = data.carritoCount;
-                  contador.classList.remove('hidden');
-                } else {
-                  contador.classList.add('hidden');
-                }
-              }
-
-              // Efecto visual en el botón
-              const button = this.querySelector('button');
-              const originalText = button.innerHTML;
-              button.innerHTML = '<i class="fas fa-check mr-2"></i>¡Agregado!';
-              button.classList.add('bg-green-500');
-
-              // Mostrar notificación
-              mostrarNotificacion(
-                'Obra agregada al carrito exitosamente',
-                'success'
-              );
-
-              // Después de 2 segundos, redirigir a galería
-              setTimeout(() => {
-                window.location.href = '/spring/galeria';
-              }, 2000);
-            } else {
-              mostrarNotificacion(data.message, 'error');
-            }
-          })
-          .catch((error) => {
-            console.error('Error:', error);
-            mostrarNotificacion('Error de conexión', 'error');
-          });
-      });
-    }
+    // Manejar el formulario de agregar al carrito con AJAX (Comentado hasta poder integrarlo en el controlador)
+    // const carritoForm = document.querySelector(
+    //   'form[action*="/carrito/agregar"]'
+    // );
+    // if (carritoForm) {
+    //   carritoForm.addEventListener('submit', function (e) {
+    //     e.preventDefault(); // Prevenir envío normal del formulario
+    //
+    //     const formData = new FormData(this);
+    //     const obraId = formData.get('obraId');
+    //     const cantidad = formData.get('cantidad') || 1;
+    //
+    //     // Hacer petición AJAX
+    //     fetch('/spring/carrito/agregar', {
+    //       method: 'POST',
+    //       headers: {
+    //         'Content-Type': 'application/x-www-form-urlencoded',
+    //       },
+    //         body: `obraId=${obraId}&titulo=${titulo}&precio=${precio}`,
+    //     })
+    //       .then((response) => response.json())
+    //       .then((data) => {
+    //         if (data.success) {
+    //           // Actualizar contador
+    //           const contador = document.querySelector('[data-carrito-count]');
+    //           if (contador) {
+    //             if (data.carritoCount > 0) {
+    //               contador.textContent = data.carritoCount;
+    //               contador.classList.remove('hidden');
+    //             } else {
+    //               contador.classList.add('hidden');
+    //             }
+    //           }
+    //
+    //           // Efecto visual en el botón
+    //           const button = this.querySelector('button');
+    //           const originalText = button.innerHTML;
+    //           button.innerHTML = '<i class="fas fa-check mr-2"></i>¡Agregado!';
+    //           button.classList.add('bg-green-500');
+    //
+    //           // Mostrar notificación
+    //           mostrarNotificacion(
+    //             'Obra agregada al carrito exitosamente',
+    //             'success'
+    //           );
+    //
+    //           // Después de 2 segundos, redirigir a galería
+    //           setTimeout(() => {
+    //             window.location.href = '/spring/galeria';
+    //           }, 2000);
+    //         } else {
+    //           mostrarNotificacion(data.message, 'error');
+    //         }
+    //       })
+    //       .catch((error) => {
+    //         console.error('Error:', error);
+    //         mostrarNotificacion('Error de conexión', 'error');
+    //       });
+    //   });
+    // }
 
     // Función para mostrar notificaciones
     function mostrarNotificacion(mensaje, tipo) {

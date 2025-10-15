@@ -107,11 +107,11 @@ public class Obra {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Obra obra = (Obra) o;
-        return Objects.equals(id, obra.id) && Objects.equals(titulo, obra.titulo) && Objects.equals(autor, obra.autor) && Objects.equals(imagenUrl, obra.imagenUrl) && Objects.equals(descripcion, obra.descripcion) && Objects.equals(categorias, obra.categorias);
+        return Objects.equals(id, obra.id) && Objects.equals(titulo, obra.titulo) && Objects.equals(autor, obra.autor) && Objects.equals(descripcion, obra.descripcion) && Objects.equals(categorias, obra.categorias);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, titulo, autor, imagenUrl, descripcion, categorias);
+        return Objects.hash(id, titulo, autor, descripcion, categorias);
     }
 }

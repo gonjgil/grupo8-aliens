@@ -5,6 +5,7 @@ import com.tallerwebi.dominio.excepcion.CarritoVacioException;
 import com.tallerwebi.presentacion.ObraDto;
 
 import java.util.List;
+import java.util.Set;
 
 public interface ServicioCarrito {
     Carrito obtenerOCrearCarritoParaUsuario(Usuario usuario);
@@ -19,4 +20,9 @@ public interface ServicioCarrito {
 
     Integer getCantidadTotal();
 
+    /////////////////////////////////////////////////////////
+    void agregar(Obra obra);
+    void eliminar(Long idObra);
+    void vaciar();
+    Set<Obra> obtenerItems();
 }
