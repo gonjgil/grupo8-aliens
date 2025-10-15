@@ -3,13 +3,15 @@ package com.tallerwebi.dominio;
 import com.tallerwebi.dominio.enums.EstadoCarrito;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Table(name = "Carrito")
 public class Carrito {
+
+    @ManyToMany
+    @JoinTable(name = "carrito_obra", joinColumns = @JoinColumn(name = "carrito_id"), inverseJoinColumns = @JoinColumn(name = "obra_id"))
+    private Set<Obra> obras = new HashSet<>();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -122,4 +124,19 @@ public class Carrito {
         Carrito other = (Carrito) obj;
         return Objects.equals(id, other.id);
     }
+
+    /////////////////////////////////////////////////////////
+    public void agregarObra(Obra obra) {
+        obras.add(obra);
+    }
+    public void eliminarObra(Long idObra) {
+        obras.removeIf(o -> o.getId().equals(idObra));
+    }
+    public void vaciarCarrito() {
+        obras.clear();
+    }
+    public Set<Obra> getObras() {
+        return obras;
+    }
 }
+

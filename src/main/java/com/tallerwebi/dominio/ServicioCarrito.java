@@ -5,6 +5,7 @@ import com.tallerwebi.dominio.excepcion.NoHayStockSuficiente;
 import com.tallerwebi.presentacion.ObraDto;
 
 import java.util.List;
+import java.util.Set;
 
 public interface ServicioCarrito {
     Carrito obtenerOCrearCarritoParaUsuario(Usuario usuario); //testeado
@@ -15,4 +16,10 @@ public interface ServicioCarrito {
     Carrito obtenerCarritoConItems(Usuario usuario); //testeado
     Double calcularPrecioTotalCarrito(Usuario usuario); //testeado
     Integer contarItemsEnCarrito(Usuario usuario); //testeado
+
+    /////////////////////////////////////////////////////////
+    void agregar(Obra obra);
+    void eliminar(Long idObra);
+    void vaciar();
+    Set<Obra> obtenerItems();
 }

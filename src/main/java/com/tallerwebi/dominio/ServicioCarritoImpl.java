@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service("servicioCarrito")
 @Transactional
@@ -106,6 +107,25 @@ public class ServicioCarritoImpl implements ServicioCarrito {
             obrasEnCarrito.add(new ObraDto(obra));
         }
         return obrasEnCarrito;
+    }
+
+    /////////////////////////////////////////////////////////////
+    private final Carrito carrito = new Carrito();
+
+    public void agregar(Obra obra) {
+        carrito.agregarObra(obra);
+    }
+
+    public void eliminar(Long idObra) {
+        carrito.eliminarObra(idObra);
+    }
+
+    public void vaciar() {
+        carrito.vaciarCarrito();
+    }
+
+    public Set<Obra> obtenerItems() {
+        return carrito.getObras();
     }
 }
 
