@@ -31,18 +31,6 @@ main {
     font-weight: bold;
 }
 
-.btn-checkout {
-    background-color: #0d6efd;
-    color: white;
-    font-weight: bold;
-    border: none;
-    transition: background-color 0.3s ease;
-}
-
-.btn-checkout:hover {
-    background-color: #0b5ed7;
-}
-
 .table td, .table th {
     vertical-align: middle;
 }
