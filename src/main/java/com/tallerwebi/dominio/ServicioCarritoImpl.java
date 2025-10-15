@@ -1,8 +1,7 @@
 package com.tallerwebi.dominio;
 
-import com.tallerwebi.dominio.enums.EstadoCarrito;
-import com.tallerwebi.dominio.excepcion.CarritoVacioException;
 import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
+import com.tallerwebi.dominio.excepcion.NoHayStockSuficiente;
 import com.tallerwebi.presentacion.ObraDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service("servicioCarrito")
+@Transactional
 public class ServicioCarritoImpl implements ServicioCarrito {
 
     private final RepositorioCarrito repositorioCarrito;
@@ -22,13 +22,12 @@ public class ServicioCarritoImpl implements ServicioCarrito {
     public ServicioCarritoImpl(RepositorioCarrito repositorioCarrito, RepositorioObra repositorioObra) {
         this.repositorioCarrito = repositorioCarrito;
         this.repositorioObra = repositorioObra;
-
     }
 
 
     @Override
     public Carrito obtenerOCrearCarritoParaUsuario(Usuario usuario) {
-        Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario);
+        Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId());
         if (carrito == null) {
             carrito = repositorioCarrito.crearCarritoParaUsuario(usuario);
         }
@@ -36,13 +35,13 @@ public class ServicioCarritoImpl implements ServicioCarrito {
     }
 
     @Override
-    public boolean agregarObraAlCarrito(Usuario usuario, Long obraId) throws NoExisteLaObra {
+    public boolean agregarObraAlCarrito(Usuario usuario, Long obraId) throws NoExisteLaObra, NoHayStockSuficiente {
         Obra obra = repositorioObra.obtenerPorId(obraId);
         if (obra == null) {
             throw new NoExisteLaObra();
         }
         if (!repositorioObra.hayStockSuficiente(obra)) {
-            return false;
+            throw new NoHayStockSuficiente();
         }
 
         Carrito carrito = obtenerOCrearCarritoParaUsuario(usuario);
@@ -54,7 +53,7 @@ public class ServicioCarritoImpl implements ServicioCarrito {
 
     @Override
     public void eliminarObraDelCarrito(Usuario usuario, Long obraId) {
-        Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario);
+        Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId());
         if (carrito != null) {
             Obra obra = repositorioObra.obtenerPorId(obraId);
             if (obra != null) {
@@ -67,7 +66,7 @@ public class ServicioCarritoImpl implements ServicioCarrito {
 
     @Override
     public void vaciarCarrito(Usuario usuario) {
-        Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario);
+        Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId());
         if (carrito != null) {
             carrito.limpiar();
             repositorioCarrito.guardar(carrito);
@@ -76,12 +75,12 @@ public class ServicioCarritoImpl implements ServicioCarrito {
 
     @Override
     public Carrito obtenerCarritoConItems(Usuario usuario) {
-        return repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario);
+        return repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId());
     }
 
     @Override
     public Double calcularPrecioTotalCarrito(Usuario usuario) {
-        Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario);
+        Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId());
         if(carrito != null){
             return carrito.getTotal();
         }
@@ -90,37 +89,24 @@ public class ServicioCarritoImpl implements ServicioCarrito {
 
     @Override
     public Integer contarItemsEnCarrito(Usuario usuario) {
-        Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario);
+        Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId());
         if(carrito != null) {
           return  carrito.getCantidadTotalItems();
         }
         return 0;
     }
 
+
     @Override
-    public Integer getCantidadTotal() {
-        return 0;
-    }
+    public List<ObraDto> obtenerObras (Usuario usuario){
+        Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId());
+        List<ObraDto> obrasEnCarrito = new ArrayList<>();
 
-        @Override
-        public void finalizarCarrito (Usuario usuario) throws CarritoVacioException {
-            Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario);
-            if (carrito == null || carrito.getItems().isEmpty()) {
-                throw new CarritoVacioException();
-            }
-            repositorioCarrito.actualizarEstado(carrito.getId(), EstadoCarrito.FINALIZADO);
+        for (ItemCarrito itemCarrito : carrito.getItems()) {
+            Obra obra = itemCarrito.getObra();
+            obrasEnCarrito.add(new ObraDto(obra));
         }
-
-        @Override
-        public List<ObraDto> obtenerObras (Usuario usuario){
-            Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario);
-            List<ObraDto> obrasEnCarrito = new ArrayList<>();
-
-            for (ItemCarrito itemCarrito : carrito.getItems()) {
-                Obra obra = itemCarrito.getObra();
-                obrasEnCarrito.add(new ObraDto(obra));
-            }
-            return obrasEnCarrito;
+        return obrasEnCarrito;
     }
 
     /////////////////////////////////////////////////////////////
