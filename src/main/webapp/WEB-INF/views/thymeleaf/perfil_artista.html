@@ -4,17 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Perfil del Artista</title>
-
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
     <link rel="stylesheet" th:href="@{/css/perfil_artista.css}"/>
 </head>
-
 <body>
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top shadow">
-    <div class="container">
-        <a class="navbar-brand fw-bold" href="#">ALIENS</a>
+<header class="bg-white p-6 flex justify-between items-center shadow-md">
+    <h1 class="text-4xl font-extrabold text-gray-900 tracking-wider">
+        <a th:href="@{/galeria}" class="hover:text-blue-600 transition-colors">
+            ALIENS
+        </a>
+    </h1>
+
+    <div class="flex items-center space-x-4">
+        <div th:if="${usuario != null}" class="flex items-center space-x-4">
+            <div th:text=" 'Hola, ' + ${usuario.email}"></div>
+            <a th:href="@{/logout}"
+               class="bg-red-600 hover:bg-red-700 fa-solid fa-right-from-bracket text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg">
+            </a>
+        </div>
+        <div th:unless="${usuario != null}">
+            <button
+                    th:onclick="|location.href='@{/login}'|"
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg"
+            >
+                Iniciar Sesión
+            </button>
+        </div>
     </div>
-</nav>
+
+
+</header>
 
 <main role="main" class="container perfil-container">
     <div class="row justify-content-center">

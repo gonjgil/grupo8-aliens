@@ -5,17 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ALIENS - Obra</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-      rel="stylesheet"
-    />
-    <!-- <link rel="stylesheet" href="../../../resources/core/css/galeria.css" /> -->
-    <!-- Boostrap core css -->
-      <link
-              rel="stylesheet"
-              th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"
-      />
-      <link rel="stylesheet" th:href="@{/css/obra.css}" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" th:href="@{/css/obra.css}" />
     <link rel="stylesheet" th:href="@{/css/header.css}"/>
 </head>
 <body class="bg-gray-100 text-gray-800">
@@ -30,9 +23,13 @@
     <div class="flex items-center space-x-4">
         <div th:if="${usuario != null}" class="flex items-center space-x-4">
             <div th:text=" 'Hola, ' + ${usuario.email}"></div>
-            <a th:href="@{/logout}"
-               class="bg-red-600 hover:bg-red-700 fa-solid fa-right-from-bracket text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg">
-            </a>
+                <a th:href="@{/carrito}"
+                  class="bg-blue-600 hover:bg-blue-700 fas fa-shopping-cart mr-2 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg">
+                </a>
+                <a th:href="@{/logout}"
+                   class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg">
+                    <i class="bi bi-box-arrow-right"></i>
+                </a>
         </div>
         <div th:unless="${usuario != null}">
             <button
@@ -71,10 +68,9 @@
             class="obra-titulo text-4xl font-bold mb-2"
             th:text="${obra.titulo}"
           ></h1>
-          <p
-            class="obra-autor text-xl text-gray-600"
-            th:text="${obra.autor}"
-          ></p>
+          <a th:href="@{/perfilArtista/{id}(id=${obra.artista.id})}" class="hover:underline">
+            <p class="obra-autor text-xl text-gray-600" th:text="${obra.artista.nombre}"></p>
+          </a>
         </div>
 
         <div class="obra-body flex-grow mb-8">
@@ -120,8 +116,10 @@
 
               <div class="flex gap-2">
                   <form th:action="@{/carrito/agregar}" method="post">
-                      <input type="hidden" name="obraId" th:value="${obra.id}" />
-                      <input type="hidden" name="cantidad" value="1" />
+                      <input type="hidden" name="id" th:value="${obra.id}" />
+                      <input type="hidden" name="titulo" th:value="${obra.titulo}" />
+                      <input type="hidden" name="precio" th:value="${obra.precio}" />
+
                       <button
                               type="submit"
                               class="btn bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full transition duration-300"
@@ -138,7 +136,10 @@
                       Comprar Ahora
                   </a>
               </div>
+
           </div>
+          <p th:if="${mensaje}" class="alert alert-success mt-3" th:text="${mensaje}">
+          <p th:if="${error != null}" class="alert alert-danger mt-3" th:text="${error}">
       </div>
 
     </main>
@@ -225,66 +226,66 @@
     // Actualizar contador al cargar la página
     actualizarContadorCarrito();
 
-    // Manejar el formulario de agregar al carrito con AJAX
-    const carritoForm = document.querySelector(
-      'form[action*="/carrito/agregar"]'
-    );
-    if (carritoForm) {
-      carritoForm.addEventListener('submit', function (e) {
-        e.preventDefault(); // Prevenir envío normal del formulario
-
-        const formData = new FormData(this);
-        const obraId = formData.get('obraId');
-        const cantidad = formData.get('cantidad') || 1;
-
-        // Hacer petición AJAX
-        fetch('/spring/carrito/agregar/ajax', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body: `obraId=${obraId}&cantidad=${cantidad}`,
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.success) {
-              // Actualizar contador
-              const contador = document.querySelector('[data-carrito-count]');
-              if (contador) {
-                if (data.carritoCount > 0) {
-                  contador.textContent = data.carritoCount;
-                  contador.classList.remove('hidden');
-                } else {
-                  contador.classList.add('hidden');
-                }
-              }
-
-              // Efecto visual en el botón
-              const button = this.querySelector('button');
-              const originalText = button.innerHTML;
-              button.innerHTML = '<i class="fas fa-check mr-2"></i>¡Agregado!';
-              button.classList.add('bg-green-500');
-
-              // Mostrar notificación
-              mostrarNotificacion(
-                'Obra agregada al carrito exitosamente',
-                'success'
-              );
-
-              // Después de 2 segundos, redirigir a galería
-              setTimeout(() => {
-                window.location.href = '/spring/galeria';
-              }, 2000);
-            } else {
-              mostrarNotificacion(data.message, 'error');
-            }
-          })
-          .catch((error) => {
-            console.error('Error:', error);
-            mostrarNotificacion('Error de conexión', 'error');
-          });
-      });
-    }
+    // Manejar el formulario de agregar al carrito con AJAX (Comentado hasta poder integrarlo en el controlador)
+    // const carritoForm = document.querySelector(
+    //   'form[action*="/carrito/agregar"]'
+    // );
+    // if (carritoForm) {
+    //   carritoForm.addEventListener('submit', function (e) {
+    //     e.preventDefault(); // Prevenir envío normal del formulario
+    //
+    //     const formData = new FormData(this);
+    //     const obraId = formData.get('obraId');
+    //     const cantidad = formData.get('cantidad') || 1;
+    //
+    //     // Hacer petición AJAX
+    //     fetch('/spring/carrito/agregar', {
+    //       method: 'POST',
+    //       headers: {
+    //         'Content-Type': 'application/x-www-form-urlencoded',
+    //       },
+    //         body: `obraId=${obraId}&titulo=${titulo}&precio=${precio}`,
+    //     })
+    //       .then((response) => response.json())
+    //       .then((data) => {
+    //         if (data.success) {
+    //           // Actualizar contador
+    //           const contador = document.querySelector('[data-carrito-count]');
+    //           if (contador) {
+    //             if (data.carritoCount > 0) {
+    //               contador.textContent = data.carritoCount;
+    //               contador.classList.remove('hidden');
+    //             } else {
+    //               contador.classList.add('hidden');
+    //             }
+    //           }
+    //
+    //           // Efecto visual en el botón
+    //           const button = this.querySelector('button');
+    //           const originalText = button.innerHTML;
+    //           button.innerHTML = '<i class="fas fa-check mr-2"></i>¡Agregado!';
+    //           button.classList.add('bg-green-500');
+    //
+    //           // Mostrar notificación
+    //           mostrarNotificacion(
+    //             'Obra agregada al carrito exitosamente',
+    //             'success'
+    //           );
+    //
+    //           // Después de 2 segundos, redirigir a galería
+    //           setTimeout(() => {
+    //             window.location.href = '/spring/galeria';
+    //           }, 2000);
+    //         } else {
+    //           mostrarNotificacion(data.message, 'error');
+    //         }
+    //       })
+    //       .catch((error) => {
+    //         console.error('Error:', error);
+    //         mostrarNotificacion('Error de conexión', 'error');
+    //       });
+    //   });
+    // }
 
     // Función para mostrar notificaciones
     function mostrarNotificacion(mensaje, tipo) {

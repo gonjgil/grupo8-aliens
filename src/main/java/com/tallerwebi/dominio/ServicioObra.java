@@ -1,5 +1,5 @@
 package com.tallerwebi.dominio;
 
-public interface ServicioObra {
+public class ServicioObra {
     
 }

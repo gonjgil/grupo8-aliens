@@ -1,8 +1,10 @@
 package com.tallerwebi.dominio;
 
+import java.util.List;
+
 public interface ServicioLike {
 
-    boolean darLike(Usuario usuario, Obra obra);
-    boolean quitarLike(Usuario usuario, Obra obra);
-
+    void toggleLike(Usuario usuario, Long obraId); //testeado
+    Integer contarLikes(Long obraId); //sin implementar
+    List<Obra> obtenerObrasLikeadasPorUsuario(Usuario usuario); //sin implementar
 }

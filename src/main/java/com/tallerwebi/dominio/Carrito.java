@@ -3,13 +3,15 @@ package com.tallerwebi.dominio;
 import com.tallerwebi.dominio.enums.EstadoCarrito;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "Carrito")
 public class Carrito {
+
+    @ManyToMany
+    @JoinTable(name = "carrito_obra", joinColumns = @JoinColumn(name = "carrito_id"), inverseJoinColumns = @JoinColumn(name = "obra_id"))
+    private Set<Obra> obras = new HashSet<>();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,23 +24,15 @@ public class Carrito {
     @OneToMany(mappedBy = "carrito", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ItemCarrito> items = new ArrayList<>();
 
-    @Column(name = "fecha_creacion")
-    private LocalDateTime fechaCreacion;
-
-    @Column(name = "fecha_actualizacion")
-    private LocalDateTime fechaActualizacion;
-
     @Enumerated(EnumType.STRING)
     private EstadoCarrito estado;
 
     public Carrito() {
-        this.fechaCreacion = LocalDateTime.now();
-        this.fechaActualizacion = LocalDateTime.now();
         this.estado = EstadoCarrito.ACTIVO;
     }
 
     public Carrito(Usuario usuario) {
-        this(); // llamada al constructor vacio para inicializar fechas y estado
+        this.estado = EstadoCarrito.ACTIVO;
         this.usuario = usuario;
     }
 
@@ -50,12 +44,10 @@ public class Carrito {
             ItemCarrito nuevoItem = new ItemCarrito(this, obra);
             this.items.add(nuevoItem);
         }
-        this.fechaActualizacion = LocalDateTime.now();
     }
 
     public void removerItem(Obra obra) {
         ItemCarrito itemExistente = buscarItemPorObra(obra);
-   //     this.items.removeIf(item -> item.getObra().getId().equals(obra.getId()));
         if (itemExistente != null) {
             itemExistente.setCantidad(itemExistente.getCantidad() - 1);
             if (itemExistente.getCantidad() <= 0) {
@@ -64,8 +56,6 @@ public class Carrito {
                 itemExistente.setCantidad(itemExistente.getCantidad());
             }
         }
-
-        this.fechaActualizacion = LocalDateTime.now();
     }
 
     public void actualizarCantidadItem(Obra obra, Integer nuevaCantidad) {
@@ -75,14 +65,12 @@ public class Carrito {
                 removerItem(obra);
             } else {
                 item.setCantidad(nuevaCantidad);
-                this.fechaActualizacion = LocalDateTime.now();
             }
         }
     }
 
     public void limpiar() {
         this.items.clear();
-        this.fechaActualizacion = LocalDateTime.now();
     }
 
     public Double getTotal() {
@@ -119,12 +107,36 @@ public class Carrito {
     public List<ItemCarrito> getItems() { return items; }
     public void setItems(List<ItemCarrito> items) { this.items = items; }
 
-    public LocalDateTime getFechaCreacion() { return fechaCreacion; }
-    public void setFechaCreacion(LocalDateTime fechaCreacion) { this.fechaCreacion = fechaCreacion; }
-
-    public LocalDateTime getFechaActualizacion() { return fechaActualizacion; }
-    public void setFechaActualizacion(LocalDateTime fechaActualizacion) { this.fechaActualizacion = fechaActualizacion; }
-
     public EstadoCarrito getEstado() { return estado; }
     public void setEstado(EstadoCarrito estado) { this.estado = estado; }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!(obj instanceof Carrito))
+            return false;
+        Carrito other = (Carrito) obj;
+        return Objects.equals(id, other.id);
+    }
+
+    /////////////////////////////////////////////////////////
+    public void agregarObra(Obra obra) {
+        obras.add(obra);
+    }
+    public void eliminarObra(Long idObra) {
+        obras.removeIf(o -> o.getId().equals(idObra));
+    }
+    public void vaciarCarrito() {
+        obras.clear();
+    }
+    public Set<Obra> getObras() {
+        return obras;
+    }
 }
+

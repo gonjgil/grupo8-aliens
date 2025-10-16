@@ -3,7 +3,6 @@ package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.Obra;
 import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.enums.Categoria;
-import com.tallerwebi.presentacion.ObraDto;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

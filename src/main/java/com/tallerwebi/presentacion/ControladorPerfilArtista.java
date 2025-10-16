@@ -38,7 +38,7 @@ public class ControladorPerfilArtista {
             // -->Agregar lógica para saber si el usuario logueado es el dueño del perfil
         } catch (NoExisteArtista e) { //si no lo es se lanza la excepcion
             model.put("error", "perfil no encontrado"); //si la clave es error se envia el mensaje el artista no existe
-            return new ModelAndView("PerfilNoExiste", model);
+            return new ModelAndView("redirect:/galeria", model);
         }
 
     }

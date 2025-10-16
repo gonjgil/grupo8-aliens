@@ -15,7 +15,6 @@ public class Obra {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    public String codigo; // valor único para cada obra? ver como generarlo automaticamente
     private String titulo;
     private String autor;
     private String imagenUrl;
@@ -43,13 +42,13 @@ public class Obra {
     @Column(name = "categoria")
     private Set<Categoria> categorias = new HashSet<>();
 
-    // @ManyToOne
-    // @JoinColumn(name = "artista")
-    // private Artista artista;
+    @ManyToOne
+    @JoinColumn(name = "artista")
+    private Artista artista;
 
     public Obra() { }
 
-      public Obra(String titulo, String autor, String imagenUrl, String descripcion, Integer stock, Set<Categoria> categorias, Double precio) {
+    public Obra(String titulo, String autor, String imagenUrl, String descripcion, Integer stock, Set<Categoria> categorias, Double precio) {
         this.titulo = titulo;
         this.autor = autor;
         this.imagenUrl = imagenUrl;
@@ -57,6 +56,17 @@ public class Obra {
         this.stock = stock;
         this.categorias = categorias;
         this.precio = precio;
+    }
+
+    public Obra(String titulo, String autor, String imagenUrl, String descripcion, Integer stock, Set<Categoria> categorias, Double precio, Artista artista) {
+        this.titulo = titulo;
+        this.autor = autor;
+        this.imagenUrl = imagenUrl;
+        this.descripcion = descripcion;
+        this.stock = stock;
+        this.categorias = categorias;
+        this.precio = precio;
+        this.artista = artista;
     }
 
     public Long getId() { return id; }
@@ -86,8 +96,8 @@ public class Obra {
     public Set<Categoria> getCategorias() { return categorias; }
     public void agregarCategoria(Categoria categoria) { this.categorias.add(categoria); }
 
-    // public Artista getArtista() { return artista; }
-    // public void setArtista(Artista artista) { this.artista = artista; }
+     public Artista getArtista() { return artista; }
+     public void setArtista(Artista artista) { this.artista = artista; }
 
     public Integer getStock() { return stock; }
     public void setStock(Integer stock) { this.stock = stock; }
@@ -96,11 +106,16 @@ public class Obra {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Obra obra = (Obra) o;
-        return Objects.equals(id, obra.id) && Objects.equals(titulo, obra.titulo) && Objects.equals(autor, obra.autor) && Objects.equals(imagenUrl, obra.imagenUrl) && Objects.equals(descripcion, obra.descripcion) && Objects.equals(categorias, obra.categorias);
+        return Objects.equals(id, obra.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, titulo, autor, imagenUrl, descripcion, categorias);
+        return Objects.hash(id);
+    }
+
+    public Obra toEntity() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'toEntity'");
     }
 }
