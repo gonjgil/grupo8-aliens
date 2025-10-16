@@ -60,7 +60,7 @@
                     <a th:href="${mostrarArtista.urlTwitter}" target="_blank" class="link-red">Twitter</a>
                 </div>
 
-                <div class="mt-4">
+                <div class="mt-4" th:if="${esDuenio}">
                     <button id="btn-editar-perfil" class="btn-editar" th:attr="data-artista-id=${mostrarArtista.id}">
                         Editar Perfil
                     </button>

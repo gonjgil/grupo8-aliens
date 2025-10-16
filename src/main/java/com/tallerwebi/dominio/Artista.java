@@ -18,6 +18,10 @@ public class Artista {
     private String urlInstagram;
     private String urlTwitter;
 
+    @OneToOne
+    @JoinColumn(name = "usuario_id", referencedColumnName = "id")
+    private Usuario usuario;
+
     @OneToMany(mappedBy = "artista", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Obra> obras = new ArrayList<>();
 
@@ -88,5 +92,11 @@ public class Artista {
     }
 
 
+    public Usuario getUsuario() {
+        return usuario;
+    }
 
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
 }
