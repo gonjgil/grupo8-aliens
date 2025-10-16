@@ -13,7 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Set;
 
-@Controller@RequestMapping("/carrito")
+@Controller
+@RequestMapping("/carrito")
 public class ControladorCarrito {
 
     private final ServicioCarrito servicioCarrito;
