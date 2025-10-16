@@ -3,6 +3,7 @@ package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.Artista;
 import com.tallerwebi.dominio.ServicioCloudinary;
 import com.tallerwebi.dominio.ServicioPerfilArtista;
+import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.excepcion.NoExisteArtista;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,6 +32,9 @@ public class ControladorPerfilArtista {
     @GetMapping(path = "/ver/{idArtista}")
     public ModelAndView verPerfilArtista(@PathVariable("idArtista") Long idArtista, HttpServletRequest request) {
         ModelMap model = new ModelMap();
+
+        Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
+        model.put("usuario", usuario);
         try {
             PerfilArtistaDTO artista = this.servicioPerfilArtista.obtenerPerfilArtista(idArtista);
             model.put("mostrarArtista", artista); //si la clave es "mostrarArtista" se enviará el perfil del artista
@@ -66,8 +70,12 @@ public class ControladorPerfilArtista {
 
     //Formulario de edicion con datos actuales
     @GetMapping("/ver/{id}/editar")
-    public ModelAndView mostrarFormularioDeEdicion(@PathVariable("id") Long idArtista){
+    public ModelAndView mostrarFormularioDeEdicion(@PathVariable("id") Long idArtista, HttpServletRequest request){
         ModelMap model = new ModelMap();
+
+        Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
+        model.put("usuario", usuario);
+
         try{
             PerfilArtistaDTO artista = this.servicioPerfilArtista.obtenerPerfilArtista(idArtista);
             model.put("artista", artista);
