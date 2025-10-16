@@ -13,8 +13,9 @@ public class PerfilArtistaDTO {
         private String urlFacebook;
         private String urlInstagram;
         private String urlTwitter;
+        private Long usuarioId;
 
-    public PerfilArtistaDTO(Long id, String nombre, String biografia, String urlFotoPerfil, String urlFacebook, String urlInstagram, String urlTwitter) {
+    public PerfilArtistaDTO(Long id, String nombre, String biografia, String urlFotoPerfil, String urlFacebook, String urlInstagram, String urlTwitter, Long usuarioId) {
         this.id = id;
         this.nombre = nombre;
         this.biografia = biografia;
@@ -22,6 +23,7 @@ public class PerfilArtistaDTO {
         this.urlFacebook = urlFacebook;
         this.urlInstagram = urlInstagram;
         this.urlTwitter = urlTwitter;
+        this.usuarioId = usuarioId;
     }
 
     public PerfilArtistaDTO(Artista artista) {
@@ -104,6 +106,12 @@ public class PerfilArtistaDTO {
         artista.setUrlInstagram(this.urlInstagram);
         artista.setUrlTwitter(this.urlTwitter);
         return artista;
+    }
+
+    public Long getUsuarioId() { return usuarioId;
+    }
+
+    public void setUsuarioId(Long usuarioId) { this.usuarioId = usuarioId;
     }
 }
 

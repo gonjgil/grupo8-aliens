@@ -34,6 +34,8 @@ public class ServicioPerfilArtistaImpl implements ServicioPerfilArtista {
         dto.setUrlInstagram(artista.getUrlInstagram());
         dto.setUrlTwitter(artista.getUrlTwitter());
 
+        dto.setUsuarioId(artista.getUsuario() != null ? artista.getUsuario().getId() : null);
+
         // Servicio devuelve el dto al Controlador.
         return dto;
     }
@@ -62,13 +64,13 @@ public class ServicioPerfilArtistaImpl implements ServicioPerfilArtista {
     }
 
     @Override
-    public Artista crearPerfilArtista(PerfilArtistaDTO datos) {
+    public Artista crearPerfilArtista(PerfilArtistaDTO datos, Usuario usuario) {
 
         // Lógica de corrección de urls antes de crear la entidad
         datos.setUrlFacebook(corregirUrl(datos.getUrlFacebook()));
         datos.setUrlInstagram(corregirUrl(datos.getUrlInstagram()));
         datos.setUrlTwitter(corregirUrl(datos.getUrlTwitter()));
-        datos.setUrlFotoPerfil(corregirUrl(datos.getUrlFotoPerfil()));
+        datos.setUrlFotoPerfil(datos.getUrlFotoPerfil());
 
 
 // Hay que cambiar esto si ligamos a la creación de un Usuario a la asignación del rol de artista
@@ -76,6 +78,7 @@ public class ServicioPerfilArtistaImpl implements ServicioPerfilArtista {
         nuevoArtista.setUrlFacebook(corregirUrl(datos.getUrlFacebook()));
         nuevoArtista.setUrlInstagram(corregirUrl(datos.getUrlInstagram()));
         nuevoArtista.setUrlTwitter(corregirUrl(datos.getUrlTwitter()));
+        nuevoArtista.setUsuario(usuario);
 
         repositorioArtista.guardar(nuevoArtista);
 

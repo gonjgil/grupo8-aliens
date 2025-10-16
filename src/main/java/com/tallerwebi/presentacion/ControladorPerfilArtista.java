@@ -35,9 +35,14 @@ public class ControladorPerfilArtista {
 
         Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
         model.put("usuario", usuario);
+
         try {
             PerfilArtistaDTO artista = this.servicioPerfilArtista.obtenerPerfilArtista(idArtista);
             model.put("mostrarArtista", artista); //si la clave es "mostrarArtista" se enviará el perfil del artista
+            //  botón de editar solo se muestra si el usuario logueado es el dueño
+            boolean esDuenio = (usuario != null && artista.getUsuarioId() != null
+                    && usuario.getId().equals(artista.getUsuarioId()));
+            model.put("esDuenio", esDuenio);
             return new ModelAndView("perfil_artista", model);
             // -->Agregar lógica para saber si el usuario logueado es el dueño del perfil
         } catch (NoExisteArtista e) { //si no lo es se lanza la excepcion
@@ -56,14 +61,16 @@ public class ControladorPerfilArtista {
     //POST para recibir los datos y guardar
     @PostMapping("/crear")
     //@ModelAttribute = Spring construya automáticamente el DTO a partir de los parámetros de la solicitud.
-    public String crearArtista(@ModelAttribute PerfilArtistaDTO dto, @RequestParam("fotoPerfil") MultipartFile archivo) {
+    public String crearArtista(@ModelAttribute PerfilArtistaDTO dto, @RequestParam("fotoPerfil") MultipartFile archivo, HttpServletRequest request) {
+
+        Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
 
         if (!archivo.isEmpty()) {
             String urlImagen = servicioCloudinary.subirImagen(archivo);
             dto.setUrlFotoPerfil(urlImagen);
         }
 
-        Artista artista = servicioPerfilArtista.crearPerfilArtista(dto);
+        Artista artista = servicioPerfilArtista.crearPerfilArtista(dto, usuario);
         return "redirect:/perfilArtista/ver/" + artista.getId();
 
     }

@@ -85,8 +85,12 @@ public class ServicioPerfilArtistaImplTest {
         datosCreacion.setUrlFotoPerfil("http://example.com/warhol.jpg");
         datosCreacion.setUrlInstagram("http://instagram.com/warhol");
 
+        Usuario usuarioMock = new Usuario();
+        usuarioMock.setId(1L);
+        usuarioMock.setEmail("usuario@prueba.com");
+
         // Ejecución
-        Artista nuevoArtista = servicioPerfilArtistaImpl.crearPerfilArtista(datosCreacion);
+        Artista nuevoArtista = servicioPerfilArtistaImpl.crearPerfilArtista(datosCreacion, usuarioMock);
 
         // Validación
         assertThat(nuevoArtista, is(notNullValue()));
