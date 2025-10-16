@@ -57,10 +57,16 @@ textarea {
   min-height: 60px;
 }
 
-.btn-guardar {
-  width: 100%;
-  background-color: #6c63ff;
-  color: white;
+
+.acciones {
+  display: flex;
+  gap: 10px; /* Espacio entre los botones */
+  margin-top: 20px;
+}
+
+/* Estilo base para todos los botones */
+.btn {
+  flex: 1; /* Cada boton ocupa la mitad del contenedor */
   border: none;
   border-radius: 10px;
   padding: 12px;
@@ -69,7 +75,22 @@ textarea {
   transition: background 0.3s ease, transform 0.1s ease;
 }
 
+.btn-guardar {
+  background-color: #6c63ff;
+  color: white;
+}
+
 .btn-guardar:hover {
   background-color: #5848e4;
+  transform: scale(1.02);
+}
+
+.btn-cancelar {
+  background-color: #e0e0e0;
+  color: #333;
+}
+
+.btn-cancelar:hover {
+  background-color: #c4c4c4;
   transform: scale(1.02);
 }

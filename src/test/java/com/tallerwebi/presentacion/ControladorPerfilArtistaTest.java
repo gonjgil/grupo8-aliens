@@ -89,7 +89,7 @@ public class ControladorPerfilArtistaTest {
         String redirectUrl = controladorPerfilArtista.crearArtista(dto, archivoMock);
 
         // Validación
-        assertThat(redirectUrl, is(equalTo("redirect:/perfilArtista/10"))); // Verifica la URL de redirección
+        assertThat(redirectUrl, is(equalTo("redirect:/perfilArtista/ver/10"))); // Verifica la URL de redirección
 
     }
 
