@@ -1,20 +1,15 @@
-const BTN_EDITAR = document.getElementById("btn-editar");
-const NOMBRE = document.getElementById("nombre-artista");
-const BIO = document.getElementById("bio-artista");
+// Se asegura de que este script se cargue después del HTML del botón
+document.addEventListener('DOMContentLoaded', function() {
+    const btnEditar = document.getElementById('btn-editar-perfil');
 
-
-
-// Función para simular edición
-function habilitarEdicion() {
-  const NUEVO_NOMBRE = prompt("Editar nombre:", NOMBRE.innerText);
-  const NUEVA_BIO = prompt("Editar biografía:", BIO.innerText);
-
-  if (NUEVO_NOMBRE) {
-    NOMBRE.innerText = NUEVO_NOMBRE;
-  }
-  if (NUEVA_BIO) {
-    BIO.innerText = NUEVA_BIO;
-
-  }
-}
-BTN_EDITAR.addEventListener("click", habilitarEdicion);
+    if (btnEditar) {
+        btnEditar.addEventListener('click', function() {
+            const artistaId = this.dataset.artistaId; // Obtiene el ID del atributo data-artista-id
+            if (artistaId) {
+                window.location.href = '/spring/perfilArtista/ver/' + artistaId + '/editar'; // Redirige el navegador a la URL de edición
+            } else {
+                console.error("No se pudo obtener el ID del artista para la edición.");
+            }
+        });
+    }
+});

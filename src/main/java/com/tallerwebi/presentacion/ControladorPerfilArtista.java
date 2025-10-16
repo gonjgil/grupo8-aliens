@@ -28,8 +28,8 @@ public class ControladorPerfilArtista {
     }
 
     // Muestra el perfil de un artista
-    @GetMapping(path = "/{verArtista}")
-    public ModelAndView verPerfilArtista(@PathVariable("verArtista") Long idArtista, HttpServletRequest request) {
+    @GetMapping(path = "/ver/{idArtista}")
+    public ModelAndView verPerfilArtista(@PathVariable("idArtista") Long idArtista, HttpServletRequest request) {
         ModelMap model = new ModelMap();
         try {
             PerfilArtistaDTO artista = this.servicioPerfilArtista.obtenerPerfilArtista(idArtista);
@@ -49,7 +49,6 @@ public class ControladorPerfilArtista {
         return "nuevo_artista";
     }
 
-
     //POST para recibir los datos y guardar
     @PostMapping("/crear")
     //@ModelAttribute = Spring construya automáticamente el DTO a partir de los parámetros de la solicitud.
@@ -61,8 +60,36 @@ public class ControladorPerfilArtista {
         }
 
         Artista artista = servicioPerfilArtista.crearPerfilArtista(dto);
-        return "redirect:/perfilArtista/" + artista.getId();
+        return "redirect:/perfilArtista/ver/" + artista.getId();
 
+    }
+
+    //Formulario de edicion con datos actuales
+    @GetMapping("/ver/{id}/editar")
+    public ModelAndView mostrarFormularioDeEdicion(@PathVariable("id") Long idArtista){
+        ModelMap model = new ModelMap();
+        try{
+            PerfilArtistaDTO artista = this.servicioPerfilArtista.obtenerPerfilArtista(idArtista);
+            model.put("artista", artista);
+            return new ModelAndView("editar_artista", model);
+        } catch (NoExisteArtista e) {
+            model.put("error", "perfil no encontrado");
+            return new ModelAndView("PerfilNoExiste", model);
+        }
+    }
+
+    @PostMapping("ver/{id}/actualizar")
+    public String actualizarPerfil(@PathVariable("id") Long idArtista, @ModelAttribute PerfilArtistaDTO dto, @RequestParam("fotoPerfil") MultipartFile archivo) throws NoExisteArtista{
+
+        if (!archivo.isEmpty()) {
+            String urlImagen = servicioCloudinary.subirImagen(archivo);
+            dto.setUrlFotoPerfil(urlImagen);
+        }
+
+        dto.setId(idArtista);
+        servicioPerfilArtista.actualizarPerfilArtista(dto);
+
+        return "redirect:/perfilArtista/ver/" + idArtista;
     }
 }
 
