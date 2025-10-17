@@ -1,17 +1,27 @@
 package com.tallerwebi.dominio;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 import com.tallerwebi.dominio.enums.EstadoCarrito;
 
-import javax.persistence.*;
-import java.util.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "Carrito")
 public class Carrito {
-
-    @ManyToMany
-    @JoinTable(name = "carrito_obra", joinColumns = @JoinColumn(name = "carrito_id"), inverseJoinColumns = @JoinColumn(name = "obra_id"))
-    private Set<Obra> obras = new HashSet<>();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -80,7 +90,7 @@ public class Carrito {
         }
         return total;
     }
-        
+
     public Integer getCantidadTotalItems() {
         Integer totalCantidad = 0;
         for (ItemCarrito item : items) {
@@ -98,17 +108,37 @@ public class Carrito {
         return null;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public Usuario getUsuario() { return usuario; }
-    public void setUsuario(Usuario usuario) { this.usuario = usuario; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public List<ItemCarrito> getItems() { return items; }
-    public void setItems(List<ItemCarrito> items) { this.items = items; }
+    public Usuario getUsuario() {
+        return usuario;
+    }
 
-    public EstadoCarrito getEstado() { return estado; }
-    public void setEstado(EstadoCarrito estado) { this.estado = estado; }
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public List<ItemCarrito> getItems() {
+        return items;
+    }
+
+    public void setItems(List<ItemCarrito> items) {
+        this.items = items;
+    }
+
+    public EstadoCarrito getEstado() {
+        return estado;
+    }
+
+    public void setEstado(EstadoCarrito estado) {
+        this.estado = estado;
+    }
 
     @Override
     public int hashCode() {
@@ -125,18 +155,4 @@ public class Carrito {
         return Objects.equals(id, other.id);
     }
 
-    /////////////////////////////////////////////////////////
-    public void agregarObra(Obra obra) {
-        obras.add(obra);
-    }
-    public void eliminarObra(Long idObra) {
-        obras.removeIf(o -> o.getId().equals(idObra));
-    }
-    public void vaciarCarrito() {
-        obras.clear();
-    }
-    public Set<Obra> getObras() {
-        return obras;
-    }
 }
-
