@@ -65,18 +65,19 @@ public class RepositorioObraImpl implements RepositorioObra {
     public Obra obtenerPorId(Long id) {
         try {
             return this.sessionFactory.getCurrentSession()
-            // se usa left join fetch para inicializar la coleccion usuariosQueDieronLike y evitar problemas de LazyInitializationException
+                    // se usa left join fetch para inicializar la coleccion usuariosQueDieronLike y
+                    // evitar problemas de LazyInitializationException
                     .createQuery("FROM Obra o LEFT JOIN FETCH o.usuariosQueDieronLike WHERE o.id = :id", Obra.class)
                     .setParameter("id", id)
                     .uniqueResult();
         } catch (IllegalArgumentException e) {
             return null;
         }
-     }
+    }
 
     @Override
     public boolean hayStockSuficiente(Obra obra) {
-        if(obra.getStock() >= 1){//si es fisica verificar si hay stock, si es digital no es necesario
+        if (obra.getStock() != null && obra.getStock() >= 1) {
             return true;
         }
         return false;
@@ -84,12 +85,18 @@ public class RepositorioObraImpl implements RepositorioObra {
 
     @Override
     public void descontarStock(Obra obra) {
-        obra.setStock(obra.getStock() - 1);
+        if (obra.getStock() != null) {
+            obra.setStock(obra.getStock() - 1);
+        }
     }
 
     @Override
     public void devolverStock(Obra obra) {
-        obra.setStock(obra.getStock() + 1);
+        if( obra.getStock() != null) {
+            obra.setStock(obra.getStock() + 1);
+        } else {
+            obra.setStock(1);
+        }
     }
-    
+
 }
