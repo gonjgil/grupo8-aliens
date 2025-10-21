@@ -38,33 +38,12 @@ public class ControladorObra {
         model.put("usuario", usuario);
         
         try {
-            ObraDto obra = this.servicioGaleria.obtenerPorId(id);
+            ObraDto obra = new ObraDto(this.servicioGaleria.obtenerPorId(id));
             model.put("obra", obra);
             return new ModelAndView("obra", model);
         } catch (Exception e) {
             model.put("error", "No existe la obra solicitada.");
             return new ModelAndView("redirect:/galeria_alt", model);
-        }
-    }
-
-    @RequestMapping(path = "{id}/like", method = RequestMethod.POST)
-    public ModelAndView toggleLike(@PathVariable Long id, HttpServletRequest request) {
-        Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
-        ModelMap model = new ModelMap();
-        model.put("usuario", usuario);
-
-        try {
-            this.servicioLike.toggleLike(usuario, id);
-            ObraDto obra = this.servicioGaleria.obtenerPorId(id);
-            model.put("obra", obra);
-            return new ModelAndView("redirect:/obra/" + id, model);
-
-        } catch (UsuarioAnonimoException e) {
-            model.put("error", "Debe estar logueado para dar/quitar like.");
-            return new ModelAndView("redirect:/obra/" + id, model);
-        } catch (NoExisteLaObra e) {
-            model.put("error", "No existe la obra solicitada.");
-            return new ModelAndView("redirect:/galeria", model);
         }
     }
 }

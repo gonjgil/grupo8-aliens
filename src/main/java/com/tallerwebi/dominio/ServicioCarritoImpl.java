@@ -105,13 +105,12 @@ public class ServicioCarritoImpl implements ServicioCarrito {
     }
 
     @Override
-    public List<ObraDto> obtenerObras(Usuario usuario) {
+    public List<Obra> obtenerObras(Usuario usuario) {
         Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId());
-        List<ObraDto> obrasEnCarrito = new ArrayList<>();
+        List<Obra> obrasEnCarrito = new ArrayList<>();
 
         for (ItemCarrito itemCarrito : carrito.getItems()) {
-            Obra obra = itemCarrito.getObra();
-            obrasEnCarrito.add(new ObraDto(obra));
+            obrasEnCarrito.add(itemCarrito.getObra());
         }
         return obrasEnCarrito;
     }

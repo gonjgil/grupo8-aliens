@@ -67,12 +67,12 @@ public class ServicioGaleriaImpl implements ServicioGaleria {
     }
 
     @Override
-    public ObraDto obtenerPorId(Long id) throws NoExisteLaObra {
+    public Obra obtenerPorId(Long id) throws NoExisteLaObra {
         Obra obra = repositorioObra.obtenerPorId(id);
         if (obra == null) {
             throw new NoExisteLaObra();
         }
-        return new ObraDto(obra);
+        return obra;
     }
 
 }

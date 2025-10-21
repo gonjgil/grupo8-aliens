@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -34,7 +35,13 @@ public class ControladorCarrito {
             return new ModelAndView("redirect:/login");
         }
 
-        List<ObraDto> items = servicioCarrito.obtenerObras(usuario);
+        List<Obra> obras = servicioCarrito.obtenerObras(usuario);
+        List<ObraDto> items = new ArrayList<>();
+
+        for (Obra obra : obras) {
+            items.add(new ObraDto(obra));
+        }
+
         Double total = servicioCarrito.calcularPrecioTotalCarrito(usuario);
         Integer cantidadItems = servicioCarrito.contarItemsEnCarrito(usuario);
 

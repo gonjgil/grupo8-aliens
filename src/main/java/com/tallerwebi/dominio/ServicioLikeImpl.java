@@ -18,16 +18,20 @@ public class ServicioLikeImpl implements ServicioLike {
     }
 
     @Override
-    public void toggleLike(Usuario usuario, Long obraId) {
+    public boolean toggleLike(Usuario usuario, Long obraId) {
+        boolean resultado = false;
         Obra obra = this.repositorioObra.obtenerPorId(obraId);
         if (usuario != null && obra != null) {
             if (obra.getUsuariosQueDieronLike().contains(usuario)) {
                 obra.quitarLike(usuario);
+                resultado = false;
             } else {
                 obra.darLike(usuario);
+                resultado = true;
             }
             repositorioObra.guardar(obra);
         }
+        return resultado;
     }
 
     @Override

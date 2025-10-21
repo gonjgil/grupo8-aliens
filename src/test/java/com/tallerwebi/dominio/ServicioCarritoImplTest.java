@@ -103,7 +103,7 @@ public class ServicioCarritoImplTest {
         } catch (NoHayStockSuficiente e) {
         }
 
-        List<ObraDto> resultado = servicioCarritoImpl.obtenerObras(usuario);
+        List<Obra> resultado = servicioCarritoImpl.obtenerObras(usuario);
 
         assertThat(resultado.size(), is(1));
     }
@@ -185,7 +185,7 @@ public class ServicioCarritoImplTest {
         servicioCarritoImpl.agregarObraAlCarrito(usuario, obra2.getId());
         servicioCarritoImpl.agregarObraAlCarrito(usuario, obra3.getId());
 
-        List<ObraDto> resultado = servicioCarritoImpl.obtenerObras(usuario);
+        List<Obra> resultado = servicioCarritoImpl.obtenerObras(usuario);
 
         assertThat(carrito.getItems().size(), is(equalTo(3)));
         assertThat(resultado.size(), is(3));
@@ -216,7 +216,7 @@ public class ServicioCarritoImplTest {
         } catch (NoHayStockSuficiente e) {
         }
 
-        List<ObraDto> resultado = servicioCarritoImpl.obtenerObras(usuario);
+        List<Obra> resultado = servicioCarritoImpl.obtenerObras(usuario);
         assertThat(carrito.getItems().size(), is(1));
         assertThat(carrito.getItems().get(0).getCantidad(), is(4));
         assertThat(resultado.size(), is(1));
