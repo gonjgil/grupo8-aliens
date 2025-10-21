@@ -94,12 +94,13 @@
         </div>
       </div> -->
           <div class="likes flex items-center gap-1">
-              <form th:action="@{/obra/{id}/like(id=${obra.id})}" method="post">
-                  <button type="submit"
+              <div th:if="${usuario != null}">
+                  <button id="btn-like"
                           class="like-button px-4 py-2 rounded-full border border-gray-300 hover:bg-blue-50"
-                          aria-pressed="false">&#x2764;</button>
-              </form>
-              <span th:text="${obra.getCantidadLikes()}"></span>
+                          aria-pressed="false"
+                          th:attr="data-obra-id=${obra.id}">&#x2764;</button>
+              </div>
+              <span id="like-count" th:text="${obra.getCantidadLikes()}"></span>
               <span class="likes-label text-gray-500 text-sm">
             personas dieron like
           </span>
@@ -309,5 +310,7 @@
         setTimeout(() => notificacion.remove(), 300);
       }, 3000);
     }
+
   </script>
+  <script th:src="@{/js/obra.js}"></script>
 </html>

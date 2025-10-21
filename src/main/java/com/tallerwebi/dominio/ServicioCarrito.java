@@ -11,7 +11,7 @@ public interface ServicioCarrito {
     boolean agregarObraAlCarrito(Usuario usuario, Long obraId) throws NoExisteLaObra, NoHayStockSuficiente; // testeado
     void eliminarObraDelCarrito(Usuario usuario, Long obraId); // testeado
     void vaciarCarrito(Usuario usuario); //test
-    List<ObraDto> obtenerObras(Usuario usuario); //testeado
+    List<Obra> obtenerObras(Usuario usuario); //testeado
     Carrito obtenerCarritoConItems(Usuario usuario); //testeado
     Double calcularPrecioTotalCarrito(Usuario usuario); //testeado
     Integer contarItemsEnCarrito(Usuario usuario); //testeado

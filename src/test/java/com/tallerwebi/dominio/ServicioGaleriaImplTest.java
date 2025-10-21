@@ -122,7 +122,7 @@ class ServicioGaleriaImplTest {
 
         ServicioGaleriaImpl servicio = new ServicioGaleriaImpl(repositorioObra);
 
-        ObraDto resultado = servicio.obtenerPorId(1234L);
+        ObraDto resultado = new ObraDto(servicio.obtenerPorId(1234L));
 
         assertThat(resultado.getAutor(), is("Autor de la Obra"));
         assertThat(resultado.getId(), is(notNullValue()));

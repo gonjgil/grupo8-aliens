@@ -49,7 +49,7 @@ public class ControladorObraTest {
         obra.setDescripcion("Lorem Ipsum");
 
         ObraDto obraDto = new ObraDto(obra);
-        when(servicioGaleria.obtenerPorId(1L)).thenReturn(obraDto);
+        when(servicioGaleria.obtenerPorId(1L)).thenReturn(obra);
         // when(servicioCarrito.contarItemsEnCarrito(usuario)).thenReturn(2);
 
         ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioLike);
@@ -73,79 +73,6 @@ public class ControladorObraTest {
         ModelAndView modelAndView = controladorObra.verObra(999L, request);
 
         assertThat(modelAndView.getViewName(), is(equalTo("redirect:/galeria_alt")));
-    }
-
-    @Test
-    public void queUnUsuarioLoggeadoPuedaDarLikeAUnaObra() throws NoExisteLaObra, UsuarioAnonimoException {
-        ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
-        ServicioLike servicioLike = mock(ServicioLike.class);
-        Long id = 1L;
-        
-        Obra obra = new Obra();
-        obra.setId(id);
-        
-        ObraDto obraDto = new ObraDto(obra);
-        
-        when(servicioGaleria.obtenerPorId(id)).thenReturn(obraDto);
-
-        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioLike);
-        ModelAndView modelAndView = controladorObra.toggleLike(id, request);
-
-
-        assertThat(modelAndView.getViewName(), is(equalTo("redirect:/obra/" + id)));
-        assertThat(modelAndView.getModel().get("obra"), is(equalTo(obraDto)));
-    }
-
-    @Test
-    public void queUnUsuarioAnonimoNoPuedaDarLikeAUnaObra() throws NoExisteLaObra, UsuarioAnonimoException {
-        ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
-        ServicioLike servicioLike = mock(ServicioLike.class);
-        Long id = 1L;
-        Obra obra = new Obra();
-        obra.setId(id);
-        obra.setTitulo("Obra A");
-        obra.setAutor("Autor A");
-        obra.setDescripcion("Lorem Ipsum");
-
-        ObraDto obraDto = new ObraDto(obra);
-        when(servicioGaleria.obtenerPorId(id)).thenReturn(obraDto);
-        doThrow(new UsuarioAnonimoException()).when(servicioLike).toggleLike(null, id);
-        when(this.request.getSession().getAttribute("usuarioLogueado")).thenReturn(null);
-
-        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioLike);
-        ModelAndView modelAndView = controladorObra.toggleLike(id, request);
-
-        assertThat(modelAndView.getViewName(), is(equalTo("redirect:/obra/" + id)));
-        assertThat(modelAndView.getModel().get("error"), is(equalTo("Debe estar logueado para dar/quitar like.")));
-    }
-
-    @Test
-    public void queUnUsuarioLoggeadoPuedaQuitarLikeAUnaObra() throws NoExisteLaObra, UsuarioAnonimoException {
-        ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
-        ServicioLike servicioLike = mock(ServicioLike.class);
-        Long id = 1L;
-        Obra obra = new Obra();
-        obra.setId(id);
-        obra.setTitulo("Obra A");
-        obra.setAutor("Autor A");
-        obra.setDescripcion("Lorem Ipsum");
-        obra.setUsuariosQueDieronLike(new HashSet<>(Set.of(usuario))); // ya tenía el like
-
-        ObraDto obraDto = new ObraDto(obra);
-        when(servicioGaleria.obtenerPorId(id)).thenReturn(obraDto);
-
-        doAnswer(invoc -> {
-            obra.getUsuariosQueDieronLike().remove(usuario);
-            return null;
-        }).when(servicioLike).toggleLike(this.usuario, id);
-
-        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioLike);
-        ModelAndView modelAndView = controladorObra.toggleLike(id, request);
-        ObraDto obraDtoEnModel = (ObraDto) modelAndView.getModel().get("obra");
-
-        assertThat(modelAndView.getViewName(), is(equalTo("redirect:/obra/" + id)));
-        assertThat(modelAndView.getModel().get("obra"), is(equalTo(obraDto)));
-        assertThat(obraDtoEnModel.getUsuariosQueDieronLike().size(), is(equalTo(0)));
     }
 
 }

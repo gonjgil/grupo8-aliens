@@ -10,5 +10,5 @@ public interface ServicioGaleria {
     List<Obra> ordenarRandom();
     List<Obra> obtenerPorAutor(String autor);
     List<Obra> obtenerPorCategoria(Categoria categoria);
-    ObraDto obtenerPorId(Long id);
+    Obra obtenerPorId(Long id);
 }
