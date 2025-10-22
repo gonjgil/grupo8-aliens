@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
 import com.tallerwebi.dominio.excepcion.NoHayStockSuficiente;
-import com.tallerwebi.presentacion.ObraDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -71,9 +70,7 @@ public class ServicioCarritoImpl implements ServicioCarrito {
         if (carrito != null) {
             // Devolver stock de todos los items antes de limpiar
             for (ItemCarrito item : carrito.getItems()) {
-                for (int i = 0; i < item.getCantidad(); i++) {
-                    repositorioObra.devolverStock(item.getObra());
-                }
+                repositorioObra.devolverStock(item.getObra());
                 repositorioObra.guardar(item.getObra());
             }
             carrito.limpiar();
@@ -108,9 +105,12 @@ public class ServicioCarritoImpl implements ServicioCarrito {
     public List<Obra> obtenerObras(Usuario usuario) {
         Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId());
         List<Obra> obrasEnCarrito = new ArrayList<>();
-
-        for (ItemCarrito itemCarrito : carrito.getItems()) {
-            obrasEnCarrito.add(itemCarrito.getObra());
+        if (carrito != null) {
+            for (ItemCarrito itemCarrito : carrito.getItems()) {
+                if (itemCarrito.getCantidad() > 0) {
+                    obrasEnCarrito.add(itemCarrito.getObra());
+                }
+            }
         }
         return obrasEnCarrito;
     }

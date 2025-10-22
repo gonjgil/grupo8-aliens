@@ -1,10 +1,12 @@
 package com.tallerwebi.infraestructura;
 
+import org.hibernate.SessionFactory;
+
 import com.tallerwebi.dominio.Carrito;
 import com.tallerwebi.dominio.RepositorioCarrito;
 import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.enums.EstadoCarrito;
-import org.hibernate.SessionFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -20,7 +22,6 @@ public class RepositorioCarritoImpl implements RepositorioCarrito {
 
     @Override
     public void guardar(Carrito carrito) {
-
         this.sessionFactory.getCurrentSession().saveOrUpdate(carrito);
     }
 
