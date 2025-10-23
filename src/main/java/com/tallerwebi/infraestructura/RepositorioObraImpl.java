@@ -75,28 +75,5 @@ public class RepositorioObraImpl implements RepositorioObra {
         }
     }
 
-    @Override
-    public boolean hayStockSuficiente(Obra obra) {
-        if (obra.getStock() != null && obra.getStock() >= 1) {
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public void descontarStock(Obra obra) {
-        if (obra.getStock() != null) {
-            obra.setStock(obra.getStock() - 1);
-        }
-    }
-
-    @Override
-    public void devolverStock(Obra obra) {
-        if( obra.getStock() != null) {
-            obra.setStock(obra.getStock() + 1);
-        } else {
-            obra.setStock(1);
-        }
-    }
 
 }
