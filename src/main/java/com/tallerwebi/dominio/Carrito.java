@@ -57,15 +57,11 @@ public class Carrito {
     }
 
     public void removerItem(Obra obra) {
-        ItemCarrito itemExistente = buscarItemPorObra(obra);
-        if (itemExistente != null) {
-            int nuevaCantidad = itemExistente.getCantidad() - 1;
-            if (nuevaCantidad <= 0) {
-                items.remove(itemExistente);
-            } else {
-                itemExistente.setCantidad(nuevaCantidad);
-            }
-        }
+        if (obra == null || items == null)
+            return;
+
+        items.removeIf(item -> item.getObra() != null &&
+                item.getObra().getId().equals(obra.getId()));
     }
 
     public void actualizarCantidadItem(Obra obra, Integer nuevaCantidad) {
@@ -99,7 +95,7 @@ public class Carrito {
         return totalCantidad;
     }
 
-    private ItemCarrito buscarItemPorObra(Obra obra) {
+    public ItemCarrito buscarItemPorObra(Obra obra) {
         for (ItemCarrito item : items) {
             if (item.getObra().getId().equals(obra.getId())) {
                 return item;

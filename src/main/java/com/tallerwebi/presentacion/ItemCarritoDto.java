@@ -1,5 +1,7 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.ItemCarrito;
+
 public class ItemCarritoDto {
     private Long id;
     private Long obraId;
@@ -9,6 +11,17 @@ public class ItemCarritoDto {
     private Double obraPrecio;
     private Integer cantidad;
     private Double subtotal;
+
+    public ItemCarritoDto(ItemCarrito item) {
+        this.id = item.getId();
+        this.obraId = item.getObra().getId();
+        this.obraTitulo = item.getObra().getTitulo();
+        this.obraAutor = item.getObra().getAutor();
+        this.obraImagenUrl = item.getObra().getImagenUrl();
+        this.obraPrecio = item.getPrecioUnitario();
+        this.cantidad = item.getCantidad();
+        this.subtotal = item.getSubtotal();
+    }
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }

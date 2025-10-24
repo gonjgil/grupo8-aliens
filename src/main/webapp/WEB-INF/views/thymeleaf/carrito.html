@@ -50,16 +50,34 @@
             <tr>
                 <th>Obra</th>
                 <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Subtotal</th>
                 <th></th>
             </tr>
             </thead>
 
             <tbody>
-            <tr th:each="obra : ${items}">
-                <td th:text="${obra.titulo}"></td>
-                <td th:text="'$' + ${#numbers.formatDecimal(obra.precio, 1, 2)}"></td>
+            <tr th:each="item : ${items}">
+                <td th:text="${item.obraTitulo}"></td>
+                <td th:text="'$' + ${#numbers.formatDecimal(item.obraPrecio, 1, 2)}"></td>
                 <td>
-                    <form th:action="@{/carrito/eliminar/{obraId}(obraId=${obra.id})}" method="post">
+                    <div class="flex items-center justify-start space-x-2">
+                        <form th:action="@{/carrito/disminuir/{id}(id=${item.obraId})}" method="post" style="display:inline">
+                            <button type="submit" class="w-8 h-8 flex items-center justify-center
+                            bg-gray-200 hover:bg-gray-300 rounded-full text-lg font-bold">-</button>
+                        </form>
+
+                        <span class="w-10 text-center font-semibold"><span th:text="${item.cantidad}">1</span></span>
+
+                        <form th:action="@{/carrito/aumentar/{id}(id=${item.obraId})}" method="post" style="display:inline">
+                            <button type="submit" class="w-8 h-8 flex items-center justify-center
+                            bg-gray-200 hover:bg-gray-300 rounded-full text-lg font-bold">+</button>
+                        </form>
+                    </div>
+                </td>
+                <td th:text="'$' + ${#numbers.formatDecimal(item.subtotal, 1, 2)}"></td>
+                <td>
+                    <form th:action="@{/carrito/eliminar/{obraId}(obraId=${item.obraId})}" method="post">
                         <button type="submit" class="text-red-600 hover:text-red-800 font-semibold">Eliminar</button>
                     </form>
                 </td>
@@ -70,6 +88,7 @@
 
         <div th:if="${!#lists.isEmpty(items)}">
             <!-- Total y botones -->
+            <p th:if="${error != null}" class="alert alert-danger mt-3" th:text="${error}">
             <p class="fw-bold text-end fs-5">
                 Total: $<span th:text="${#numbers.formatDecimal(total, 1, 2)}"></span>
             </p>
@@ -78,7 +97,7 @@
                     <button class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-200" type="submit">Vaciar carrito</button>
                 </form>
                 <div>
-                    <a th:href="@{/galeria.html}" class="border border-gray-900  text-gray-400 hover:bg-gray-400 hover:text-white font-semibold py-2 px-4 rounded transition duration-200">Seguir comprando</a>
+                    <a th:href="@{/galeria}" class="border border-gray-900  text-gray-400 hover:bg-gray-400 hover:text-white font-semibold py-2 px-4 rounded transition duration-200">Seguir comprando</a>
                     <button id="finalizarCompraBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Finalizar compra</button>
                 </div>
             </div>
@@ -101,13 +120,13 @@
       .addEventListener('click', async () => {
         // Crear array de items basado en las obras del carrito
         const items = [];
-        
-        /*[# th:each="obra : ${items}"]*/
+
+        /*[# th:each="item : ${items}"]*/
         items.push({
-            id: 'obra-' + /*[[${obra.id}]]*/ '1',
-            title: /*[[${obra.titulo}]]*/ 'Obra de arte',
-            quantity: 1,
-            unit_price: /*[[${obra.precio}]]*/ 5000,
+            id: 'obra-' + /*[[${item.obraId}]]*/ '1',
+            title: /*[[${item.obraTitulo}]]*/ 'Obra de arte',
+            quantity: /*[[${item.cantidad}]]*/ 1,
+            unit_price: /*[[${item.obraPrecio}]]*/ 5000,
         });
         /*[/]*/
 

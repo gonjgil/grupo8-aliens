@@ -12,7 +12,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -35,19 +34,11 @@ public class ControladorCarrito {
             return new ModelAndView("redirect:/login");
         }
 
-        List<Obra> obras = servicioCarrito.obtenerObras(usuario);
-        List<ObraDto> items = new ArrayList<>();
-
-        for (Obra obra : obras) {
-            items.add(new ObraDto(obra));
-        }
-
+        List<ItemCarritoDto> items = servicioCarrito.obtenerItems(usuario);
         Double total = servicioCarrito.calcularPrecioTotalCarrito(usuario);
-        Integer cantidadItems = servicioCarrito.contarItemsEnCarrito(usuario);
 
         modelo.put("items", items);
         modelo.put("total", total);
-        modelo.put("cantidadItems", cantidadItems);
         modelo.put("usuario", usuario);
 
         return new ModelAndView("carrito", modelo);
@@ -76,8 +67,31 @@ public class ControladorCarrito {
         return "redirect:/obra/" + id;
     }
 
+    @PostMapping("/aumentar/{obraId}")
+    public String aumentarCantidad(@PathVariable Long obraId, HttpSession session, RedirectAttributes redirectAttributes) {
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+        if (usuario == null) return "redirect:/login";
+
+        try {
+            servicioCarrito.aumentarCantidadDeItem(usuario, obraId);
+        } catch (NoHayStockSuficiente e) {
+            redirectAttributes.addFlashAttribute("error", "No hay suficiente stock para esta obra.");
+        }
+        return "redirect:/carrito";
+    }
+
+    @PostMapping("/disminuir/{obraId}")
+    public String disminuirCantidad(@PathVariable Long obraId, HttpSession session) {
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+        if (usuario == null) return "redirect:/login";
+
+        servicioCarrito.disminuirCantidadDeItem(usuario, obraId);
+        return "redirect:/carrito";
+    }
+
+
     @PostMapping("/eliminar/{obraId}")
-    public String eliminarDelCarrito(@PathVariable Long obraId, 
+    public String eliminarDelCarrito(@PathVariable Long obraId,
                                      HttpSession session,
                                      RedirectAttributes redirectAttributes) {
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
