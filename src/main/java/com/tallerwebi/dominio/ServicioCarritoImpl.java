@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
 import com.tallerwebi.dominio.excepcion.NoHayStockSuficiente;
-import com.tallerwebi.presentacion.ObraDto;
+import com.tallerwebi.presentacion.ItemCarritoDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,6 +49,40 @@ public class ServicioCarritoImpl implements ServicioCarrito {
         repositorioObra.guardar(obra);
         repositorioCarrito.guardar(carrito);
         return true;
+    }
+
+    @Override
+    public void aumentarCantidadDeItem(Usuario usuario, Long obraId) throws NoHayStockSuficiente {
+        Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId());
+        Obra obra = repositorioObra.obtenerPorId(obraId);
+
+        if (obra == null) throw new NoExisteLaObra();
+
+        ItemCarrito item = carrito.buscarItemPorObra(obra);
+        if (item != null) {
+            if (item.getCantidad() + 1 > obra.getStock()) {
+                throw new NoHayStockSuficiente();
+            }
+            item.setCantidad(item.getCantidad() + 1);
+        }
+        repositorioCarrito.guardar(carrito);
+    }
+
+    @Override
+    public void disminuirCantidadDeItem(Usuario usuario, Long obraId) {
+        Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId());
+        Obra obra = repositorioObra.obtenerPorId(obraId);
+
+        if (obra == null) return;
+
+        ItemCarrito item = carrito.buscarItemPorObra(obra);
+        if (item != null) {
+            item.setCantidad(item.getCantidad() - 1);
+            if (item.getCantidad() <= 0) {
+                carrito.removerItem(obra);
+            }
+        }
+        repositorioCarrito.guardar(carrito);
     }
 
     @Override
@@ -113,6 +147,18 @@ public class ServicioCarritoImpl implements ServicioCarrito {
             obrasEnCarrito.add(itemCarrito.getObra());
         }
         return obrasEnCarrito;
+    }
+
+    @Override
+    public List<ItemCarritoDto> obtenerItems(Usuario usuario) {
+        Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId());
+        List<ItemCarritoDto> itemsEnCarrito = new ArrayList<>();
+
+        for (ItemCarrito item : carrito.getItems()) {
+            itemsEnCarrito.add(new ItemCarritoDto(item));
+        }
+
+        return itemsEnCarrito;
     }
 
 }
