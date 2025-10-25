@@ -88,6 +88,7 @@
 
         <div th:if="${!#lists.isEmpty(items)}">
             <!-- Total y botones -->
+            <p th:if="${mensaje}" class="alert alert-success mt-3" th:text="${mensaje}">
             <p th:if="${error != null}" class="alert alert-danger mt-3" th:text="${error}">
             <p class="fw-bold text-end fs-5">
                 Total: $<span th:text="${#numbers.formatDecimal(total, 1, 2)}"></span>

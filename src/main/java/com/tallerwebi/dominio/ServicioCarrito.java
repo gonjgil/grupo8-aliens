@@ -9,9 +9,8 @@ import java.util.List;
 public interface ServicioCarrito {
     Carrito obtenerOCrearCarritoParaUsuario(Usuario usuario); //testeado
     boolean agregarObraAlCarrito(Usuario usuario, Long obraId) throws NoExisteLaObra, NoHayStockSuficiente; // testeado
-    void aumentarCantidadDeItem(Usuario usuario, Long obraId) throws NoHayStockSuficiente;
-    void disminuirCantidadDeItem(Usuario usuario, Long obraId);
-    void eliminarObraDelCarrito(Usuario usuario, Long obraId); // testeado
+    void disminuirCantidadDeObraDelCarrito(Usuario usuario, Long obraId); // testeado
+    void eliminarObraDelCarrito(Usuario usuario, Long obraId);
     void vaciarCarrito(Usuario usuario); //test
     List<Obra> obtenerObras(Usuario usuario); //testeado
     List<ItemCarritoDto> obtenerItems(Usuario usuario);
