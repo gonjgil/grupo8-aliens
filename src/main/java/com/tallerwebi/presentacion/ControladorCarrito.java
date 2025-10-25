@@ -68,14 +68,15 @@ public class ControladorCarrito {
     }
 
     @PostMapping("/aumentar/{obraId}")
-    public String aumentarCantidad(@PathVariable Long obraId, HttpSession session, RedirectAttributes redirectAttributes) {
+    public String aumentarCantidad(@PathVariable Long obraId, HttpSession session,
+                                   RedirectAttributes redirectAttributes) {
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
         if (usuario == null) return "redirect:/login";
 
         try {
-            servicioCarrito.aumentarCantidadDeItem(usuario, obraId);
+            servicioCarrito.agregarObraAlCarrito(usuario, obraId);
         } catch (NoHayStockSuficiente e) {
-            redirectAttributes.addFlashAttribute("error", "No hay suficiente stock para esta obra.");
+            redirectAttributes.addFlashAttribute("error", "No hay stock suficiente.");
         }
         return "redirect:/carrito";
     }
@@ -85,7 +86,7 @@ public class ControladorCarrito {
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
         if (usuario == null) return "redirect:/login";
 
-        servicioCarrito.disminuirCantidadDeItem(usuario, obraId);
+        servicioCarrito.disminuirCantidadDeObraDelCarrito(usuario, obraId);
         return "redirect:/carrito";
     }
 

@@ -52,37 +52,17 @@ public class ServicioCarritoImpl implements ServicioCarrito {
     }
 
     @Override
-    public void aumentarCantidadDeItem(Usuario usuario, Long obraId) throws NoHayStockSuficiente {
+    public void disminuirCantidadDeObraDelCarrito(Usuario usuario, Long obraId) {
         Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId());
-        Obra obra = repositorioObra.obtenerPorId(obraId);
-
-        if (obra == null) throw new NoExisteLaObra();
-
-        ItemCarrito item = carrito.buscarItemPorObra(obra);
-        if (item != null) {
-            if (item.getCantidad() + 1 > obra.getStock()) {
-                throw new NoHayStockSuficiente();
-            }
-            item.setCantidad(item.getCantidad() + 1);
-        }
-        repositorioCarrito.guardar(carrito);
-    }
-
-    @Override
-    public void disminuirCantidadDeItem(Usuario usuario, Long obraId) {
-        Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId());
-        Obra obra = repositorioObra.obtenerPorId(obraId);
-
-        if (obra == null) return;
-
-        ItemCarrito item = carrito.buscarItemPorObra(obra);
-        if (item != null) {
-            item.setCantidad(item.getCantidad() - 1);
-            if (item.getCantidad() <= 0) {
-                carrito.removerItem(obra);
+        if (carrito != null) {
+            Obra obra = repositorioObra.obtenerPorId(obraId);
+            if (obra != null) {
+                carrito.disminuirCantidadDeItem(obra);
+                repositorioObra.devolverStock(obra);
+                repositorioObra.guardar(obra);
+                repositorioCarrito.guardar(carrito);
             }
         }
-        repositorioCarrito.guardar(carrito);
     }
 
     @Override
@@ -91,8 +71,12 @@ public class ServicioCarritoImpl implements ServicioCarrito {
         if (carrito != null) {
             Obra obra = repositorioObra.obtenerPorId(obraId);
             if (obra != null) {
-                carrito.removerItem(obra);
-                repositorioObra.devolverStock(obra);
+                ItemCarrito item = carrito.eliminarItem(obra);
+                if(item != null) {
+                    for (int i = 0; i < item.getCantidad(); i++) {
+                    repositorioObra.devolverStock(item.getObra());
+                    }
+                }
                 repositorioObra.guardar(obra);
                 repositorioCarrito.guardar(carrito);
             }
@@ -110,7 +94,7 @@ public class ServicioCarritoImpl implements ServicioCarrito {
                 }
                 repositorioObra.guardar(item.getObra());
             }
-            carrito.limpiar();
+            carrito.limpiarCarrito();
             repositorioCarrito.guardar(carrito);
         }
     }

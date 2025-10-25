@@ -33,7 +33,7 @@ public class CarritoTest {
         carrito.agregarItem(obra1);
         carrito.agregarItem(obra2);
 
-        carrito.removerItem(obra1);
+        carrito.disminuirCantidadDeItem(obra1);
 
         assertThat(carrito.getItems().size(), is(equalTo(1)));
         ItemCarrito item = carrito.getItems().get(0);
@@ -67,7 +67,7 @@ public class CarritoTest {
         carrito.agregarItem(obra1);
         carrito.agregarItem(obra2);
 
-        carrito.limpiar();
+        carrito.limpiarCarrito();
 
         assertThat(carrito.getItems().size(), is(equalTo(0)));
     }

@@ -2,7 +2,6 @@ package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
 import com.tallerwebi.dominio.excepcion.NoHayStockSuficiente;
-import com.tallerwebi.presentacion.ObraDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -223,7 +222,7 @@ public class ServicioCarritoImplTest {
     }
 
     @Test
-    public void seDebeVerificarQueSePuedaEliminarSoloUnaObraSiHayDosIgualesEnElCarrito() throws NoHayStockSuficiente {
+    public void seDebeVerificarQueSePuedaDisminuirLaCantidadDeUnaObraEnElCarrito() throws NoHayStockSuficiente {
         Obra obra1 = new Obra();
         obra1.setId(1L);
         obra1.setStock(4);
@@ -240,7 +239,7 @@ public class ServicioCarritoImplTest {
 
         assertThat(carrito.getItems().get(0).getCantidad(), is(2));
 
-        servicioCarritoImpl.eliminarObraDelCarrito(usuario, obra1.getId());
+        servicioCarritoImpl.disminuirCantidadDeObraDelCarrito(usuario, obra1.getId());
 
         assertThat(carrito.getItems().get(0).getCantidad(), is(1));
         assertThat(carrito.getItems().size(), is(1));

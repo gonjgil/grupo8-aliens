@@ -56,26 +56,28 @@ public class Carrito {
         }
     }
 
-    public void removerItem(Obra obra) {
-        if (obra == null || items == null)
-            return;
-
-        items.removeIf(item -> item.getObra() != null &&
-                item.getObra().getId().equals(obra.getId()));
-    }
-
-    public void actualizarCantidadItem(Obra obra, Integer nuevaCantidad) {
-        ItemCarrito item = buscarItemPorObra(obra);
-        if (item != null) {
+    public void disminuirCantidadDeItem(Obra obra) {
+        ItemCarrito itemExistente = buscarItemPorObra(obra);
+        if (itemExistente != null) {
+            int nuevaCantidad = itemExistente.getCantidad() - 1;
             if (nuevaCantidad <= 0) {
-                removerItem(obra);
+                this.items.remove(itemExistente);
             } else {
-                item.setCantidad(nuevaCantidad);
+                itemExistente.setCantidad(nuevaCantidad);
             }
         }
     }
 
-    public void limpiar() {
+    public ItemCarrito eliminarItem (Obra obra) {
+        ItemCarrito itemExistente = buscarItemPorObra(obra);
+        if (itemExistente != null) {
+            this.items.remove(itemExistente);
+        }
+        return itemExistente;
+
+    }
+
+    public void limpiarCarrito() {
         this.items.clear();
     }
 
