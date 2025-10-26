@@ -53,7 +53,7 @@ public class ControladorPerfilArtistaTest {
     }
 
     @Test
-    public void deberiaMostrarPaginaDeErrorCuandoArtistaNoExiste(){
+    public void deberiaRedirigirAGaleriaCuandoArtistaNoExiste(){
         // Preparación
         Long idArtista = 2L;
         when(servicioPerfilArtistaMock.obtenerPerfilArtista(idArtista)).thenThrow(new NoExisteArtista());
