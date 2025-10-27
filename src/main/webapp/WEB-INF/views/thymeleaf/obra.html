@@ -116,15 +116,26 @@
               </div>
 
               <div class="flex gap-2">
-                  <form th:action="@{/carrito/agregar}" method="post">
+                  <div class="flex items-center justify-start space-x-2" th:if="${cantidad > 0}">
+                      <form th:action="@{/carrito/disminuir/{id}(id=${obra.id}, redirect='obra')}" method="post" style="display:inline">
+                          <button type="submit" class="w-8 h-8 flex items-center justify-center
+                            bg-gray-200 hover:bg-gray-300 rounded-full text-lg font-bold">-</button>
+                      </form>
+
+                      <span class="w-10 text-center font-semibold"><span th:text="${cantidad}">1</span></span>
+
+                      <form th:action="@{/carrito/aumentar/{id}(id=${obra.id}, redirect='obra')}" method="post" style="display:inline">
+                          <button type="submit" class="w-8 h-8 flex items-center justify-center
+                            bg-gray-200 hover:bg-gray-300 rounded-full text-lg font-bold">+</button>
+                      </form>
+                  </div>
+                  <form th:action="@{/carrito/agregar}" method="post" th:if="${cantidad < 1}">
                       <input type="hidden" name="id" th:value="${obra.id}" />
                       <!-- <input type="hidden" name="titulo" th:value="${obra.titulo}" /> -->
                       <!-- <input type="hidden" name="precio" th:value="${obra.precio}" /> -->
 
-                      <button
-                              type="submit"
-                              class="btn bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full transition duration-300"
-                      >
+                      <button type="submit" class="btn bg-green-600 hover:bg-green-700 text-white
+                      font-bold py-2 px-4 rounded-full transition duration-300">
                           <i class="fas fa-shopping-cart mr-2"></i>
                           Agregar al Carrito
                       </button>
