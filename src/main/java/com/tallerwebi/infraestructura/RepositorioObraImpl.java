@@ -41,8 +41,8 @@ public class RepositorioObraImpl implements RepositorioObra {
     public List<Obra> obtenerPorAutor(String autor) {
         try {
             return this.sessionFactory.getCurrentSession()
-                    .createQuery("FROM Obra WHERE autor LIKE :autor", Obra.class)
-                    .setParameter("autor", "%" + autor + "%")
+                    .createQuery("FROM Obra WHERE lower(autor) LIKE :autor", Obra.class)
+                    .setParameter("autor", "%" + autor.toLowerCase() + "%")
                     .getResultList();
         } catch (IllegalArgumentException e) {
             return new ArrayList<>();
@@ -80,8 +80,8 @@ public class RepositorioObraImpl implements RepositorioObra {
     public List<Obra> buscarPorTitulo(String titulo) {
         try {
             return this.sessionFactory.getCurrentSession()
-                    .createQuery("FROM Obra WHERE titulo LIKE :titulo", Obra.class)
-                    .setParameter("titulo", "%" + titulo + "%")
+                    .createQuery("FROM Obra WHERE lower(titulo) LIKE :titulo", Obra.class)
+                    .setParameter("titulo", "%" + titulo.toLowerCase() + "%")
                     .getResultList();
         } catch (IllegalArgumentException e) {
             return new ArrayList<>();
@@ -105,8 +105,8 @@ public class RepositorioObraImpl implements RepositorioObra {
     public List<Obra> buscarPorDescripcion(String descripcion) {
         try {
             return this.sessionFactory.getCurrentSession()
-                    .createQuery("FROM Obra WHERE descripcion LIKE :descripcion", Obra.class)
-                    .setParameter("descripcion", "%" + descripcion + "%")
+                    .createQuery("FROM Obra WHERE lower(descripcion) LIKE :descripcion", Obra.class)
+                    .setParameter("descripcion", "%" + descripcion.toLowerCase() + "%")
                     .getResultList();
         } catch (IllegalArgumentException e) {
             return new ArrayList<>();
