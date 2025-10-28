@@ -52,6 +52,7 @@ public class ControladorCarritoTest {
         when(session.getAttribute("usuarioLogueado")).thenReturn(usuario);
         Obra obra = new Obra();
         obra.setId(1L);
+        obra.setStock(2);
         
         RepositorioCarritoImpl repositorioCarrito = mock(RepositorioCarritoImpl.class);
         RepositorioObraImpl repositorioObra = mock(RepositorioObraImpl.class);
@@ -59,7 +60,6 @@ public class ControladorCarritoTest {
         Carrito carrito = new Carrito(usuario);
         when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId())).thenReturn(carrito);
         when(repositorioObra.obtenerPorId(obra.getId())).thenReturn(obra);
-        when(repositorioObra.hayStockSuficiente(obra)).thenReturn(true);
 
         ServicioCarritoImpl servicioCarrito = new ServicioCarritoImpl(repositorioCarrito, repositorioObra);
         ControladorCarrito controladorCarrito = new ControladorCarrito(servicioCarrito);

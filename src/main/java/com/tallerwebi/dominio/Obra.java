@@ -102,6 +102,28 @@ public class Obra {
     public Integer getStock() { return stock; }
     public void setStock(Integer stock) { this.stock = stock; }
 
+
+    public boolean hayStockSuficiente() {
+    if (this.getStock() != null && this.getStock() >= 1) {
+        return true;
+    }
+    return false;
+    }
+
+    public void descontarStock() {
+        if (this.getStock() != null) {
+            this.setStock(this.getStock() - 1);
+        }
+    }
+
+    public void devolverStock() {
+        if( this.getStock() != null) {
+            this.setStock(this.getStock() + 1);
+        } else {
+            this.setStock(1);
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

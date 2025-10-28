@@ -39,13 +39,13 @@ public class ServicioCarritoImpl implements ServicioCarrito {
         if (obra == null) {
             throw new NoExisteLaObra();
         }
-        if (!repositorioObra.hayStockSuficiente(obra)) {
+        if (!obra.hayStockSuficiente()) {
             throw new NoHayStockSuficiente();
         }
 
         Carrito carrito = obtenerOCrearCarritoParaUsuario(usuario);
         carrito.agregarItem(obra);
-        repositorioObra.descontarStock(obra);
+        obra.descontarStock();
         repositorioObra.guardar(obra);
         repositorioCarrito.guardar(carrito);
         return true;
@@ -58,7 +58,7 @@ public class ServicioCarritoImpl implements ServicioCarrito {
             Obra obra = repositorioObra.obtenerPorId(obraId);
             if (obra != null) {
                 carrito.disminuirCantidadDeItem(obra);
-                repositorioObra.devolverStock(obra);
+                obra.descontarStock();
                 repositorioObra.guardar(obra);
                 repositorioCarrito.guardar(carrito);
             }
@@ -74,7 +74,7 @@ public class ServicioCarritoImpl implements ServicioCarrito {
                 ItemCarrito item = carrito.eliminarItem(obra);
                 if(item != null) {
                     for (int i = 0; i < item.getCantidad(); i++) {
-                    repositorioObra.devolverStock(item.getObra());
+                    item.getObra().devolverStock();
                     }
                 }
                 repositorioObra.guardar(obra);
@@ -90,7 +90,8 @@ public class ServicioCarritoImpl implements ServicioCarrito {
             // Devolver stock de todos los items antes de limpiar
             for (ItemCarrito item : carrito.getItems()) {
                 for (int i = 0; i < item.getCantidad(); i++) {
-                    repositorioObra.devolverStock(item.getObra());
+
+                    item.getObra().devolverStock();
                 }
                 repositorioObra.guardar(item.getObra());
             }
