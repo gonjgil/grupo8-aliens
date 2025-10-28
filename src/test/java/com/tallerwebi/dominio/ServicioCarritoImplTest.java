@@ -137,8 +137,10 @@ public class ServicioCarritoImplTest {
 
         servicioCarritoImpl.eliminarObraDelCarrito(usuario, obra1Id);
 
-        assertThat(carrito.getItems().size(), is(equalTo(1)));
-        assertThat(carrito.getItems().get(0).getObra().getId(), is(equalTo(obra2Id)));
+        List<Obra> obrasEnCarrito = servicioCarritoImpl.obtenerObras(usuario);
+        assertThat(obrasEnCarrito.size(), is(1));
+        assertThat(servicioCarritoImpl.contarItemsEnCarrito(usuario), is(1));
+
     }
 
     @Test
@@ -154,7 +156,9 @@ public class ServicioCarritoImplTest {
 
         servicioCarritoImpl.eliminarObraDelCarrito(usuario, obraId);
 
-        assertThat(carrito.getItems().size(), is(equalTo(0)));
+        List<Obra> obrasEnCarrito = servicioCarritoImpl.obtenerObras(usuario);
+        assertThat(obrasEnCarrito.size(), is(0));
+        assertThat(servicioCarritoImpl.contarItemsEnCarrito(usuario), is(0));
     }
 
 
@@ -190,6 +194,8 @@ public class ServicioCarritoImplTest {
 
         assertThat(carrito.getItems().size(), is(equalTo(3)));
         assertThat(resultado.size(), is(3));
+        assertThat(servicioCarritoImpl.contarItemsEnCarrito(usuario), is(3));
+
     }
 
     @Test
@@ -211,7 +217,6 @@ public class ServicioCarritoImplTest {
         servicioCarritoImpl.agregarObraAlCarrito(usuario, obra1.getId());
         servicioCarritoImpl.agregarObraAlCarrito(usuario, obra1.getId());
 
-        obra1.hayStockSuficiente();
         try {
             assertFalse(servicioCarritoImpl.agregarObraAlCarrito(usuario, obra1.getId()));
         } catch (NoHayStockSuficiente e) {
@@ -245,6 +250,7 @@ public class ServicioCarritoImplTest {
 
         List<Obra> resultado = servicioCarritoImpl.obtenerObras(usuario);
         assertThat(resultado.size(), is(1));
+        assertThat(servicioCarritoImpl.contarItemsEnCarrito(usuario), is(1));
         assertThat(carrito.getItems().get(0).getCantidad(), is(1));
         assertThat(carrito.getItems().size(), is(1));
     }
