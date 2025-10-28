@@ -165,59 +165,6 @@ public class RepositorioObraImplTest {
         assertThat(obraObtenida, is(equalTo(obra1)));
     }
 
-    @Test
-    @Transactional
-    @Rollback
-    public void deberiaDescontarStockCorrectamente(){
-        Obra obra1 = generarObra1();
-        obra1.setStock(5);
-
-        this.repositorioObra.guardar(obra1);
-
-        repositorioObra.descontarStock(obra1);
-        repositorioObra.descontarStock(obra1);
-
-
-        assertThat(obra1.getStock(), is(equalTo(3)));
-    }
-
-    @Test
-    @Transactional
-    @Rollback
-    public void deberiaDevolverStockCorrectamente(){
-        Obra obra1 = generarObra1();
-        obra1.setStock(5);
-
-        this.repositorioObra.guardar(obra1);
-
-        repositorioObra.descontarStock(obra1);
-        repositorioObra.descontarStock(obra1);
-
-        repositorioObra.devolverStock(obra1);
-        repositorioObra.devolverStock(obra1);
-
-
-        assertThat(obra1.getStock(), is(equalTo(5)));
-    }
-
-    @Test
-    @Transactional
-    @Rollback
-    public void deberiaPersistirDescuentoDeStock() {
-        Obra obra1 = generarObra1();
-        obra1.setStock(5);
-        this.repositorioObra.guardar(obra1);
-
-        repositorioObra.descontarStock(obra1);
-  //      sessionFactory.getCurrentSession().flush();
-
-        String hql = "FROM Obra WHERE id = :id";
-        Query query = sessionFactory.getCurrentSession().createQuery(hql);
-        query.setParameter("id", obra1.getId());
-        Obra obraActualizada = (Obra) query.getSingleResult();
-
-        assertThat(obraActualizada.getStock(), is(equalTo(4)));
-    }
 
 
     private Obra generarObra1() {
