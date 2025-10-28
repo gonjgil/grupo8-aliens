@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
 import com.tallerwebi.dominio.excepcion.NoHayStockSuficiente;
-import com.tallerwebi.presentacion.ObraDto;
+import com.tallerwebi.presentacion.ItemCarritoDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,13 +52,31 @@ public class ServicioCarritoImpl implements ServicioCarrito {
     }
 
     @Override
+    public void disminuirCantidadDeObraDelCarrito(Usuario usuario, Long obraId) {
+        Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId());
+        if (carrito != null) {
+            Obra obra = repositorioObra.obtenerPorId(obraId);
+            if (obra != null) {
+                carrito.disminuirCantidadDeItem(obra);
+                obra.descontarStock();
+                repositorioObra.guardar(obra);
+                repositorioCarrito.guardar(carrito);
+            }
+        }
+    }
+
+    @Override
     public void eliminarObraDelCarrito(Usuario usuario, Long obraId) {
         Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId());
         if (carrito != null) {
             Obra obra = repositorioObra.obtenerPorId(obraId);
             if (obra != null) {
-                carrito.removerItem(obra);
-                obra.devolverStock();
+                ItemCarrito item = carrito.eliminarItem(obra);
+                if(item != null) {
+                    for (int i = 0; i < item.getCantidad(); i++) {
+                    item.getObra().devolverStock();
+                    }
+                }
                 repositorioObra.guardar(obra);
                 repositorioCarrito.guardar(carrito);
             }
@@ -77,7 +95,7 @@ public class ServicioCarritoImpl implements ServicioCarrito {
                 }
                 repositorioObra.guardar(item.getObra());
             }
-            carrito.limpiar();
+            carrito.limpiarCarrito();
             repositorioCarrito.guardar(carrito);
         }
     }
@@ -114,6 +132,18 @@ public class ServicioCarritoImpl implements ServicioCarrito {
             obrasEnCarrito.add(itemCarrito.getObra());
         }
         return obrasEnCarrito;
+    }
+
+    @Override
+    public List<ItemCarritoDto> obtenerItems(Usuario usuario) {
+        Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId());
+        List<ItemCarritoDto> itemsEnCarrito = new ArrayList<>();
+
+        for (ItemCarrito item : carrito.getItems()) {
+            itemsEnCarrito.add(new ItemCarritoDto(item));
+        }
+
+        return itemsEnCarrito;
     }
 
 }

@@ -4,6 +4,8 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository("repositorioArtista")
 public class RepositorioArtistaImpl implements RepositorioArtista {
 
@@ -29,5 +31,14 @@ public class RepositorioArtistaImpl implements RepositorioArtista {
     @Override
     public void modificar(Artista artista) {
         sessionFactory.getCurrentSession().update(artista);
+    }
+
+    @Override
+    public List<Artista> obtenerPorNombre(String nombre) {
+        String hql = "FROM Artista WHERE nombre = :nombre";
+        return sessionFactory.getCurrentSession()
+                .createQuery(hql, Artista.class)
+                .setParameter("nombre", "%" + nombre + "%")
+                .getResultList();
     }
 }

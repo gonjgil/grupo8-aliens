@@ -31,7 +31,7 @@ public class Carrito {
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
-    @OneToMany(mappedBy = "carrito", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "carrito", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<ItemCarrito> items = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
@@ -56,30 +56,28 @@ public class Carrito {
         }
     }
 
-    public void removerItem(Obra obra) {
+    public void disminuirCantidadDeItem(Obra obra) {
         ItemCarrito itemExistente = buscarItemPorObra(obra);
         if (itemExistente != null) {
-            itemExistente.setCantidad(itemExistente.getCantidad() - 1);
-            if (itemExistente.getCantidad() <= 0) {
-                items.remove(itemExistente);
-            } else {
-                itemExistente.setCantidad(itemExistente.getCantidad());
-            }
-        }
-    }
-
-    public void actualizarCantidadItem(Obra obra, Integer nuevaCantidad) {
-        ItemCarrito item = buscarItemPorObra(obra);
-        if (item != null) {
+            int nuevaCantidad = itemExistente.getCantidad() - 1;
             if (nuevaCantidad <= 0) {
-                removerItem(obra);
+                this.items.remove(itemExistente);
             } else {
-                item.setCantidad(nuevaCantidad);
+                itemExistente.setCantidad(nuevaCantidad);
             }
         }
     }
 
-    public void limpiar() {
+    public ItemCarrito eliminarItem (Obra obra) {
+        ItemCarrito itemExistente = buscarItemPorObra(obra);
+        if (itemExistente != null) {
+            this.items.remove(itemExistente);
+        }
+        return itemExistente;
+
+    }
+
+    public void limpiarCarrito() {
         this.items.clear();
     }
 
@@ -99,7 +97,7 @@ public class Carrito {
         return totalCantidad;
     }
 
-    private ItemCarrito buscarItemPorObra(Obra obra) {
+    public ItemCarrito buscarItemPorObra(Obra obra) {
         for (ItemCarrito item : items) {
             if (item.getObra().getId().equals(obra.getId())) {
                 return item;
