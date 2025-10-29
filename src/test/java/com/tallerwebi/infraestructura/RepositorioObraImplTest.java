@@ -181,7 +181,7 @@ public class RepositorioObraImplTest {
         this.repositorioObra.guardar(obra2);
         this.repositorioObra.guardar(obra3);
 
-        List<Obra> obrasObtenidas = this.repositorioObra.buscarPorTitulo("Especial");
+        List<Obra> obrasObtenidas = this.repositorioObra.buscarPorString("Especial");
 
         assertThat(obrasObtenidas.size(), is(equalTo(2)));
         assertThat(obrasObtenidas.get(0), is(equalTo(obra1)));
@@ -222,7 +222,7 @@ public class RepositorioObraImplTest {
         this.repositorioObra.guardar(obra2);
         this.repositorioObra.guardar(obra3);
 
-        List<Obra> obrasObtenidas = this.repositorioObra.buscarPorDescripcion("obra");
+        List<Obra> obrasObtenidas = this.repositorioObra.buscarPorString("obra");
 
         assertThat(obrasObtenidas.size(), is(equalTo(3)));
         assertThat(obrasObtenidas.get(0), is(equalTo(obra1)));
@@ -245,7 +245,7 @@ public class RepositorioObraImplTest {
         this.repositorioObra.guardar(obra2);
         this.repositorioObra.guardar(obra3);
 
-        List<Obra> obrasObtenidas = this.repositorioObra.buscarPorDescripcion("inexistente");
+        List<Obra> obrasObtenidas = this.repositorioObra.buscarPorString("inexistente");
 
         assertThat(obrasObtenidas.size(), is(equalTo(0)));
     }
@@ -279,7 +279,7 @@ public class RepositorioObraImplTest {
         this.repositorioObra.guardar(obra2);
         this.repositorioObra.guardar(obra3);
 
-        List<Obra> obrasObtenidas = this.repositorioObra.buscarPorTitulo("Inexistente");
+        List<Obra> obrasObtenidas = this.repositorioObra.buscarPorString("Inexistente");
 
         assertThat(obrasObtenidas.size(), is(equalTo(0)));
     }

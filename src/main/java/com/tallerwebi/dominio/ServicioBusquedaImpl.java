@@ -4,12 +4,14 @@ import com.tallerwebi.dominio.enums.Categoria;
 import com.tallerwebi.dominio.excepcion.NoSeEncontraronResultadosException;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 @Service
+@Transactional
 public class ServicioBusquedaImpl implements ServicioBusqueda {
 
     private RepositorioObra repositorioObra;
@@ -20,14 +22,14 @@ public class ServicioBusquedaImpl implements ServicioBusqueda {
         this.repositorioArtista = repositorioArtista;
     }
 
-    @Override
-    public List<Obra> buscarObraPorTitulo(String titulo) throws NoSeEncontraronResultadosException {
-         List<Obra> obras = repositorioObra.buscarPorTitulo(titulo);
-         if(obras.isEmpty()) {
-             throw new NoSeEncontraronResultadosException("No se encontraron obras con el título proporcionado.");
-         }
-         return obras;
-    }
+//    @Override
+//    public List<Obra> buscarObraPorTitulo(String titulo) throws NoSeEncontraronResultadosException {
+//         List<Obra> obras = repositorioObra.buscarPorTitulo(titulo);
+//         if(obras.isEmpty()) {
+//             throw new NoSeEncontraronResultadosException("No se encontraron obras con el título proporcionado.");
+//         }
+//         return obras;
+//    }
 
     @Override
     public List<Artista> buscarArtistaPorNombre(String nombre) throws NoSeEncontraronResultadosException {
@@ -38,15 +40,15 @@ public class ServicioBusquedaImpl implements ServicioBusqueda {
         return artistas;
     }
 
-    @Override
-    public List<Obra> buscarObraPorCategoria(Categoria categoria) throws NoSeEncontraronResultadosException {
-        List<Obra> obras = repositorioObra.obtenerPorCategoria(categoria);
-        if (obras.isEmpty()) {
-            throw new NoSeEncontraronResultadosException("No se encontraron obras en la categoría proporcionada.");
-        } else {
-            return obras;
-        }
-    }
+//    @Override
+//    public List<Obra> buscarObraPorCategoria(Categoria categoria) throws NoSeEncontraronResultadosException {
+//        List<Obra> obras = repositorioObra.obtenerPorCategoria(categoria);
+//        if (obras.isEmpty()) {
+//            throw new NoSeEncontraronResultadosException("No se encontraron obras en la categoría proporcionada.");
+//        } else {
+//            return obras;
+//        }
+//    }
 
     @Override
     public List<Obra> buscarPorRangoDePrecios(Double precioMin, Double precioMax) throws NoSeEncontraronResultadosException {
@@ -58,15 +60,15 @@ public class ServicioBusquedaImpl implements ServicioBusqueda {
         }
     }
 
-    @Override
-    public List<Obra> buscarObraPorAutor(String nombreAutor) throws NoSeEncontraronResultadosException {
-        List<Obra> obras = repositorioObra.obtenerPorAutor(nombreAutor);
-        if (obras.isEmpty()) {
-            throw new NoSeEncontraronResultadosException("No se encontraron obras del autor proporcionado.");
-        } else {
-            return obras;
-        }
-    }
+//    @Override
+//    public List<Obra> buscarObraPorAutor(String nombreAutor) throws NoSeEncontraronResultadosException {
+//        List<Obra> obras = repositorioObra.obtenerPorAutor(nombreAutor);
+//        if (obras.isEmpty()) {
+//            throw new NoSeEncontraronResultadosException("No se encontraron obras del autor proporcionado.");
+//        } else {
+//            return obras;
+//        }
+//    }
 
     private List<Obra> ordenarPorPrecio(boolean asc) {
         List<Obra> obras = new ArrayList<>(repositorioObra.obtenerTodas());
@@ -102,11 +104,21 @@ public class ServicioBusquedaImpl implements ServicioBusqueda {
         return ordenarPorCantidadDeLikes(false);
     }
 
+//    @Override
+//    public List<Obra> buscarObraPorDescripcion(String descripcion) throws NoSeEncontraronResultadosException {
+//        List<Obra> obras = repositorioObra.buscarPorDescripcion(descripcion);
+//        if (obras.isEmpty()) {
+//            throw new NoSeEncontraronResultadosException("No se encontraron obras con la descripción proporcionada.");
+//        } else {
+//            return obras;
+//        }
+//    }
+
     @Override
-    public List<Obra> buscarObraPorDescripcion(String descripcion) throws NoSeEncontraronResultadosException {
-        List<Obra> obras = repositorioObra.buscarPorDescripcion(descripcion);
+    public List<Obra> buscarObrasPorString(String palabraBuscada) {
+        List<Obra> obras = repositorioObra.buscarPorString(palabraBuscada);
         if (obras.isEmpty()) {
-            throw new NoSeEncontraronResultadosException("No se encontraron obras con la descripción proporcionada.");
+            throw new NoSeEncontraronResultadosException("No se encontraron obras");
         } else {
             return obras;
         }
