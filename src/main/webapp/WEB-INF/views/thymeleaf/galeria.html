@@ -55,14 +55,6 @@
         <strong>¡Pago simulado exitoso!</strong> En un entorno real, esto sería procesado por MercadoPago.
         <span class="float-right cursor-pointer" onclick="this.parentElement.style.display='none'">&times;</span>
       </div>
-
-    <input
-            type="text"
-            id="buscador"
-            placeholder="Buscar obras o artistas..."
-            oninput="buscar()" />
-
-    <div id="resultados"></div>
       
       <!-- Spotlight Carousel -->
       <section class="mb-16">
@@ -118,22 +110,25 @@
         </div>
       </section>
 
-      <!-- Author Carousel -->
-      <section class="mb-16">
-        <h2 class="text-3xl font-bold mb-6 text-gray-900">Autor</h2>
+        <div class="input-group">
+            <input type="search" id="buscador" class="form-control" placeholder="Buscar obras o artistas..." oninput="buscar()">
+        </div>
+
+      <section class="obras-container" style="display: none">
+        <h2 class="text-3xl font-bold mb-6 text-gray-900">Obras</h2>
         <div class="carousel-container relative">
-          <div id="author-track" class="carousel-track">
+          <div id="obras-track" class="carousel-track">
             <!-- Carousel items will be injected here by JS -->
-              <a th:href="@{/obra/{id}(id=${obra.id})}" th:each="obra : ${autorObras}" class="carousel-item group cursor-pointer transition-transform duration-300 transform hover:scale-105" th:style="|background-image: url('${obra.imagenUrl}')|">
-                  <div class="image-overlay">
-                      <p class="text-sm font-semibold text-white" th:text="${obra.titulo}"></p>
-                      <p class="text-xs text-gray-300" th:text="${obra.autor}"></p>
-                  </div>
-              </a>
+<!--              <a th:href="@{/obra/{id}(id=${obra.id})}" th:each="obra : ${temaObras}" class="carousel-item group cursor-pointer transition-transform duration-300 transform hover:scale-105" th:style="|background-image: url('${obra.imagenUrl}')|">-->
+<!--                <div class="image-overlay">-->
+<!--                  <p class="text-sm font-semibold text-white" th:text="${obra.titulo}"></p>-->
+<!--                  <p class="text-xs text-gray-300" th:text="${obra.autor}"></p>-->
+<!--                </div>-->
+<!--              </a>-->
           </div>
           <button
             class="scroll-button left-button"
-            onclick="scrollCarousel('author', -1)"
+            onclick="scrollCarousel('obras', -1)"
           >
             <svg
               class="w-10 h-10"
@@ -152,7 +147,7 @@
           </button>
           <button
             class="scroll-button right-button"
-            onclick="scrollCarousel('author', 1)"
+            onclick="scrollCarousel('obras', 1)"
           >
             <svg
               class="w-10 h-10"
@@ -172,59 +167,58 @@
         </div>
       </section>
 
-      <!-- Theme Carousel -->
-      <section>
-        <h2 class="text-3xl font-bold mb-6 text-gray-900">Tema</h2>
-        <div class="carousel-container relative">
-          <div id="theme-track" class="carousel-track">
-            <!-- Carousel items will be injected here by JS -->
-              <a th:href="@{/obra/{id}(id=${obra.id})}" th:each="obra : ${temaObras}" class="carousel-item group cursor-pointer transition-transform duration-300 transform hover:scale-105" th:style="|background-image: url('${obra.imagenUrl}')|">
-                <div class="image-overlay">
-                  <p class="text-sm font-semibold text-white" th:text="${obra.titulo}"></p>
-                  <p class="text-xs text-gray-300" th:text="${obra.autor}"></p>
+        <section class="mb-16 artistas-container" style="display: none">
+            <h2 class="text-3xl font-bold mb-6 text-gray-900">Artistas</h2>
+            <div class="carousel-container relative">
+                <div id="artistas-track" class="carousel-track">
+                    <!-- Carousel items will be injected here by JS -->
+                    <!--              <a th:href="@{/obra/{id}(id=${obra.id})}" th:each="obra : ${autorObras}" class="carousel-item group cursor-pointer transition-transform duration-300 transform hover:scale-105" th:style="|background-image: url('${obra.imagenUrl}')|">-->
+                    <!--                  <div class="image-overlay">-->
+                    <!--                      <p class="text-sm font-semibold text-white" th:text="${obra.titulo}"></p>-->
+                    <!--                      <p class="text-xs text-gray-300" th:text="${obra.autor}"></p>-->
+                    <!--                  </div>-->
+                    <!--              </a>-->
                 </div>
-              </a>
-          </div>
-          <button
-            class="scroll-button left-button"
-            onclick="scrollCarousel('theme', -1)"
-          >
-            <svg
-              class="w-10 h-10"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M15 19l-7-7 7-7"
-              ></path>
-            </svg>
-          </button>
-          <button
-            class="scroll-button right-button"
-            onclick="scrollCarousel('theme', 1)"
-          >
-            <svg
-              class="w-10 h-10"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 5l7 7-7 7"
-              ></path>
-            </svg>
-          </button>
-        </div>
-      </section>
+                <button
+                        class="scroll-button left-button"
+                        onclick="scrollCarousel('artistas', -1)"
+                >
+                    <svg
+                            class="w-10 h-10"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M15 19l-7-7 7-7"
+                        ></path>
+                    </svg>
+                </button>
+                <button
+                        class="scroll-button right-button"
+                        onclick="scrollCarousel('artistas', 1)"
+                >
+                    <svg
+                            class="w-10 h-10"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M9 5l7 7-7 7"
+                        ></path>
+                    </svg>
+                </button>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -336,36 +330,75 @@
     }
 
 
-    async function buscar() {
-        const query = document.getElementById("buscador").value.trim();
-        if (query.length === 0) {
-            document.getElementById("resultados").innerHTML = "";
-            return;
+        async function buscar() {
+            const query = document.getElementById("buscador").value.trim();
+            const obrasTrack = document.getElementById("obras-track");
+            const artistasTrack = document.getElementById("artistas-track");
+            const obrasContainer = obrasTrack.closest(".obras-container");
+            const artistasContainer = artistasTrack.closest(".artistas-container");
+
+            // Limpia carruseles si no hay búsqueda
+            if (query.length === 0) {
+                obrasTrack.innerHTML = "";
+                artistasTrack.innerHTML = "";
+                obrasContainer.style.display = "none";
+                artistasContainer.style.display = "none";
+                return;
+            }
+
+            try {
+                const response = await fetch(`/spring/busqueda?query=${encodeURIComponent(query)}`);
+                if (!response.ok) throw new Error();
+
+                const data = await response.json();
+
+                // Construir carrusel de obras
+                if (data.obras?.length) {
+                    obrasTrack.innerHTML = data.obras.map(o => `
+                    <a href="/spring/obra/${o.id}"
+                       class="carousel-item group cursor-pointer transition-transform duration-300 transform hover:scale-105 relative rounded-xl overflow-hidden bg-cover bg-center"
+                       style="background-image: url('${o.imagenUrl || '/img/default-obra.jpg'}');">
+                        <div class="image-overlay absolute inset-0 bg-black/40 flex flex-col justify-end p-3">
+                            <p class="text-sm font-semibold text-white">${o.titulo}</p>
+                            <p class="text-xs text-gray-300">${o.autor}</p>
+                        </div>
+                    </a>
+            `).join("");
+                    obrasContainer.style.display = "";
+                } else {
+                    //obrasTrack.innerHTML = "<p class='text-gray-400 text-sm p-2'>No se encontraron obras.</p>";
+                    obrasTrack.innerHTML = "";
+                    obrasContainer.style.display = "none";
+                }
+
+                // Construir carrusel de artistas
+                if (data.artistas?.length) {
+                    artistasTrack.innerHTML = data.artistas.map(a => `
+                <a href="/spring/perfilArtista/ver/${a.id}"
+                   class="carousel-item cursor-pointer transition-transform duration-300 transform hover:scale-105 relative rounded-xl overflow-hidden bg-cover bg-center"
+                   style="background-image: url('${a.urlFotoPerfil || '/img/default-artista.jpg'}');">
+
+                    <!-- Overlay siempre visible -->
+                    <div class="absolute inset-0 bg-black/40 flex flex-col justify-end p-3">
+                        <p class="text-sm font-semibold text-white">${a.nombre}</p>
+                        <p class="text-xs text-gray-300 line-clamp-2">${a.biografia || ''}</p>
+                    </div>
+                </a>
+            `).join("");
+                    artistasContainer.style.display = "";
+                } else {
+                    artistasTrack.innerHTML = "";
+                    artistasContainer.style.display = "none";
+                }
+
+            } catch (error) {
+                obrasTrack.innerHTML = "";
+                artistasTrack.innerHTML = "";
+                obrasContainer.style.display = "none";
+                artistasContainer.style.display = "none";
+                console.error("Error en la búsqueda:", error);
+            }
         }
-
-        const response = await fetch(`/spring/busqueda?query=${encodeURIComponent(query)}`);
-
-        if (!response.ok) {
-            document.getElementById("resultados").innerHTML = "<p>No se encontraron resultados.</p>";
-            return;
-        }
-
-        const data = await response.json();
-
-        let html = "";
-        if (data.obras?.length) {
-            html += "<h3>Obras:</h3><ul>";
-            data.obras.forEach(o => html += `<li>${o.titulo}</li>`);
-            html += "</ul>";
-        }
-        if (data.artistas?.length) {
-            html += "<h3>Artistas:</h3><ul>";
-            data.artistas.forEach(a => html += `<li>${a.nombre}</li>`);
-            html += "</ul>";
-        }
-
-        document.getElementById("resultados").innerHTML = html || "<p>No se encontraron resultados.</p>";
-    }
 
     </script>
   </body>
