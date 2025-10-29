@@ -41,8 +41,8 @@ public class RepositorioObraImpl implements RepositorioObra {
     public List<Obra> obtenerPorAutor(String autor) {
         try {
             return this.sessionFactory.getCurrentSession()
-                    .createQuery("FROM Obra WHERE autor = :autor", Obra.class)
-                    .setParameter("autor", autor)
+                    .createQuery("FROM Obra WHERE lower(autor) LIKE :autor", Obra.class)
+                    .setParameter("autor", "%" + autor.toLowerCase() + "%")
                     .getResultList();
         } catch (IllegalArgumentException e) {
             return new ArrayList<>();
@@ -75,27 +75,41 @@ public class RepositorioObraImpl implements RepositorioObra {
         }
     }
 
-    @Override
-    public boolean hayStockSuficiente(Obra obra) {
-        if (obra.getStock() != null && obra.getStock() >= 1) {
-            return true;
-        }
-        return false;
-    }
 
     @Override
-    public void descontarStock(Obra obra) {
-        if (obra.getStock() != null) {
-            obra.setStock(obra.getStock() - 1);
+    public List<Obra> buscarPorTitulo(String titulo) {
+        try {
+            return this.sessionFactory.getCurrentSession()
+                    .createQuery("FROM Obra WHERE lower(titulo) LIKE :titulo", Obra.class)
+                    .setParameter("titulo", "%" + titulo.toLowerCase() + "%")
+                    .getResultList();
+        } catch (IllegalArgumentException e) {
+            return new ArrayList<>();
         }
     }
 
     @Override
-    public void devolverStock(Obra obra) {
-        if( obra.getStock() != null) {
-            obra.setStock(obra.getStock() + 1);
-        } else {
-            obra.setStock(1);
+    public List<Obra> obtenerPorRangoDePrecio(Double precioMin, Double precioMax) {
+        try {
+            return this.sessionFactory.getCurrentSession()
+                    .createQuery("FROM Obra WHERE precio BETWEEN :precioMin AND :precioMax", Obra.class)
+                    .setParameter("precioMin", precioMin)
+                    .setParameter("precioMax", precioMax)
+                    .getResultList();
+        } catch (IllegalArgumentException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public List<Obra> buscarPorDescripcion(String descripcion) {
+        try {
+            return this.sessionFactory.getCurrentSession()
+                    .createQuery("FROM Obra WHERE lower(descripcion) LIKE :descripcion", Obra.class)
+                    .setParameter("descripcion", "%" + descripcion.toLowerCase() + "%")
+                    .getResultList();
+        } catch (IllegalArgumentException e) {
+            return new ArrayList<>();
         }
     }
 

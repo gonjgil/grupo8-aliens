@@ -1,8 +1,12 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.infraestructura;
 
+import com.tallerwebi.dominio.Artista;
+import com.tallerwebi.dominio.RepositorioArtista;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository("repositorioArtista")
 public class RepositorioArtistaImpl implements RepositorioArtista {
@@ -29,5 +33,14 @@ public class RepositorioArtistaImpl implements RepositorioArtista {
     @Override
     public void modificar(Artista artista) {
         sessionFactory.getCurrentSession().update(artista);
+    }
+
+    @Override
+    public List<Artista> obtenerPorNombre(String nombre) {
+        String hql = "FROM Artista WHERE lower(nombre) LIKE :nombre";
+        return sessionFactory.getCurrentSession()
+                .createQuery(hql, Artista.class)
+                .setParameter("nombre", "%" + nombre.toLowerCase() + "%")
+                .getResultList();
     }
 }

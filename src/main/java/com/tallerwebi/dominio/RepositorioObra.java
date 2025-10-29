@@ -10,7 +10,7 @@ public interface RepositorioObra {
     List<Obra> obtenerPorAutor(String autor);
     List<Obra> obtenerPorCategoria(Categoria categoria);
     Obra obtenerPorId(Long id);
-    boolean hayStockSuficiente(Obra obra);
-    void descontarStock(Obra obra);
-    void devolverStock(Obra obra);
+    List<Obra> buscarPorTitulo(String titulo);
+    List<Obra> obtenerPorRangoDePrecio(Double precioMin, Double precioMax);
+    List<Obra> buscarPorDescripcion(String descripcion);
 }
