@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -19,37 +20,35 @@ public class ControladorBusquedaTest {
 
     @Test
     public void queAlBuscarUnaObraPorTituloSeListenLasObrasQueIncluyanElTextoIngresadoEnElTitulo() {
-        Obra obra1 = new Obra();
-        Obra obra2 = new Obra();
-        Obra obra3 = new Obra();
-        Obra obra4 = new Obra();
-
-        obra1.setId(1L);
-        obra1.setTitulo("Paisaje Abstracto");
-        obra2.setId(2L);
-        obra2.setTitulo("Abstracto Azul");
-        obra3.setId(3L);
-        obra3.setTitulo("Simple Skyline");
-        obra4.setId(4L);
-        obra4.setTitulo("Abstract Concept");
+        Obra obra1 = new Obra(); obra1.setId(1L); obra1.setTitulo("Paisaje Abstracto");
+        Obra obra2 = new Obra(); obra2.setId(2L); obra2.setTitulo("Abstracto Azul");
+        Obra obra3 = new Obra(); obra3.setId(3L); obra3.setTitulo("Simple Skyline");
+        Obra obra4 = new Obra(); obra4.setId(4L); obra4.setTitulo("Abstract Concept");
 
         ServicioBusqueda servicioBusqueda = mock(ServicioBusqueda.class);
         ControladorBusqueda controladorBusqueda = new ControladorBusqueda(servicioBusqueda);
         String palabraBuscada = "abstract";
 
-        when(servicioBusqueda.buscarObrasPorString(palabraBuscada)).thenReturn(List.of(obra1,obra2,obra4));
+        when(servicioBusqueda.buscarObrasPorString(palabraBuscada))
+                .thenReturn(List.of(obra1, obra2, obra4));
         when(servicioBusqueda.buscarArtistaPorNombre(palabraBuscada))
                 .thenThrow(new NoSeEncontraronResultadosException(""));
 
         ResponseEntity<Map<String, Object>> respuesta = controladorBusqueda.buscar(palabraBuscada);
-        assertThat(200, is(equalTo(respuesta.getStatusCodeValue())));
+        assertThat(respuesta.getStatusCodeValue(), is(200));
 
-        List<Obra> obras = (List<Obra>) respuesta.getBody().get("obras");
-        assertThat(obras, is(notNullValue()));
-        assertThat(obras, hasSize(3));
-        assertThat(obras, containsInAnyOrder(obra1, obra2, obra4));
+        List<ObraDto> obrasDto = (List<ObraDto>) respuesta.getBody().get("obras");
+        assertThat(obrasDto, is(notNullValue()));
+        assertThat(obrasDto, hasSize(3));
 
-        List<Artista> artistas = (List<Artista>) respuesta.getBody().get("artistas");
+        // Comparar por campo que importa, por ejemplo id o titulo
+        List<Long> idsEsperados = List.of(1L, 2L, 4L);
+        List<Long> idsObtenidos = obrasDto.stream()
+                .map(ObraDto::getId)
+                .collect(Collectors.toList());
+        assertThat(idsObtenidos, containsInAnyOrder(idsEsperados.toArray()));
+
+        List<PerfilArtistaDTO> artistas = (List<PerfilArtistaDTO>) respuesta.getBody().get("artistas");
         assertThat(artistas, is(notNullValue()));
         assertThat(artistas, is(empty()));
 
