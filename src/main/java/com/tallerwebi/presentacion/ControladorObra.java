@@ -34,13 +34,15 @@ public class ControladorObra {
         Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
         model.put("usuario", usuario);
 
-
-        Integer cantidad = servicioCarrito.obtenerCantidadDeItemPorId(usuario,servicioGaleria.obtenerPorId(id));
-        model.put("cantidad", cantidad);
-
         try {
-            ObraDto obra = new ObraDto(this.servicioGaleria.obtenerPorId(id));
-            model.put("obra", obra);
+            Obra obra = servicioGaleria.obtenerPorId(id);
+
+            Integer cantidad = servicioCarrito.obtenerCantidadDeItemPorId(usuario, obra);
+            model.put("cantidad", cantidad);
+
+            ObraDto obraDto = new ObraDto(obra);
+            model.put("obra", obraDto);
+
             return new ModelAndView("obra", model);
         } catch (Exception e) {
             model.put("error", "No existe la obra solicitada.");

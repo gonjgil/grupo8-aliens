@@ -58,7 +58,7 @@ public class ServicioCarritoImpl implements ServicioCarrito {
             Obra obra = repositorioObra.obtenerPorId(obraId);
             if (obra != null) {
                 carrito.disminuirCantidadDeItem(obra);
-                obra.descontarStock();
+                obra.devolverStock();
                 repositorioObra.guardar(obra);
                 repositorioCarrito.guardar(carrito);
             }
