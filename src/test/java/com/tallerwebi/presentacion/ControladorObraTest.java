@@ -67,7 +67,7 @@ public class ControladorObraTest {
         ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioLike, servicioCarrito);
         ModelAndView modelAndView = controladorObra.verObra(999L, request);
 
-        assertThat(modelAndView.getViewName(), is(equalTo("redirect:/galeria_alt")));
+        assertThat(modelAndView.getViewName(), is(equalTo("redirect:/galeria")));
     }
 
 }

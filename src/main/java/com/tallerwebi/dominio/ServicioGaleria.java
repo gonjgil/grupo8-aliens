@@ -11,4 +11,5 @@ public interface ServicioGaleria {
     List<Obra> obtenerPorAutor(String autor);
     List<Obra> obtenerPorCategoria(Categoria categoria);
     Obra obtenerPorId(Long id);
+    List<Obra> obtenerObrasParaUsuario(Usuario usuario);
 }

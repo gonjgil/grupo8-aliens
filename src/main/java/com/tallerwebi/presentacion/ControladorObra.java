@@ -46,7 +46,7 @@ public class ControladorObra {
             return new ModelAndView("obra", model);
         } catch (Exception e) {
             model.put("error", "No existe la obra solicitada.");
-            return new ModelAndView("redirect:/galeria_alt", model);
+            return new ModelAndView("redirect:/galeria", model);
         }
     }
 }

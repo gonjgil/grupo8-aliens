@@ -1,12 +1,14 @@
 package com.tallerwebi.dominio;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
+@JsonIgnoreProperties({"obrasLikeadas"})
 public class Usuario {
 
     @Id
@@ -16,6 +18,8 @@ public class Usuario {
     private String password;
     private String rol;
     private Boolean activo = false;
+    @ManyToMany(mappedBy = "usuariosQueDieronLike", fetch = FetchType.LAZY)
+    private Set<Obra> obrasLikeadas = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -47,6 +51,9 @@ public class Usuario {
     public void setActivo(Boolean activo) {
         this.activo = activo;
     }
+    public Set<Obra>
+    getObrasLikeadas() { return obrasLikeadas; }
+    public void setObrasLikeadas(Set<Obra> obrasLikeadas) { this.obrasLikeadas = obrasLikeadas; }
 
     public void activar() {
         activo = true;
