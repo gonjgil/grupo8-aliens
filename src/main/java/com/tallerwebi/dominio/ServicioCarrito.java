@@ -1,5 +1,7 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.excepcion.CarritoNoEncontradoException;
+import com.tallerwebi.dominio.excepcion.CarritoVacioException;
 import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
 import com.tallerwebi.dominio.excepcion.NoHayStockSuficiente;
 import com.tallerwebi.presentacion.ItemCarritoDto;
@@ -14,7 +16,7 @@ public interface ServicioCarrito {
     void vaciarCarrito(Usuario usuario); //test
     List<Obra> obtenerObras(Usuario usuario); //testeado
     List<ItemCarritoDto> obtenerItems(Usuario usuario);
-    Carrito obtenerCarritoConItems(Usuario usuario); //testeado
+    Carrito obtenerCarritoConItems(Usuario usuario) throws CarritoVacioException, CarritoNoEncontradoException; //testeado
     Double calcularPrecioTotalCarrito(Usuario usuario); //testeado
     Integer contarItemsEnCarrito(Usuario usuario); //testeado
 }

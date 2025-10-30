@@ -3,6 +3,8 @@ package com.tallerwebi.dominio;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tallerwebi.dominio.excepcion.CarritoNoEncontradoException;
+import com.tallerwebi.dominio.excepcion.CarritoVacioException;
 import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
 import com.tallerwebi.dominio.excepcion.NoHayStockSuficiente;
 import com.tallerwebi.presentacion.ItemCarritoDto;
@@ -101,8 +103,15 @@ public class ServicioCarritoImpl implements ServicioCarrito {
     }
 
     @Override
-    public Carrito obtenerCarritoConItems(Usuario usuario) {
-        return repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId());
+    public Carrito obtenerCarritoConItems(Usuario usuario) throws CarritoVacioException, CarritoNoEncontradoException {
+        Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId());
+        if (carrito == null) {
+            throw new CarritoNoEncontradoException("Carrito no encontrado para el usuario");
+        }
+        if (carrito.getItems() == null || carrito.getItems().isEmpty()) {
+            throw new CarritoVacioException("El carrito no puede ser vacio");
+        }
+        return carrito;
     }
 
     @Override

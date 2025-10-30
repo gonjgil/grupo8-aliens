@@ -1,17 +1,19 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.excepcion.CarritoNoEncontradoException;
+import com.tallerwebi.dominio.excepcion.CarritoVacioException;
 import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
 import com.tallerwebi.dominio.excepcion.NoHayStockSuficiente;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
@@ -59,7 +61,7 @@ public class ServicioCarritoImplTest {
     }
 
     @Test
-    public void dadoQueExisteUnCarritoDeberiaAgregarObraCorrectamente() throws NoExisteLaObra, NoHayStockSuficiente {
+    public void dadoQueExisteUnCarritoDeberiaAgregarObraCorrectamente() throws NoExisteLaObra, NoHayStockSuficiente, CarritoNoEncontradoException, CarritoVacioException {
         Usuario usuario = new Usuario();
         Obra obra1 = new Obra();
         Long obraId = 1L;
@@ -80,7 +82,7 @@ public class ServicioCarritoImplTest {
     }
 
     @Test
-    public void debeVerificarQueNoSeAgregueObraACarritoSiNoHayStock() throws NoHayStockSuficiente {
+    public void debeVerificarQueNoSeAgregueObraACarritoSiNoHayStockLanzaLaExcepcionNoHayStockSuficiente() throws NoHayStockSuficiente {
         Obra obra1 = new Obra();
         obra1.setId(1L);
         obra1.setStock(2);
@@ -101,6 +103,7 @@ public class ServicioCarritoImplTest {
 
         try {
             servicioCarritoImpl.agregarObraAlCarrito(usuario, obra2.getId());
+            fail("Se esperaba NoHayStockSuficiente, pero no fue lanzada");
 
         } catch (NoHayStockSuficiente e) {
         }
@@ -207,7 +210,6 @@ public class ServicioCarritoImplTest {
         Carrito carrito = new Carrito(usuario);
 
         when(repositorioObra.obtenerPorId(1L)).thenReturn(obra1);
-        obra1.hayStockSuficiente();
 
         when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId())).thenReturn(carrito);
 
@@ -236,7 +238,6 @@ public class ServicioCarritoImplTest {
         Carrito carrito = new Carrito(usuario);
 
         when(repositorioObra.obtenerPorId(1L)).thenReturn(obra1);
-        obra1.hayStockSuficiente();
 
         when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId())).thenReturn(carrito);
 
@@ -280,7 +281,7 @@ public class ServicioCarritoImplTest {
     }
 
     @Test
-    public void obtenerCarritoConItems_debeObtenerCarritoConItemsDeUsuarioEspecifico() throws NoHayStockSuficiente {
+    public void obtenerCarritoConItems_debeObtenerCarritoConItemsDeUsuarioEspecifico() throws NoHayStockSuficiente, CarritoNoEncontradoException, CarritoVacioException {
         Obra obra1 = new Obra();
         obra1.setId(1L);
         obra1.setStock(2);
@@ -319,6 +320,93 @@ public class ServicioCarritoImplTest {
         assertThat(servicioCarritoImpl.contarItemsEnCarrito(usuario2),is(equalTo(1)));
     }
 
+    @Test
+    public void obtenerCarritoConItems_EnCasoDeQueCarritoNoSeEncuentreDebeLanzarCarritoNoEncontradoException() throws NoHayStockSuficiente, CarritoNoEncontradoException, CarritoVacioException {
+        Obra obra1 = new Obra();
+        obra1.setId(1L);
+        obra1.setStock(2);
+
+        Obra obra2 = new Obra();
+        obra2.setId(2L);
+        obra2.setStock(2);
+
+        Usuario usuario1 = new Usuario();
+        usuario1.setId(1L);
+        usuario1.setEmail("email1@test.com");
+        Usuario usuario2 = new Usuario();
+        usuario2.setId(2L);
+        usuario2.setEmail("email2@test.com");
+
+        Carrito carrito1 = new Carrito(usuario1);
+        carrito1.setId(1L);
+        Carrito carrito2 = new Carrito(usuario1);
+
+
+        when(repositorioObra.obtenerPorId(1L)).thenReturn(obra1);
+        when(repositorioObra.obtenerPorId(2L)).thenReturn(obra2);
+
+
+        when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario1.getId())).thenReturn(carrito1);
+        when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario2.getId())).thenReturn(null);
+
+        servicioCarritoImpl.agregarObraAlCarrito(usuario1, obra1.getId());
+        servicioCarritoImpl.agregarObraAlCarrito(usuario1, obra1.getId());
+        servicioCarritoImpl.agregarObraAlCarrito(usuario1, obra2.getId());
+
+
+        assertThat(servicioCarritoImpl.obtenerCarritoConItems(usuario1),is(equalTo(carrito1)));
+        assertThat(servicioCarritoImpl.contarItemsEnCarrito(usuario1),is(equalTo(3)));
+
+        CarritoNoEncontradoException exception = assertThrows(CarritoNoEncontradoException.class, () -> {
+            servicioCarritoImpl.obtenerCarritoConItems(usuario2);
+        });
+        assertEquals("Carrito no encontrado para el usuario", exception.getMessage());
+
+    }
+
+    @Test
+    public void obtenerCarritoConItems_EnCasoDeQueElCarritoNoTengaItemsDebeLanzarCarritoVacioException() throws NoHayStockSuficiente, CarritoNoEncontradoException, CarritoVacioException {
+        Obra obra1 = new Obra();
+        obra1.setId(1L);
+        obra1.setStock(2);
+
+        Obra obra2 = new Obra();
+        obra2.setId(2L);
+        obra2.setStock(2);
+
+        Usuario usuario1 = new Usuario();
+        usuario1.setId(1L);
+        usuario1.setEmail("email1@test.com");
+        Usuario usuario2 = new Usuario();
+        usuario2.setId(2L);
+        usuario2.setEmail("email2@test.com");
+
+        Carrito carrito1 = new Carrito(usuario1);
+        carrito1.setId(1L);
+        Carrito carrito2 = new Carrito(usuario1);
+        carrito2.setId(2L);
+        carrito2.setItems(new ArrayList<>());
+
+        when(repositorioObra.obtenerPorId(1L)).thenReturn(obra1);
+        when(repositorioObra.obtenerPorId(2L)).thenReturn(obra2);
+
+
+        when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario1.getId())).thenReturn(carrito1);
+        when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario2.getId())).thenReturn(carrito2);
+
+        servicioCarritoImpl.agregarObraAlCarrito(usuario1, obra1.getId());
+        servicioCarritoImpl.agregarObraAlCarrito(usuario1, obra1.getId());
+        servicioCarritoImpl.agregarObraAlCarrito(usuario1, obra2.getId());
+
+
+        assertThat(servicioCarritoImpl.obtenerCarritoConItems(usuario1),is(equalTo(carrito1)));
+        assertThat(servicioCarritoImpl.contarItemsEnCarrito(usuario1),is(equalTo(3)));
+
+        CarritoVacioException exception = assertThrows(CarritoVacioException.class, () -> {
+            servicioCarritoImpl.obtenerCarritoConItems(usuario2);
+        });
+        assertEquals("El carrito no puede ser vacio", exception.getMessage());
+    }
 
     @Test
     public void dadoQueTengoTresObrasEnCarritoDosDe$3500YUnaDe$5200DebeDevolver$12200() throws NoHayStockSuficiente {
