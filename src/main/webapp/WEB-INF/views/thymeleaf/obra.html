@@ -120,15 +120,27 @@
               </div>
 
               <div class="flex gap-2">
-                  <form th:action="@{/carrito/agregar}" method="post">
+                  <div th:if="${cantidad > 0}" class="flex items-center justify-start space-x-2 bg-green-600 px-4 rounded-full text-white">
+                      <i class="fas fa-shopping-cart mr-2"></i>
+                      <form th:action="@{/carrito/disminuir/{id}(id=${obra.id}, redirect='obra')}" method="post" style="display:inline">
+                          <button type="submit" class="w-8 h-8 flex items-center justify-center
+                            bg-green-600 hover:bg-green-700 rounded-full text-2xl font-bold">-</button>
+                      </form>
+
+                      <span class="w-10 text-center font-semibold text-xl"><span th:text="${cantidad}">1</span></span>
+
+                      <form th:action="@{/carrito/aumentar/{id}(id=${obra.id}, redirect='obra')}" method="post" style="display:inline">
+                          <button type="submit" class="w-8 h-8 flex items-center justify-center
+                            bg-green-600 hover:bg-green-700 rounded-full text-2xl font-bold">+</button>
+                      </form>
+                  </div>
+                  <form th:action="@{/carrito/agregar}" method="post" th:if="${cantidad < 1}">
                       <input type="hidden" name="id" th:value="${obra.id}" />
                       <!-- <input type="hidden" name="titulo" th:value="${obra.titulo}" /> -->
                       <!-- <input type="hidden" name="precio" th:value="${obra.precio}" /> -->
 
-                      <button
-                              type="submit"
-                              class="btn bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full transition duration-300"
-                      >
+                      <button type="submit" class="btn bg-green-600 hover:bg-green-700 text-white
+                      font-bold py-2 px-4 rounded-full transition duration-300">
                           <i class="fas fa-shopping-cart mr-2"></i>
                           Agregar al Carrito
                       </button>
@@ -143,8 +155,6 @@
               </div>
 
           </div>
-          <p th:if="${mensaje}" class="alert alert-success mt-3" th:text="${mensaje}">
-          <p th:if="${error != null}" class="alert alert-danger mt-3" th:text="${error}">
       </div>
 
     </main>
@@ -228,6 +238,12 @@
         .catch((error) => console.error('Error actualizando contador:', error));
     }
 
+    const mensaje = /*[[${mensaje}]]*/ null;
+    const error = /*[[${error}]]*/ null;
+
+    if (mensaje) mostrarNotificacion(mensaje, 'success');
+    if (error) mostrarNotificacion(error, 'error');
+
     // Actualizar contador al cargar la página
     actualizarContadorCarrito();
 
@@ -301,7 +317,7 @@
       };
 
       const notificacion = document.createElement('div');
-      notificacion.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg ${
+      notificacion.className = `fixed top-24 right-4 z-50 p-4 rounded-lg shadow-lg ${
         tipoClases[tipo] || tipoClases.info
       }`;
       notificacion.innerHTML = `<p>${mensaje}</p>`;

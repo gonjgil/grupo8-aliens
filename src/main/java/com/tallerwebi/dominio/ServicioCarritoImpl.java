@@ -145,5 +145,19 @@ public class ServicioCarritoImpl implements ServicioCarrito {
 
         return itemsEnCarrito;
     }
-
+    @Override
+    public Integer obtenerCantidadDeItemPorId(Usuario usuario, Obra obra) {
+        Carrito carrito = null;
+        if (usuario != null) {
+            carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId());
+        }
+        Integer cantidadDeItemPorId = 0;
+        if (carrito != null) {
+            ItemCarrito itemCarrito = carrito.buscarItemPorObra(obra);
+            if (itemCarrito != null) {
+                cantidadDeItemPorId = itemCarrito.getCantidad();
+            }
+        }
+        return cantidadDeItemPorId;
+    }
 }
