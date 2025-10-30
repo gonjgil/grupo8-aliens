@@ -251,8 +251,66 @@ public class RepositorioOrdenCompraImplTest {
             assertThat(orden3.getUsuario(), is(usuario2));
 
     }
+    @Test
+    public void deberiaActualizarElEstadoDeLaOrdenDeCompraCorrectamente (){
+        Usuario usuario = new Usuario();
+        Carrito carrito = new Carrito(usuario);
+        Carrito carrito2 = new Carrito(usuario);
+
+        Obra obra1 = new Obra();
+        Obra obra2 = new Obra();
 
 
+        obra1.setPrecio(100.0);
+        carrito.agregarItem(obra1);
+        obra2.setPrecio(100.0);
+        carrito2.agregarItem(obra2);
+
+
+        ItemCarrito itemCarrito = carrito.getItems().get(0);
+        ItemOrden itemOrden = new ItemOrden(itemCarrito);
+        ItemCarrito itemCarrito2 = carrito2.getItems().get(0);
+        ItemOrden itemOrden2 = new ItemOrden(itemCarrito2);
+
+
+        OrdenCompra orden1 = new OrdenCompra(1L, carrito, carrito.getTotal(), usuario);
+        OrdenCompra orden2 = new OrdenCompra(2L, carrito2, carrito2.getTotal(), usuario);
+
+        itemOrden.setOrden(orden1);
+        orden1.setItems(List.of(itemOrden));
+        itemOrden2.setOrden(orden2);
+        orden2.setItems(List.of(itemOrden2));
+
+        orden1.setEstado(EstadoOrdenCompra.PENDIENTE);
+        orden2.setEstado(EstadoOrdenCompra.PENDIENTE);
+
+        repositorioUsuario.guardar(usuario);
+        repositorioCarrito.guardar(carrito);
+        repositorioCarrito.guardar(carrito2);
+        repositorioObra.guardar(obra1);
+        repositorioObra.guardar(obra2);
+
+        repositorioOrden.guardar(orden1);
+        repositorioOrden.guardar(orden2);
+
+
+        OrdenCompra ordenEstado1 = repositorioOrden.obtenerPorId(orden1.getId());
+        OrdenCompra ordenEstado2 = repositorioOrden.obtenerPorId(orden2.getId());
+
+        assertThat(ordenEstado1.getEstado(), is(EstadoOrdenCompra.PENDIENTE));
+        assertThat(ordenEstado2.getEstado(), is(EstadoOrdenCompra.PENDIENTE));
+
+        repositorioOrden.actualizarEstado(orden1.getId(), EstadoOrdenCompra.APROBADA);
+        repositorioOrden.actualizarEstado(orden2.getId(), EstadoOrdenCompra.RECHAZADA);
+
+
+        OrdenCompra ordenEstadoActualizado1 = repositorioOrden.obtenerPorId(orden1.getId());
+        OrdenCompra ordenEstadoActualizado2 = repositorioOrden.obtenerPorId(orden2.getId());
+
+        assertThat(ordenEstadoActualizado1.getEstado(), is(EstadoOrdenCompra.APROBADA));
+        assertThat(ordenEstadoActualizado2.getEstado(), is(EstadoOrdenCompra.RECHAZADA));
+
+    }
 
 
 }

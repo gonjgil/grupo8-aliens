@@ -11,4 +11,5 @@ public interface RepositorioOrdenCompra {
     OrdenCompra obtenerPorId(Long id);
     List<OrdenCompra> obtenerPorEstado(EstadoOrdenCompra estado);
     List<OrdenCompra> obtenerTodasPorUsuario(Usuario usuario);
+    void actualizarEstado(Long ordenId, EstadoOrdenCompra estado);
 }

@@ -61,4 +61,17 @@ public class RepositorioOrdenCompraImpl implements RepositorioOrdenCompra {
                 .setParameter("usuario", usuario)
                 .getResultList();
     }
+
+    @Override
+    public void actualizarEstado(Long ordenId, EstadoOrdenCompra estado) {
+        this.sessionFactory.getCurrentSession()
+                .createQuery("UPDATE OrdenCompra o SET o.estado = :estado WHERE o.id = :id")
+                .setParameter("estado", estado)
+                .setParameter("id", ordenId)
+                .executeUpdate();
+        OrdenCompra orden = sessionFactory.getCurrentSession().get(OrdenCompra.class, ordenId);
+        if (orden != null) {
+            sessionFactory.getCurrentSession().refresh(orden);
+        }
+    }
 }
