@@ -137,6 +137,11 @@ public class ServicioCarritoImpl implements ServicioCarrito {
     @Override
     public List<ItemCarritoDto> obtenerItems(Usuario usuario) {
         Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId());
+
+        if(carrito == null) {
+            carrito = repositorioCarrito.crearCarritoParaUsuario(usuario);
+        }
+
         List<ItemCarritoDto> itemsEnCarrito = new ArrayList<>();
 
         for (ItemCarrito item : carrito.getItems()) {
