@@ -14,6 +14,7 @@ public interface ServicioCarrito {
     void vaciarCarrito(Usuario usuario); //test
     List<Obra> obtenerObras(Usuario usuario); //testeado
     List<ItemCarritoDto> obtenerItems(Usuario usuario);
+    Integer obtenerCantidadDeItemPorId(Usuario usuario, Obra obra);
     Carrito obtenerCarritoConItems(Usuario usuario); //testeado
     Double calcularPrecioTotalCarrito(Usuario usuario); //testeado
     Integer contarItemsEnCarrito(Usuario usuario); //testeado

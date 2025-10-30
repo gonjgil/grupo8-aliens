@@ -1,8 +1,6 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.Usuario;
-import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
-import com.tallerwebi.dominio.excepcion.UsuarioAnonimoException;
+import com.tallerwebi.dominio.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -10,9 +8,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.tallerwebi.dominio.ServicioGaleria;
-import com.tallerwebi.dominio.ServicioLike;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -22,12 +17,14 @@ public class ControladorObra {
 
     @Autowired
     private ServicioGaleria servicioGaleria;
+    private ServicioCarrito servicioCarrito;
     private ServicioLike servicioLike;
     
     @Autowired
-    public ControladorObra(ServicioGaleria servicioGaleria, ServicioLike servicioLike) {
+    public ControladorObra(ServicioGaleria servicioGaleria, ServicioLike servicioLike, ServicioCarrito servicioCarrito) {
         this.servicioGaleria = servicioGaleria;
         this.servicioLike = servicioLike;
+        this.servicioCarrito = servicioCarrito;
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
@@ -36,10 +33,16 @@ public class ControladorObra {
 
         Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
         model.put("usuario", usuario);
-        
+
         try {
-            ObraDto obra = new ObraDto(this.servicioGaleria.obtenerPorId(id));
-            model.put("obra", obra);
+            Obra obra = servicioGaleria.obtenerPorId(id);
+
+            Integer cantidad = servicioCarrito.obtenerCantidadDeItemPorId(usuario, obra);
+            model.put("cantidad", cantidad);
+
+            ObraDto obraDto = new ObraDto(obra);
+            model.put("obra", obraDto);
+
             return new ModelAndView("obra", model);
         } catch (Exception e) {
             model.put("error", "No existe la obra solicitada.");
