@@ -4,6 +4,7 @@ package com.tallerwebi.dominio;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "Artista")
@@ -98,5 +99,17 @@ public class Artista {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Artista)) return false;
+        Artista artista = (Artista) o;
+        return Objects.equals(id, artista.id) && Objects.equals(nombre, artista.nombre) && Objects.equals(usuario, artista.usuario);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nombre, usuario);
     }
 }
