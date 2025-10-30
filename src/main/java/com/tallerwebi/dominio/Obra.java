@@ -111,7 +111,7 @@ public class Obra {
     }
 
     public void descontarStock() {
-        if (this.getStock() != null) {
+        if (this.hayStockSuficiente()) {
             this.setStock(this.getStock() - 1);
         }
     }
@@ -119,8 +119,6 @@ public class Obra {
     public void devolverStock() {
         if( this.getStock() != null) {
             this.setStock(this.getStock() + 1);
-        } else {
-            this.setStock(1);
         }
     }
 

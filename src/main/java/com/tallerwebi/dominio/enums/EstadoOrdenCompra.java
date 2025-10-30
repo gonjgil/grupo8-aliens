@@ -4,7 +4,7 @@ public enum EstadoOrdenCompra {
 
     PENDIENTE ("Pendiente"),
     RECHAZADA("Rechazada"),
-    ACEPTADA("Aceptada");
+    APROBADA("Aprobada");
 
     private String descripcion;
 

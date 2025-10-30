@@ -27,6 +27,8 @@ public class OrdenCompra {
 
     private Double precioFinal;
 
+    private Long pagoId;
+
     @ManyToOne
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
@@ -98,6 +100,14 @@ public class OrdenCompra {
 
     public void setPrecioFinal(Double precioTotal) {
         this.precioFinal = precioTotal;
+    }
+
+    public Long getPagoId() {
+        return pagoId;
+    }
+
+    public void setPagoId(Long pagoId) {
+        this.pagoId = pagoId;
     }
 
     @Override

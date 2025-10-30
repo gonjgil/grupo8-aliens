@@ -160,9 +160,9 @@ public class RepositorioOrdenCompraImplTest {
         orden3.setEstado(EstadoOrdenCompra.RECHAZADA);
         orden4.setEstado(EstadoOrdenCompra.RECHAZADA);
 
-        orden5.setEstado(EstadoOrdenCompra.ACEPTADA);
-        orden6.setEstado(EstadoOrdenCompra.ACEPTADA);
-        orden7.setEstado(EstadoOrdenCompra.ACEPTADA);
+        orden5.setEstado(EstadoOrdenCompra.APROBADA);
+        orden6.setEstado(EstadoOrdenCompra.APROBADA);
+        orden7.setEstado(EstadoOrdenCompra.APROBADA);
 
 
         repositorioOrden.guardar(orden1);
@@ -174,7 +174,7 @@ public class RepositorioOrdenCompraImplTest {
         repositorioOrden.guardar(orden7);
 
 
-        List<OrdenCompra> ordenesObtenidas = repositorioOrden.obtenerPorEstado(EstadoOrdenCompra.ACEPTADA);
+        List<OrdenCompra> ordenesObtenidas = repositorioOrden.obtenerPorEstado(EstadoOrdenCompra.APROBADA);
 
         assertThat(ordenesObtenidas.size(),is(3));
         assertThat(ordenesObtenidas.get(0).getId(), is(orden5.getId()));
