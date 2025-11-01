@@ -1,17 +1,15 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.Artista;
-import com.tallerwebi.dominio.Obra;
+import com.tallerwebi.dominio.entidades.Artista;
+import com.tallerwebi.dominio.entidades.Obra;
 import com.tallerwebi.dominio.ServicioBusqueda;
-import com.tallerwebi.dominio.Usuario;
-import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
 import com.tallerwebi.dominio.excepcion.NoSeEncontraronResultadosException;
+import com.tallerwebi.presentacion.dto.ObraDto;
+import com.tallerwebi.presentacion.dto.PerfilArtistaDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @RestController

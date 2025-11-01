@@ -1,7 +1,11 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.*;
+import com.tallerwebi.dominio.entidades.*;
 import com.tallerwebi.dominio.enums.EstadoOrdenCompra;
+import com.tallerwebi.dominio.repositorios.RepositorioCarrito;
+import com.tallerwebi.dominio.repositorios.RepositorioObra;
+import com.tallerwebi.dominio.repositorios.RepositorioOrdenCompra;
+import com.tallerwebi.dominio.repositorios.RepositorioUsuario;
 import com.tallerwebi.infraestructura.config.HibernateTestInfraestructuraConfig;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.BeforeEach;

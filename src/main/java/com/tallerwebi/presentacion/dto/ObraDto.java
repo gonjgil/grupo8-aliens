@@ -1,11 +1,11 @@
-package com.tallerwebi.presentacion;
+package com.tallerwebi.presentacion.dto;
 
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import com.tallerwebi.dominio.Obra;
-import com.tallerwebi.dominio.Usuario;
+import com.tallerwebi.dominio.entidades.Obra;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.enums.Categoria;
 
 public class ObraDto {

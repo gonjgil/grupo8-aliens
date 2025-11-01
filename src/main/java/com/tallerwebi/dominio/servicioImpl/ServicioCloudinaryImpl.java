@@ -1,7 +1,8 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.servicioImpl;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.tallerwebi.dominio.ServicioCloudinary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,7 +11,7 @@ import java.io.IOException;
 import java.util.Map;
 
 @Service("servicioCloudinary")
-public class ServicioCloudinaryImpl implements ServicioCloudinary{
+public class ServicioCloudinaryImpl implements ServicioCloudinary {
 
     private final Cloudinary cloudinary;
 

@@ -1,6 +1,6 @@
-package com.tallerwebi.presentacion;
+package com.tallerwebi.presentacion.dto;
 
-import com.tallerwebi.dominio.ItemCarrito;
+import com.tallerwebi.dominio.entidades.ItemCarrito;
 
 public class ItemCarritoDto {
     private Long id;

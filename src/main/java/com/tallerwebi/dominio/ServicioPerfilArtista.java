@@ -1,8 +1,10 @@
 package com.tallerwebi.dominio;
 
 
+import com.tallerwebi.dominio.entidades.Artista;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.NoExisteArtista;
-import com.tallerwebi.presentacion.PerfilArtistaDTO;
+import com.tallerwebi.presentacion.dto.PerfilArtistaDTO;
 
 public interface ServicioPerfilArtista {
     PerfilArtistaDTO obtenerPerfilArtista (Long idArtista);

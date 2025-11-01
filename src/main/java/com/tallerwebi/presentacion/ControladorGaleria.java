@@ -3,10 +3,10 @@ package com.tallerwebi.presentacion;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.tallerwebi.dominio.Obra;
-import com.tallerwebi.dominio.Usuario;
-import com.tallerwebi.dominio.enums.Categoria;
+import com.tallerwebi.dominio.entidades.Obra;
+import com.tallerwebi.dominio.entidades.Usuario;
 
+import com.tallerwebi.presentacion.dto.ObraDto;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.ui.ModelMap;

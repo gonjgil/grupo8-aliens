@@ -4,8 +4,8 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.tallerwebi.dominio.Obra;
-import com.tallerwebi.dominio.RepositorioObra;
+import com.tallerwebi.dominio.entidades.Obra;
+import com.tallerwebi.dominio.repositorios.RepositorioObra;
 import com.tallerwebi.dominio.enums.Categoria;
 
 import java.text.Normalizer;

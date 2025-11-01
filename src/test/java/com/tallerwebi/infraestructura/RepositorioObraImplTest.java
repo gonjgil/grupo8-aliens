@@ -19,8 +19,8 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.tallerwebi.dominio.Obra;
-import com.tallerwebi.dominio.RepositorioObra;
+import com.tallerwebi.dominio.entidades.Obra;
+import com.tallerwebi.dominio.repositorios.RepositorioObra;
 import com.tallerwebi.dominio.enums.Categoria;
 import com.tallerwebi.infraestructura.config.HibernateTestInfraestructuraConfig;
 

@@ -1,6 +1,7 @@
 package com.tallerwebi.dominio;
 
-import com.tallerwebi.dominio.enums.Categoria;
+import com.tallerwebi.dominio.entidades.Artista;
+import com.tallerwebi.dominio.entidades.Obra;
 import com.tallerwebi.dominio.excepcion.NoSeEncontraronResultadosException;
 
 import java.util.List;

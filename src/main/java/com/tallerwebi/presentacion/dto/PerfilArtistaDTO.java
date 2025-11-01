@@ -1,6 +1,6 @@
-package com.tallerwebi.presentacion;
+package com.tallerwebi.presentacion.dto;
 
-import com.tallerwebi.dominio.Artista;
+import com.tallerwebi.dominio.entidades.Artista;
 
 public class PerfilArtistaDTO {
 

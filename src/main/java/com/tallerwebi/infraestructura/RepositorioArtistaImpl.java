@@ -1,7 +1,7 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.Artista;
-import com.tallerwebi.dominio.RepositorioArtista;
+import com.tallerwebi.dominio.entidades.Artista;
+import com.tallerwebi.dominio.repositorios.RepositorioArtista;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

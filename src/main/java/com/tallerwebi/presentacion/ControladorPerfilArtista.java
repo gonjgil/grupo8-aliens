@@ -1,10 +1,11 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.Artista;
+import com.tallerwebi.dominio.entidades.Artista;
 import com.tallerwebi.dominio.ServicioCloudinary;
 import com.tallerwebi.dominio.ServicioPerfilArtista;
-import com.tallerwebi.dominio.Usuario;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.NoExisteArtista;
+import com.tallerwebi.presentacion.dto.PerfilArtistaDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;

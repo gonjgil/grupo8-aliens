@@ -1,7 +1,8 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.servicioImpl;
 
 import java.util.List;
 
+import com.tallerwebi.dominio.ServicioCompra;
 import com.tallerwebi.dominio.enums.Formato;
 
 import org.springframework.stereotype.Service;

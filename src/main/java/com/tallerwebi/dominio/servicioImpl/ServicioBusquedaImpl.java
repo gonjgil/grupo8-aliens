@@ -1,6 +1,10 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.servicioImpl;
 
-import com.tallerwebi.dominio.enums.Categoria;
+import com.tallerwebi.dominio.repositorios.RepositorioArtista;
+import com.tallerwebi.dominio.repositorios.RepositorioObra;
+import com.tallerwebi.dominio.ServicioBusqueda;
+import com.tallerwebi.dominio.entidades.Artista;
+import com.tallerwebi.dominio.entidades.Obra;
 import com.tallerwebi.dominio.excepcion.NoSeEncontraronResultadosException;
 import org.springframework.stereotype.Service;
 
