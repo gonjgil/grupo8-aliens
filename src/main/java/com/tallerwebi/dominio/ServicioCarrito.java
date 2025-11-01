@@ -1,8 +1,11 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.entidades.Carrito;
+import com.tallerwebi.dominio.entidades.Obra;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
 import com.tallerwebi.dominio.excepcion.NoHayStockSuficiente;
-import com.tallerwebi.presentacion.ItemCarritoDto;
+import com.tallerwebi.presentacion.dto.ItemCarritoDto;
 
 import java.util.List;
 

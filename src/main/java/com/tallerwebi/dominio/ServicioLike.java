@@ -1,5 +1,8 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.entidades.Obra;
+import com.tallerwebi.dominio.entidades.Usuario;
+
 import java.util.List;
 
 public interface ServicioLike {

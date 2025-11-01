@@ -1,4 +1,4 @@
-package com.tallerwebi.presentacion;
+package com.tallerwebi.presentacion.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;

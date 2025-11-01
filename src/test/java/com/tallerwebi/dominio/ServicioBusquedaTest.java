@@ -1,11 +1,16 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.repositorios.RepositorioArtista;
+import com.tallerwebi.dominio.repositorios.RepositorioObra;
+import com.tallerwebi.dominio.servicioImpl.ServicioBusquedaImpl;
+import com.tallerwebi.dominio.entidades.Artista;
+import com.tallerwebi.dominio.entidades.Obra;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.enums.Categoria;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 

@@ -1,11 +1,18 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.servicioImpl;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tallerwebi.dominio.repositorios.RepositorioCarrito;
+import com.tallerwebi.dominio.repositorios.RepositorioObra;
+import com.tallerwebi.dominio.ServicioCarrito;
+import com.tallerwebi.dominio.entidades.Carrito;
+import com.tallerwebi.dominio.entidades.ItemCarrito;
+import com.tallerwebi.dominio.entidades.Obra;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
 import com.tallerwebi.dominio.excepcion.NoHayStockSuficiente;
-import com.tallerwebi.presentacion.ItemCarritoDto;
+import com.tallerwebi.presentacion.dto.ItemCarritoDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

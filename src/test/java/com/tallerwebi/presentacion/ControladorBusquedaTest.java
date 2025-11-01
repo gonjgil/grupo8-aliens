@@ -1,10 +1,10 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.Artista;
-import com.tallerwebi.dominio.Obra;
+import com.tallerwebi.dominio.entidades.Obra;
 import com.tallerwebi.dominio.ServicioBusqueda;
-import com.tallerwebi.dominio.ServicioBusquedaImpl;
 import com.tallerwebi.dominio.excepcion.NoSeEncontraronResultadosException;
+import com.tallerwebi.presentacion.dto.ObraDto;
+import com.tallerwebi.presentacion.dto.PerfilArtistaDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
 

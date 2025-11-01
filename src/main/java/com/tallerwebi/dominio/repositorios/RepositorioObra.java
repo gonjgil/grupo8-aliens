@@ -1,7 +1,8 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.repositorios;
 
 import java.util.List;
 
+import com.tallerwebi.dominio.entidades.Obra;
 import com.tallerwebi.dominio.enums.Categoria;
 
 public interface RepositorioObra {

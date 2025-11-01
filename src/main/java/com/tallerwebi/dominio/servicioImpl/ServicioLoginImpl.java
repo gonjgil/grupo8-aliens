@@ -1,5 +1,8 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.servicioImpl;
 
+import com.tallerwebi.dominio.repositorios.RepositorioUsuario;
+import com.tallerwebi.dominio.ServicioLogin;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.UsuarioExistente;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

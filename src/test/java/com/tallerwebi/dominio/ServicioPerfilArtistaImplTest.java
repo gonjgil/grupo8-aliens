@@ -1,7 +1,11 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.repositorios.RepositorioArtista;
+import com.tallerwebi.dominio.servicioImpl.ServicioPerfilArtistaImpl;
+import com.tallerwebi.dominio.entidades.Artista;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.NoExisteArtista;
-import com.tallerwebi.presentacion.PerfilArtistaDTO;
+import com.tallerwebi.presentacion.dto.PerfilArtistaDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

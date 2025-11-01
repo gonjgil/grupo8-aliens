@@ -1,18 +1,18 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.entidades;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "ItemOrden")
-public class ItemOrden {
+@Table(name = "ItemCarrito")
+public class ItemCarrito {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "orden_id")
-    private OrdenCompra orden;
+    @JoinColumn(name = "carrito_id")
+    private Carrito carrito;
 
     @ManyToOne
     @JoinColumn(name = "obra_id")
@@ -20,13 +20,13 @@ public class ItemOrden {
     private Integer cantidad;
     private Double precioUnitario;
 
-    public ItemOrden() {}
+    public ItemCarrito() {}
 
-
-    public ItemOrden(ItemCarrito itemCarrito) {
-        this.obra = itemCarrito.getObra();
-        this.cantidad = itemCarrito.getCantidad();
-        this.precioUnitario = itemCarrito.getPrecioUnitario();
+    public ItemCarrito(Carrito carrito, Obra obra) {
+        this.carrito = carrito;
+        this.obra = obra;
+        this.precioUnitario = obra.getPrecio();
+        this.cantidad = 1;
     }
 
     public Double getSubtotal() {
@@ -37,8 +37,8 @@ public class ItemOrden {
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public OrdenCompra getOrden() { return orden; }
-    public void setOrden(OrdenCompra orden) { this.orden = orden; }
+    public Carrito getCarrito() { return carrito; }
+    public void setCarrito(Carrito carrito) { this.carrito = carrito; }
 
     public Obra getObra() { return obra; }
     public void setObra(Obra obra) { this.obra = obra; }

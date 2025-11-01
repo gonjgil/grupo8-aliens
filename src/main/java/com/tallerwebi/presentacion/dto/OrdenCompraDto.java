@@ -1,12 +1,11 @@
-package com.tallerwebi.presentacion;
+package com.tallerwebi.presentacion.dto;
 
-import com.tallerwebi.dominio.ItemOrden;
-import com.tallerwebi.dominio.OrdenCompra;
-import com.tallerwebi.dominio.Usuario;
+import com.tallerwebi.dominio.entidades.ItemOrden;
+import com.tallerwebi.dominio.entidades.OrdenCompra;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.enums.EstadoOrdenCompra;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 public class OrdenCompraDto {

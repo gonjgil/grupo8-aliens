@@ -1,5 +1,7 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.repositorios;
 
+import com.tallerwebi.dominio.entidades.OrdenCompra;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.enums.EstadoOrdenCompra;
 
 import java.util.List;

@@ -1,6 +1,6 @@
-package com.tallerwebi.presentacion;
+package com.tallerwebi.presentacion.dto;
 
-import com.tallerwebi.dominio.Usuario;
+import com.tallerwebi.dominio.entidades.Usuario;
 
 public class UsuarioDto {
 

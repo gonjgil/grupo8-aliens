@@ -1,4 +1,4 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.entidades;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

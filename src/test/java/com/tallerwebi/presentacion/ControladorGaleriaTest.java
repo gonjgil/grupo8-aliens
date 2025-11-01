@@ -1,13 +1,12 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.Obra;
-import com.tallerwebi.dominio.Usuario;
-import com.tallerwebi.dominio.enums.Categoria;
+import com.tallerwebi.dominio.entidades.Obra;
+import com.tallerwebi.dominio.entidades.Usuario;
 
+import com.tallerwebi.presentacion.dto.ObraDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import org.mockito.Mockito;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.tallerwebi.dominio.ServicioGaleria;
@@ -19,12 +18,10 @@ import javax.servlet.http.HttpSession;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.text.IsEqualIgnoringCase.equalToIgnoringCase;
-import static org.hamcrest.core.IsEqual.equalTo;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.doThrow;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ControladorGaleriaTest {

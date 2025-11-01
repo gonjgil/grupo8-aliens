@@ -1,9 +1,9 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.Carrito;
-import com.tallerwebi.dominio.Obra;
-import com.tallerwebi.dominio.ServicioCarritoImpl;
-import com.tallerwebi.dominio.Usuario;
+import com.tallerwebi.dominio.entidades.Carrito;
+import com.tallerwebi.dominio.entidades.Obra;
+import com.tallerwebi.dominio.servicioImpl.ServicioCarritoImpl;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
 import com.tallerwebi.dominio.excepcion.NoHayStockSuficiente;
 import com.tallerwebi.infraestructura.RepositorioCarritoImpl;

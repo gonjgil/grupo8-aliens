@@ -1,7 +1,11 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.servicioImpl;
 
+import com.tallerwebi.dominio.repositorios.RepositorioArtista;
+import com.tallerwebi.dominio.ServicioPerfilArtista;
+import com.tallerwebi.dominio.entidades.Artista;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.NoExisteArtista;
-import com.tallerwebi.presentacion.PerfilArtistaDTO;
+import com.tallerwebi.presentacion.dto.PerfilArtistaDTO;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

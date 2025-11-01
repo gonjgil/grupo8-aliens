@@ -1,8 +1,13 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.repositorios.RepositorioObra;
+import com.tallerwebi.dominio.servicioImpl.ServicioGaleriaImpl;
+import com.tallerwebi.dominio.entidades.Artista;
+import com.tallerwebi.dominio.entidades.Obra;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.enums.Categoria;
 import com.tallerwebi.dominio.excepcion.*;
-import com.tallerwebi.presentacion.ObraDto;
+import com.tallerwebi.presentacion.dto.ObraDto;
 
 import org.junit.jupiter.api.Test;
 

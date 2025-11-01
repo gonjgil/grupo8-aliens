@@ -1,19 +1,16 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.Obra;
+import com.tallerwebi.dominio.entidades.Obra;
 import com.tallerwebi.dominio.ServicioGaleria;
 import com.tallerwebi.dominio.ServicioLike;
-import com.tallerwebi.dominio.Usuario;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
-import com.tallerwebi.dominio.excepcion.UsuarioAnonimoException;
+import com.tallerwebi.presentacion.dto.ObraDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController
