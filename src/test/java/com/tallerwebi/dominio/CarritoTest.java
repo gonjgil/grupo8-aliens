@@ -10,7 +10,7 @@ import com.tallerwebi.dominio.entidades.Obra;
 import com.tallerwebi.dominio.entidades.Usuario;
 import org.junit.jupiter.api.Test;
 
-public class ServicioCarritoTest {
+public class CarritoTest {
 
     @Test
     public void queAlAgregarUnItemSeAgregueCorrectamente() {
