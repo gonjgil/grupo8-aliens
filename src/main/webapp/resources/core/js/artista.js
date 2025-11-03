@@ -1,4 +1,4 @@
-// Se asegura de que este script se cargue después del HTML del botón
+//despliegue formulario editar artista
 document.addEventListener('DOMContentLoaded', function() {
     const btnEditar = document.getElementById('btn-editar-perfil');
 
@@ -12,4 +12,12 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+
+// Funcionalidad botón Cancelar (formulario edición)
+  const btnCancelar = document.getElementById("btn-cancelar");
+  btnCancelar.addEventListener("click", function() {
+      const artistaId = btnCancelar.dataset.id;
+      window.location.href = `/spring/perfilArtista/ver/${artistaId}`;
+    });
 });
