@@ -24,11 +24,6 @@ public class RepositorioOrdenCompraImpl implements RepositorioOrdenCompra {
 
 
     @Override
-    public Boolean crearOrdenCompra(OrdenCompra ordenCompra) {
-        return (Long) sessionFactory.getCurrentSession().save(ordenCompra) > 0;
-    }
-
-    @Override
     public void guardar(OrdenCompra ordenCompra) {
         sessionFactory.getCurrentSession().save(ordenCompra);
     }
@@ -69,9 +64,15 @@ public class RepositorioOrdenCompraImpl implements RepositorioOrdenCompra {
                 .setParameter("estado", estado)
                 .setParameter("id", ordenId)
                 .executeUpdate();
-        OrdenCompra orden = sessionFactory.getCurrentSession().get(OrdenCompra.class, ordenId);
-        if (orden != null) {
-            sessionFactory.getCurrentSession().refresh(orden);
-        }
+        OrdenCompra ordenActualizada = sessionFactory.getCurrentSession().get(OrdenCompra.class, ordenId);
+        sessionFactory.getCurrentSession().refresh(ordenActualizada);
+
+    }
+
+    @Override
+    public List<OrdenCompra> obtenerTodas() {
+        return sessionFactory.getCurrentSession()
+                .createQuery("FROM OrdenCompra",OrdenCompra.class)
+                .getResultList();
     }
 }

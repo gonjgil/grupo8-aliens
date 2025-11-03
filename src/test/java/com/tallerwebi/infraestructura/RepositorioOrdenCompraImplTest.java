@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -40,26 +41,6 @@ public class RepositorioOrdenCompraImplTest {
         this.repositorioUsuario = new RepositorioUsuarioImpl(this.sessionFactory);
     }
 
-    @Test
-    public void deberiaCrearUnaOrdenDeCompraCorrectamente (){
-        Usuario usuario = new Usuario();
-        Carrito carrito = new Carrito(usuario);
-        Obra obra = new Obra();
-        obra.setPrecio(0.0);
-        carrito.agregarItem(obra);
-
-        ItemCarrito itemCarrito = carrito.getItems().get(0);
-        ItemOrden itemOrden = new ItemOrden(itemCarrito);
-
-        OrdenCompra orden = new OrdenCompra(1L, carrito, carrito.getTotal(), usuario);
-        itemOrden.setOrden(orden);
-        orden.setItems(List.of(itemOrden));
-
-        Boolean ordenCreada = repositorioOrden.crearOrdenCompra(orden);
-        assertThat(ordenCreada, is(true));
-        OrdenCompra ordenObtenida = repositorioOrden.obtenerPorId(orden.getId());
-        assertThat(ordenObtenida, is(equalTo(orden)));
-    }
 
     @Test
     public void deberiaGuardarUnaOrdenDeCompraCorrectamente() {
@@ -136,7 +117,6 @@ public class RepositorioOrdenCompraImplTest {
         OrdenCompra orden = new OrdenCompra();
         orden.setId(1L);
 
-        repositorioOrden.crearOrdenCompra(orden);
         repositorioOrden.guardar(orden);
 
         OrdenCompra ordenObtenida = repositorioOrden.obtenerPorId(orden.getId());

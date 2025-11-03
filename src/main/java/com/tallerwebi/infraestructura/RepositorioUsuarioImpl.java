@@ -1,5 +1,6 @@
 package com.tallerwebi.infraestructura;
 
+import com.tallerwebi.dominio.Obra;
 import com.tallerwebi.dominio.RepositorioUsuario;
 import com.tallerwebi.dominio.Usuario;
 import org.hibernate.Session;
@@ -7,6 +8,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository("repositorioUsuario")
 public class RepositorioUsuarioImpl implements RepositorioUsuario {
@@ -38,6 +41,13 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
         return (Usuario) sessionFactory.getCurrentSession().createCriteria(Usuario.class)
                 .add(Restrictions.eq("email", email))
                 .uniqueResult();
+    }
+
+    @Override
+    public List<Usuario> obtenerTodos() {
+        return this.sessionFactory.getCurrentSession()
+                .createQuery("FROM Usuario", Usuario.class)
+                .getResultList();
     }
 
     @Override
