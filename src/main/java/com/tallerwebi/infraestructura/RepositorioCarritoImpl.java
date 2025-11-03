@@ -2,9 +2,9 @@ package com.tallerwebi.infraestructura;
 
 import org.hibernate.SessionFactory;
 
-import com.tallerwebi.dominio.Carrito;
-import com.tallerwebi.dominio.RepositorioCarrito;
-import com.tallerwebi.dominio.Usuario;
+import com.tallerwebi.dominio.entidades.Carrito;
+import com.tallerwebi.dominio.repositorios.RepositorioCarrito;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.enums.EstadoCarrito;
 
 import org.springframework.beans.factory.annotation.Autowired;

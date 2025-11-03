@@ -3,10 +3,10 @@ package com.tallerwebi.presentacion;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.tallerwebi.dominio.Obra;
-import com.tallerwebi.dominio.Usuario;
-import com.tallerwebi.dominio.enums.Categoria;
+import com.tallerwebi.dominio.entidades.Obra;
+import com.tallerwebi.dominio.entidades.Usuario;
 
+import com.tallerwebi.presentacion.dto.ObraDto;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.ui.ModelMap;
@@ -40,23 +40,29 @@ public class ControladorGaleria {
             Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
             model.put("usuario", usuario);
 
-            List<Obra> obras = this.servicioGaleria.obtener();
+            if(usuario == null) {
+                model.put("obrasSpotlight", this.servicioGaleria.ordenarRandom());
+                model.put("exito", "Hay obras.");
+                return  new ModelAndView("galeria", model);
+            }
+
+            List<Obra> obrasSpotlight = this.servicioGaleria.obtenerObrasParaUsuario(usuario);
             List<ObraDto> obrasDto = new ArrayList<>();
-            for (Obra obra : obras) {
+            for (Obra obra : obrasSpotlight) {
                 obrasDto.add(new ObraDto(obra));
             }
 
-            model.put("obras", obrasDto);
+            model.put("obrasSpotlight", obrasDto);
             model.put("exito", "Hay obras.");
         } catch (NoHayObrasExistentes e) {
-            model.put("obras", new ArrayList<>());
+            model.put("obrasSpotlight", new ArrayList<>());
             model.put("error", "No hay obras.");
             return  new ModelAndView("galeria", model);
         }
         
-        model.put("randomObras", servicioGaleria.ordenarRandom());
-        model.put("autorObras", servicioGaleria.obtenerPorAutor("J. Doe"));
-        model.put("temaObras", servicioGaleria.obtenerPorCategoria(Categoria.ABSTRACTO));
+        //model.put("randomObras", servicioGaleria.ordenarRandom());
+        //model.put("autorObras", servicioGaleria.obtenerPorAutor("J. Doe"));
+        //model.put("temaObras", servicioGaleria.obtenerPorCategoria(Categoria.ABSTRACTO));
 
         return new ModelAndView("galeria", model);
     }

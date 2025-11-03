@@ -4,10 +4,11 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.tallerwebi.dominio.Obra;
-import com.tallerwebi.dominio.RepositorioObra;
+import com.tallerwebi.dominio.entidades.Obra;
+import com.tallerwebi.dominio.repositorios.RepositorioObra;
 import com.tallerwebi.dominio.enums.Categoria;
 
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,8 +42,8 @@ public class RepositorioObraImpl implements RepositorioObra {
     public List<Obra> obtenerPorAutor(String autor) {
         try {
             return this.sessionFactory.getCurrentSession()
-                    .createQuery("FROM Obra WHERE autor LIKE :autor", Obra.class)
-                    .setParameter("autor", "%" + autor + "%")
+                    .createQuery("FROM Obra WHERE lower(autor) LIKE :autor", Obra.class)
+                    .setParameter("autor", "%" + autor.toLowerCase() + "%")
                     .getResultList();
         } catch (IllegalArgumentException e) {
             return new ArrayList<>();
@@ -76,17 +77,17 @@ public class RepositorioObraImpl implements RepositorioObra {
     }
 
 
-    @Override
-    public List<Obra> buscarPorTitulo(String titulo) {
-        try {
-            return this.sessionFactory.getCurrentSession()
-                    .createQuery("FROM Obra WHERE titulo LIKE :titulo", Obra.class)
-                    .setParameter("titulo", "%" + titulo + "%")
-                    .getResultList();
-        } catch (IllegalArgumentException e) {
-            return new ArrayList<>();
-        }
-    }
+//    @Override
+//    public List<Obra> buscarPorTitulo(String titulo) {
+//        try {
+//            return this.sessionFactory.getCurrentSession()
+//                    .createQuery("FROM Obra WHERE lower(titulo) LIKE :titulo", Obra.class)
+//                    .setParameter("titulo", "%" + titulo.toLowerCase() + "%")
+//                    .getResultList();
+//        } catch (IllegalArgumentException e) {
+//            return new ArrayList<>();
+//        }
+//    }
 
     @Override
     public List<Obra> obtenerPorRangoDePrecio(Double precioMin, Double precioMax) {
@@ -101,16 +102,72 @@ public class RepositorioObraImpl implements RepositorioObra {
         }
     }
 
+//    @Override
+//    public List<Obra> buscarPorDescripcion(String descripcion) {
+//        try {
+//            return this.sessionFactory.getCurrentSession()
+//                    .createQuery("FROM Obra WHERE lower(descripcion) LIKE :descripcion", Obra.class)
+//                    .setParameter("descripcion", "%" + descripcion.toLowerCase() + "%")
+//                    .getResultList();
+//        } catch (IllegalArgumentException e) {
+//            return new ArrayList<>();
+//        }
+//    }
+
+    private String obtenerCategoriaEnumSiUnica(String entrada) {
+        if (entrada == null || entrada.isBlank()) {
+            return null;
+        }
+
+        String normalizadaEntrada = normalizar(entrada);
+        List<Categoria> coincidencias = new ArrayList<>();
+
+        for (Categoria c : Categoria.values()) {
+            String normalizadaCategoria = normalizar(c.getCategoria());
+            if (normalizadaCategoria.contains(normalizadaEntrada)) {
+                coincidencias.add(c);
+            }
+        }
+
+        // Solo devolver si hay UNA coincidencia exacta o parcial única
+        return coincidencias.size() == 1 ? coincidencias.get(0).name() : null;
+    }
+
+    private String normalizar(String texto) {
+        return Normalizer.normalize(texto, Normalizer.Form.NFD)
+                .replaceAll("\\p{M}", "") // quita tildes
+                .toLowerCase()
+                .trim();
+    }
+
     @Override
-    public List<Obra> buscarPorDescripcion(String descripcion) {
+    public List<Obra> buscarPorString(String palabraBuscada) {
         try {
-            return this.sessionFactory.getCurrentSession()
-                    .createQuery("FROM Obra WHERE descripcion LIKE :descripcion", Obra.class)
-                    .setParameter("descripcion", "%" + descripcion + "%")
-                    .getResultList();
+            String categoriaEnum = obtenerCategoriaEnumSiUnica(palabraBuscada);
+
+            String query = "SELECT DISTINCT o FROM Obra o " +
+                    "LEFT JOIN FETCH o.usuariosQueDieronLike u " + // <-- fetch join
+                    "JOIN o.categorias c " +
+                    "WHERE lower(o.titulo) LIKE :palabra " +
+                    "OR lower(o.descripcion) LIKE :palabra " +
+                    "OR lower(o.autor) LIKE :palabra";
+
+            if (categoriaEnum != null) {
+                query += " OR c = :categoriaEnum";
+            }
+
+            var q = this.sessionFactory.getCurrentSession()
+                    .createQuery(query, Obra.class)
+                    .setParameter("palabra", "%" + palabraBuscada.toLowerCase() + "%");
+
+            if (categoriaEnum != null) {
+                q.setParameter("categoriaEnum", Categoria.valueOf(categoriaEnum));
+            }
+
+            return q.getResultList();
+
         } catch (IllegalArgumentException e) {
             return new ArrayList<>();
         }
     }
-
 }

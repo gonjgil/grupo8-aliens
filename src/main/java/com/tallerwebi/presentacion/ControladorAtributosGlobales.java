@@ -1,7 +1,7 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.ServicioCarrito;
-import com.tallerwebi.dominio.Usuario;
+import com.tallerwebi.dominio.entidades.Usuario;
 
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;

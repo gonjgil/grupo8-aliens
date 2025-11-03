@@ -19,8 +19,8 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.tallerwebi.dominio.Obra;
-import com.tallerwebi.dominio.RepositorioObra;
+import com.tallerwebi.dominio.entidades.Obra;
+import com.tallerwebi.dominio.repositorios.RepositorioObra;
 import com.tallerwebi.dominio.enums.Categoria;
 import com.tallerwebi.infraestructura.config.HibernateTestInfraestructuraConfig;
 
@@ -166,6 +166,123 @@ public class RepositorioObraImplTest {
     }
 
 
+    @Test
+    @Transactional
+    @Rollback
+    public void queAlBuscarPorTituloObtengaLasObrasCorrespondientes() {
+        Obra obra1 = generarObra1();
+        Obra obra2 = generarObra2();
+        Obra obra3 = generarObra3();
+        obra1.setTitulo("Obra Especial");
+        obra2.setTitulo("Otra Obra Especial");
+        obra3.setTitulo("Obra Común");
+
+        this.repositorioObra.guardar(obra1);
+        this.repositorioObra.guardar(obra2);
+        this.repositorioObra.guardar(obra3);
+
+        List<Obra> obrasObtenidas = this.repositorioObra.buscarPorString("Especial");
+
+        assertThat(obrasObtenidas.size(), is(equalTo(2)));
+        assertThat(obrasObtenidas.get(0), is(equalTo(obra1)));
+        assertThat(obrasObtenidas.get(1), is(equalTo(obra2)));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queAlBuscarPorRangoDePrecioObtengaLasObrasCorrespondientes() {
+        Obra obra1 = generarObra1();
+        Obra obra2 = generarObra2();
+        Obra obra3 = generarObra3();
+
+        this.repositorioObra.guardar(obra1);
+        this.repositorioObra.guardar(obra2);
+        this.repositorioObra.guardar(obra3);
+
+        List<Obra> obrasObtenidas = this.repositorioObra.obtenerPorRangoDePrecio(2000.0, 4000.0);
+
+        assertThat(obrasObtenidas.size(), is(equalTo(2)));
+        assertThat(obrasObtenidas.get(0), is(equalTo(obra2)));
+        assertThat(obrasObtenidas.get(1), is(equalTo(obra3)));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queAlBuscarPorDescripcionObtengaLasObrasCorrespondientes() {
+        Obra obra1 = generarObra1();
+        Obra obra2 = generarObra2();
+        Obra obra3 = generarObra3();
+        obra1.setDescripcion("Esta es una obra maravillosa");
+        obra2.setDescripcion("Una obra que destaca por su belleza");
+        obra3.setDescripcion("Obra común sin nada especial");
+
+        this.repositorioObra.guardar(obra1);
+        this.repositorioObra.guardar(obra2);
+        this.repositorioObra.guardar(obra3);
+
+        List<Obra> obrasObtenidas = this.repositorioObra.buscarPorString("obra");
+
+        assertThat(obrasObtenidas.size(), is(equalTo(3)));
+        assertThat(obrasObtenidas.get(0), is(equalTo(obra1)));
+        assertThat(obrasObtenidas.get(1), is(equalTo(obra2)));
+        assertThat(obrasObtenidas.get(2), is(equalTo(obra3)));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queAlBuscarPorDescripcionYNoEncuentreCoincidenciasDevuelvaUnaListaVacia() {
+        Obra obra1 = generarObra1();
+        Obra obra2 = generarObra2();
+        Obra obra3 = generarObra3();
+        obra1.setDescripcion("Esta es una obra maravillosa");
+        obra2.setDescripcion("Una obra que destaca por su belleza");
+        obra3.setDescripcion("Obra común sin nada especial");
+
+        this.repositorioObra.guardar(obra1);
+        this.repositorioObra.guardar(obra2);
+        this.repositorioObra.guardar(obra3);
+
+        List<Obra> obrasObtenidas = this.repositorioObra.buscarPorString("inexistente");
+
+        assertThat(obrasObtenidas.size(), is(equalTo(0)));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queAlBuscarPorRangoDePrecioSinCoincidenciasDevuelvaUnaListaVacia() {
+        Obra obra1 = generarObra1();
+        Obra obra2 = generarObra2();
+        Obra obra3 = generarObra3();
+
+        this.repositorioObra.guardar(obra1);
+        this.repositorioObra.guardar(obra2);
+        this.repositorioObra.guardar(obra3);
+
+        List<Obra> obrasObtenidas = this.repositorioObra.obtenerPorRangoDePrecio(4000.0, 5000.0);
+
+        assertThat(obrasObtenidas.size(), is(equalTo(0)));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queAlBuscarPorTituloSinCoincidenciasDevuelvaUnaListaVacia() {
+        Obra obra1 = generarObra1();
+        Obra obra2 = generarObra2();
+        Obra obra3 = generarObra3();
+
+        this.repositorioObra.guardar(obra1);
+        this.repositorioObra.guardar(obra2);
+        this.repositorioObra.guardar(obra3);
+
+        List<Obra> obrasObtenidas = this.repositorioObra.buscarPorString("Inexistente");
+
+        assertThat(obrasObtenidas.size(), is(equalTo(0)));
+    }
 
     private Obra generarObra1() {
         Obra obra1 = new Obra();

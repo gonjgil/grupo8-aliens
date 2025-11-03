@@ -1,10 +1,11 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.Artista;
+import com.tallerwebi.dominio.entidades.Artista;
 import com.tallerwebi.dominio.ServicioCloudinary;
 import com.tallerwebi.dominio.ServicioPerfilArtista;
-import com.tallerwebi.dominio.Usuario;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.NoExisteArtista;
+import com.tallerwebi.presentacion.dto.PerfilArtistaDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.multipart.MultipartFile;
@@ -53,7 +54,7 @@ public class ControladorPerfilArtistaTest {
     }
 
     @Test
-    public void deberiaMostrarPaginaDeErrorCuandoArtistaNoExiste(){
+    public void deberiaRedirigirAGaleriaCuandoArtistaNoExiste(){
         // Preparación
         Long idArtista = 2L;
         when(servicioPerfilArtistaMock.obtenerPerfilArtista(idArtista)).thenThrow(new NoExisteArtista());

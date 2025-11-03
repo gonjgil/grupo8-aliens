@@ -1,11 +1,16 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.repositorios.RepositorioArtista;
+import com.tallerwebi.dominio.repositorios.RepositorioObra;
+import com.tallerwebi.dominio.servicioImpl.ServicioBusquedaImpl;
+import com.tallerwebi.dominio.entidades.Artista;
+import com.tallerwebi.dominio.entidades.Obra;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.enums.Categoria;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -38,9 +43,9 @@ public class ServicioBusquedaTest {
         obra2.setTitulo("Titulo 2");
         obra3.setTitulo("Titulo 3");
 
-        when(repositorioObra.buscarPorTitulo("2")).thenReturn(List.of(obra2));
+        when(repositorioObra.buscarPorString("2")).thenReturn(List.of(obra2));
 
-        List<Obra> obras = servicioBusqueda.buscarObraPorTitulo("2");
+        List<Obra> obras = servicioBusqueda.buscarObrasPorString("2");
 
         assert(obras.size() == 1);
         assert(obras.get(0).getTitulo().equals("Titulo 2"));
@@ -48,13 +53,13 @@ public class ServicioBusquedaTest {
 
     @Test
     public void queAlBuscarUnaObraPorUnTituloInexistenteSeDevuelvaMensajeDeError() {
-        when(repositorioObra.buscarPorTitulo("Titulo Inexistente")).thenReturn(List.of());
+        when(repositorioObra.buscarPorString("Titulo Inexistente")).thenReturn(List.of());
 
         try {
-            servicioBusqueda.buscarObraPorTitulo("Titulo Inexistente");
+            servicioBusqueda.buscarObrasPorString("Titulo Inexistente");
             assert(false); // Si no lanza excepción, la prueba falla
         } catch (Exception e) {
-            assert(e.getMessage().equals("No se encontraron obras con el título proporcionado."));
+            assert(e.getMessage().equals("No se encontraron obras"));
         }
     }
 
@@ -93,9 +98,11 @@ public class ServicioBusquedaTest {
         obra2.agregarCategoria(Categoria.TEST);
         obra3.agregarCategoria(Categoria.ABSTRACTO);
 
-        when(repositorioObra.obtenerPorCategoria(Categoria.TEST)).thenReturn(List.of(obra1,obra2));
+        //when(repositorioObra.obtenerPorCategoria(Categoria.TEST)).thenReturn(List.of(obra1,obra2));
+        //List<Obra> obras = servicioBusqueda.buscarObraPorCategoria(Categoria.TEST);
 
-        List<Obra> obras = servicioBusqueda.buscarObraPorCategoria(Categoria.TEST);
+        when(repositorioObra.buscarPorString((Categoria.TEST).toString())).thenReturn(List.of(obra1,obra2));
+        List<Obra> obras = servicioBusqueda.buscarObrasPorString((Categoria.TEST).toString());
 
         assert(obras.size() == 2);
         assert(obras.get(0).getCategorias().contains(Categoria.TEST));
@@ -107,10 +114,10 @@ public class ServicioBusquedaTest {
         when(repositorioObra.obtenerPorCategoria(Categoria.TEST)).thenReturn(List.of());
 
         try {
-            servicioBusqueda.buscarObraPorCategoria(Categoria.TEST);
+            servicioBusqueda.buscarObrasPorString((Categoria.TEST).toString());
             assert(false); // Si no lanza excepción, la prueba falla
         } catch (Exception e) {
-            assert(e.getMessage().equals("No se encontraron obras en la categoría proporcionada."));
+            assert(e.getMessage().equals("No se encontraron obras"));
         }
     }
 
@@ -141,8 +148,8 @@ public class ServicioBusquedaTest {
         obra2.setAutor("Autor 1");
         obra3.setAutor("Autor 2");
 
-        when(repositorioObra.obtenerPorAutor("Autor 1")).thenReturn(List.of(obra1,obra2));
-        List<Obra> obras = servicioBusqueda.buscarObraPorAutor("Autor 1");
+        when(repositorioObra.buscarPorString("Autor 1")).thenReturn(List.of(obra1,obra2));
+        List<Obra> obras = servicioBusqueda.buscarObrasPorString("Autor 1");
         assert(obras.size() == 2);
         assert(obras.get(0).getAutor().equals("Autor 1"));
         assert(obras.get(1).getAutor().equals("Autor 1"));
@@ -256,12 +263,45 @@ public class ServicioBusquedaTest {
         obra2.setDescripcion("Una pieza del arte plástico impresionante.");
         obra3.setDescripcion("Un paisaje natural maravilloso.");
 
-        when(repositorioObra.buscarPorDescripcion("arte")).thenReturn(List.of(obra1, obra2));
+        when(repositorioObra.buscarPorString("arte")).thenReturn(List.of(obra1, obra2));
 
-        List<Obra> obras = servicioBusqueda.buscarObraPorDescripcion("arte");
+        List<Obra> obras = servicioBusqueda.buscarObrasPorString("arte");
 
         assert(obras.size() == 2);
         assert(obras.get(0).getDescripcion().toLowerCase().contains("arte"));
         assert(obras.get(1).getDescripcion().toLowerCase().contains("arte"));
+    }
+
+    @Test
+    public void queSePuedaBuscarObrasPorMasDeUnCriterioEnSimultaneo() {
+        Obra obra1 = new Obra();
+        Obra obra2 = new Obra();
+        Obra obra3 = new Obra();
+        Obra obra4 = new Obra();
+
+        obra1.setDescripcion("Esta es una hermosa obra de arte abstracto.");
+        obra1.setTitulo("Titulo 1");
+        obra1.agregarCategoria(Categoria.TEST);
+
+        obra2.setDescripcion("Una pieza impresionante.");
+        obra2.setTitulo("Arte abstracto");
+        obra2.agregarCategoria(Categoria.TEST);
+
+        obra3.setDescripcion("Un paisaje natural maravilloso.");
+        obra3.setTitulo("Titulo 3");
+        obra3.agregarCategoria(Categoria.TEST);
+
+        obra4.setDescripcion("Descripcion...");
+        obra4.setTitulo("Titulo 4");
+        obra4.agregarCategoria(Categoria.ABSTRACTO);
+
+        when(repositorioObra.buscarPorString("abstracto")).thenReturn(List.of(obra1, obra2, obra4));
+
+        List<Obra> obras = servicioBusqueda.buscarObrasPorString("abstracto");
+
+        assert(obras.size() == 3);
+        assert(obras.get(0).getDescripcion().toLowerCase().contains("abstracto"));
+        assert(obras.get(1).getTitulo().toLowerCase().contains("abstracto"));
+        assert(obras.get(2).getCategorias().contains(Categoria.valueOf("ABSTRACTO")));
     }
 }

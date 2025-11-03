@@ -1,5 +1,11 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.repositorios.RepositorioCarrito;
+import com.tallerwebi.dominio.repositorios.RepositorioObra;
+import com.tallerwebi.dominio.servicioImpl.ServicioCarritoImpl;
+import com.tallerwebi.dominio.entidades.Carrito;
+import com.tallerwebi.dominio.entidades.Obra;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.CarritoNoEncontradoException;
 import com.tallerwebi.dominio.excepcion.CarritoVacioException;
 import com.tallerwebi.dominio.excepcion.NoExisteLaObra;

@@ -1,8 +1,8 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.Obra;
-import com.tallerwebi.dominio.RepositorioUsuario;
-import com.tallerwebi.dominio.Usuario;
+import com.tallerwebi.dominio.entidades.Obra;
+import com.tallerwebi.dominio.entidades.Usuario;
+import com.tallerwebi.dominio.repositorios.RepositorioUsuario;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -25,9 +25,14 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
     public Usuario buscarUsuario(String email, String password) {
 
         final Session session = sessionFactory.getCurrentSession();
-        return (Usuario) session.createCriteria(Usuario.class)
-                .add(Restrictions.eq("email", email))
-                .add(Restrictions.eq("password", password))
+
+        String hql = "SELECT u FROM Usuario u " +
+                "LEFT JOIN FETCH u.obrasLikeadas " +
+                "WHERE u.email = :email AND u.password = :password";
+
+        return session.createQuery(hql, Usuario.class)
+                .setParameter("email", email)
+                .setParameter("password", password)
                 .uniqueResult();
     }
 

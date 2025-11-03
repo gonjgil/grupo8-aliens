@@ -1,9 +1,11 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.*;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
 import com.tallerwebi.dominio.excepcion.NoHayStockSuficiente;
 
+import com.tallerwebi.presentacion.dto.ItemCarritoDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -69,6 +71,7 @@ public class ControladorCarrito {
 
     @PostMapping("/aumentar/{obraId}")
     public String aumentarCantidad(@PathVariable Long obraId, HttpSession session,
+                                   @RequestParam(required = false) String redirect,
                                    RedirectAttributes redirectAttributes) {
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
         if (usuario == null) return "redirect:/login";
@@ -78,15 +81,24 @@ public class ControladorCarrito {
         } catch (NoHayStockSuficiente e) {
             redirectAttributes.addFlashAttribute("error", "No hay stock suficiente.");
         }
+        if ("obra".equals(redirect)) {
+            return "redirect:/obra/" + obraId;
+        }
         return "redirect:/carrito";
     }
 
     @PostMapping("/disminuir/{obraId}")
-    public String disminuirCantidad(@PathVariable Long obraId, HttpSession session) {
+    public String disminuirCantidad(@PathVariable Long obraId,
+                                    @RequestParam(required = false) String redirect,
+                                    HttpSession session) {
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
         if (usuario == null) return "redirect:/login";
 
         servicioCarrito.disminuirCantidadDeObraDelCarrito(usuario, obraId);
+
+        if ("obra".equals(redirect)) {
+            return "redirect:/obra/" + obraId;
+        }
         return "redirect:/carrito";
     }
 
