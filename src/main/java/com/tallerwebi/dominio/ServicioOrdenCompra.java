@@ -2,6 +2,8 @@ package com.tallerwebi.dominio;
 
 import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.exceptions.MPException;
+import com.tallerwebi.dominio.entidades.Carrito;
+import com.tallerwebi.dominio.entidades.OrdenCompra;
 import com.tallerwebi.dominio.enums.EstadoOrdenCompra;
 import com.tallerwebi.dominio.excepcion.CarritoVacioException;
 import com.tallerwebi.dominio.excepcion.UsuarioNoEncontradoException;

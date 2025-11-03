@@ -20,7 +20,7 @@ public interface ServicioCarrito {
     List<Obra> obtenerObras(Usuario usuario); //testeado
     List<ItemCarritoDto> obtenerItems(Usuario usuario);
     Integer obtenerCantidadDeItemPorId(Usuario usuario, Obra obra);
-    Carrito obtenerCarritoConItems(Usuario usuario); //testeado
+    Carrito obtenerCarritoConItems(Usuario usuario) throws CarritoVacioException, CarritoNoEncontradoException; //testeado
     Double calcularPrecioTotalCarrito(Usuario usuario); //testeado
     Integer contarItemsEnCarrito(Usuario usuario); //testeado
 }

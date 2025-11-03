@@ -5,10 +5,16 @@ import com.mercadopago.client.payment.PaymentClient;
 import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.resources.payment.Payment;
+import com.tallerwebi.dominio.entidades.Carrito;
+import com.tallerwebi.dominio.entidades.ItemCarrito;
+import com.tallerwebi.dominio.entidades.ItemOrden;
+import com.tallerwebi.dominio.entidades.OrdenCompra;
 import com.tallerwebi.dominio.enums.EstadoCarrito;
 import com.tallerwebi.dominio.enums.EstadoOrdenCompra;
 import com.tallerwebi.dominio.excepcion.CarritoVacioException;
 import com.tallerwebi.dominio.excepcion.UsuarioNoEncontradoException;
+import com.tallerwebi.dominio.repositorios.RepositorioCarrito;
+import com.tallerwebi.dominio.repositorios.RepositorioOrdenCompra;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +29,6 @@ public class ServicioOrdenCompraImpl implements ServicioOrdenCompra{
 
     private RepositorioOrdenCompra repositorioOrdenCompra;
     private RepositorioCarrito repositorioCarrito;
-    private RepositorioUsuario repositorioUsuario;
     private PaymentClient mpCliente;
 
     public ServicioOrdenCompraImpl(RepositorioOrdenCompra repositorioOrden,  RepositorioCarrito repositorioCarrito,  PaymentClient mpCliente) {

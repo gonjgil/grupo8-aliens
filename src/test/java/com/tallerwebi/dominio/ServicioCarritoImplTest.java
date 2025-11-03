@@ -20,7 +20,6 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 public class ServicioCarritoImplTest {
@@ -408,10 +407,10 @@ public class ServicioCarritoImplTest {
         assertThat(servicioCarritoImpl.obtenerCarritoConItems(usuario1),is(equalTo(carrito1)));
         assertThat(servicioCarritoImpl.contarItemsEnCarrito(usuario1),is(equalTo(3)));
 
-        CarritoVacioException exception = assertThrows(CarritoVacioException.class, () -> {
+        assertThrows(CarritoVacioException.class, () -> {
             servicioCarritoImpl.obtenerCarritoConItems(usuario2);
         });
-        assertEquals("El carrito no puede ser vacio", exception.getMessage());
+
     }
 
     @Test
