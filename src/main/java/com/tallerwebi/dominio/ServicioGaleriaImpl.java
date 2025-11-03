@@ -4,15 +4,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.tallerwebi.presentacion.ObraDto;
+import com.tallerwebi.dominio.enums.Categoria;
+import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
+import com.tallerwebi.dominio.excepcion.NoHayObrasExistentes;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.tallerwebi.dominio.enums.Categoria;
-import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
-import com.tallerwebi.dominio.excepcion.NoHayObrasExistentes;
 
 @Service("servicioGaleria")
 @Transactional

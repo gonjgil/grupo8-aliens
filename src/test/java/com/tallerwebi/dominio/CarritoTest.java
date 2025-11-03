@@ -1,5 +1,7 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.enums.Formato;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -14,7 +16,7 @@ public class CarritoTest {
         Carrito carrito = new Carrito(usuario);
         Obra obra = new Obra();
 
-        carrito.agregarItem(obra);
+        carrito.agregarItem(obra, Formato.ORIGINAL, 2001.0);
 
         assertThat(carrito.getItems().size(), is(equalTo(1)));
         ItemCarrito item = carrito.getItems().get(0);
@@ -30,8 +32,8 @@ public class CarritoTest {
         Obra obra2 = new Obra();
         obra2.setId(2L);
 
-        carrito.agregarItem(obra1);
-        carrito.agregarItem(obra2);
+        carrito.agregarItem(obra1, Formato.ORIGINAL, 2001.0);
+        carrito.agregarItem(obra2, Formato.ORIGINAL, 2001.0);
 
         carrito.disminuirCantidadDeItem(obra1);
 
@@ -47,8 +49,8 @@ public class CarritoTest {
         Obra obra1 = new Obra();
         obra1.setId(1L);
 
-        carrito.agregarItem(obra1);
-        carrito.agregarItem(obra1);
+        carrito.agregarItem(obra1, Formato.ORIGINAL, 2001.0);
+        carrito.agregarItem(obra1, Formato.ORIGINAL, 2001.0);
 
         assertThat(carrito.getItems().size(), is(equalTo(1)));
         ItemCarrito item = carrito.getItems().get(0);
@@ -64,8 +66,8 @@ public class CarritoTest {
         Obra obra2 = new Obra();
         obra2.setId(2L);
         
-        carrito.agregarItem(obra1);
-        carrito.agregarItem(obra2);
+        carrito.agregarItem(obra1, Formato.ORIGINAL, 2001.0);
+        carrito.agregarItem(obra2, Formato.ORIGINAL, 2001.0);
 
         carrito.limpiarCarrito();
 
@@ -78,17 +80,15 @@ public class CarritoTest {
         Carrito carrito = new Carrito(usuario);
         Obra obra1 = new Obra();
         obra1.setId(1L);
-        obra1.setPrecio(100.0);
         Obra obra2 = new Obra();
         obra2.setId(2L);
-        obra2.setPrecio(3000.0);  
         
-        carrito.agregarItem(obra1);
-        carrito.agregarItem(obra1);
-        carrito.agregarItem(obra2);
+        carrito.agregarItem(obra1, Formato.ORIGINAL, 200.0);
+        carrito.agregarItem(obra1, Formato.ORIGINAL, 200.0);
+        carrito.agregarItem(obra2, Formato.ORIGINAL, 3000.0);
 
         assertThat(carrito.getItems().size(), is(equalTo(2)));
-        assertThat(carrito.getTotal(), is(equalTo(3200.0)));
+        assertThat(carrito.getTotal(), is(equalTo(3400.0)));
     }
     
 @Test
@@ -100,9 +100,9 @@ public class CarritoTest {
         Obra obra2 = new Obra();
         obra2.setId(2L);
         
-        carrito.agregarItem(obra1);
-        carrito.agregarItem(obra1);
-        carrito.agregarItem(obra2);
+        carrito.agregarItem(obra1, Formato.ORIGINAL, 2001.0);
+        carrito.agregarItem(obra1, Formato.ORIGINAL, 2001.0);
+        carrito.agregarItem(obra2, Formato.ORIGINAL, 2001.0);
 
         assertThat(carrito.getItems().size(), is(equalTo(2)));
         assertThat(carrito.getCantidadTotalItems(), is(equalTo(3)));

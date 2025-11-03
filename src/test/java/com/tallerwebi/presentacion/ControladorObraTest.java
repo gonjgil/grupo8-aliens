@@ -1,6 +1,7 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.Obra;
+import com.tallerwebi.dominio.ServicioCarrito;
 import com.tallerwebi.dominio.ServicioGaleria;
 import com.tallerwebi.dominio.ServicioLike;
 import com.tallerwebi.dominio.Usuario;
@@ -37,6 +38,7 @@ public class ControladorObraTest {
     public void verObra_deberiaMostrarVistaConDatosDeLaObra() throws Exception {
         ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
         ServicioLike servicioLike = mock(ServicioLike.class);
+        ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
 
         Obra obra = mock(Obra.class);
         obra.setId(1L);
@@ -48,7 +50,7 @@ public class ControladorObraTest {
         when(servicioGaleria.obtenerPorId(1L)).thenReturn(obra);
         // when(servicioCarrito.contarItemsEnCarrito(usuario)).thenReturn(2);
 
-        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioLike);
+        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioLike, servicioCarrito);
 
         ModelAndView modelAndView = controladorObra.verObra(1L, request);
 
@@ -62,10 +64,11 @@ public class ControladorObraTest {
     public void queAlIntentarAccederAUnaObraNoValidaSeRedirijaAVistaGaleria() throws NoExisteLaObra {
         ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
         ServicioLike servicioLike = mock(ServicioLike.class);
+        ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
         when(servicioGaleria.obtenerPorId(999L)).thenThrow(new NoExisteLaObra());
         
 
-        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioLike);
+        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioLike, servicioCarrito);
         ModelAndView modelAndView = controladorObra.verObra(999L, request);
 
         assertThat(modelAndView.getViewName(), is(equalTo("redirect:/galeria_alt")));

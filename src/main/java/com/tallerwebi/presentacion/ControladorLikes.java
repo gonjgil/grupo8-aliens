@@ -1,20 +1,19 @@
 package com.tallerwebi.presentacion;
 
+import java.util.Map;
+
 import com.tallerwebi.dominio.Obra;
 import com.tallerwebi.dominio.ServicioGaleria;
 import com.tallerwebi.dominio.ServicioLike;
 import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
-import com.tallerwebi.dominio.excepcion.UsuarioAnonimoException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.Map;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class ControladorLikes {
@@ -40,7 +39,6 @@ public class ControladorLikes {
         try {
             boolean liked = servicioLike.toggleLike(usuario, id);
             Obra obra = servicioGaleria.obtenerPorId(id);
-            ObraDto obraDto = new ObraDto(obra);
 
             return ResponseEntity.ok(Map.of(
                     "liked", liked,

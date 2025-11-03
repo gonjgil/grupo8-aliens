@@ -49,6 +49,7 @@
             <thead class="table-light">
             <tr>
                 <th>Obra</th>
+                <th>Formato</th>
                 <th>Precio</th>
                 <th>Cantidad</th>
                 <th>Subtotal</th>
@@ -59,10 +60,14 @@
             <tbody>
             <tr th:each="item : ${items}">
                 <td th:text="${item.obraTitulo}"></td>
+                <td>
+                    <span class="badge bg-secondary" th:text="${item.formatoNombre}"></span>
+                </td>
                 <td th:text="'$' + ${#numbers.formatDecimal(item.obraPrecio, 1, 2)}"></td>
                 <td>
                     <div class="flex items-center justify-start space-x-2">
                         <form th:action="@{/carrito/disminuir/{id}(id=${item.obraId})}" method="post" style="display:inline">
+                            <input type="hidden" name="formato" th:value="${item.formato}" />
                             <button type="submit" class="w-8 h-8 flex items-center justify-center
                             bg-gray-200 hover:bg-gray-300 rounded-full text-lg font-bold">-</button>
                         </form>
@@ -70,6 +75,7 @@
                         <span class="w-10 text-center font-semibold"><span th:text="${item.cantidad}">1</span></span>
 
                         <form th:action="@{/carrito/aumentar/{id}(id=${item.obraId})}" method="post" style="display:inline">
+                            <input type="hidden" name="formato" th:value="${item.formato}" />
                             <button type="submit" class="w-8 h-8 flex items-center justify-center
                             bg-gray-200 hover:bg-gray-300 rounded-full text-lg font-bold">+</button>
                         </form>
@@ -78,6 +84,7 @@
                 <td th:text="'$' + ${#numbers.formatDecimal(item.subtotal, 1, 2)}"></td>
                 <td>
                     <form th:action="@{/carrito/eliminar/{obraId}(obraId=${item.obraId})}" method="post">
+                        <input type="hidden" name="formato" th:value="${item.formato}" />
                         <button type="submit" class="text-red-600 hover:text-red-800 font-semibold">Eliminar</button>
                     </form>
                 </td>

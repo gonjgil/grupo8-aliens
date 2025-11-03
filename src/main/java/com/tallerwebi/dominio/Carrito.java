@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 import com.tallerwebi.dominio.enums.EstadoCarrito;
+import com.tallerwebi.dominio.enums.Formato;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -46,12 +47,12 @@ public class Carrito {
         this.usuario = usuario;
     }
 
-    public void agregarItem(Obra obra) {
+    public void agregarItem(Obra obra, Formato formato, Double precio) {
         ItemCarrito itemExistente = buscarItemPorObra(obra);
         if (itemExistente != null) {
             itemExistente.setCantidad(itemExistente.getCantidad() + 1);
         } else {
-            ItemCarrito nuevoItem = new ItemCarrito(this, obra);
+            ItemCarrito nuevoItem = new ItemCarrito(this, obra, formato, precio);
             this.items.add(nuevoItem);
         }
     }

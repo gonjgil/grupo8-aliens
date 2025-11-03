@@ -1,13 +1,16 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.Carrito;
+import com.tallerwebi.dominio.FormatoObra;
 import com.tallerwebi.dominio.Obra;
 import com.tallerwebi.dominio.ServicioCarritoImpl;
 import com.tallerwebi.dominio.Usuario;
+import com.tallerwebi.dominio.enums.Formato;
 import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
 import com.tallerwebi.dominio.excepcion.NoHayStockSuficiente;
 import com.tallerwebi.infraestructura.RepositorioCarritoImpl;
 import com.tallerwebi.infraestructura.RepositorioObraImpl;
+import com.tallerwebi.infraestructura.RepositorioFormatoObraImpl;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -23,9 +26,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 public class ControladorCarritoTest {
 
-        private HttpServletRequest requestMock;
-        private RedirectAttributes redirectAttributesMock;
-        private ControladorCarrito controladorCarrito;
+    private HttpServletRequest requestMock;
+    private RedirectAttributes redirectAttributesMock;
 
     @BeforeEach
     public void setUp() {
@@ -40,7 +42,6 @@ public class ControladorCarritoTest {
 
     @Test
     public void queAlAgregarUnaObraAlCarritoSeExecuteCorrectamente() {
-        // Test placeholder - funcionalidad implementada
         assert true;
     }
 
@@ -56,20 +57,25 @@ public class ControladorCarritoTest {
         
         RepositorioCarritoImpl repositorioCarrito = mock(RepositorioCarritoImpl.class);
         RepositorioObraImpl repositorioObra = mock(RepositorioObraImpl.class);
+        RepositorioFormatoObraImpl repositorioFormatoObra = mock(RepositorioFormatoObraImpl.class);
         
         Carrito carrito = new Carrito(usuario);
+        FormatoObra formatoObra = new FormatoObra();
+        formatoObra.setStock(10);
+        formatoObra.setFormato(Formato.DIGITAL);
+        
         when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId())).thenReturn(carrito);
         when(repositorioObra.obtenerPorId(obra.getId())).thenReturn(obra);
+        when(repositorioFormatoObra.obtenerFormatoPorObraYFormato(obra.getId(), Formato.DIGITAL)).thenReturn(formatoObra);
 
-        ServicioCarritoImpl servicioCarrito = new ServicioCarritoImpl(repositorioCarrito, repositorioObra);
+        ServicioCarritoImpl servicioCarrito = new ServicioCarritoImpl(repositorioCarrito, repositorioObra, repositorioFormatoObra);
         ControladorCarrito controladorCarrito = new ControladorCarrito(servicioCarrito);
 
-        servicioCarrito.agregarObraAlCarrito(usuario, obra.getId());
+        servicioCarrito.agregarObraAlCarrito(usuario, obra.getId(), Formato.DIGITAL);
 
         String resultado = controladorCarrito.vaciarCarrito(session, redirectAttributesMock);
 
         assertThat(resultado, is(equalTo("redirect:/carrito")));
         assertThat(servicioCarrito.contarItemsEnCarrito(usuario), is(equalTo(0)));
     }
-
 }

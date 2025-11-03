@@ -75,7 +75,7 @@ public class RepositorioObraImplTest {
         assertThat(obrasObtenidas.size(), is(equalTo(3)));
         assertThat(obrasObtenidas.get(0), is(equalTo(obra1)));
         assertThat(obrasObtenidas.get(1), is(equalTo(obra2)));
-        assertThat(obrasObtenidas.get(2), is(equalTo(obra3)));  
+        assertThat(obrasObtenidas.get(2), is(equalTo(obra3)));
     }
 
     @Test
@@ -154,8 +154,8 @@ public class RepositorioObraImplTest {
     @Rollback
     public void alBuscarObraPorIdDeberiaObtenerLaObraCorrespondiente() {
         Obra obra1 = generarObra1();
-     
-        this.repositorioObra.guardar(obra1);    
+
+        this.repositorioObra.guardar(obra1);
 
         String hql = "FROM Obra WHERE id = :id";
         Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
@@ -164,7 +164,6 @@ public class RepositorioObraImplTest {
 
         assertThat(obraObtenida, is(equalTo(obra1)));
     }
-
 
     @Test
     @Transactional
@@ -295,16 +294,16 @@ public class RepositorioObraImplTest {
         return obra1;
     }
     
-        private Obra generarObra2() {
-            Obra obra2 = new Obra();
-            obra2.setTitulo("Titulo de la Obra 2");
-            obra2.setAutor("Autor de la Obra 2");
-            obra2.setDescripcion("Descripcion de la Obra 2");
-            obra2.setImagenUrl("http://imagen.com/obra2.jpg");
-            obra2.setPrecio(2500.0);
-            obra2.agregarCategoria(Categoria.SURREALISMO);
-            return obra2;
-        }
+    private Obra generarObra2() {
+        Obra obra2 = new Obra();
+        obra2.setTitulo("Titulo de la Obra 2");
+        obra2.setAutor("Autor de la Obra 2");
+        obra2.setDescripcion("Descripcion de la Obra 2");
+        obra2.setImagenUrl("http://imagen.com/obra2.jpg");
+        obra2.setPrecio(2500.0);
+        obra2.agregarCategoria(Categoria.SURREALISMO);
+        return obra2;
+    }
 
     private Obra generarObra3() {
         Obra obra3 = new Obra();
@@ -316,5 +315,4 @@ public class RepositorioObraImplTest {
         obra3.agregarCategoria(Categoria.ABSTRACTO);
         return obra3;
     }
-    
 }
