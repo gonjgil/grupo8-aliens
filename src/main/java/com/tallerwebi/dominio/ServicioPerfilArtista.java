@@ -10,7 +10,6 @@ public interface ServicioPerfilArtista {
     PerfilArtistaDTO obtenerPerfilArtista (Long idArtista);
     Artista crearPerfilArtista (PerfilArtistaDTO datos, Usuario usuario);// necesario al registrar un nuevo artista
     void actualizarPerfilArtista (PerfilArtistaDTO datos) throws NoExisteArtista;
-
     Artista obtenerArtistaPorUsuario(Usuario usuario);
 }
 

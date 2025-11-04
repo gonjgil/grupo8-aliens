@@ -3,6 +3,8 @@ package com.tallerwebi.presentacion;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tallerwebi.dominio.ServicioPerfilArtista;
+import com.tallerwebi.dominio.entidades.Artista;
 import com.tallerwebi.dominio.entidades.Obra;
 import com.tallerwebi.dominio.entidades.Usuario;
 
@@ -25,10 +27,12 @@ public class ControladorGaleria {
 
     @Autowired
     private ServicioGaleria servicioGaleria;
+    private ServicioPerfilArtista servicioPerfilArtista;
 
     @Autowired
-    public ControladorGaleria(ServicioGaleria servicioGaleria) {
+    public ControladorGaleria(ServicioGaleria servicioGaleria, ServicioPerfilArtista servicioPerfilArtista) {
         this.servicioGaleria = servicioGaleria;
+        this.servicioPerfilArtista = servicioPerfilArtista;
     }
 
     @RequestMapping(path = "/galeria", method = RequestMethod.GET)
@@ -39,6 +43,12 @@ public class ControladorGaleria {
         try {
             Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
             model.put("usuario", usuario);
+
+            //buscar el artista del usuario logueado (si tiene)
+            if (usuario != null) {
+                Artista artistaUsuario = servicioPerfilArtista.obtenerArtistaPorUsuario(usuario);
+                model.put("artistaUsuario", artistaUsuario);
+            }
 
             if(usuario == null) {
                 model.put("obrasSpotlight", this.servicioGaleria.ordenarRandom());

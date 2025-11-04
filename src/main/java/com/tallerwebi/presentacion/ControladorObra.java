@@ -46,6 +46,11 @@ public class ControladorObra {
         Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
         model.put("usuario", usuario);
 
+        if (usuario != null) {
+            Artista artistaUsuario = servicioPerfilArtista.obtenerArtistaPorUsuario(usuario);
+            model.put("artistaUsuario", artistaUsuario);
+        }
+
         try {
             Obra obra = servicioGaleria.obtenerPorId(id);
 

@@ -22,11 +22,20 @@
         <div class="flex items-center space-x-4">
             <div th:if="${usuario != null}" class="flex items-center space-x-4">
         <div th:text=" 'Hola, ' + ${usuario.email}"></div>
-          <a th:href="@{/perfilArtista/nuevo}"
-            class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg"
-            title="Crear nuevo artista">
-            <i class="bi bi-person-plus"></i>
-          </a>
+
+                <a th:if="${artistaUsuario != null}"
+                   th:href="@{'/perfilArtista/ver/' + ${artistaUsuario.id}}"
+                   class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg"
+                   title="Ver mi perfil de artista">
+                    <i class="bi bi-palette-fill"></i>
+                </a>
+
+                <a th:if="${artistaUsuario == null}"
+                   th:href="@{/perfilArtista/nuevo}"
+                   class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg"
+                   title="Crear nuevo artista">
+                    <i class="bi bi-person-plus"></i>
+                </a>
           <a th:href="@{/carrito}"
               class="bg-blue-600 hover:bg-blue-700 fas fa-shopping-cart mr-2 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg">
           </a>

@@ -38,6 +38,11 @@ public class ControladorPerfilArtista {
         Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
         model.put("usuario", usuario);
 
+        if (usuario != null) {
+            Artista artistaUsuario = servicioPerfilArtista.obtenerArtistaPorUsuario(usuario);
+            model.put("artistaUsuario", artistaUsuario);
+        }
+
         try {
             PerfilArtistaDTO artista = this.servicioPerfilArtista.obtenerPerfilArtista(idArtista);
             model.put("mostrarArtista", artista); //si la clave es "mostrarArtista" se enviará el perfil del artista

@@ -1,6 +1,7 @@
 package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.entidades.Artista;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.repositorios.RepositorioArtista;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,15 @@ public class RepositorioArtistaImpl implements RepositorioArtista {
     @Override
     public Artista buscarArtistaPorId(Long id) {
         return sessionFactory.getCurrentSession().get(Artista.class, id);
+    }
+
+    @Override
+    public Artista buscarArtistaPorUsuario(Usuario usuario) {
+        String hql = "FROM Artista a WHERE a.usuario = :usuario";
+        return (Artista) sessionFactory.getCurrentSession()
+                .createQuery(hql)
+                .setParameter("usuario", usuario)
+                .uniqueResult();
     }
 
 
