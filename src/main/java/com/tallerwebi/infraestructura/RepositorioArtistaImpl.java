@@ -43,4 +43,13 @@ public class RepositorioArtistaImpl implements RepositorioArtista {
                 .setParameter("nombre", "%" + nombre.toLowerCase() + "%")
                 .getResultList();
     }
+
+    @Override
+    public Artista buscarPorUsuario(Long idUsuario) {
+        String hql = "FROM Artista WHERE usuario.id = :idUsuario";
+        return sessionFactory.getCurrentSession()
+                .createQuery(hql, Artista.class)
+                .setParameter("idUsuario", idUsuario)
+                .uniqueResult();
+    }
 }

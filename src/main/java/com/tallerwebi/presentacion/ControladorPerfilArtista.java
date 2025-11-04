@@ -4,6 +4,7 @@ import com.tallerwebi.dominio.entidades.Artista;
 import com.tallerwebi.dominio.ServicioCloudinary;
 import com.tallerwebi.dominio.ServicioPerfilArtista;
 import com.tallerwebi.dominio.entidades.Usuario;
+import com.tallerwebi.dominio.enums.TipoImagen;
 import com.tallerwebi.dominio.excepcion.NoExisteArtista;
 import com.tallerwebi.presentacion.dto.PerfilArtistaDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +68,7 @@ public class ControladorPerfilArtista {
         Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
 
         if (!archivo.isEmpty()) {
-            String urlImagen = servicioCloudinary.subirImagen(archivo);
+            String urlImagen = servicioCloudinary.subirImagen(archivo, TipoImagen.PERFIL_ARTISTA);
             dto.setUrlFotoPerfil(urlImagen);
         }
 
@@ -86,11 +87,17 @@ public class ControladorPerfilArtista {
 
         try{
             PerfilArtistaDTO artista = this.servicioPerfilArtista.obtenerPerfilArtista(idArtista);
+
+            if(usuario == null || !usuario.getId().equals(artista.getUsuarioId())){
+                model.put("error", "No tienes permiso para editar este perfil.");
+                return new ModelAndView("redirect:/galeria", model);
+            }
+
             model.put("artista", artista);
             return new ModelAndView("editar_artista", model);
         } catch (NoExisteArtista e) {
-            model.put("error", "perfil no encontrado");
-            return new ModelAndView("PerfilNoExiste", model);
+            model.put("error", "perfil no encontrado"); //si la clave es error se envia el mensaje el artista no existe
+            return new ModelAndView("redirect:/galeria", model);
         }
     }
 
@@ -98,7 +105,7 @@ public class ControladorPerfilArtista {
     public String actualizarPerfil(@PathVariable("id") Long idArtista, @ModelAttribute PerfilArtistaDTO dto, @RequestParam("fotoPerfil") MultipartFile archivo) throws NoExisteArtista{
 
         if (!archivo.isEmpty()) {
-            String urlImagen = servicioCloudinary.subirImagen(archivo);
+            String urlImagen = servicioCloudinary.subirImagen(archivo, TipoImagen.PERFIL_ARTISTA);
             dto.setUrlFotoPerfil(urlImagen);
         }
 

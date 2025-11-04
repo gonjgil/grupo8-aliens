@@ -95,5 +95,16 @@ public class ServicioPerfilArtistaImpl implements ServicioPerfilArtista {
         }
         return url;
     }
+
+    @Override
+    public Artista obtenerArtistaPorUsuario(Usuario usuario) throws NoExisteArtista {
+        Artista artista = repositorioArtista.buscarPorUsuario(usuario.getId());
+
+        if(artista == null) {
+            throw new NoExisteArtista();
+        }
+
+        return artista;
+    }
 }
 

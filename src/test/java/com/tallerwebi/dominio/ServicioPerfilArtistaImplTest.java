@@ -103,4 +103,40 @@ public class ServicioPerfilArtistaImplTest {
         assertThat(nuevoArtista.getUrlFotoPerfil(), equalTo("http://example.com/warhol.jpg"));
         assertThat(nuevoArtista.getUrlInstagram(), equalTo("http://instagram.com/warhol"));
     }
+
+    @Test
+    public void queSePuedeObtenerPerfilDeArtistaPorElIdDeSuUsuario() {
+        // Preparación
+        Usuario usuario = new Usuario();
+        usuario.setId(1L);
+        usuario.setEmail("asd@mail.com");
+        Artista artistaMock = new Artista("Frida Kahlo", "Pintora mexicana", "http://example.com/frida.jpg");
+        artistaMock.setId(50L);
+        artistaMock.setUsuario(usuario);
+
+        when(repositorioArtistaMock.buscarPorUsuario(usuario.getId())).thenReturn(artistaMock);
+
+        // Ejecución
+        Artista artistaObtenido = servicioPerfilArtistaImpl.obtenerArtistaPorUsuario(usuario);
+
+        // Validación
+        assertThat(artistaObtenido, is(notNullValue()));
+        assertThat(artistaObtenido.getId(), is(equalTo(artistaMock.getId())));
+        assertThat(artistaObtenido.getUsuario(), is(equalTo(usuario)));
+    }
+
+    @Test
+    public void queAlNoEncontrarArtistaPorUsuarioLanceNoExisteArtistaException() {
+        // Preparación
+        Usuario usuario = new Usuario();
+        usuario.setId(2L);
+        usuario.setEmail("asd@mail.com");
+
+        when(repositorioArtistaMock.buscarPorUsuario(usuario.getId())).thenReturn(null);
+
+        // Ejecución y Validación
+        assertThrows(NoExisteArtista.class, () -> {
+            servicioPerfilArtistaImpl.obtenerArtistaPorUsuario(usuario);
+        });
+    }
 }
