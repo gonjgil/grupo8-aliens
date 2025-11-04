@@ -3,15 +3,19 @@ package com.tallerwebi.dominio.servicioImpl;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.tallerwebi.dominio.repositorios.RepositorioCarrito;
-import com.tallerwebi.dominio.repositorios.RepositorioObra;
+import com.tallerwebi.dominio.FormatoObra;
+import com.tallerwebi.dominio.RepositorioFormatoObra;
 import com.tallerwebi.dominio.ServicioCarrito;
 import com.tallerwebi.dominio.entidades.Carrito;
 import com.tallerwebi.dominio.entidades.ItemCarrito;
 import com.tallerwebi.dominio.entidades.Obra;
 import com.tallerwebi.dominio.entidades.Usuario;
+import com.tallerwebi.dominio.enums.Formato;
 import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
 import com.tallerwebi.dominio.excepcion.NoHayStockSuficiente;
+import com.tallerwebi.dominio.repositorios.RepositorioCarrito;
+import com.tallerwebi.dominio.repositorios.RepositorioObra;
+import com.tallerwebi.presentacion.FormatoObraDto;
 import com.tallerwebi.presentacion.dto.ItemCarritoDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +28,14 @@ public class ServicioCarritoImpl implements ServicioCarrito {
 
     private final RepositorioCarrito repositorioCarrito;
     private final RepositorioObra repositorioObra;
+    private final RepositorioFormatoObra repositorioFormatoObra;
 
     @Autowired
-    public ServicioCarritoImpl(RepositorioCarrito repositorioCarrito, RepositorioObra repositorioObra) {
+    public ServicioCarritoImpl(RepositorioCarrito repositorioCarrito, RepositorioObra repositorioObra, 
+                               RepositorioFormatoObra repositorioFormatoObra) {
         this.repositorioCarrito = repositorioCarrito;
         this.repositorioObra = repositorioObra;
+        this.repositorioFormatoObra = repositorioFormatoObra;
     }
 
     @Override
@@ -41,25 +48,45 @@ public class ServicioCarritoImpl implements ServicioCarrito {
     }
 
     @Override
-    public boolean agregarObraAlCarrito(Usuario usuario, Long obraId) throws NoExisteLaObra, NoHayStockSuficiente {
+    public boolean agregarObraAlCarrito(Usuario usuario, Long obraId, Formato formato) throws NoExisteLaObra, NoHayStockSuficiente {
         Obra obra = repositorioObra.obtenerPorId(obraId);
         if (obra == null) {
             throw new NoExisteLaObra();
         }
-        if (!obra.hayStockSuficiente()) {
+
+        FormatoObra formatoObra = repositorioFormatoObra.obtenerFormatoPorObraYFormato(obraId, formato);
+        if (formatoObra == null || !formatoObra.hayStockSuficiente()) {
             throw new NoHayStockSuficiente();
         }
 
         Carrito carrito = obtenerOCrearCarritoParaUsuario(usuario);
-        carrito.agregarItem(obra);
-        obra.descontarStock();
-        repositorioObra.guardar(obra);
+        
+        // Verificar si ya existe un item con la misma obra y formato
+        ItemCarrito itemExistente = null;
+        for (ItemCarrito item : carrito.getItems()) {
+            if (item.getObra().getId().equals(obraId) && item.getFormato().equals(formato)) {
+                itemExistente = item;
+                break;
+            }
+        }
+
+        if (itemExistente != null) {
+            // Incrementar cantidad del item existente
+            itemExistente.setCantidad(itemExistente.getCantidad() + 1);
+        } else {
+            // Crear nuevo item
+            ItemCarrito nuevoItem = new ItemCarrito(carrito, obra, formato, formatoObra.getPrecio());
+            carrito.getItems().add(nuevoItem);
+        }
+
+        formatoObra.descontarStock();
+        repositorioFormatoObra.guardar(formatoObra);
         repositorioCarrito.guardar(carrito);
         return true;
     }
 
-    @Override
-    public void disminuirCantidadDeObraDelCarrito(Usuario usuario, Long obraId) {
+        @Override
+    public void disminuirCantidadDeObraDelCarrito(Usuario usuario, Long obraId, Formato formato) {
         Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId());
         if (carrito != null) {
             Obra obra = repositorioObra.obtenerPorId(obraId);
@@ -67,25 +94,50 @@ public class ServicioCarritoImpl implements ServicioCarrito {
                 carrito.disminuirCantidadDeItem(obra);
                 obra.devolverStock();
                 repositorioObra.guardar(obra);
+            FormatoObra formatoObra = repositorioFormatoObra.obtenerFormatoPorObraYFormato(obraId, formato);
+            if (formatoObra != null) {
+                // Buscar el item específico
+                for (ItemCarrito item : carrito.getItems()) {
+                    if (item.getObra().getId().equals(obraId) && item.getFormato().equals(formato)) {
+                        if (item.getCantidad() > 1) {
+                            item.setCantidad(item.getCantidad() - 1);
+                        } else {
+                            carrito.getItems().remove(item);
+                        }
+                        formatoObra.devolverStock();
+                        repositorioFormatoObra.guardar(formatoObra);
+                        break;
+                    }
+                }
                 repositorioCarrito.guardar(carrito);
             }
         }
     }
 
     @Override
-    public void eliminarObraDelCarrito(Usuario usuario, Long obraId) {
+    public void eliminarObraDelCarrito(Usuario usuario, Long obraId, Formato formato) {
         Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId());
         if (carrito != null) {
-            Obra obra = repositorioObra.obtenerPorId(obraId);
-            if (obra != null) {
-                ItemCarrito item = carrito.eliminarItem(obra);
-                if(item != null) {
-                    for (int i = 0; i < item.getCantidad(); i++) {
-                    item.getObra().devolverStock();
+            FormatoObra formatoObra = repositorioFormatoObra.obtenerFormatoPorObraYFormato(obraId, formato);
+            if (formatoObra != null) {
+                // Buscar y eliminar el item específico
+                ItemCarrito itemAEliminar = null;
+                for (ItemCarrito item : carrito.getItems()) {
+                    if (item.getObra().getId().equals(obraId) && item.getFormato().equals(formato)) {
+                        itemAEliminar = item;
+                        break;
                     }
                 }
-                repositorioObra.guardar(obra);
-                repositorioCarrito.guardar(carrito);
+                
+                if (itemAEliminar != null) {
+                    // Devolver todo el stock del item
+                    for (int i = 0; i < itemAEliminar.getCantidad(); i++) {
+                        formatoObra.devolverStock();
+                    }
+                    carrito.getItems().remove(itemAEliminar);
+                    repositorioFormatoObra.guardar(formatoObra);
+                    repositorioCarrito.guardar(carrito);
+                }
             }
         }
     }
@@ -96,11 +148,14 @@ public class ServicioCarritoImpl implements ServicioCarrito {
         if (carrito != null) {
             // Devolver stock de todos los items antes de limpiar
             for (ItemCarrito item : carrito.getItems()) {
-                for (int i = 0; i < item.getCantidad(); i++) {
-
-                    item.getObra().devolverStock();
+                FormatoObra formatoObra = repositorioFormatoObra.obtenerFormatoPorObraYFormato(
+                    item.getObra().getId(), item.getFormato());
+                if (formatoObra != null) {
+                    for (int i = 0; i < item.getCantidad(); i++) {
+                        formatoObra.devolverStock();
+                    }
+                    repositorioFormatoObra.guardar(formatoObra);
                 }
-                repositorioObra.guardar(item.getObra());
             }
             carrito.limpiarCarrito();
             repositorioCarrito.guardar(carrito);
@@ -171,5 +226,18 @@ public class ServicioCarritoImpl implements ServicioCarrito {
             }
         }
         return cantidadDeItemPorId;
+
+    @Override
+    public List<FormatoObraDto> obtenerFormatosDisponibles(Long obraId) {
+        List<FormatoObra> formatos = repositorioFormatoObra.obtenerFormatosPorObra(obraId);
+        List<FormatoObraDto> formatosDto = new ArrayList<>();
+        
+        for (FormatoObra formato : formatos) {
+            if (formato.getDisponible()) {
+                formatosDto.add(new FormatoObraDto(formato));
+            }
+        }
+        
+        return formatosDto;
     }
 }

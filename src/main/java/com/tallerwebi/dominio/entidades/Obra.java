@@ -142,8 +142,4 @@ public class Obra {
         return Objects.hash(id);
     }
 
-    public Obra toEntity() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'toEntity'");
-    }
 }
