@@ -70,6 +70,12 @@ public class ServicioPerfilArtistaImpl implements ServicioPerfilArtista {
     @Override
     public Artista crearPerfilArtista(PerfilArtistaDTO datos, Usuario usuario) {
 
+        //verifica si ya tiene un artista
+        Artista existente = repositorioArtista.buscarArtistaPorUsuario(usuario);
+        if(existente !=null){
+            return existente;
+        }
+
         // Lógica de corrección de urls antes de crear la entidad
         datos.setUrlFacebook(corregirUrl(datos.getUrlFacebook()));
         datos.setUrlInstagram(corregirUrl(datos.getUrlInstagram()));
@@ -77,7 +83,6 @@ public class ServicioPerfilArtistaImpl implements ServicioPerfilArtista {
         datos.setUrlFotoPerfil(datos.getUrlFotoPerfil());
 
 
-// Hay que cambiar esto si ligamos a la creación de un Usuario a la asignación del rol de artista
         Artista nuevoArtista = new Artista(datos.getNombre(), datos.getBiografia(), datos.getUrlFotoPerfil());
         nuevoArtista.setUrlFacebook(corregirUrl(datos.getUrlFacebook()));
         nuevoArtista.setUrlInstagram(corregirUrl(datos.getUrlInstagram()));
