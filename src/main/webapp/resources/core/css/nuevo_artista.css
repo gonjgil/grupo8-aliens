@@ -36,6 +36,40 @@ label {
   margin-bottom: 5px;
 }
 
+.foto-container {
+  display: flex;
+  justify-content: center;
+}
+
+.foto-perfil {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #6c63ff;
+  box-shadow: 0 0 15px rgba(108, 99, 255, 0.3);
+  transition: transform 0.3s ease;
+  margin-bottom: 20px;
+}
+
+.custom-file-upload {
+  display: inline-block;
+  background-color: #4a90e2;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin-top: 8px;
+  font-weight: 500;
+  align-self: center;
+}
+
+.custom-file-upload:hover {
+  background-color: #357ABD;
+}
+
+
 input[type="text"],
 textarea {
   border: 1px solid #ccc;

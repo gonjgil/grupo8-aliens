@@ -105,6 +105,9 @@ public class ControladorPerfilArtista {
         if (!archivo.isEmpty()) {
             String urlImagen = servicioCloudinary.subirImagen(archivo);
             dto.setUrlFotoPerfil(urlImagen);
+        }else{
+            PerfilArtistaDTO artistaActual = this.servicioPerfilArtista.obtenerPerfilArtista(idArtista);
+            dto.setUrlFotoPerfil(artistaActual.getUrlFotoPerfil());
         }
 
         dto.setId(idArtista);

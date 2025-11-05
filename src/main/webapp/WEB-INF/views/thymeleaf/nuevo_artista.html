@@ -13,7 +13,14 @@
 
         <div class="campo">
             <label>Foto de perfil:</label>
-            <input type="file" name="fotoPerfil" accept="image/*" required>
+            <div class="foto-container">
+                <img id="foto-preview" class="foto-perfil"
+                     th:src="@{/images/html5up/defaultProfilePic.jpg}" alt="Preview"
+                     width="150">
+            </div>
+            <label for="fotoPerfil" class="custom-file-upload">Elegir imagen</label>
+            <input type="file" id="fotoPerfil" name="fotoPerfil" accept="image/*" style="display: none">
+
         </div>
 
         <div class="campo">
@@ -41,8 +48,10 @@
             <input type="text" name="urlTwitter" required>
         </div>
 
-        <button type="button" id="btn-cancelar" class="btn btn-cancelar">Cancelar</button>
-        <button type="submit" id="btn-guardar" class="btn btn-guardar">Guardar</button>
+        <div class="acciones">
+            <button type="button" id="btn-cancelar" class="btn btn-cancelar">Cancelar</button>
+            <button type="submit" id="btn-guardar" class="btn btn-guardar">Guardar</button>
+        </div>
     </form>
 </div>
 
