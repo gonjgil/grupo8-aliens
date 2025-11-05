@@ -15,11 +15,9 @@ public class MercadoPagoConfig {
 
     static {
         // Inicializa el SDK global con el access token
-        MercadoPagoConfig.setAccessToken(ACCESS_TOKEN);
+        com.mercadopago.MercadoPagoConfig.setAccessToken(ACCESS_TOKEN);
     }
 
-    private static void setAccessToken(String accessToken) {
-    }
 
     @Bean
     public PaymentClient paymentClient() {

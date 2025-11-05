@@ -10,10 +10,11 @@ import com.tallerwebi.dominio.entidades.OrdenCompra;
 import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.enums.EstadoCarrito;
 import com.tallerwebi.dominio.enums.EstadoOrdenCompra;
+import com.tallerwebi.dominio.excepcion.CarritoNoEncontradoException;
 import com.tallerwebi.dominio.excepcion.CarritoVacioException;
-import com.tallerwebi.dominio.excepcion.NoHayStockSuficiente;
 import com.tallerwebi.dominio.repositorios.RepositorioCarrito;
 import com.tallerwebi.dominio.repositorios.RepositorioOrdenCompra;
+import com.tallerwebi.dominio.servicioImpl.ServicioOrdenCompraImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -46,7 +47,7 @@ public class ServicioOrdenCompraTest {
 
 
     @Test
-    public void deberiaCrearOrdenDeCompraAPartirDeCarritoCorrectamente() throws CarritoVacioException {
+    public void deberiaCrearOrdenDeCompraAPartirDeCarritoCorrectamente() throws CarritoVacioException, CarritoNoEncontradoException {
         Usuario usuario = new Usuario();
         Carrito carrito = new Carrito(usuario);
 
@@ -72,7 +73,7 @@ public class ServicioOrdenCompraTest {
     }
 
     @Test
-    public void deberiaCrearOrdenDeCompraAPartirDeCarritoCorrectamenteItemCarritoDebeConvertirseEnItemOrdenCorrectamente() throws CarritoVacioException {
+    public void deberiaCrearOrdenDeCompraAPartirDeCarritoCorrectamenteItemCarritoDebeConvertirseEnItemOrdenCorrectamente() throws CarritoVacioException, CarritoNoEncontradoException {
         Usuario usuario = new Usuario();
         Carrito carrito = new Carrito(usuario);
 
@@ -111,7 +112,7 @@ public class ServicioOrdenCompraTest {
         try {
             this.servicioOrdenCompra.crearOrdenDeCompraAPartirDeCarrito(carrito);
             fail("Se esperaba CarritoVacioException pero no fue lanzada");
-        } catch (CarritoVacioException e) {
+        } catch (CarritoVacioException | CarritoNoEncontradoException e) {
 
         }
 

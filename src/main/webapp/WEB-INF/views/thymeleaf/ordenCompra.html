@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Orden de Compra • Detalle</title>
+
+  <!-- Bootstrap CSS -->
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" th:href="@{/css/OrdenCompra.css}"/>
+
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.4/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container py-4">
+    <div class="d-flex justify-content-between align-items-start mb-3">
+      <h1 class="h4 mb-0">Orden de Compra</h1>
+      <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" id="toggleAdmin" />
+        <label class="form-check-label small-muted" for="toggleAdmin"><i class="bi bi-person-badge"></i> Ver como administrador</label>
+      </div>
+    </div>
+
+    <!-- CLIENTE VIEW -->
+    <div id="clientView" class="card card-order shadow-sm mb-4">
+      <div class="card-body">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start mb-3">
+          <div>
+            <h3 class="h5 mb-1">Orden de Compra N° <strong th:text="${'#' + orden.id}"></strong></h3>
+            <div class="small-muted">Fecha: <span th:text="${#dates.format(orden.fechayHora, 'dd/MM/yyyy HH:mm')}"></span></div>
+          </div>
+          <div class="text-md-end mt-3 mt-md-0">
+            <div class="mb-1">
+<!--              <span th:class="${'estado-dot ' + (orden.estado == 'PENDIENTE' ? 'status-pendiente' :
+                                                      orden.estado == 'APROBADA' ? 'status-aprobado' :
+                                                      'status-rechazado')}"></span> -->
+                <span class="status-dot" th:switch="${orden.estado}">
+                    <span th:case="'PENDIENTE'" class="estado-pendiente"></span>
+                    <span th:case="'APROBADA'" class="estado-aprobado"></span>
+                    <span th:case="'RECHAZADA'" class="estado-rechazado"></span>
+                </span>
+              <strong th:text="${orden.estado.descripcion}"></strong>
+            </div>
+            <div class="small-muted">Total: <strong th:text="${'$' + #numbers.formatDecimal(orden.precioFinal, 0, 'POINT', 0, 'COMMA')}"></strong></div>
+          </div>
+        </div>
+
+        <hr />
+
+        <h6 class="mb-2"><i class="bi bi-cart2"></i> Detalle de productos</h6>
+        <div class="table-responsive">
+          <table class="table table-products align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>Obras</th>
+                <th class="text-center">Cantidad</th>
+                <th class="text-end">Precio unitario</th>
+                <th class="text-end">Subtotal</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="item : ${items}">
+                <td th:text="${item.obraTitulo}"></td>
+                <td class="text-center" th:text="${item.cantidad}">2</td>
+                <td class="text-end" th:text="${'$' + #numbers.formatDecimal(item.obraPrecio, 0, 'POINT', 0, 'COMMA')}"></td>
+                <td class="text-end" th:text="${'$' + #numbers.formatDecimal(item.subtotal, 0, 'POINT', 0, 'COMMA')}"></td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <th colspan="3" class="text-end">Total</th>
+                <th class="text-end" th:text="${'$' + #numbers.formatDecimal(orden.precioFinal, 0, 'POINT', 0, 'COMMA')}"></th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+<!--        <div class="row g-3 mt-3">-->
+<!--          <div class="col-md-6">-->
+<!--            <div class="summary-box">-->
+<!--              <h6 class="mb-1"><i class="bi bi-credit-card"></i> Información de pago</h6>-->
+<!--              <div class="small-muted mb-2">Método: <strong th:text="${orden.infoPago.metodo}">Mercado Pago</strong></div>-->
+<!--              <div class="mb-1">Estado del pago: -->
+<!--                <span id="clientPaymentStatus">-->
+<!--                  <span th:class="${'status-dot ' + (orden.infoPago.estado == 'PENDIENTE' ? 'estado-pendiente' :-->
+<!--                                                   orden.infoPago.estado == 'APROBADO' ? 'estado-aprobado' : 'status-rechazado')}"></span>-->
+<!--                  <strong th:text="${orden.infoPago.estado}">Pendiente</strong>-->
+<!--                </span>-->
+<!--              </div>-->
+<!--              <div class="small-muted">Fecha de pago: <span id="clientPaymentDate" th:text="${#dates.format(orden.infoPago.fechaPago, 'dd/MM/yyyy')}">03/11/2025</span></div>-->
+<!--              <div class="small-muted">ID de transacción: <span id="clientTxId" th:text="${orden.infoPago.idTransaccion}">MP-123456789</span></div>-->
+<!--            </div>-->
+<!--          </div>-->
+
+<!--          <div class="col-md-6">-->
+<!--            <div class="summary-box">-->
+<!--              <h6 class="mb-1"><i class="bi bi-truck"></i> Envío</h6>-->
+<!--              <div class="small-muted mb-1">Dirección: <span th:text="${orden.infoEnvio.direccion}">Calle Falsa 123, Buenos Aires</span></div>-->
+<!--              <div class="small-muted mb-1">Método: <span th:text="${orden.infoEnvio.metodo}">Envío estándar</span></div>-->
+<!--              <div>Estado: <strong id="clientShipStatus" th:text="${orden.infoEnvio.estado}">Preparando envío</strong></div>-->
+<!--              <div class="small-muted">Número de seguimiento: <span id="clientTracking" th:text="${orden.infoEnvio.numeroSeguimiento}">ENV123456</span></div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+
+        <div class="d-flex flex-wrap justify-content-between align-items-center mt-4 actions">
+          <div class="mb-2">
+            <button class="btn btn-outline-primary btn-sm"><i class="bi bi-file-earmark-pdf"></i> Ver factura PDF</button>
+            <button class="btn btn-link btn-sm">Volver a mis órdenes</button>
+          </div>
+
+          <div class="mb-2" id="clientPendingActions">
+            <!-- acciones visibles si está pendiente -->
+            <button class="btn btn-danger btn-sm">Cancelar orden</button>
+            <button class="btn btn-success btn-sm">Intentar pagar nuevamente</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADMIN VIEW -->
+    <div id="adminView" class="card card-order shadow-sm mb-4 d-none">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start mb-3">
+          <div>
+            <h3 class="h5 mb-1">Orden <strong th:text="${'#' + orden.numeroOrden}"></strong> 
+              <span class="small-muted" th:text="${'| Cliente: ' + orden.usuario.nombre}"></span></h3>
+            <div class="small-muted">
+              Creación: <span th:text="${#dates.format(orden.fechaCreacion, 'dd/MM/yyyy')}"></span> • 
+              Última actualización: <span th:text="${#dates.format(orden.fechaActualizacion, 'dd/MM/yyyy')}"></span>
+            </div>
+          </div>
+          <div class="text-end">
+            <div class="mb-1">Estado: 
+              <span id="adminOrderState" 
+                    th:class="${'badge ' + (orden.estado == 'PENDIENTE' ? 'bg-warning text-dark' : 
+                                         orden.estado == 'APROBADA' ? 'bg-success' : 'bg-danger')}"
+                    th:text="${orden.estado}">Pendiente</span>
+            </div>
+            <div class="small-muted">Total: <strong th:text="${'$' + #numbers.formatDecimal(orden.total, 0, 'POINT', 0, 'COMMA')}">$28.000</strong></div>
+          </div>
+        </div>
+
+        <hr />
+
+        <div class="row">
+          <div class="col-lg-left col-12 mb-3">
+            <h6 class="mb-2">Resumen general</h6>
+            <div class="card p-3 mb-3">
+              <div class="row">
+                <div class="col-sm-6 small-muted">Estado del pago</div>
+                <div class="col-sm-6" th:text="${orden.infoPago.estado}">Aprobado</div>
+
+                <div class="col-sm-6 small-muted mt-2">Método de pago</div>
+                <div class="col-sm-6 mt-2" th:text="${orden.infoPago.metodo}">Mercado Pago</div>
+
+                <div class="col-sm-6 small-muted mt-2">ID Transacción</div>
+                <div class="col-sm-6 mt-2" th:text="${orden.infoPago.idTransaccion}">MP-123456789</div>
+
+                <div class="col-sm-6 small-muted mt-2">Fecha de pago</div>
+                <div class="col-sm-6 mt-2" th:text="${#dates.format(orden.infoPago.fechaPago, 'dd/MM/yyyy HH:mm')}"></div>
+              </div>
+            </div>
+
+            <h6 class="mb-2">Detalle del cliente</h6>
+            <div class="card p-3 mb-3">
+              <div class="small-muted">Nombre</div>
+              <div><strong th:text="${orden.usuario.nombre}"></strong></div>
+              <div class="mt-2 small-muted">Email</div>
+              <div th:text="${orden.usuario.email}"></div>
+              <div class="mt-2 small-muted">Teléfono</div>
+              <div th:text="${orden.usuario.telefono}"></div>
+            </div>
+
+            <h6 class="mb-2">Detalle de productos</h6>
+            <div class="table-responsive">
+              <table class="table table-sm">
+                <thead class="table-light">
+                  <tr>
+                    <th>Item</th>
+                    <th class="text-center">Cantidad</th>
+                    <th class="text-end">Precio</th>
+                    <th class="text-end">Subtotal</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr th:each="item : ${items}">
+                    <td th:text="${item.obraTitulo}"></td>
+                    <td class="text-center" th:text="${item.cantidad}">2</td>
+                    <td class="text-end" th:text="${'$' + #numbers.formatDecimal(item.obraPrecio, 0, 'POINT', 0, 'COMMA')}"></td>
+                    <td class="text-end" th:text="${'$' + #numbers.formatDecimal(item.subtotal, 0, 'POINT', 0, 'COMMA')}"></td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th colspan="3" class="text-end">Total</th>
+                    <th class="text-end" th:text="${'$' + #numbers.formatDecimal(orden.precioFinal, 0, 'POINT', 0, 'COMMA')}"></th>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+
+<!--          <div class="col-lg-4 col-12">-->
+<!--            <div class="card p-3 mb-3">-->
+<!--              <h6 class="mb-2">Detalle de pago</h6>-->
+<!--              <div class="small-muted">Método</div>-->
+<!--              <div th:text="${orden.infoPago.metodo}">Mercado Pago</div>-->
+<!--              <div class="small-muted mt-2">ID Transacción</div>-->
+<!--              <div th:text="${orden.infoPago.idTransaccion}">MP-123456789</div>-->
+<!--              <div class="small-muted mt-2">Estado del pago</div>-->
+<!--              <div><strong id="adminPaymentState" th:text="${orden.infoPago.estado}">Aprobado</strong></div>-->
+<!--              <div class="mt-2">-->
+<!--                <a th:if="${orden.infoPago.urlComprobante}" th:href="${orden.infoPago.urlComprobante}" -->
+<!--                   class="btn btn-outline-secondary btn-sm" target="_blank">-->
+<!--                   <i class="bi bi-file-earmark-check"></i> Ver comprobante-->
+<!--                </a>-->
+<!--              </div>-->
+<!--            </div>-->
+
+<!--            <div class="card p-3 mb-3">-->
+<!--              <h6 class="mb-2">Envío</h6>-->
+<!--              <div class="small-muted">Dirección</div>-->
+<!--              <div th:text="${orden.infoEnvio.direccion}">Calle Falsa 123, Buenos Aires</div>-->
+<!--              <div class="small-muted mt-2">Método</div>-->
+<!--              <div th:text="${orden.infoEnvio.metodo}">Envío estándar</div>-->
+<!--              <div class="small-muted mt-2">Número de seguimiento</div>-->
+<!--              <div th:text="${orden.infoEnvio.numeroSeguimiento}">ENV123456</div>-->
+<!--            </div>-->
+
+            <div class="card p-3">
+              <h6 class="mb-2">Opciones de acción</h6>
+              <div class="d-grid gap-2">
+                <button id="markApproved" class="btn btn-success btn-sm" 
+                        th:if="${orden.estado == 'APROBADA'}">Marcar como aprobada</button>
+                <button id="markRejected" class="btn btn-danger btn-sm"
+                        th:if="${orden.estado == 'RECHAZADA'}">Rechazar</button>
+                <button id="updateShipment" class="btn btn-outline-primary btn-sm"
+                        th:if="${orden.estado == 'PENDIENTE'}">Actualizar estado de envío</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+<!--    <footer class="text-center small-muted mt-4">Versión demo • Datos ficticios para UI</footer> -->
+  </div>
+
+  <!-- Optional JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Custom JS -->
+  <script th:href="@{/javascript/OrdenCompra.js}"></script>
+</body>
+</html>
