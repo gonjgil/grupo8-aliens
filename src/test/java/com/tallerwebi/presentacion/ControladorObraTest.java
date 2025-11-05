@@ -68,10 +68,11 @@ public class ControladorObraTest {
         ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
         ServicioLike servicioLike = mock(ServicioLike.class);
         ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
+        ServicioPerfilArtista servicioPerfilArtista = mock(ServicioPerfilArtista.class);
         when(servicioGaleria.obtenerPorId(999L)).thenThrow(new NoExisteLaObra());
         
 
-        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioLike, servicioCarrito);
+        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioLike, servicioCarrito, servicioPerfilArtista);
         ModelAndView modelAndView = controladorObra.verObra(999L, request);
 
         assertThat(modelAndView.getViewName(), is(equalTo("redirect:/galeria")));

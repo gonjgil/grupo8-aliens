@@ -1,21 +1,30 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.entidades.Artista;
-import com.tallerwebi.dominio.entidades.Obra;
-import com.tallerwebi.dominio.ServicioBusqueda;
-import com.tallerwebi.dominio.excepcion.NoSeEncontraronResultadosException;
-import com.tallerwebi.presentacion.dto.ObraDto;
-import com.tallerwebi.presentacion.dto.PerfilArtistaDTO;
-import org.junit.jupiter.api.Test;
-import org.springframework.http.ResponseEntity;
-
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.tallerwebi.dominio.ServicioBusqueda;
+import com.tallerwebi.dominio.entidades.Artista;
+import com.tallerwebi.dominio.entidades.Obra;
+import com.tallerwebi.dominio.excepcion.NoSeEncontraronResultadosException;
+import com.tallerwebi.presentacion.dto.ObraDto;
+import com.tallerwebi.presentacion.dto.PerfilArtistaDTO;
+
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.http.ResponseEntity;
 
 public class ControladorBusquedaTest {
 

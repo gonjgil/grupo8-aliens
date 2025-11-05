@@ -1,27 +1,36 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.entidades.*;
+import java.util.List;
+
+import org.hibernate.SessionFactory;
+
+import com.tallerwebi.dominio.entidades.Carrito;
+import com.tallerwebi.dominio.entidades.ItemCarrito;
+import com.tallerwebi.dominio.entidades.ItemOrden;
+import com.tallerwebi.dominio.entidades.Obra;
+import com.tallerwebi.dominio.entidades.OrdenCompra;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.enums.EstadoOrdenCompra;
+import com.tallerwebi.dominio.enums.Formato;
 import com.tallerwebi.dominio.repositorios.RepositorioCarrito;
+import com.tallerwebi.dominio.repositorios.RepositorioFormatoObra;
 import com.tallerwebi.dominio.repositorios.RepositorioObra;
 import com.tallerwebi.dominio.repositorios.RepositorioOrdenCompra;
 import com.tallerwebi.dominio.repositorios.RepositorioUsuario;
-import com.tallerwebi.dominio.enums.Formato;
 import com.tallerwebi.infraestructura.config.HibernateTestInfraestructuraConfig;
-import org.hibernate.SessionFactory;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import javax.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import javax.transaction.Transactional;
-import java.util.List;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = { HibernateTestInfraestructuraConfig.class })

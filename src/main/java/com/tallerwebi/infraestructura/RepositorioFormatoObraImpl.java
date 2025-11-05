@@ -1,8 +1,9 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.FormatoObra;
-import com.tallerwebi.dominio.RepositorioFormatoObra;
+import com.tallerwebi.dominio.entidades.FormatoObra;
 import com.tallerwebi.dominio.enums.Formato;
+import com.tallerwebi.dominio.repositorios.RepositorioFormatoObra;
+
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

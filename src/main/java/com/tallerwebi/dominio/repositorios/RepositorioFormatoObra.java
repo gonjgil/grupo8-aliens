@@ -1,5 +1,6 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.repositorios;
 
+import com.tallerwebi.dominio.entidades.FormatoObra;
 import com.tallerwebi.dominio.enums.Formato;
 
 import java.util.List;

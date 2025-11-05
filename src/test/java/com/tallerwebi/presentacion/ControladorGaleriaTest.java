@@ -1,29 +1,28 @@
 package com.tallerwebi.presentacion;
 
+import java.util.List;
+
+import com.tallerwebi.dominio.ServicioGaleria;
 import com.tallerwebi.dominio.ServicioPerfilArtista;
 import com.tallerwebi.dominio.entidades.Obra;
 import com.tallerwebi.dominio.entidades.Usuario;
-
-import com.tallerwebi.presentacion.dto.ObraDto;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import org.springframework.web.servlet.ModelAndView;
-
-import com.tallerwebi.dominio.ServicioGaleria;
 import com.tallerwebi.dominio.excepcion.NoHayObrasExistentes;
+import com.tallerwebi.presentacion.dto.ObraDto;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.text.IsEqualIgnoringCase.equalToIgnoringCase;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.hamcrest.text.IsEqualIgnoringCase.equalToIgnoringCase;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.doThrow;
-
-import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.web.servlet.ModelAndView;
 
 public class ControladorGaleriaTest {
 

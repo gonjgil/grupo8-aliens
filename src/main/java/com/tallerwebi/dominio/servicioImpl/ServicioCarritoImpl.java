@@ -3,10 +3,9 @@ package com.tallerwebi.dominio.servicioImpl;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.tallerwebi.dominio.FormatoObra;
-import com.tallerwebi.dominio.RepositorioFormatoObra;
 import com.tallerwebi.dominio.ServicioCarrito;
 import com.tallerwebi.dominio.entidades.Carrito;
+import com.tallerwebi.dominio.entidades.FormatoObra;
 import com.tallerwebi.dominio.entidades.ItemCarrito;
 import com.tallerwebi.dominio.entidades.Obra;
 import com.tallerwebi.dominio.entidades.Usuario;
@@ -14,6 +13,7 @@ import com.tallerwebi.dominio.enums.Formato;
 import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
 import com.tallerwebi.dominio.excepcion.NoHayStockSuficiente;
 import com.tallerwebi.dominio.repositorios.RepositorioCarrito;
+import com.tallerwebi.dominio.repositorios.RepositorioFormatoObra;
 import com.tallerwebi.dominio.repositorios.RepositorioObra;
 import com.tallerwebi.presentacion.FormatoObraDto;
 import com.tallerwebi.presentacion.dto.ItemCarritoDto;
@@ -89,27 +89,31 @@ public class ServicioCarritoImpl implements ServicioCarrito {
     public void disminuirCantidadDeObraDelCarrito(Usuario usuario, Long obraId, Formato formato) {
         Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId());
         if (carrito != null) {
-            Obra obra = repositorioObra.obtenerPorId(obraId);
-            if (obra != null) {
-                carrito.disminuirCantidadDeItem(obra);
-                obra.devolverStock();
-                repositorioObra.guardar(obra);
             FormatoObra formatoObra = repositorioFormatoObra.obtenerFormatoPorObraYFormato(obraId, formato);
             if (formatoObra != null) {
-                // Buscar el item específico
+                // Buscar el item específico por obra y formato
+                ItemCarrito itemADisminuir = null;
                 for (ItemCarrito item : carrito.getItems()) {
                     if (item.getObra().getId().equals(obraId) && item.getFormato().equals(formato)) {
-                        if (item.getCantidad() > 1) {
-                            item.setCantidad(item.getCantidad() - 1);
-                        } else {
-                            carrito.getItems().remove(item);
-                        }
-                        formatoObra.devolverStock();
-                        repositorioFormatoObra.guardar(formatoObra);
+                        itemADisminuir = item;
                         break;
                     }
                 }
-                repositorioCarrito.guardar(carrito);
+                
+                if (itemADisminuir != null) {
+                    if (itemADisminuir.getCantidad() > 1) {
+                        // Disminuir cantidad
+                        itemADisminuir.setCantidad(itemADisminuir.getCantidad() - 1);
+                    } else {
+                        // Eliminar item si cantidad es 1
+                        carrito.getItems().remove(itemADisminuir);
+                    }
+                    
+                    // Devolver stock al formato
+                    formatoObra.devolverStock();
+                    repositorioFormatoObra.guardar(formatoObra);
+                    repositorioCarrito.guardar(carrito);
+                }
             }
         }
     }
@@ -212,6 +216,7 @@ public class ServicioCarritoImpl implements ServicioCarrito {
 
         return itemsEnCarrito;
     }
+
     @Override
     public Integer obtenerCantidadDeItemPorId(Usuario usuario, Obra obra) {
         Carrito carrito = null;
@@ -226,6 +231,7 @@ public class ServicioCarritoImpl implements ServicioCarrito {
             }
         }
         return cantidadDeItemPorId;
+    }
 
     @Override
     public List<FormatoObraDto> obtenerFormatosDisponibles(Long obraId) {

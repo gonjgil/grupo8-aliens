@@ -78,20 +78,21 @@ public class ControladorCarrito {
     }
 
     @PostMapping("/aumentar/{obraId}")
-    public String aumentarCantidad(@PathVariable Long obraId, 
-                                   @RequestParam String formato,
-                                   HttpSession session,
-                                   RedirectAttributes redirectAttributes) {
+    public String aumentarCantidad(@PathVariable Long obraId, HttpSession session,
+            @RequestParam(required = false) String redirect,
+            @RequestParam String formato,
+                    RedirectAttributes redirectAttributes) {
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
-        if (usuario == null) return "redirect:/login";
+        if (usuario == null)
+            return "redirect:/login";
 
         try {
             Formato formatoEnum = Formato.valueOf(formato.toUpperCase());
-            servicioCarrito.agregarObraAlCarrito(usuario, obraId, formatoEnum);
+            servicioCarrito.agregarObraAlCarrito(usuario, obraId,formatoEnum);
         } catch (NoHayStockSuficiente e) {
             redirectAttributes.addFlashAttribute("error", "No hay stock suficiente.");
         } catch (IllegalArgumentException e) {
-            redirectAttributes.addFlashAttribute("error", "Formato no válido.");
+            redirectAttributes.addFlashAttribute("error", "Formato Invalido");
         }
         if ("obra".equals(redirect)) {
             return "redirect:/obra/" + obraId;

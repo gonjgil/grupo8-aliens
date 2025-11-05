@@ -1,7 +1,5 @@
 package com.tallerwebi.presentacion;
 
-import java.util.List;
-
 import com.tallerwebi.dominio.ServicioCarrito;
 import com.tallerwebi.dominio.ServicioGaleria;
 import com.tallerwebi.dominio.ServicioLike;

@@ -136,10 +136,4 @@ public class Obra {
         Obra obra = (Obra) o;
         return Objects.equals(id, obra.id);
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
 }

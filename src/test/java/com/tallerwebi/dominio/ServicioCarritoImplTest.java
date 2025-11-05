@@ -1,9 +1,11 @@
 package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.repositorios.RepositorioCarrito;
+import com.tallerwebi.dominio.repositorios.RepositorioFormatoObra;
 import com.tallerwebi.dominio.repositorios.RepositorioObra;
 import com.tallerwebi.dominio.servicioImpl.ServicioCarritoImpl;
 import com.tallerwebi.dominio.entidades.Carrito;
+import com.tallerwebi.dominio.entidades.FormatoObra;
 import com.tallerwebi.dominio.entidades.Obra;
 import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.enums.Formato;
@@ -292,13 +294,13 @@ public class ServicioCarritoImplTest {
         when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId())).thenReturn(carrito);
         when(repositorioFormatoObra.obtenerFormatoPorObraYFormato(obra1.getId(), formato)).thenReturn(formatoObra);
 
-        servicioCarritoImpl.agregarObraAlCarrito(usuario,obra1.getId(), formato);
-        servicioCarritoImpl.agregarObraAlCarrito(usuario,obra1.getId(), formato);
+        servicioCarritoImpl.agregarObraAlCarrito(usuario, obra1.getId(), formato);
+        servicioCarritoImpl.agregarObraAlCarrito(usuario, obra1.getId(), formato);
 
         assertThat(carrito.getItems().get(0).getCantidad(), is(2));
-
+        
         servicioCarritoImpl.disminuirCantidadDeObraDelCarrito(usuario, obra1.getId(), formato);
-
+        
         List<Obra> resultado = servicioCarritoImpl.obtenerObras(usuario);
         assertThat(resultado.size(), is(1));
         assertThat(servicioCarritoImpl.contarItemsEnCarrito(usuario), is(1));
