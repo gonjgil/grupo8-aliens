@@ -1,5 +1,6 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.ServicioPerfilArtista;
 import com.tallerwebi.dominio.entidades.Obra;
 import com.tallerwebi.dominio.entidades.Usuario;
 
@@ -42,13 +43,14 @@ public class ControladorGaleriaTest {
     public void mostrarGaleria_deberiaRetornarListaVaciaSiNoHayObras() throws NoHayObrasExistentes {
         // Arrange
         ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
+        ServicioPerfilArtista servicioPerfilArtista = mock(ServicioPerfilArtista.class);
         Usuario usuario = mock(Usuario.class);
         when(request.getSession()).thenReturn(mock(javax.servlet.http.HttpSession.class));
         when(request.getSession().getAttribute("usuarioLogueado")).thenReturn(usuario);
 
         doThrow(NoHayObrasExistentes.class).when(servicioGaleria).obtenerObrasParaUsuario(usuario);
 
-        ControladorGaleria controladorGaleria = new ControladorGaleria(servicioGaleria);
+        ControladorGaleria controladorGaleria = new ControladorGaleria(servicioGaleria, servicioPerfilArtista);
 
         // Act
         ModelAndView modelAndView = controladorGaleria.mostrarGaleria(this.request);
@@ -64,6 +66,7 @@ public class ControladorGaleriaTest {
     public void siHay4obrasDeberiaRetornar4obras() throws NoHayObrasExistentes {
         // Arrange
         ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
+        ServicioPerfilArtista servicioPerfilArtista = mock(ServicioPerfilArtista.class);
         Usuario usuario = mock(Usuario.class);
         when(request.getSession()).thenReturn(mock(javax.servlet.http.HttpSession.class));
         when(request.getSession().getAttribute("usuarioLogueado")).thenReturn(usuario);
@@ -71,7 +74,7 @@ public class ControladorGaleriaTest {
         List<Obra> obras = List.of(mock(Obra.class), mock(Obra.class), mock(Obra.class), mock(Obra.class));
         when(servicioGaleria.obtenerObrasParaUsuario(usuario)).thenReturn(obras);
 
-        ControladorGaleria controladorGaleria = new ControladorGaleria(servicioGaleria);
+        ControladorGaleria controladorGaleria = new ControladorGaleria(servicioGaleria, servicioPerfilArtista);
 
         // Act
         ModelAndView modelAndView = controladorGaleria.mostrarGaleria(this.request);

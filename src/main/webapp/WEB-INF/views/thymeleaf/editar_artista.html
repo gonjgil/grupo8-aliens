@@ -7,15 +7,19 @@
 </head>
 <body>
 <div class=" container">
-    <h2>Editar Perfil dell Artista</h2>
+    <h2>Editar Perfil del Artista</h2>
 
-    <form th:action="@{'/perfilArtista/ver/' + ${artista.id} + '/actualizar'}" method="post" class="formulario-artista"
+    <form th:action="@{'/perfilArtista/ver/' + ${artista.id} + '/actualizar'}" method="post" class="formulario-artista" id="form-editar-artista"
           enctype="multipart/form-data">
 
         <div class="campo">
-            <label>Foto de Perfil </label><br>
-            <img th:src="${artista.UrlFotoPerfil}" alt="Foto Actual" width="150">
-            <input type="file" name="fotoPerfil" accept="image/*">
+            <label>Foto de Perfil: </label>
+            <div class="foto-container">
+                <img th:src="${artista.UrlFotoPerfil}" alt="Foto Actual" class="foto-perfil" id="foto-preview" width="150">
+            </div>
+
+            <label for="fotoPerfil" class="custom-file-upload">Elegir imagen</label>
+            <input type="file" id="fotoPerfil" name="fotoPerfil" accept="image/*" style="display: none">
         </div>
 
         <div class="campo">
@@ -51,6 +55,6 @@
     </form>
 </div>
 
-<script type="module" th:src="@{/js/editar_artista.js}"></script>
+<script type="module" th:src="@{/js/artista.js}"></script>
 </body>
 </html>

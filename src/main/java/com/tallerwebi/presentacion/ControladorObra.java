@@ -1,6 +1,7 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.*;
+import com.tallerwebi.dominio.entidades.Artista;
 import com.tallerwebi.dominio.entidades.Obra;
 import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.presentacion.dto.ObraDto;
@@ -22,12 +23,14 @@ public class ControladorObra {
     private ServicioGaleria servicioGaleria;
     private ServicioCarrito servicioCarrito;
     private ServicioLike servicioLike;
+    private ServicioPerfilArtista servicioPerfilArtista;
     
     @Autowired
-    public ControladorObra(ServicioGaleria servicioGaleria, ServicioLike servicioLike, ServicioCarrito servicioCarrito) {
+    public ControladorObra(ServicioGaleria servicioGaleria, ServicioLike servicioLike, ServicioCarrito servicioCarrito, ServicioPerfilArtista servicioPerfilArtista) {
         this.servicioGaleria = servicioGaleria;
         this.servicioLike = servicioLike;
         this.servicioCarrito = servicioCarrito;
+        this.servicioPerfilArtista = servicioPerfilArtista;
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
@@ -36,6 +39,11 @@ public class ControladorObra {
 
         Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
         model.put("usuario", usuario);
+
+        if (usuario != null) {
+            Artista artistaUsuario = servicioPerfilArtista.obtenerArtistaPorUsuario(usuario);
+            model.put("artistaUsuario", artistaUsuario);
+        }
 
         try {
             Obra obra = servicioGaleria.obtenerPorId(id);

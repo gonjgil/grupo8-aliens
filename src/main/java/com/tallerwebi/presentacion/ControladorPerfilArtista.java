@@ -37,6 +37,11 @@ public class ControladorPerfilArtista {
         Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
         model.put("usuario", usuario);
 
+        if (usuario != null) {
+            Artista artistaUsuario = servicioPerfilArtista.obtenerArtistaPorUsuario(usuario);
+            model.put("artistaUsuario", artistaUsuario);
+        }
+
         try {
             PerfilArtistaDTO artista = this.servicioPerfilArtista.obtenerPerfilArtista(idArtista);
             model.put("mostrarArtista", artista); //si la clave es "mostrarArtista" se enviará el perfil del artista
@@ -100,6 +105,9 @@ public class ControladorPerfilArtista {
         if (!archivo.isEmpty()) {
             String urlImagen = servicioCloudinary.subirImagen(archivo);
             dto.setUrlFotoPerfil(urlImagen);
+        }else{
+            PerfilArtistaDTO artistaActual = this.servicioPerfilArtista.obtenerPerfilArtista(idArtista);
+            dto.setUrlFotoPerfil(artistaActual.getUrlFotoPerfil());
         }
 
         dto.setId(idArtista);
