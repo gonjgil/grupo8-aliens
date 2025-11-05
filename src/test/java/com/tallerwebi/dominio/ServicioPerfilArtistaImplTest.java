@@ -114,7 +114,7 @@ public class ServicioPerfilArtistaImplTest {
         artistaMock.setId(50L);
         artistaMock.setUsuario(usuario);
 
-        when(repositorioArtistaMock.buscarPorUsuario(usuario.getId())).thenReturn(artistaMock);
+        when(repositorioArtistaMock.buscarArtistaPorUsuario(usuario)).thenReturn(artistaMock);
 
         // Ejecución
         Artista artistaObtenido = servicioPerfilArtistaImpl.obtenerArtistaPorUsuario(usuario);
@@ -132,7 +132,7 @@ public class ServicioPerfilArtistaImplTest {
         usuario.setId(2L);
         usuario.setEmail("asd@mail.com");
 
-        when(repositorioArtistaMock.buscarPorUsuario(usuario.getId())).thenReturn(null);
+        when(repositorioArtistaMock.buscarArtistaPorUsuario(usuario)).thenReturn(null);
 
         // Ejecución y Validación
         assertThrows(NoExisteArtista.class, () -> {

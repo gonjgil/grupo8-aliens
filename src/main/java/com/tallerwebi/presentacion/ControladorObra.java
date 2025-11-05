@@ -88,20 +88,22 @@ public class ControladorObra {
 
 
     @RequestMapping(path = "/crear", method = RequestMethod.POST)
-    public ModelAndView crearObra(ObraDto obraDto, @RequestParam("fotoPerfil") MultipartFile archivo, HttpServletRequest request) {
-        ModelMap model = new ModelMap();
+    public String crearObra(ObraDto obraDto, @RequestParam("file_obra") MultipartFile archivo, HttpServletRequest request) {
+        //ModelMap model = new ModelMap();
 
         Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
-        model.put("usuario", usuario);
+        //model.put("usuario", usuario);
 
         try {
             Artista artista = servicioPerfilArtista.obtenerArtistaPorUsuario(usuario);
             String urlImagen = servicioCloudinary.subirImagen(archivo, TipoImagen.OBRA);
             Obra obraCreada = servicioGaleria.guardar(obraDto.toObra(), artista, urlImagen);
-            return new ModelAndView("redirect:/obra/" + obraCreada.getId(), model);
+            //model.put("obra", new ObraDto(obraCreada));
+            return "redirect:/obra/" + obraCreada.getId();
         } catch (NoExisteArtista e) {
-            model.put("error", "Debes ser un artista registrado para agregar una obra.");
-            return new ModelAndView("redirect:/galeria", model);
+            //model.put("error", "Debes ser un artista registrado para agregar una obra.");
+            //return new ModelAndView("redirect:/galeria", model);
+            return "redirect:/galeria";
         }
     }
 }

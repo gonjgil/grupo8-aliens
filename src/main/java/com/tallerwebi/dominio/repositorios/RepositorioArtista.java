@@ -12,5 +12,4 @@ public interface RepositorioArtista {
     Artista guardar(Artista artista);
     void modificar(Artista artista);
     List<Artista> obtenerPorNombre(String nombre);
-    Artista buscarPorUsuario(Long idUsuario);
 }

@@ -68,11 +68,6 @@ public class ServicioPerfilArtistaImpl implements ServicioPerfilArtista {
     }
 
     @Override
-    public Artista obtenerArtistaPorUsuario(Usuario usuario) {
-        return repositorioArtista.buscarArtistaPorUsuario(usuario);
-    }
-
-    @Override
     public Artista crearPerfilArtista(PerfilArtistaDTO datos, Usuario usuario) {
 
         // Lógica de corrección de urls antes de crear la entidad
@@ -103,7 +98,7 @@ public class ServicioPerfilArtistaImpl implements ServicioPerfilArtista {
 
     @Override
     public Artista obtenerArtistaPorUsuario(Usuario usuario) throws NoExisteArtista {
-        Artista artista = repositorioArtista.buscarPorUsuario(usuario.getId());
+        Artista artista = repositorioArtista.buscarArtistaPorUsuario(usuario);
 
         if(artista == null) {
             throw new NoExisteArtista();

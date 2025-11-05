@@ -131,7 +131,7 @@ public class RepositorioArtistaImplTest {
 
         repositorioArtista.guardar(artista);
 
-        Artista artistaEncontrado = repositorioArtista.buscarPorUsuario(1L);
+        Artista artistaEncontrado = repositorioArtista.buscarArtistaPorUsuario(usuario);
         assertThat(artistaEncontrado.getNombre(), is(equalTo("Artista Usuario")));
     }
 
