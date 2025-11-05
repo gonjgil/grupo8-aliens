@@ -14,7 +14,7 @@ public class Artista {
     private Long id;
     private String nombre;
     private String biografia;
-    private String urlFotoPerfil; // URL de la imagen del perfil
+    private String urlFotoPerfil;
     private String urlFacebook;
     private String urlInstagram;
     private String urlTwitter;
