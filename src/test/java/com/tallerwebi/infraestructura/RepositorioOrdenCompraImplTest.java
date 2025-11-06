@@ -1,26 +1,37 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.entidades.*;
+import java.util.List;
+
+import org.hibernate.SessionFactory;
+
+import com.tallerwebi.dominio.entidades.Carrito;
+import com.tallerwebi.dominio.entidades.FormatoObra;
+import com.tallerwebi.dominio.entidades.ItemCarrito;
+import com.tallerwebi.dominio.entidades.ItemOrden;
+import com.tallerwebi.dominio.entidades.Obra;
+import com.tallerwebi.dominio.entidades.OrdenCompra;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.enums.EstadoOrdenCompra;
+import com.tallerwebi.dominio.enums.Formato;
 import com.tallerwebi.dominio.repositorios.RepositorioCarrito;
+import com.tallerwebi.dominio.repositorios.RepositorioFormatoObra;
 import com.tallerwebi.dominio.repositorios.RepositorioObra;
 import com.tallerwebi.dominio.repositorios.RepositorioOrdenCompra;
 import com.tallerwebi.dominio.repositorios.RepositorioUsuario;
 import com.tallerwebi.infraestructura.config.HibernateTestInfraestructuraConfig;
-import org.hibernate.SessionFactory;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import javax.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import javax.transaction.Transactional;
-import java.util.List;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = { HibernateTestInfraestructuraConfig.class })
@@ -35,6 +46,7 @@ public class RepositorioOrdenCompraImplTest {
 
     private RepositorioObra repositorioObra;
     private RepositorioUsuario repositorioUsuario;
+    private RepositorioFormatoObra repositorioFormatoObra;
 
     @BeforeEach
     void setUp() {
@@ -42,15 +54,20 @@ public class RepositorioOrdenCompraImplTest {
         this.repositorioCarrito = new RepositorioCarritoImpl(this.sessionFactory);
         this.repositorioObra = new RepositorioObraImpl(this.sessionFactory);
         this.repositorioUsuario = new RepositorioUsuarioImpl(this.sessionFactory);
+        this.repositorioFormatoObra = new RepositorioFormatoObraImpl(this.sessionFactory);
     }
 
     @Test
-    public void deberiaCrearUnaOrdenDeCompraCorrectamente (){
+    public void deberiaCrearUnaOrdenDeCompraCorrectamente() {
         Usuario usuario = new Usuario();
         Carrito carrito = new Carrito(usuario);
         Obra obra = new Obra();
-        obra.setPrecio(0.0);
-        carrito.agregarItem(obra);
+        
+        // Crear formato para la obra
+        FormatoObra formatoObra = new FormatoObra(obra, Formato.ORIGINAL, 2001.0, 5);
+        obra.agregarFormato(formatoObra);
+        
+        carrito.agregarItem(obra, Formato.ORIGINAL, 2001.0);
 
         ItemCarrito itemCarrito = carrito.getItems().get(0);
         ItemOrden itemOrden = new ItemOrden(itemCarrito);
@@ -70,8 +87,12 @@ public class RepositorioOrdenCompraImplTest {
         Usuario usuario = new Usuario();
         Carrito carrito = new Carrito(usuario);
         Obra obra = new Obra();
-        obra.setPrecio(0.0);
-        carrito.agregarItem(obra);
+        
+        // Crear formato para la obra
+        FormatoObra formatoObra = new FormatoObra(obra, Formato.ORIGINAL, 2001.0, 5);
+        obra.agregarFormato(formatoObra);
+        
+        carrito.agregarItem(obra, Formato.ORIGINAL, 2001.0);
 
         ItemCarrito itemCarrito = carrito.getItems().get(0);
         ItemOrden itemOrden = new ItemOrden(itemCarrito);
@@ -90,18 +111,21 @@ public class RepositorioOrdenCompraImplTest {
 
 
     @Test
-    public void deberiaEliminarUnaOrdenDeCompraCorrectamente (){
+    public void deberiaEliminarUnaOrdenDeCompraCorrectamente() {
         Usuario usuario = new Usuario();
         Carrito carrito = new Carrito(usuario);
         Carrito carrito2 = new Carrito(usuario);
 
         Obra obra1 = new Obra();
+        FormatoObra formatoObra1 = new FormatoObra(obra1, Formato.ORIGINAL, 2001.0, 5);
+        obra1.agregarFormato(formatoObra1);
+        
         Obra obra2 = new Obra();
+        FormatoObra formatoObra2 = new FormatoObra(obra2, Formato.ORIGINAL, 2001.0, 5);
+        obra2.agregarFormato(formatoObra2);
 
-        obra1.setPrecio(100.0);
-        carrito.agregarItem(obra1);
-        obra2.setPrecio(100.0);
-        carrito2.agregarItem(obra2);
+        carrito.agregarItem(obra1, Formato.ORIGINAL, 2001.0);
+        carrito2.agregarItem(obra2, Formato.ORIGINAL, 2001.0);
 
         ItemCarrito itemCarrito = carrito.getItems().get(0);
         ItemOrden itemOrden = new ItemOrden(itemCarrito);
@@ -189,7 +213,7 @@ public class RepositorioOrdenCompraImplTest {
     }
 
     @Test
-    public void deberiaObtenerOrdenesDeCompraDeUsuarioCorrectamente (){
+    public void deberiaObtenerOrdenesDeCompraDeUsuarioCorrectamente() {
 
             Usuario usuario = new Usuario();
             Usuario usuario2 = new Usuario();
@@ -201,12 +225,9 @@ public class RepositorioOrdenCompraImplTest {
             Obra obra2 = new Obra();
             Obra obra3 = new Obra();
 
-            obra1.setPrecio(100.0);
-            carrito.agregarItem(obra1);
-            obra2.setPrecio(100.0);
-            carrito2.agregarItem(obra2);
-            obra3.setPrecio(100.0);
-            carrito3.agregarItem(obra3);
+            carrito.agregarItem(obra1, Formato.ORIGINAL, 2001.0);
+            carrito2.agregarItem(obra2, Formato.ORIGINAL, 2001.0);
+            carrito3.agregarItem(obra3, Formato.ORIGINAL, 2001.0);
 
             ItemCarrito itemCarrito = carrito.getItems().get(0);
             ItemOrden itemOrden = new ItemOrden(itemCarrito);
@@ -253,10 +274,5 @@ public class RepositorioOrdenCompraImplTest {
             assertThat(ordenesDeUsuario2.size(),is(1));
             assertThat(ordenesDeUsuario2.get(0).getId(), is(orden3.getId()));
             assertThat(orden3.getUsuario(), is(usuario2));
-
     }
-
-
-
-
 }

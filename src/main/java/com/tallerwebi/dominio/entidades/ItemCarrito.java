@@ -1,5 +1,7 @@
 package com.tallerwebi.dominio.entidades;
 
+import com.tallerwebi.dominio.enums.Formato;
+
 import javax.persistence.*;
 
 @Entity
@@ -17,20 +19,25 @@ public class ItemCarrito {
     @ManyToOne
     @JoinColumn(name = "obra_id")
     private Obra obra;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Formato formato;
+    
     private Integer cantidad;
     private Double precioUnitario;
 
     public ItemCarrito() {}
 
-    public ItemCarrito(Carrito carrito, Obra obra) {
+    public ItemCarrito(Carrito carrito, Obra obra, Formato formato, Double precioUnitario) {
         this.carrito = carrito;
         this.obra = obra;
-        this.precioUnitario = obra.getPrecio();
+        this.formato = formato;
+        this.precioUnitario = precioUnitario;
         this.cantidad = 1;
     }
 
     public Double getSubtotal() {
-
         return precioUnitario * cantidad;
     }
 
@@ -42,6 +49,9 @@ public class ItemCarrito {
 
     public Obra getObra() { return obra; }
     public void setObra(Obra obra) { this.obra = obra; }
+
+    public Formato getFormato() { return formato; }
+    public void setFormato(Formato formato) { this.formato = formato; }
 
     public Integer getCantidad() { return cantidad; }
     public void setCantidad(Integer cantidad) { this.cantidad = cantidad; }

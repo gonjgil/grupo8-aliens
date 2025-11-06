@@ -1,6 +1,9 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.*;
+import com.tallerwebi.dominio.ServicioCarrito;
+import com.tallerwebi.dominio.ServicioGaleria;
+import com.tallerwebi.dominio.ServicioPerfilArtista;
+import com.tallerwebi.dominio.ServicioCloudinary;
 import com.tallerwebi.dominio.entidades.Artista;
 import com.tallerwebi.dominio.entidades.Obra;
 import com.tallerwebi.dominio.entidades.Usuario;
