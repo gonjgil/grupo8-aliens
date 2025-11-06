@@ -12,10 +12,7 @@ import com.tallerwebi.presentacion.dto.PerfilArtistaDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -88,21 +85,15 @@ public class ControladorObra {
 
 
     @RequestMapping(path = "/crear", method = RequestMethod.POST)
-    public String crearObra(ObraDto obraDto, @RequestParam("file_obra") MultipartFile archivo, HttpServletRequest request) {
-        //ModelMap model = new ModelMap();
-
+    public String crearObra(@ModelAttribute ObraDto obraDto, @RequestParam("file_obra") MultipartFile archivo, HttpServletRequest request) {
         Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
-        //model.put("usuario", usuario);
 
         try {
             Artista artista = servicioPerfilArtista.obtenerArtistaPorUsuario(usuario);
             String urlImagen = servicioCloudinary.subirImagen(archivo, TipoImagen.OBRA);
             Obra obraCreada = servicioGaleria.guardar(obraDto.toObra(), artista, urlImagen);
-            //model.put("obra", new ObraDto(obraCreada));
             return "redirect:/obra/" + obraCreada.getId();
         } catch (NoExisteArtista e) {
-            //model.put("error", "Debes ser un artista registrado para agregar una obra.");
-            //return new ModelAndView("redirect:/galeria", model);
             return "redirect:/galeria";
         }
     }

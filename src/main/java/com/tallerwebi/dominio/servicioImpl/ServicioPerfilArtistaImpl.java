@@ -102,14 +102,8 @@ public class ServicioPerfilArtistaImpl implements ServicioPerfilArtista {
     }
 
     @Override
-    public Artista obtenerArtistaPorUsuario(Usuario usuario) throws NoExisteArtista {
-        Artista artista = repositorioArtista.buscarArtistaPorUsuario(usuario);
-
-        if(artista == null) {
-            throw new NoExisteArtista();
-        }
-
-        return artista;
+    public Artista obtenerArtistaPorUsuario(Usuario usuario) {
+        return repositorioArtista.buscarArtistaPorUsuario(usuario);
     }
 }
 

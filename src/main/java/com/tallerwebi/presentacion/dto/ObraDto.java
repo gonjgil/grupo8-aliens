@@ -20,6 +20,8 @@ public class ObraDto {
     private Double precio;
     private PerfilArtistaDTO artista;
 
+    public ObraDto() {}
+
     public ObraDto(Obra obra) {
         this.id = obra.getId();
         this.titulo = obra.getTitulo();
@@ -68,9 +70,23 @@ public class ObraDto {
     public void setArtista(PerfilArtistaDTO artista) { this.artista = artista; }
 
     public Obra toObra() {
-        Obra obra = new Obra(this.titulo, this.autor, this.imagenUrl, this.descripcion, this.stock, this.categorias, this.precio, this.artista.toArtista());
+        Obra obra = new Obra();
         obra.setId(this.id);
-        obra.setUsuariosQueDieronLike(this.usuariosQueDieronLike);
+        obra.setTitulo(this.titulo);
+        obra.setDescripcion(this.descripcion);
+        obra.setPrecio(this.precio);
+        obra.setStock(this.stock);
+        obra.setImagenUrl(this.imagenUrl);
+        obra.setAutor(this.autor);
+        if (this.categorias != null && !this.categorias.isEmpty()) {
+            obra.setCategorias(new HashSet<>(this.categorias));
+        }
+        if(this.artista != null) {
+            obra.setArtista(artista.toArtista());
+        }
+        if (this.usuariosQueDieronLike != null && !this.usuariosQueDieronLike.isEmpty()) {
+            obra.setUsuariosQueDieronLike(new HashSet<>(this.usuariosQueDieronLike));
+        }
         return obra;
     }
 

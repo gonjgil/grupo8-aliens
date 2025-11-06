@@ -124,19 +124,4 @@ public class ServicioPerfilArtistaImplTest {
         assertThat(artistaObtenido.getId(), is(equalTo(artistaMock.getId())));
         assertThat(artistaObtenido.getUsuario(), is(equalTo(usuario)));
     }
-
-    @Test
-    public void queAlNoEncontrarArtistaPorUsuarioLanceNoExisteArtistaException() {
-        // Preparación
-        Usuario usuario = new Usuario();
-        usuario.setId(2L);
-        usuario.setEmail("asd@mail.com");
-
-        when(repositorioArtistaMock.buscarArtistaPorUsuario(usuario)).thenReturn(null);
-
-        // Ejecución y Validación
-        assertThrows(NoExisteArtista.class, () -> {
-            servicioPerfilArtistaImpl.obtenerArtistaPorUsuario(usuario);
-        });
-    }
 }

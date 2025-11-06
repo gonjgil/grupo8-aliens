@@ -100,6 +100,7 @@ public class Obra {
     }
 
     public Set<Categoria> getCategorias() { return categorias; }
+    public void setCategorias(Set<Categoria> categorias) { this.categorias = categorias; }
     public void agregarCategoria(Categoria categoria) { this.categorias.add(categoria); }
 
      public Artista getArtista() { return artista; }

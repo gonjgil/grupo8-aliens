@@ -46,12 +46,8 @@ public class ControladorGaleria {
 
             //buscar el artista del usuario logueado (si tiene)
             if (usuario != null) {
-                try {
-                    Artista artistaUsuario = servicioPerfilArtista.obtenerArtistaPorUsuario(usuario);
-                    model.put("artistaUsuario", artistaUsuario);
-                } catch (NoExisteArtista e) {
-                    // El usuario no es un artista, no hacer nada
-                }
+                Artista artistaUsuario = servicioPerfilArtista.obtenerArtistaPorUsuario(usuario);
+                model.put("artistaUsuario", artistaUsuario);
             }
 
             if(usuario == null) {
