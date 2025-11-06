@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 import com.tallerwebi.dominio.entidades.Obra;
 import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.enums.Categoria;
-import com.tallerwebi.presentacion.FormatoObraDto;
 
 public class ObraDto {
     private Long id;
@@ -92,6 +91,12 @@ public class ObraDto {
         }
         if (this.usuariosQueDieronLike != null && !this.usuariosQueDieronLike.isEmpty()) {
             obra.setUsuariosQueDieronLike(new HashSet<>(this.usuariosQueDieronLike));
+        }
+        obra.setFormatos(new HashSet<>());
+        if (this.formatos != null && !this.formatos.isEmpty()) {
+            for (FormatoObraDto formatoDto : this.formatos) {
+                obra.agregarFormato(formatoDto.toFormatoObra());
+            }
         }
         return obra;
     }

@@ -1,4 +1,4 @@
-package com.tallerwebi.presentacion;
+package com.tallerwebi.presentacion.dto;
 
 import com.tallerwebi.dominio.entidades.FormatoObra;
 import com.tallerwebi.dominio.enums.Formato;
@@ -44,5 +44,15 @@ public class FormatoObraDto {
 
     public boolean hayStock() {
         return stock != null && stock > 0 && disponible;
+    }
+
+    public FormatoObra toFormatoObra() {
+        FormatoObra formatoObra = new FormatoObra();
+        formatoObra.setId(this.id);
+        formatoObra.setFormato(this.formato);
+        formatoObra.setPrecio(this.precio);
+        formatoObra.setStock(this.stock);
+        formatoObra.setDisponible(this.disponible);
+        return formatoObra;
     }
 }

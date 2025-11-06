@@ -15,7 +15,7 @@ import com.tallerwebi.dominio.excepcion.NoHayStockSuficiente;
 import com.tallerwebi.dominio.repositorios.RepositorioCarrito;
 import com.tallerwebi.dominio.repositorios.RepositorioFormatoObra;
 import com.tallerwebi.dominio.repositorios.RepositorioObra;
-import com.tallerwebi.presentacion.FormatoObraDto;
+import com.tallerwebi.presentacion.dto.FormatoObraDto;
 import com.tallerwebi.presentacion.dto.ItemCarritoDto;
 
 import org.springframework.beans.factory.annotation.Autowired;

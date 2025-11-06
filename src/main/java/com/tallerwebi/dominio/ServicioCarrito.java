@@ -8,7 +8,7 @@ import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.enums.Formato;
 import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
 import com.tallerwebi.dominio.excepcion.NoHayStockSuficiente;
-import com.tallerwebi.presentacion.FormatoObraDto;
+import com.tallerwebi.presentacion.dto.FormatoObraDto;
 import com.tallerwebi.presentacion.dto.ItemCarritoDto;
 
 public interface ServicioCarrito {

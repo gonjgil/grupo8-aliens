@@ -11,7 +11,7 @@ INSERT INTO Artista (id, nombre, biografia) VALUES
 (4, 'Claude Monet', 'Fundador del impresionismo francés. Famoso por sus series de nenúfares y catedrales. Revolucionó la pintura al aire libre.'),
 (5, 'Frida Kahlo', 'Pintora mexicana conocida por sus autorretratos y obras que incorporan elementos de la naturaleza y artefactos de México.'),
 (6, 'Salvador Dalí', 'Surrealista español famoso por sus paisajes oníricos y su técnica hiperrealista. Sus relojes derretidos son iconos del arte moderno.'),
-(7, 'Georgia O\'Keeffe', 'Artista estadounidense conocida por sus pinturas de flores ampliadas, paisajes de Nuevo México y rascacielos de Nueva York.'),
+(7, 'Georgia Keeffe', 'Artista estadounidense conocida por sus pinturas de flores ampliadas, paisajes de Nuevo México y rascacielos de Nueva York.'),
 (8, 'Andy Warhol', 'Líder del movimiento artístico pop. Exploró la relación entre la expresión artística, la cultura pop y la publicidad.'),
 (9, 'Jackson Pollock', 'Pintor estadounidense conocido por su técnica de goteo (drip painting) y su papel en el movimiento expresionista abstracto.'),
 (10, 'Wassily Kandinsky', 'Pionero del arte abstracto. Teorizó sobre la sinestesia en el arte y la espiritualidad de la forma y el color.'),
@@ -72,8 +72,8 @@ INSERT INTO Obra(id, titulo, autor, imagenUrl, descripcion, stock, artista) VALU
 (null, 'Naturaleza Viva Mexicana', 'Frida Kahlo', '/images/obras/artwork_013.jpg', 'Bodegón vibrante que celebra la biodiversidad y cultura gastronómica de México', 2, 5),
 (null, 'Paisaje Onírico', 'Salvador Dalí', '/images/obras/artwork_014.jpg', 'Exploración del subconsciente a través de imágenes imposibles y técnica hiperrealista', 1, 6),
 (null, 'Metamorfosis del Tiempo', 'Salvador Dalí', '/images/obras/artwork_015.jpg', 'Reflexión sobre la relatividad temporal mediante simbolismo surrealista característico', 1, 6),
-(null, 'Flor Ampliada Rosa', 'Georgia O\'Keeffe', '/images/obras/artwork_016.jpg', 'Interpretación íntima de formas naturales con sensualidad y precisión técnica', 3, 7),
-(null, 'Paisaje de Nuevo México', 'Georgia O\'Keeffe', '/images/obras/artwork_017.jpg', 'Vista del desierto americano que captura la espiritualidad del paisaje árido', 2, 7),
+(null, 'Flor Ampliada Rosa', 'Georgia Keeffe', '/images/obras/artwork_016.jpg', 'Interpretación íntima de formas naturales con sensualidad y precisión técnica', 3, 7),
+(null, 'Paisaje de Nuevo México', 'Georgia Keeffe', '/images/obras/artwork_017.jpg', 'Vista del desierto americano que captura la espiritualidad del paisaje árido', 2, 7),
 (null, 'Repetición en Color', 'Andy Warhol', '/images/obras/artwork_018.jpg', 'Exploración de la cultura de masas mediante repetición e iconografía comercial', 5, 8),
 (null, 'Retrato Serigráfico', 'Andy Warhol', '/images/obras/artwork_019.jpg', 'Técnica de serigrafía aplicada al retrato contemporáneo con colores saturados', 4, 8),
 (null, 'Composición de Goteo', 'Jackson Pollock', '/images/obras/artwork_020.jpg', 'Técnica de drip painting que expresa emoción pura a través del movimiento gestual', 1, 9),
@@ -519,3 +519,204 @@ INSERT INTO formato_obra(id, obra_id, formato, precio, stock, disponible) VALUES
 
 (null, 100, 'ORIGINAL', 380000.00, 1, true),
 (null, 100, 'DIGITAL', 16000.00, 999, true);
+
+
+-- Asignar categorías a las obras (las obras se numeran desde 1)
+INSERT INTO obra_categorias (obra_id, categoria) VALUES
+-- Leonardo Da Vinci (1-2)
+(1, 'PINTURA'), (1, 'RETRATO'),
+(2, 'PINTURA'), (2, 'RETRATO'),
+
+-- Van Gogh (3-5)
+(3, 'PINTURA'), (3, 'MODERNO'),
+(4, 'PINTURA'), (4, 'MODERNO'),
+(5, 'PINTURA'), (5, 'MODERNO'),
+
+-- Picasso (6-8)
+(6, 'PINTURA'), (6, 'ABSTRACTO'),
+(7, 'PINTURA'), (7, 'ABSTRACTO'),
+(8, 'PINTURA'), (8, 'ABSTRACTO'),
+
+-- Monet (9-11)
+(9, 'PINTURA'), (9, 'MODERNO'),
+(10, 'PINTURA'), (10, 'MODERNO'),
+(11, 'PINTURA'), (11, 'MODERNO'),
+
+-- Frida Kahlo (12-13)
+(12, 'PINTURA'), (12, 'RETRATO'),
+(13, 'PINTURA'), (13, 'SURREALISMO'),
+
+-- Salvador Dalí (14-15)
+(14, 'PINTURA'), (14, 'SURREALISMO'),
+(15, 'PINTURA'), (15, 'SURREALISMO'),
+
+-- Georgia O’Keeffe (16-17)
+(16, 'PINTURA'), (16, 'ABSTRACTO'),
+(17, 'PINTURA'), (17, 'ABSTRACTO'),
+
+-- Andy Warhol (18-19)
+(18, 'ARTE_MIXTO'), (18, 'MODERNO'),
+(19, 'ARTE_MIXTO'), (19, 'MODERNO'),
+
+-- Jackson Pollock (20-21)
+(20, 'PINTURA'), (20, 'ABSTRACTO'),
+(21, 'PINTURA'), (21, 'ABSTRACTO'),
+
+-- Kandinsky (22-23)
+(22, 'PINTURA'), (22, 'ABSTRACTO'), (22, 'COSMICO'),
+(23, 'PINTURA'), (23, 'ABSTRACTO'), (23, 'COSMICO'),
+
+-- Isabella Chen (24-25)
+(24, 'PINTURA'), (24, 'ARTE_MIXTO'),
+(25, 'PINTURA'), (25, 'ARTE_MIXTO'),
+
+-- Marcus Thompson (26-27)
+(26, 'FOTOGRAFIA'),
+(27, 'FOTOGRAFIA'),
+
+-- Yuki Nakamura (28-29)
+(28, 'ARTE_DIGITAL'),
+(29, 'ARTE_DIGITAL'),
+
+-- Amara Okafor (30-31)
+(30, 'ESCULTURA'),
+(31, 'ARTE_MIXTO'),
+
+-- Diego Mendoza (32-33)
+(32, 'ARTE_MIXTO'),
+(33, 'ARTE_MIXTO'),
+
+-- Svetlana Petrov (34-35)
+(34, 'PINTURA'),
+(35, 'PINTURA'),
+
+-- Ahmed Al-Rashid (36-37)
+(36, 'ARTE_MIXTO'),
+(37, 'ARTE_MIXTO'),
+
+-- Marie Dubois (38-39)
+(38, 'PINTURA'), (38, 'MODERNO'),
+(39, 'PINTURA'), (39, 'MODERNO'),
+
+-- Raj Patel (40-41)
+(40, 'ARTE_MIXTO'),
+(41, 'ARTE_MIXTO'),
+
+-- Elena Rossi (42-43)
+(42, 'ESCULTURA'),
+(43, 'ESCULTURA'),
+
+-- Benjamin Carter (44-45)
+(44, 'FOTOGRAFIA'),
+(45, 'FOTOGRAFIA'),
+
+-- Fatima Benali (46-47)
+(46, 'ARTE_TEXTIL'),
+(47, 'ARTE_TEXTIL'),
+
+-- Hiroshi Tanaka (48-49)
+(48, 'ARTE_CERAMICO'),
+(49, 'ARTE_CERAMICO'),
+
+-- Lucia Santos (50-51)
+(50, 'ARTE_MIXTO'),
+(51, 'ARTE_MIXTO'),
+
+-- Olaf Eriksen (52-53)
+(52, 'PINTURA'),
+(53, 'PINTURA'),
+
+-- Priya Sharma (54-55)
+(54, 'ARTE_MIXTO'),
+(55, 'ARTE_MIXTO'),
+
+-- Alessandro Bianchi (56-57)
+(56, 'PINTURA'),
+(57, 'PINTURA'),
+
+-- Kofi Asante (58-59)
+(58, 'ESCULTURA'),
+(59, 'ESCULTURA'),
+
+-- Ingrid Larsson (60-61)
+(60, 'ARTE_MIXTO'),
+(61, 'ARTE_MIXTO'),
+
+-- Rafael Guerrero (62-63)
+(62, 'DIBUJO'),
+(63, 'DIBUJO'),
+
+-- Aisha Williams (64-65)
+(64, 'FOTOGRAFIA'),
+(65, 'FOTOGRAFIA'),
+
+-- Dmitri Volkov (66-67)
+(66, 'ESCULTURA'),
+(67, 'ESCULTURA'),
+
+-- Carmen Delgado (68-69)
+(68, 'PINTURA'),
+(69, 'PINTURA'),
+
+-- James Mitchell (70-71)
+(70, 'PINTURA'), (70, 'ABSTRACTO'),
+(71, 'PINTURA'), (71, 'ABSTRACTO'),
+
+-- Noor Al-Zahra (72-73)
+(72, 'ARTE_MIXTO'),
+(73, 'ARTE_MIXTO'),
+
+-- Erik Nielsen (74-75)
+(74, 'DIBUJO'),
+(75, 'DIBUJO'),
+
+-- Catalina Ruiz (76-77)
+(76, 'ARTE_TEXTIL'),
+(77, 'ARTE_TEXTIL'),
+
+-- Hassan Ouni (78-79)
+(78, 'FOTOGRAFIA'),
+(79, 'FOTOGRAFIA'),
+
+-- Anastasia Popov (80-81)
+(80, 'PINTURA'),
+(81, 'PINTURA'),
+
+-- Tony Chang (82-83)
+(82, 'ARTE_MIXTO'),
+(83, 'ARTE_MIXTO'),
+
+-- Isabella Martinez (84-85)
+(84, 'ESCULTURA'),
+(85, 'ESCULTURA'),
+
+-- Kwame Osei (86-87)
+(86, 'PINTURA'),
+(87, 'PINTURA'),
+
+-- Helena Kozlova (88-89)
+(88, 'ESCULTURA'),
+(89, 'ESCULTURA'),
+
+-- Samuel Andersson (90-91)
+(90, 'ESCULTURA'),
+(91, 'ESCULTURA'),
+
+-- Yasmin Farouk (92-93)
+(92, 'PINTURA'),
+(93, 'PINTURA'),
+
+-- Marco Santini (94-95)
+(94, 'PINTURA'),
+(95, 'PINTURA'),
+
+-- Keiko Yamamoto (96-97)
+(96, 'DIBUJO'),
+(97, 'DIBUJO'),
+
+-- Thabo Mthembu (98-99)
+(98, 'ESCULTURA'),
+(99, 'ARTE_MIXTO'),
+
+-- Zara Hassan (100)
+(100, 'ARTE_TEXTIL');
