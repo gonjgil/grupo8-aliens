@@ -13,32 +13,36 @@
 </head>
 <body class="bg-gray-100 text-gray-800">
 <!-- Header -->
-<header class="bg-white p-6 flex justify-between items-center shadow-md">
-    <h1 class="text-4xl font-extrabold text-gray-900 tracking-wider">
+<header class="bg-black p-6 flex justify-between items-center shadow-md">
+    <h1 class="text-4xl font-extrabold text-gray-200 tracking-wider">
         <a th:href="@{/galeria}" class="hover:text-blue-600 transition-colors">
             ArtRoom
         </a>
     </h1>
 
-    <div class="flex items-center space-x-4">
-        <div th:if="${usuario != null}" class="flex items-center space-x-4">
+    <div class="flex items-center space-x-4 text-gray-200">
+        <div th:if="${usuario != null}" class="flex items-center space-x-4 text-xl">
             <div th:text=" 'Hola, ' + ${usuario.email}"></div>
             <a th:href="@{/perfilArtista/nuevo}"
-               class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg"
+               class="hover:bg-gray-800 hover:outline hover:outline-2 hover:outline-white text-white font-bold py-2 px-4 rounded transition duration-300 shadow-lg"
                title="Crear nuevo artista">
-                <i class="bi bi-person-plus"></i>
-                <a th:href="@{/carrito}"
-                  class="bg-blue-600 hover:bg-blue-700 fas fa-shopping-cart mr-2 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg">
-                </a>
-                <a th:href="@{/logout}"
-                   class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg">
-                    <i class="bi bi-box-arrow-right"></i>
-                </a>
-         </div>
+                <i class="bi bi-person-plus text-2xl"></i>
+            </a>
+            <a th:href="@{/carrito}"
+               class="hover:bg-gray-800 hover:outline hover:outline-2 hover:outline-white text-white font-bold py-2 px-4 rounded transition duration-300 shadow-lg"
+               title="Carrito de compras">
+                <i class="bi bi-bag text-2xl"></i>
+            </a>
+            <a th:href="@{/logout}"
+               class="hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300 shadow-lg"
+               title="Cerrar sesión">
+                <i class="bi bi-box-arrow-right text-2xl"></i>
+            </a>
+        </div>
         <div th:unless="${usuario != null}">
             <button
                     th:onclick="|location.href='@{/login}'|"
-                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg"
+                    class="hover:outline hover:outline-2 hover:outline-white text-white font-bold py-2 px-6 rounded-lg transition duration-300 shadow-lg"
             >
                 Iniciar Sesión
             </button>
