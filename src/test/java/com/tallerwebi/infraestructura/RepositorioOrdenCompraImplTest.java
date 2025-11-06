@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.SessionFactory;
 
 import com.tallerwebi.dominio.entidades.Carrito;
+import com.tallerwebi.dominio.entidades.FormatoObra;
 import com.tallerwebi.dominio.entidades.ItemCarrito;
 import com.tallerwebi.dominio.entidades.ItemOrden;
 import com.tallerwebi.dominio.entidades.Obra;
@@ -61,7 +62,11 @@ public class RepositorioOrdenCompraImplTest {
         Usuario usuario = new Usuario();
         Carrito carrito = new Carrito(usuario);
         Obra obra = new Obra();
-        obra.setPrecio(2001.0);
+        
+        // Crear formato para la obra
+        FormatoObra formatoObra = new FormatoObra(obra, Formato.ORIGINAL, 2001.0, 5);
+        obra.agregarFormato(formatoObra);
+        
         carrito.agregarItem(obra, Formato.ORIGINAL, 2001.0);
 
         ItemCarrito itemCarrito = carrito.getItems().get(0);
@@ -82,7 +87,11 @@ public class RepositorioOrdenCompraImplTest {
         Usuario usuario = new Usuario();
         Carrito carrito = new Carrito(usuario);
         Obra obra = new Obra();
-        obra.setPrecio(2001.0);
+        
+        // Crear formato para la obra
+        FormatoObra formatoObra = new FormatoObra(obra, Formato.ORIGINAL, 2001.0, 5);
+        obra.agregarFormato(formatoObra);
+        
         carrito.agregarItem(obra, Formato.ORIGINAL, 2001.0);
 
         ItemCarrito itemCarrito = carrito.getItems().get(0);
@@ -108,9 +117,12 @@ public class RepositorioOrdenCompraImplTest {
         Carrito carrito2 = new Carrito(usuario);
 
         Obra obra1 = new Obra();
-        obra1.setPrecio(2001.0);
+        FormatoObra formatoObra1 = new FormatoObra(obra1, Formato.ORIGINAL, 2001.0, 5);
+        obra1.agregarFormato(formatoObra1);
+        
         Obra obra2 = new Obra();
-        obra2.setPrecio(2001.0);
+        FormatoObra formatoObra2 = new FormatoObra(obra2, Formato.ORIGINAL, 2001.0, 5);
+        obra2.agregarFormato(formatoObra2);
 
         carrito.agregarItem(obra1, Formato.ORIGINAL, 2001.0);
         carrito2.agregarItem(obra2, Formato.ORIGINAL, 2001.0);
@@ -210,11 +222,8 @@ public class RepositorioOrdenCompraImplTest {
             Carrito carrito3 = new Carrito(usuario2);
 
             Obra obra1 = new Obra();
-            obra1.setPrecio(2001.0);
             Obra obra2 = new Obra();
-            obra2.setPrecio(2001.0);
             Obra obra3 = new Obra();
-            obra3.setPrecio(2001.0);
 
             carrito.agregarItem(obra1, Formato.ORIGINAL, 2001.0);
             carrito2.agregarItem(obra2, Formato.ORIGINAL, 2001.0);

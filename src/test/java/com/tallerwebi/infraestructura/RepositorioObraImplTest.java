@@ -19,9 +19,11 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.tallerwebi.dominio.entidades.FormatoObra;
 import com.tallerwebi.dominio.entidades.Obra;
 import com.tallerwebi.dominio.repositorios.RepositorioObra;
 import com.tallerwebi.dominio.enums.Categoria;
+import com.tallerwebi.dominio.enums.Formato;
 import com.tallerwebi.infraestructura.config.HibernateTestInfraestructuraConfig;
 
 @ExtendWith(SpringExtension.class)
@@ -194,6 +196,15 @@ public class RepositorioObraImplTest {
         Obra obra1 = generarObra1();
         Obra obra2 = generarObra2();
         Obra obra3 = generarObra3();
+        
+        // Agregar formatos con precios específicos para el test
+        FormatoObra formato1 = new FormatoObra(obra1, Formato.ORIGINAL, 1500.0, 5);
+        FormatoObra formato2 = new FormatoObra(obra2, Formato.ORIGINAL, 2500.0, 5);
+        FormatoObra formato3 = new FormatoObra(obra3, Formato.ORIGINAL, 3500.0, 5);
+        
+        obra1.agregarFormato(formato1);
+        obra2.agregarFormato(formato2);
+        obra3.agregarFormato(formato3);
 
         this.repositorioObra.guardar(obra1);
         this.repositorioObra.guardar(obra2);
@@ -256,6 +267,15 @@ public class RepositorioObraImplTest {
         Obra obra1 = generarObra1();
         Obra obra2 = generarObra2();
         Obra obra3 = generarObra3();
+        
+        // Agregar formatos con precios fuera del rango de búsqueda (4000-5000)
+        FormatoObra formato1 = new FormatoObra(obra1, Formato.ORIGINAL, 1500.0, 5);
+        FormatoObra formato2 = new FormatoObra(obra2, Formato.ORIGINAL, 2500.0, 5);
+        FormatoObra formato3 = new FormatoObra(obra3, Formato.ORIGINAL, 3500.0, 5);
+        
+        obra1.agregarFormato(formato1);
+        obra2.agregarFormato(formato2);
+        obra3.agregarFormato(formato3);
 
         this.repositorioObra.guardar(obra1);
         this.repositorioObra.guardar(obra2);
@@ -289,7 +309,6 @@ public class RepositorioObraImplTest {
         obra1.setAutor("Autor de la Obra 1");
         obra1.setDescripcion("Descripcion de la Obra 1");
         obra1.setImagenUrl("http://imagen.com/obra1.jpg");
-        obra1.setPrecio(1500.0);
         obra1.agregarCategoria(Categoria.ABSTRACTO);
         return obra1;
     }
@@ -300,7 +319,6 @@ public class RepositorioObraImplTest {
         obra2.setAutor("Autor de la Obra 2");
         obra2.setDescripcion("Descripcion de la Obra 2");
         obra2.setImagenUrl("http://imagen.com/obra2.jpg");
-        obra2.setPrecio(2500.0);
         obra2.agregarCategoria(Categoria.SURREALISMO);
         return obra2;
     }
@@ -311,7 +329,6 @@ public class RepositorioObraImplTest {
         obra3.setAutor("Autor de la Obra 3");
         obra3.setDescripcion("Descripcion de la Obra 3");
         obra3.setImagenUrl("http://imagen.com/obra3.jpg");
-        obra3.setPrecio(3500.0);
         obra3.agregarCategoria(Categoria.ABSTRACTO);
         return obra3;
     }

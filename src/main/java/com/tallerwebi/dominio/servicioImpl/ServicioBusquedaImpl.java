@@ -76,7 +76,12 @@ public class ServicioBusquedaImpl implements ServicioBusqueda {
 
     private List<Obra> ordenarPorPrecio(boolean asc) {
         List<Obra> obras = new ArrayList<>(repositorioObra.obtenerTodas());
-        obras.sort(Comparator.comparingDouble(Obra::getPrecio));
+        obras.sort(Comparator.comparingDouble(obra -> 
+            obra.getFormatos().stream()
+                .mapToDouble(formato -> formato.getPrecio())
+                .min()
+                .orElse(Double.MAX_VALUE)
+        ));
         if (!asc) Collections.reverse(obras);
         return obras;
     }
