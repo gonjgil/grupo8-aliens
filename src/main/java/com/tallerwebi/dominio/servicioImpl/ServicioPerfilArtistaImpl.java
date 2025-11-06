@@ -68,11 +68,6 @@ public class ServicioPerfilArtistaImpl implements ServicioPerfilArtista {
     }
 
     @Override
-    public Artista obtenerArtistaPorUsuario(Usuario usuario) {
-        return repositorioArtista.buscarArtistaPorUsuario(usuario);
-    }
-
-    @Override
     public Artista crearPerfilArtista(PerfilArtistaDTO datos, Usuario usuario) {
 
         //verifica si ya tiene un artista
@@ -104,6 +99,11 @@ public class ServicioPerfilArtistaImpl implements ServicioPerfilArtista {
             return "https://" + url;
         }
         return url;
+    }
+
+    @Override
+    public Artista obtenerArtistaPorUsuario(Usuario usuario) {
+        return repositorioArtista.buscarArtistaPorUsuario(usuario);
     }
 }
 

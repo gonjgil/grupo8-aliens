@@ -53,4 +53,5 @@ public class RepositorioArtistaImpl implements RepositorioArtista {
                 .setParameter("nombre", "%" + nombre.toLowerCase() + "%")
                 .getResultList();
     }
+
 }

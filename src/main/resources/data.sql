@@ -4,213 +4,719 @@ WHERE NOT EXISTS (
     SELECT 1 FROM Usuario WHERE email = 'test@unlam.edu.ar'
 );
 
--- Insertar artistas
 INSERT INTO Artista (id, nombre, biografia) VALUES
-(1, 'J. Doe', 'Artista contemporáneo especializado en paisajismo y retratos modernos.'),
-(2, 'María García', 'Fotógrafa urbana que captura la esencia de la vida nocturna en las ciudades.'),
-(3, 'Carlos López', 'Pintor naturalista enfocado en la flora y fauna de su entorno.'),
-(4, 'Ana Martínez', 'Artista abstracta conocida por su uso del color y la forma.'),
-(5, 'Luis Fernández', 'Explorador del claroscuro y las técnicas experimentales en pintura.'),
-(6, 'Sofía Romano', 'Artista digital que fusiona tecnología y arte contemporáneo.'),
-(7, 'Diego Morales', 'Pintor surrealista que crea mundos oníricos y fantásticos.'),
-(8, 'Isabella Chen', 'Artista asiática que incorpora elementos zen y tradicionales en su obra.'),
-(9, 'Roberto Silva', 'Fotógrafo marino que documenta la belleza del océano y sus criaturas.'),
-(10, 'Elena Volkov', 'Pintora clásica inspirada en el Renacimiento y el Barroco.'),
-(11, 'Kenji Nakamura', 'Ilustrador japonés especializado en manga y anime.'),
-(12, 'Pierre Dubois', 'Pintor impresionista que rinde homenaje a los grandes maestros.'),
-(13, 'Ahmed Hassan', 'Artista islámico que explora la geometría sagrada y la caligrafía.'),
-(14, 'Frida Esperanza', 'Artista folclórica que celebra las tradiciones ancestrales a través de su arte.'),
-(15, 'Viktor Petrov', 'Escultor steampunk que combina elementos industriales con arte creativo.'),
-(16, 'Amélie Laurent', 'Pintora romántica que captura escenas pastorales y bucólicas.'),
-(17, 'Jackson Rivers', 'Artista de graffiti conocido por sus murales urbanos vibrantes.'),
-(18, 'Yuki Tanaka', 'Artista futurista que imagina mundos sci-fi a través del arte digital.'),
-(19, 'Leonardo Rossi', 'Fotógrafo arquitectónico que destaca monumentos y estructuras icónicas.'),
-(20, 'Emma Thompson', 'Pintora delicada especializada en acuarelas suaves y etéreas.');
+(1, 'Leonardo Da Vinci', 'Maestro renacentista italiano. Pintor, inventor, anatomista. Sus obras incluyen La Mona Lisa y La Última Cena. Genio universal que revolucionó el arte.'),
+(2, 'Vincent van Gogh', 'Postimpresionista holandés conocido por su uso expresivo del color y técnica única. Creó más de 2000 obras en una década de trabajo intenso.'),
+(3, 'Pablo Picasso', 'Artista español, cofundador del cubismo. Una de las figuras más influyentes del arte del siglo XX. Período azul, rosa y cubista definen su evolución.'),
+(4, 'Claude Monet', 'Fundador del impresionismo francés. Famoso por sus series de nenúfares y catedrales. Revolucionó la pintura al aire libre.'),
+(5, 'Frida Kahlo', 'Pintora mexicana conocida por sus autorretratos y obras que incorporan elementos de la naturaleza y artefactos de México.'),
+(6, 'Salvador Dalí', 'Surrealista español famoso por sus paisajes oníricos y su técnica hiperrealista. Sus relojes derretidos son iconos del arte moderno.'),
+(7, 'Georgia Keeffe', 'Artista estadounidense conocida por sus pinturas de flores ampliadas, paisajes de Nuevo México y rascacielos de Nueva York.'),
+(8, 'Andy Warhol', 'Líder del movimiento artístico pop. Exploró la relación entre la expresión artística, la cultura pop y la publicidad.'),
+(9, 'Jackson Pollock', 'Pintor estadounidense conocido por su técnica de goteo (drip painting) y su papel en el movimiento expresionista abstracto.'),
+(10, 'Wassily Kandinsky', 'Pionero del arte abstracto. Teorizó sobre la sinestesia en el arte y la espiritualidad de la forma y el color.'),
+(11, 'Isabella Chen', 'Artista chino-canadiense que fusiona técnicas tradicionales de pintura china con conceptos occidentales modernos.'),
+(12, 'Marcus Thompson', 'Fotógrafo urbano británico especializado en capturar la vida nocturna y la arquitectura de ciudades metropolitanas.'),
+(13, 'Yuki Nakamura', 'Artista digital japonés que crea mundos virtuales inspirados en el anime y la cultura cyberpunk contemporánea.'),
+(14, 'Amara Okafor', 'Escultora nigeriana que trabaja con materiales reciclados para crear instalaciones que abordan temas medioambientales.'),
+(15, 'Diego Mendoza', 'Muralista mexicano cuyas obras reflejan la cultura precolombina fusionada con elementos urbanos contemporáneos.'),
+(16, 'Svetlana Petrov', 'Pintora rusa especializada en paisajes árticos y retratos que capturan la melancolía de los inviernos del norte.'),
+(17, 'Ahmed Al-Rashid', 'Calígrafo y artista conceptual iraní que incorpora geometría islámica en instalaciones multimedia modernas.'),
+(18, 'Marie Dubois', 'Artista francesa neoimpresionistra que reinterpreta los clásicos maestros con una perspectiva feminista contemporánea.'),
+(19, 'Raj Patel', 'Artista indio que combina técnicas de miniatura mogol con temáticas urbanas de Mumbai y Delhi.'),
+(20, 'Elena Rossi', 'Escultora italiana especializada en mármol que crea obras que dialogan entre lo clásico y lo moderno.'),
+(21, 'Benjamin Carter', 'Fotógrafo de naturaleza estadounidense que documenta los efectos del cambio climático en paisajes naturales.'),
+(22, 'Fatima Benali', 'Artista textil marroquí que preserva y moderniza técnicas tradicionales de tejido bereber.'),
+(23, 'Hiroshi Tanaka', 'Ceramista japonés cuyas obras reflejan la filosofía wabi-sabi en formas contemporáneas.'),
+(24, 'Lucia Santos', 'Artista brasileña que trabaja con instalaciones inmersivas inspiradas en la biodiversidad amazónica.'),
+(25, 'Olaf Eriksen', 'Pintor noruego especializado en paisajes nórdicos que exploran la relación entre humano y naturaleza.'),
+(26, 'Priya Sharma', 'Artista multimedia india que crea experiencias artísticas interactivas sobre migración y identidad cultural.'),
+(27, 'Alessandro Bianchi', 'Pintor veneciano contemporáneo que reinterpreta la tradición del vedutismo con técnicas modernas.'),
+(28, 'Kofi Asante', 'Escultor ghanés que trabaja con maderas africanas creando piezas que narran historias ancestrales.'),
+(29, 'Ingrid Larsson', 'Artista sueca que utiliza luz LED y vidrio para crear instalaciones que exploran temas de sostenibilidad.'),
+(30, 'Rafael Guerrero', 'Grabador español especializado en técnicas tradicionales de aguafuerte con temáticas sociales contemporáneas.'),
+(31, 'Aisha Williams', 'Artista afroamericana que explora la identidad racial a través de retratos fotográficos y pintura.'),
+(32, 'Dmitri Volkov', 'Artista ruso que crea esculturas cinéticas inspiradas en la era espacial soviética.'),
+(33, 'Carmen Delgado', 'Pintora colombiana cuyas obras reflejan la riqueza cultural y los contrastes sociales de Latinoamérica.'),
+(34, 'James Mitchell', 'Artista abstracto australiano que incorpora arena y pigmentos naturales del outback en sus obras.'),
+(35, 'Noor Al-Zahra', 'Artista conceptual libanesa que utiliza caligrafía árabe en instalaciones sobre memoria y exilio.'),
+(36, 'Erik Nielsen', 'Ilustrador danés especializado en arte narrativo que combina tradición nórdica con estética contemporánea.'),
+(37, 'Catalina Ruiz', 'Artista textil peruana que moderniza técnicas preincaicas en tapices contemporáneos.'),
+(38, 'Hassan Ouni', 'Fotógrafo tunecino que documenta la vida cotidiana en el norte de África con una perspectiva poética.'),
+(39, 'Anastasia Popov', 'Pintora búlgara especializada en iconografía ortodoxa reinterpretada con sensibilidad moderna.'),
+(40, 'Tony Chang', 'Artista taiwanés que fusiona caligrafía china tradicional con graffiti urbano contemporáneo.'),
+(41, 'Isabella Martinez', 'Ceramista argentina que crea esculturas inspiradas en la pampa y la cultura gaucha.'),
+(42, 'Kwame Osei', 'Pintor ghanés que utiliza pigmentos naturales para crear obras sobre mitología africana.'),
+(43, 'Helena Kozlova', 'Artista checa que trabaja con vidrio soplado creando instalaciones sobre fragilidad humana.'),
+(44, 'Samuel Andersson', 'Escultor en madera finlandés que combina tradición sami con diseño escandinavo moderno.'),
+(45, 'Yasmin Farouk', 'Artista egipcia que explora jeroglíficos antiguos en contextos artísticos contemporáneos.'),
+(46, 'Marco Santini', 'Pintor siciliano que captura la luz mediterránea en paisajes que dialogan con la tradición italiana.'),
+(47, 'Keiko Yamamoto', 'Artista de grabado japonesa especializada en xilografía que moderniza el ukiyo-e tradicional.'),
+(48, 'Thabo Mthembu', 'Escultor sudafricano que trabaja con metal reciclado creando obras sobre reconciliación y esperanza.'),
+(49, 'Zara Hassan', 'Artista textil pakistaní que preserva técnicas de bordado tradicional en instalaciones contemporáneas.'),
+(50, 'Gabriel Silva', 'Muralista venezolano que documenta la realidad social latinoamericana a través del arte urbano.');
 
--- Insert obras de arte con imágenes de ejemplo
-INSERT INTO Obra(id, titulo, autor, imagenUrl, descripcion, stock, precio, artista) VALUES
--- J. Doe (Abstracto/Paisajismo)
-(null, 'Paisaje Abstracto', 'J. Doe', 'https://picsum.photos/400/600?seed=1', 'Una hermosa representación abstracta de la naturaleza', 8, 150.00, 1),
-(null, 'Retrato Moderno', 'J. Doe', 'https://picsum.photos/400/600?seed=2', 'Un retrato contemporáneo con técnicas modernas', 5, 200.00, 1),
-(null, 'Montañas al Amanecer', 'J. Doe', 'https://picsum.photos/400/600?seed=6', 'Paisaje montañoso durante el amanecer', 3, 250.00, 1),
+INSERT INTO Obra(id, titulo, autor, imagenUrl, descripcion, stock, artista) VALUES
+(null, 'La Dama del Armiño', 'Leonardo Da Vinci', '/images/obras/artwork_001.jpg', 'Retrato magistral que demuestra la técnica innovadora de Leonardo en el sfumato y la expresión psicológica', 1, 1),
+(null, 'Autorretrato con Sombrero', 'Leonardo Da Vinci', '/images/obras/artwork_002.jpg', 'Introspectivo autorretrato que revela la personalidad del genio renacentista en sus últimos años', 1, 1),
+(null, 'Noche Estrellada sobre el Ródano', 'Vincent van Gogh', '/images/obras/artwork_003.jpg', 'Obra nocturna que captura la belleza del cielo estrellado con la técnica única de pinceladas expresivas', 2, 2),
+(null, 'Campo de Trigo con Cipreses', 'Vincent van Gogh', '/images/obras/artwork_004.jpg', 'Paisaje vibrante que muestra la conexión espiritual del artista con la naturaleza mediterránea', 1, 2),
+(null, 'Los Girasoles del Jardín', 'Vincent van Gogh', '/images/obras/artwork_005.jpg', 'Naturaleza muerta que simboliza la devoción y la alegría a través del color amarillo radiante', 3, 2),
+(null, 'Retrato Geométrico Azul', 'Pablo Picasso', '/images/obras/artwork_006.jpg', 'Exploración cubista de la forma humana durante el innovador período azul del artista', 2, 3),
+(null, 'Naturaleza Muerta con Guitarra', 'Pablo Picasso', '/images/obras/artwork_007.jpg', 'Deconstrucción cubista de objetos cotidianos que revolucionó la perspectiva artística', 1, 3),
+(null, 'Mujer en Sillón', 'Pablo Picasso', '/images/obras/artwork_008.jpg', 'Retrato que ejemplifica la síntesis entre realismo y abstracción geométrica', 1, 3),
+(null, 'Nenúfares en Estanque', 'Claude Monet', '/images/obras/artwork_009.jpg', 'Obra serena que captura la luz reflejada en el agua con técnica impresionista pura', 4, 4),
+(null, 'Catedral al Amanecer', 'Claude Monet', '/images/obras/artwork_010.jpg', 'Estudio de luz arquitectural que muestra los cambios cromáticos durante las horas matutinas', 2, 4),
+(null, 'Jardín de Primavera', 'Claude Monet', '/images/obras/artwork_011.jpg', 'Celebración colorista de la naturaleza en su máximo esplendor estacional', 3, 4),
+(null, 'Autorretrato con Mariposas', 'Frida Kahlo', '/images/obras/artwork_012.jpg', 'Introspección personal que incorpora simbolismo mexicano y elementos autobiográficos', 1, 5),
+(null, 'Naturaleza Viva Mexicana', 'Frida Kahlo', '/images/obras/artwork_013.jpg', 'Bodegón vibrante que celebra la biodiversidad y cultura gastronómica de México', 2, 5),
+(null, 'Paisaje Onírico', 'Salvador Dalí', '/images/obras/artwork_014.jpg', 'Exploración del subconsciente a través de imágenes imposibles y técnica hiperrealista', 1, 6),
+(null, 'Metamorfosis del Tiempo', 'Salvador Dalí', '/images/obras/artwork_015.jpg', 'Reflexión sobre la relatividad temporal mediante simbolismo surrealista característico', 1, 6),
+(null, 'Flor Ampliada Rosa', 'Georgia Keeffe', '/images/obras/artwork_016.jpg', 'Interpretación íntima de formas naturales con sensualidad y precisión técnica', 3, 7),
+(null, 'Paisaje de Nuevo México', 'Georgia Keeffe', '/images/obras/artwork_017.jpg', 'Vista del desierto americano que captura la espiritualidad del paisaje árido', 2, 7),
+(null, 'Repetición en Color', 'Andy Warhol', '/images/obras/artwork_018.jpg', 'Exploración de la cultura de masas mediante repetición e iconografía comercial', 5, 8),
+(null, 'Retrato Serigráfico', 'Andy Warhol', '/images/obras/artwork_019.jpg', 'Técnica de serigrafía aplicada al retrato contemporáneo con colores saturados', 4, 8),
+(null, 'Composición de Goteo', 'Jackson Pollock', '/images/obras/artwork_020.jpg', 'Técnica de drip painting que expresa emoción pura a través del movimiento gestual', 1, 9),
+(null, 'Ritmo en Azul', 'Jackson Pollock', '/images/obras/artwork_021.jpg', 'Exploración del automatismo y la expresión subconsciente mediante pintura de acción', 1, 9),
+(null, 'Composición Sinestésica', 'Wassily Kandinsky', '/images/obras/artwork_022.jpg', 'Traducción visual de sensaciones musicales mediante formas y colores abstractos', 2, 10),
+(null, 'Formas en Movimiento', 'Wassily Kandinsky', '/images/obras/artwork_023.jpg', 'Exploración de la espiritualidad del arte a través de la abstracción geométrica', 1, 10),
+(null, 'Fusión Cultural', 'Isabella Chen', '/images/obras/artwork_024.jpg', 'Síntesis entre tradición pictórica china y conceptos artísticos occidentales contemporáneos', 4, 11),
+(null, 'Caligrafía Moderna', 'Isabella Chen', '/images/obras/artwork_025.jpg', 'Reinterpretación contemporánea de la caligrafía tradicional china con materiales modernos', 3, 11),
+(null, 'Luces de la Ciudad', 'Marcus Thompson', '/images/obras/artwork_026.jpg', 'Captura fotográfica de la vida urbana nocturna en metrópolis contemporáneas', 8, 12),
+(null, 'Arquitectura Reflejada', 'Marcus Thompson', '/images/obras/artwork_027.jpg', 'Estudio de geometrías urbanas y reflejos en superficies de vidrio modernas', 6, 12),
+(null, 'Mundo Virtual', 'Yuki Nakamura', '/images/obras/artwork_028.jpg', 'Creación digital que explora realidades alternativas inspiradas en cultura cyberpunk', 12, 13),
+(null, 'Avatar Futurista', 'Yuki Nakamura', '/images/obras/artwork_029.jpg', 'Diseño de personaje que fusiona estética anime con elementos tecnológicos avanzados', 15, 13),
+(null, 'Renacer Ecológico', 'Amara Okafor', '/images/obras/artwork_030.jpg', 'Escultura de materiales reciclados que aborda crisis medioambiental global', 1, 14),
+(null, 'Equilibrio Natural', 'Amara Okafor', '/images/obras/artwork_031.jpg', 'Instalación que representa la harmonía entre desarrollo humano y conservación natural', 1, 14),
+(null, 'Mural Ancestral', 'Diego Mendoza', '/images/obras/artwork_032.jpg', 'Fusión de iconografía precolombina con expresión urbana contemporánea mexicana', 2, 15),
+(null, 'Códice Urbano', 'Diego Mendoza', '/images/obras/artwork_033.jpg', 'Reinterpretación de códices antiguos en contexto de ciudad moderna', 1, 15),
+(null, 'Invierno Ártico', 'Svetlana Petrov', '/images/obras/artwork_034.jpg', 'Paisaje invernal que captura la melancolía y belleza de las regiones nórdicas', 3, 16),
+(null, 'Retrato Siberiano', 'Svetlana Petrov', '/images/obras/artwork_035.jpg', 'Estudio de carácter humano enfrentado a la dureza del clima extremo', 2, 16),
+(null, 'Geometría Sagrada', 'Ahmed Al-Rashid', '/images/obras/artwork_036.jpg', 'Instalación multimedia que combina caligrafía árabe con tecnología contemporánea', 1, 17),
+(null, 'Luz de Mezquita', 'Ahmed Al-Rashid', '/images/obras/artwork_037.jpg', 'Estudio de iluminación inspirado en arquitectura islámica tradicional', 2, 17),
+(null, 'Nuevo Impresionismo', 'Marie Dubois', '/images/obras/artwork_038.jpg', 'Reinterpretación feminista de los maestros impresionistas franceses clásicos', 4, 18),
+(null, 'Jardín Contemporáneo', 'Marie Dubois', '/images/obras/artwork_039.jpg', 'Visión moderna del jardín francés con perspectiva de género actualizada', 3, 18),
+(null, 'Miniatura Mumbai', 'Raj Patel', '/images/obras/artwork_040.jpg', 'Técnica mogol aplicada a escenas urbanas de la India contemporánea', 5, 19),
+(null, 'Mercado de Delhi', 'Raj Patel', '/images/obras/artwork_041.jpg', 'Detallado estudio de la vida comercial en mercados tradicionales indios', 4, 19),
+(null, 'Mármol Contemporáneo', 'Elena Rossi', '/images/obras/artwork_042.jpg', 'Escultura que dialoga entre tradición renacentista italiana y sensibilidad moderna', 1, 20),
+(null, 'Forma Clásica', 'Elena Rossi', '/images/obras/artwork_043.jpg', 'Interpretación contemporánea de ideales estéticos clásicos en mármol de Carrara', 1, 20),
+(null, 'Glaciar en Retroceso', 'Benjamin Carter', '/images/obras/artwork_044.jpg', 'Documentación fotográfica del impacto del cambio climático en paisajes árticos', 7, 21),
+(null, 'Bosque Primordial', 'Benjamin Carter', '/images/obras/artwork_045.jpg', 'Captura de ecosistemas vírgenes que enfatizan la necesidad de conservación', 6, 21),
+(null, 'Textil Bereber', 'Fatima Benali', '/images/obras/artwork_046.jpg', 'Tejido tradicional marroquí actualizado con patrones y colores contemporáneos', 8, 22),
+(null, 'Alfombra Narrativa', 'Fatima Benali', '/images/obras/artwork_047.jpg', 'Tapiz que narra historias ancestrales del pueblo bereber con técnicas modernas', 5, 22),
+(null, 'Cerámica Wabi-Sabi', 'Hiroshi Tanaka', '/images/obras/artwork_048.jpg', 'Pieza cerámica que abraza la imperfección como principio estético japonés', 10, 23),
+(null, 'Cuenco de Té Contemporáneo', 'Hiroshi Tanaka', '/images/obras/artwork_049.jpg', 'Cerámica funcional que moderniza la ceremonia del té tradicional japonesa', 12, 23),
+(null, 'Instalación Amazónica', 'Lucia Santos', '/images/obras/artwork_050.jpg', 'Experiencia inmersiva que recrea la biodiversidad de la selva tropical brasileña', 1, 24),
+(null, 'Sonidos de la Selva', 'Lucia Santos', '/images/obras/artwork_051.jpg', 'Instalación audiovisual que traduce la comunicación entre especies amazónicas', 1, 24),
+(null, 'Fiordo Noruego', 'Olaf Eriksen', '/images/obras/artwork_052.jpg', 'Paisaje nórdico que explora la relación espiritual entre humano y naturaleza ártica', 3, 25),
+(null, 'Aurora Boreal', 'Olaf Eriksen', '/images/obras/artwork_053.jpg', 'Captura pictórica del fenómeno lumínico natural del norte de Europa', 2, 25),
+(null, 'Identidad Migratoria', 'Priya Sharma', '/images/obras/artwork_054.jpg', 'Instalación interactiva sobre la experiencia de inmigración y identidad cultural', 1, 26),
+(null, 'Raíces Digitales', 'Priya Sharma', '/images/obras/artwork_055.jpg', 'Exploración multimedia de la preservación cultural en la era digital', 1, 26),
+(null, 'Venecia Contemporánea', 'Alessandro Bianchi', '/images/obras/artwork_056.jpg', 'Veduta moderna que actualiza la tradición pictórica veneciana del siglo XVIII', 4, 27),
+(null, 'Canal al Atardecer', 'Alessandro Bianchi', '/images/obras/artwork_057.jpg', 'Estudio de luz sobre arquitectura veneciana con técnicas contemporáneas', 3, 27),
+(null, 'Escultura Ancestral', 'Kofi Asante', '/images/obras/artwork_058.jpg', 'Talla en madera africana que narra historias tradicionales del pueblo akan', 1, 28),
+(null, 'Máscara Ceremonial', 'Kofi Asante', '/images/obras/artwork_059.jpg', 'Escultura ritual que conecta tradiciones espirituales con expresión artística moderna', 1, 28),
+(null, 'Instalación Lumínica', 'Ingrid Larsson', '/images/obras/artwork_060.jpg', 'Obra de LED y vidrio que explora sostenibilidad energética a través del arte', 1, 29),
+(null, 'Cristal Sostenible', 'Ingrid Larsson', '/images/obras/artwork_061.jpg', 'Escultura en vidrio reciclado que simboliza la economía circular', 2, 29),
+(null, 'Aguafuerte Social', 'Rafael Guerrero', '/images/obras/artwork_062.jpg', 'Grabado tradicional español que aborda problemáticas sociales contemporáneas', 8, 30),
+(null, 'Serie Urbana', 'Rafael Guerrero', '/images/obras/artwork_063.jpg', 'Conjunto de grabados que documentan transformaciones urbanas en España', 6, 30),
+(null, 'Retrato de Identidad', 'Aisha Williams', '/images/obras/artwork_064.jpg', 'Fotografía que explora la complejidad de la identidad racial en América contemporánea', 9, 31),
+(null, 'Herencia Cultural', 'Aisha Williams', '/images/obras/artwork_065.jpg', 'Serie fotográfica que celebra la diversidad y riqueza de la cultura afroamericana', 7, 31),
+(null, 'Escultura Cinética', 'Dmitri Volkov', '/images/obras/artwork_066.jpg', 'Obra mecánica inspirada en la estética de la era espacial soviética', 1, 32),
+(null, 'Cosmos en Movimiento', 'Dmitri Volkov', '/images/obras/artwork_067.jpg', 'Instalación cinética que simula movimientos planetarios con precisión mecánica', 1, 32),
+(null, 'Contrastes Colombianos', 'Carmen Delgado', '/images/obras/artwork_068.jpg', 'Pintura que refleja la riqueza cultural y las tensiones sociales de Colombia', 3, 33),
+(null, 'Biodiversidad Tropical', 'Carmen Delgado', '/images/obras/artwork_069.jpg', 'Celebración pictórica de la excepcional biodiversidad del trópico sudamericano', 4, 33),
+(null, 'Outback Abstracto', 'James Mitchell', '/images/obras/artwork_070.jpg', 'Pintura abstracta que incorpora arena y pigmentos del desierto australiano', 2, 34),
+(null, 'Tierra Roja', 'James Mitchell', '/images/obras/artwork_071.jpg', 'Exploración de texturas y colores del paisaje árido del centro de Australia', 3, 34),
+(null, 'Caligrafía del Exilio', 'Noor Al-Zahra', '/images/obras/artwork_072.jpg', 'Instalación conceptual sobre memoria y desplazamiento forzado en Oriente Medio', 1, 35),
+(null, 'Cartas Perdidas', 'Noor Al-Zahra', '/images/obras/artwork_073.jpg', 'Obra textual que explora la comunicación interrumpida por conflictos geopolíticos', 2, 35),
+(null, 'Narrativa Nórdica', 'Erik Nielsen', '/images/obras/artwork_074.jpg', 'Ilustración que combina mitología escandinava con estética contemporánea', 10, 36),
+(null, 'Saga Moderna', 'Erik Nielsen', '/images/obras/artwork_075.jpg', 'Reinterpretación gráfica de historias tradicionales danesas para audiencias actuales', 8, 36),
+(null, 'Tapiz Preincaico', 'Catalina Ruiz', '/images/obras/artwork_076.jpg', 'Textil que moderniza técnicas ancestrales peruanas con diseños contemporáneos', 5, 37),
+(null, 'Colores de los Andes', 'Catalina Ruiz', '/images/obras/artwork_077.jpg', 'Tapiz que captura la paleta cromática de los paisajes andinos peruanos', 4, 37),
+(null, 'Vida Cotidiana Magrebí', 'Hassan Ouni', '/images/obras/artwork_078.jpg', 'Fotografía poética que documenta la cotidianidad en el norte de África', 8, 38),
+(null, 'Mercado de Túnez', 'Hassan Ouni', '/images/obras/artwork_079.jpg', 'Captura fotográfica de la actividad comercial en medinas tradicionales', 6, 38),
+(null, 'Iconografía Moderna', 'Anastasia Popov', '/images/obras/artwork_080.jpg', 'Reinterpretación contemporánea de la tradición iconográfica ortodoxa búlgara', 3, 39),
+(null, 'Santos Contemporáneos', 'Anastasia Popov', '/images/obras/artwork_081.jpg', 'Pintura que actualiza hagiografía tradicional con sensibilidad moderna', 2, 39),
+(null, 'Graffiti Caligráfico', 'Tony Chang', '/images/obras/artwork_082.jpg', 'Fusión entre caligrafía china tradicional y arte urbano taiwanés contemporáneo', 6, 40),
+(null, 'Caracteres Urbanos', 'Tony Chang', '/images/obras/artwork_083.jpg', 'Exploración de escritura china en contextos de arte callejero moderno', 5, 40),
+(null, 'Cerámica Pampeana', 'Isabella Martinez', '/images/obras/artwork_084.jpg', 'Escultura cerámica inspirada en la vastedad de la llanura argentina', 4, 41),
+(null, 'Espíritu Gaucho', 'Isabella Martinez', '/images/obras/artwork_085.jpg', 'Obra que captura la esencia cultural de la tradición rural argentina', 3, 41),
+(null, 'Pigmentos Africanos', 'Kwame Osei', '/images/obras/artwork_086.jpg', 'Pintura que utiliza pigmentos naturales para narrar mitología tradicional ghanesa', 5, 42),
+(null, 'Anansi Stories', 'Kwame Osei', '/images/obras/artwork_087.jpg', 'Serie pictórica basada en historias tradicionales de la cultura akan', 4, 42),
+(null, 'Fragilidad Humana', 'Helena Kozlova', '/images/obras/artwork_088.jpg', 'Instalación de vidrio soplado que explora la vulnerabilidad de la condición humana', 1, 43),
+(null, 'Transparencias', 'Helena Kozlova', '/images/obras/artwork_089.jpg', 'Escultura en vidrio que juega con luz y transparencia como metáfora existencial', 2, 43),
+(null, 'Escultura Sami', 'Samuel Andersson', '/images/obras/artwork_090.jpg', 'Talla en madera que combina tradición sami con diseño escandinavo contemporáneo', 2, 44),
+(null, 'Reno del Ártico', 'Samuel Andersson', '/images/obras/artwork_091.jpg', 'Escultura que honra la relación ancestral entre pueblo sami y renos', 1, 44),
+(null, 'Jeroglíficos Modernos', 'Yasmin Farouk', '/images/obras/artwork_092.jpg', 'Reinterpretación artística de escritura jeroglífica egipcia en contexto contemporáneo', 6, 45),
+(null, 'Papiro Digital', 'Yasmin Farouk', '/images/obras/artwork_093.jpg', 'Fusión entre tradición escriba egipcia y tecnologías de comunicación actuales', 5, 45),
+(null, 'Luz Mediterránea', 'Marco Santini', '/images/obras/artwork_094.jpg', 'Paisaje siciliano que captura la calidad lumínica única del Mediterráneo', 4, 46),
+(null, 'Volcán Etna', 'Marco Santini', '/images/obras/artwork_095.jpg', 'Estudio pictórico del paisaje volcánico siciliano y su impacto cultural', 3, 46),
+(null, 'Ukiyo-e Contemporáneo', 'Keiko Yamamoto', '/images/obras/artwork_096.jpg', 'Xilografía que moderniza la tradición del mundo flotante japonés', 8, 47),
+(null, 'Estampas Urbanas', 'Keiko Yamamoto', '/images/obras/artwork_097.jpg', 'Grabado que aplica técnicas tradicionales japonesas a escenas urbanas modernas', 6, 47),
+(null, 'Reconciliación', 'Thabo Mthembu', '/images/obras/artwork_098.jpg', 'Escultura en metal reciclado que simboliza esperanza y unidad en Sudáfrica post-apartheid', 1, 48),
+(null, 'Ubuntu', 'Thabo Mthembu', '/images/obras/artwork_099.jpg', 'Instalación que explora filosofía africana de interconexión humana universal', 1, 48),
+(null, 'Bordado Ancestral', 'Zara Hassan', '/images/obras/artwork_100.jpg', 'Textil que preserva técnicas tradicionales de bordado pakistaní en instalación contemporánea', 3, 49);
 
--- María García (Urbano/Nocturno)
-(null, 'Ciudad Nocturna', 'María García', 'https://picsum.photos/400/600?seed=3', 'Vista nocturna de una ciudad moderna', 6, 300.00, 2),
-(null, 'Luces de Neón', 'María García', 'https://picsum.photos/400/600?seed=12', 'Reflejo de luces urbanas en la lluvia', 4, 280.00, 2),
-(null, 'Skyline al Atardecer', 'María García', 'https://picsum.photos/400/600?seed=23', 'Silueta urbana contra el cielo dorado', 2, 320.00, 2),
+INSERT INTO formato_obra(id, obra_id, formato, precio, stock, disponible) VALUES
+(null, 1, 'ORIGINAL', 2500000.00, 1, true),
+(null, 1, 'ORIGINAL_FIRMADO', 3000000.00, 1, true),
+(null, 1, 'IMPRESION_CANVAS', 85000.00, 10, true),
+(null, 1, 'IMPRESION_PREMIUM', 120000.00, 5, true),
 
--- Carlos López (Naturalismo/Botánico)
-(null, 'Flores Silvestres', 'Carlos López', 'https://picsum.photos/400/600?seed=4', 'Composición de flores en estado natural', 12, 120.00, 3),
-(null, 'Bosque Primaveral', 'Carlos López', 'https://picsum.photos/400/600?seed=13', 'Verde intenso de un bosque en primavera', 7, 190.00, 3),
+(null, 2, 'ORIGINAL', 2200000.00, 1, true),
+(null, 2, 'DIGITAL', 22000.00, 999, true),
+(null, 2, 'IMPRESION_CANVAS', 75000.00, 8, true),
 
--- Ana Martínez (Abstracto/Minimalismo)
-(null, 'Abstracto Azul', 'Ana Martínez', 'https://picsum.photos/400/600?seed=5', 'Obra abstracta en tonos azules', 9, 180.00, 4),
-(null, 'Formas Geométricas', 'Ana Martínez', 'https://picsum.photos/400/600?seed=14', 'Composición minimalista con formas puras', 6, 220.00, 4),
-(null, 'Equilibrio', 'Ana Martínez', 'https://picsum.photos/400/600?seed=24', 'Balance perfecto entre líneas y espacios', 4, 195.00, 4),
+(null, 3, 'ORIGINAL', 1800000.00, 2, true),
+(null, 3, 'ORIGINAL_FIRMADO', 2200000.00, 1, true),
+(null, 3, 'IMPRESION_CANVAS', 95000.00, 15, true),
+(null, 3, 'IMPRESION_PREMIUM', 135000.00, 8, true),
+(null, 3, 'DIGITAL', 28000.00, 999, true),
 
--- Luis Fernández (Claroscuro/Experimental)
-(null, 'Reflexiones', 'Luis Fernández', 'https://picsum.photos/400/600?seed=7', 'Juego de luces y sombras', 8, 175.00, 5),
-(null, 'Contraste', 'Luis Fernández', 'https://picsum.photos/400/600?seed=15', 'Dramático juego de claroscuros', 5, 210.00, 5),
+(null, 4, 'ORIGINAL', 1650000.00, 1, true),
+(null, 4, 'DIGITAL', 26000.00, 999, true),
 
--- Sofía Romano (Digital/Contemporáneo)
-(null, 'Arte Digital', 'Sofía Romano', 'https://picsum.photos/400/600?seed=8', 'Creación digital contemporánea', 15, 220.00, 6),
-(null, 'Píxeles y Sueños', 'Sofía Romano', 'https://picsum.photos/400/600?seed=16', 'Fusión entre lo digital y lo onírico', 10, 265.00, 6),
-(null, 'Realidad Virtual', 'Sofía Romano', 'https://picsum.photos/400/600?seed=25', 'Exploración de mundos virtuales', 8, 290.00, 6),
+(null, 5, 'ORIGINAL', 1750000.00, 3, true),
+(null, 5, 'ORIGINAL_FIRMADO', 2100000.00, 2, true),
+(null, 5, 'IMPRESION_CANVAS', 92000.00, 20, true),
 
--- Diego Morales (Surrealismo)
-(null, 'Sueños Líquidos', 'Diego Morales', 'https://picsum.photos/400/600?seed=9', 'Paisaje onírico con elementos flotantes', 3, 340.00, 7),
-(null, 'Tiempo Fragmentado', 'Diego Morales', 'https://picsum.photos/400/600?seed=17', 'Relojes derretidos en un espacio imposible', 2, 385.00, 7),
-(null, 'La Puerta Dimensional', 'Diego Morales', 'https://picsum.photos/400/600?seed=26', 'Portal entre realidades alternativas', 1, 420.00, 7),
+(null, 6, 'ORIGINAL', 2100000.00, 2, true),
+(null, 6, 'IMPRESION_CANVAS', 105000.00, 12, true),
+(null, 6, 'IMPRESION_PREMIUM', 145000.00, 6, true),
+(null, 6, 'DIGITAL', 32000.00, 999, true),
 
--- Isabella Chen (Asiático/Zen)
-(null, 'Jardín Zen', 'Isabella Chen', 'https://picsum.photos/400/600?seed=10', 'Serenidad en piedras y agua', 7, 160.00, 8),
-(null, 'Bambú al Viento', 'Isabella Chen', 'https://picsum.photos/400/600?seed=18', 'Elegancia natural del bambú', 9, 145.00, 8),
-(null, 'Meditación', 'Isabella Chen', 'https://picsum.photos/400/600?seed=27', 'Momento de paz interior', 6, 170.00, 8),
+(null, 7, 'ORIGINAL', 1950000.00, 1, true),
 
--- Roberto Silva (Marino/Acuático)
-(null, 'Océano Profundo', 'Roberto Silva', 'https://picsum.photos/400/600?seed=11', 'Misterios del fondo marino', 5, 275.00, 9),
-(null, 'Olas Doradas', 'Roberto Silva', 'https://picsum.photos/400/600?seed=19', 'Atardecer sobre el mar', 8, 245.00, 9),
-(null, 'Coral Vibrante', 'Roberto Silva', 'https://picsum.photos/400/600?seed=28', 'Vida colorida del arrecife', 10, 230.00, 9),
+(null, 8, 'ORIGINAL', 2000000.00, 1, true),
+(null, 8, 'ORIGINAL_FIRMADO', 2500000.00, 1, true),
+(null, 8, 'IMPRESION_CANVAS', 102000.00, 8, true),
+(null, 8, 'DIGITAL', 31000.00, 999, true),
 
--- Elena Volkov (Clásico/Renacentista)
-(null, 'Dama del Renacimiento', 'Elena Volkov', 'https://picsum.photos/400/600?seed=20', 'Retrato al estilo clásico', 2, 450.00, 10),
-(null, 'Naturaleza Muerta', 'Elena Volkov', 'https://picsum.photos/400/600?seed=29', 'Composición tradicional con frutas', 4, 380.00, 10),
-(null, 'Ángeles Barrocos', 'Elena Volkov', 'https://picsum.photos/400/600?seed=39', 'Querubines en técnica clásica', 1, 520.00, 10),
+(null, 9, 'ORIGINAL', 1500000.00, 4, true),
+(null, 9, 'IMPRESION_CANVAS', 78000.00, 25, true),
+(null, 9, 'DIGITAL', 24000.00, 999, true),
 
--- Kenji Nakamura (Manga/Anime)
-(null, 'Sakura Dreams', 'Kenji Nakamura', 'https://picsum.photos/400/600?seed=21', 'Estilo anime con cerezos en flor', 20, 195.00, 11),
-(null, 'Guerrero Digital', 'Kenji Nakamura', 'https://picsum.photos/400/600?seed=30', 'Personaje de videojuego en acción', 12, 240.00, 11),
-(null, 'Gato Místico', 'Kenji Nakamura', 'https://picsum.photos/400/600?seed=40', 'Criatura fantástica estilo kawaii', 15, 185.00, 11),
+(null, 10, 'ORIGINAL', 1450000.00, 2, true),
+(null, 10, 'ORIGINAL_FIRMADO', 1800000.00, 1, true),
+(null, 10, 'IMPRESION_CANVAS', 75000.00, 18, true),
+(null, 10, 'IMPRESION_PREMIUM', 110000.00, 10, true),
 
--- Pierre Dubois (Impresionismo)
-(null, 'Jardín de Monet', 'Pierre Dubois', 'https://picsum.photos/400/600?seed=22', 'Homenaje al maestro impresionista', 3, 365.00, 12),
-(null, 'Catedral en Bruma', 'Pierre Dubois', 'https://picsum.photos/400/600?seed=31', 'Arquitectura difuminada por la niebla', 2, 395.00, 12),
-(null, 'Bailarinas en Ensayo', 'Pierre Dubois', 'https://picsum.photos/400/600?seed=41', 'Movimiento capturado en pinceladas', 1, 425.00, 12),
+(null, 11, 'ORIGINAL', 1600000.00, 3, true),
+(null, 11, 'DIGITAL', 25000.00, 999, true),
 
--- Ahmed Hassan (Geometría Islámica)
-(null, 'Mandala Dorado', 'Ahmed Hassan', 'https://picsum.photos/400/600?seed=32', 'Patrones geométricos sagrados', 4, 310.00, 13),
-(null, 'Caligrafía Árabe', 'Ahmed Hassan', 'https://picsum.photos/400/600?seed=42', 'Belleza de la escritura tradicional', 6, 285.00, 13),
+(null, 12, 'ORIGINAL', 1400000.00, 1, true),
+(null, 12, 'ORIGINAL_FIRMADO', 1750000.00, 1, true),
+(null, 12, 'IMPRESION_CANVAS', 95000.00, 8, true),
+(null, 12, 'DIGITAL', 35000.00, 999, true),
 
--- Frida Esperanza (Folclore/Tradicional)
-(null, 'Danza Folklórica', 'Frida Esperanza', 'https://picsum.photos/400/600?seed=33', 'Celebración de tradiciones ancestrales', 8, 205.00, 14),
-(null, 'Máscara Ceremonial', 'Frida Esperanza', 'https://picsum.photos/400/600?seed=43', 'Arte ritual precolombino', 3, 330.00, 14),
-(null, 'Tejidos Sagrados', 'Frida Esperanza', 'https://picsum.photos/400/600?seed=47', 'Textiles con símbolos ancestrales', 5, 270.00, 14),
+(null, 13, 'ORIGINAL', 890000.00, 2, true),
+(null, 13, 'IMPRESION_CANVAS', 68000.00, 12, true),
+(null, 13, 'DIGITAL', 28000.00, 999, true),
 
--- Viktor Petrov (Industrial/Steampunk)
-(null, 'Máquina del Tiempo', 'Viktor Petrov', 'https://picsum.photos/400/600?seed=34', 'Engranajes y vapor en armonía', 2, 355.00, 15),
-(null, 'Ciudad Mecánica', 'Viktor Petrov', 'https://picsum.photos/400/600?seed=44', 'Metrópolis de cobre y acero', 1, 390.00, 15),
+(null, 14, 'ORIGINAL', 1350000.00, 1, true),
+(null, 14, 'ORIGINAL_FIRMADO', 1680000.00, 1, true),
+(null, 14, 'IMPRESION_CANVAS', 88000.00, 6, true),
+(null, 14, 'IMPRESION_PREMIUM', 125000.00, 3, true),
+(null, 14, 'DIGITAL', 42000.00, 999, true),
 
--- Amélie Laurent (Romántico/Pastoral)
-(null, 'Picnic Campestre', 'Amélie Laurent', 'https://picsum.photos/400/600?seed=35', 'Escena bucólica en el campo', 7, 225.00, 16),
-(null, 'Cottage de Ensueño', 'Amélie Laurent', 'https://picsum.photos/400/600?seed=45', 'Casa rural entre flores', 4, 265.00, 16),
-(null, 'Atardecer Provenzal', 'Amélie Laurent', 'https://picsum.photos/400/600?seed=48', 'Campos de lavanda al ocaso', 3, 295.00, 16),
+(null, 15, 'ORIGINAL', 1500000.00, 1, true),
+(null, 15, 'DIGITAL', 45000.00, 999, true),
 
--- Jackson Rivers (Graffiti/Street Art)
-(null, 'Mural Urbano', 'Jackson Rivers', 'https://picsum.photos/400/600?seed=36', 'Arte callejero vibrante', 10, 180.00, 17),
-(null, 'Rebeldía en Color', 'Jackson Rivers', 'https://picsum.photos/400/600?seed=46', 'Expresión urbana contemporánea', 12, 160.00, 17),
+(null, 16, 'ORIGINAL', 480000.00, 3, true),
+(null, 16, 'IMPRESION_CANVAS', 35000.00, 15, true),
+(null, 16, 'DIGITAL', 15000.00, 999, true),
 
--- Yuki Tanaka (Sci-Fi/Futurismo)
-(null, 'Nave Espacial', 'Yuki Tanaka', 'https://picsum.photos/400/600?seed=37', 'Exploración intergaláctica', 6, 315.00, 18),
-(null, 'Cyborg Awakening', 'Yuki Tanaka', 'https://picsum.photos/400/600?seed=49', 'Fusión entre humano y máquina', 3, 385.00, 18),
+(null, 17, 'ORIGINAL', 620000.00, 2, true),
+(null, 17, 'IMPRESION_CANVAS', 42000.00, 12, true),
+(null, 17, 'IMPRESION_PREMIUM', 58000.00, 8, true),
+(null, 17, 'DIGITAL', 18000.00, 999, true),
 
--- Leonardo Rossi (Arquitectura/Monumentos)
-(null, 'Basílica al Alba', 'Leonardo Rossi', 'https://picsum.photos/400/600?seed=38', 'Majestuosidad arquitectónica', 2, 440.00, 19),
-(null, 'Escalera Infinita', 'Leonardo Rossi', 'https://picsum.photos/400/600?seed=50', 'Perspectiva imposible de Escher', 4, 375.00, 19),
+(null, 18, 'ORIGINAL', 320000.00, 5, true),
+(null, 18, 'DIGITAL', 12000.00, 999, true),
+(null, 18, 'DIGITAL_NFT', 45000.00, 50, true),
 
--- Emma Thompson (Acuarela/Delicado)
-(null, 'Mariposas Etéreas', 'Emma Thompson', 'https://picsum.photos/400/600?seed=51', 'Delicadeza en acuarela', 11, 155.00, 20),
-(null, 'Pétalos al Viento', 'Emma Thompson', 'https://picsum.photos/400/600?seed=52', 'Suavidad primaveral', 14, 140.00, 20);
+(null, 19, 'ORIGINAL', 380000.00, 4, true),
+(null, 19, 'IMPRESION_CANVAS', 32000.00, 20, true),
+(null, 19, 'DIGITAL', 14000.00, 999, true),
+(null, 19, 'DIGITAL_NFT', 52000.00, 40, true),
+
+(null, 20, 'ORIGINAL', 1800000.00, 1, true),
+(null, 20, 'ORIGINAL_FIRMADO', 2250000.00, 1, true),
+(null, 20, 'IMPRESION_CANVAS', 125000.00, 3, true),
+
+(null, 21, 'DIGITAL', 35000.00, 999, true),
+(null, 21, 'DIGITAL_NFT', 125000.00, 10, true),
+(null, 21, 'IMPRESION_CANVAS', 65000.00, 15, true),
+(null, 21, 'IMPRESION_PREMIUM', 85000.00, 8, true),
+
+(null, 22, 'DIGITAL', 28000.00, 999, true),
+(null, 22, 'DIGITAL_NFT', 95000.00, 15, true),
+
+(null, 23, 'ORIGINAL', 140000.00, 5, true),
+(null, 23, 'IMPRESION_CANVAS', 18000.00, 30, true),
+(null, 23, 'DIGITAL', 8000.00, 999, true),
+
+(null, 24, 'ORIGINAL', 165000.00, 4, true),
+(null, 24, 'IMPRESION_CANVAS', 22000.00, 25, true),
+(null, 24, 'DIGITAL', 9500.00, 999, true),
+
+(null, 25, 'ORIGINAL', 180000.00, 3, true),
+(null, 25, 'DIGITAL', 8500.00, 999, true),
+
+(null, 26, 'ORIGINAL', 240000.00, 2, true),
+(null, 26, 'DIGITAL', 12000.00, 999, true),
+
+(null, 27, 'ORIGINAL', 220000.00, 3, true),
+(null, 27, 'IMPRESION_CANVAS', 28000.00, 15, true),
+(null, 27, 'DIGITAL', 11000.00, 999, true),
+
+(null, 28, 'ORIGINAL', 340000.00, 2, true),
+(null, 28, 'DIGITAL', 15000.00, 999, true),
+
+(null, 29, 'ORIGINAL', 520000.00, 1, true),
+(null, 29, 'DIGITAL', 22000.00, 999, true),
+(null, 29, 'DIGITAL_NFT', 75000.00, 25, true),
+
+(null, 30, 'ORIGINAL', 160000.00, 4, true),
+(null, 30, 'IMPRESION_CANVAS', 20000.00, 20, true),
+(null, 30, 'DIGITAL', 9000.00, 999, true),
+
+(null, 31, 'ORIGINAL', 200000.00, 3, true),
+(null, 31, 'IMPRESION_CANVAS', 25000.00, 15, true),
+
+(null, 32, 'ORIGINAL', 140000.00, 5, true),
+(null, 32, 'DIGITAL', 8000.00, 999, true),
+
+(null, 33, 'ORIGINAL', 165000.00, 4, true),
+(null, 33, 'IMPRESION_CANVAS', 22000.00, 18, true),
+(null, 33, 'DIGITAL', 9500.00, 999, true),
+
+(null, 34, 'ORIGINAL', 95000.00, 8, true),
+(null, 34, 'DIGITAL', 6000.00, 999, true),
+
+(null, 35, 'ORIGINAL', 110000.00, 6, true),
+(null, 35, 'IMPRESION_CANVAS', 15000.00, 25, true),
+(null, 35, 'DIGITAL', 7000.00, 999, true),
+
+(null, 36, 'ORIGINAL', 85000.00, 12, true),
+(null, 36, 'DIGITAL', 5500.00, 999, true),
+
+(null, 37, 'ORIGINAL', 75000.00, 15, true),
+(null, 37, 'IMPRESION_CANVAS', 12000.00, 30, true),
+(null, 37, 'DIGITAL', 5000.00, 999, true),
+
+(null, 38, 'ORIGINAL', 450000.00, 1, true),
+(null, 38, 'DIGITAL', 18000.00, 999, true),
+
+(null, 39, 'ORIGINAL', 380000.00, 1, true),
+(null, 39, 'IMPRESION_CANVAS', 38000.00, 10, true),
+(null, 39, 'DIGITAL', 16000.00, 999, true),
+
+(null, 40, 'ORIGINAL', 220000.00, 2, true),
+(null, 40, 'DIGITAL', 11000.00, 999, true),
+
+(null, 41, 'ORIGINAL', 290000.00, 1, true),
+(null, 41, 'IMPRESION_CANVAS', 32000.00, 12, true),
+(null, 41, 'DIGITAL', 14000.00, 999, true),
+
+(null, 42, 'ORIGINAL', 180000.00, 3, true),
+
+(null, 43, 'ORIGINAL', 240000.00, 2, true),
+(null, 43, 'IMPRESION_CANVAS', 28000.00, 15, true),
+(null, 43, 'DIGITAL', 12000.00, 999, true),
+
+(null, 44, 'ORIGINAL', 520000.00, 1, true),
+(null, 44, 'DIGITAL', 22000.00, 999, true),
+
+(null, 45, 'ORIGINAL', 340000.00, 2, true),
+(null, 45, 'IMPRESION_CANVAS', 35000.00, 10, true),
+(null, 45, 'DIGITAL', 15000.00, 999, true),
+
+(null, 46, 'ORIGINAL', 160000.00, 4, true),
+(null, 46, 'DIGITAL', 8500.00, 999, true),
+
+(null, 47, 'ORIGINAL', 200000.00, 3, true),
+(null, 47, 'IMPRESION_CANVAS', 24000.00, 18, true),
+(null, 47, 'DIGITAL', 10000.00, 999, true),
+
+(null, 48, 'ORIGINAL', 140000.00, 5, true),
+(null, 48, 'DIGITAL', 8000.00, 999, true),
+
+(null, 49, 'ORIGINAL', 165000.00, 4, true),
+(null, 49, 'IMPRESION_CANVAS', 20000.00, 22, true),
+(null, 49, 'IMPRESION_PREMIUM', 28000.00, 12, true),
+(null, 49, 'DIGITAL', 9500.00, 999, true),
+
+(null, 50, 'ORIGINAL', 180000.00, 3, true),
+(null, 50, 'DIGITAL', 9000.00, 999, true),
+
+(null, 51, 'ORIGINAL', 95000.00, 8, true),
+(null, 51, 'DIGITAL', 6000.00, 999, true),
+
+(null, 52, 'ORIGINAL', 110000.00, 6, true),
+(null, 52, 'IMPRESION_CANVAS', 14000.00, 25, true),
+(null, 52, 'DIGITAL', 7000.00, 999, true),
+
+(null, 53, 'ORIGINAL', 85000.00, 12, true),
+(null, 53, 'DIGITAL', 5500.00, 999, true),
+
+(null, 55, 'ORIGINAL', 88000.00, 10, true),
+(null, 55, 'IMPRESION_CANVAS', 12000.00, 35, true),
+(null, 55, 'DIGITAL', 5800.00, 999, true),
+
+(null, 56, 'ORIGINAL', 65000.00, 12, true),
+(null, 56, 'DIGITAL', 4500.00, 999, true),
+
+(null, 57, 'ORIGINAL', 890000.00, 1, true),
+(null, 57, 'IMPRESION_CANVAS', 85000.00, 5, true),
+(null, 57, 'DIGITAL', 35000.00, 999, true),
+
+(null, 58, 'ORIGINAL', 720000.00, 1, true),
+(null, 58, 'DIGITAL', 28000.00, 999, true),
+
+(null, 59, 'ORIGINAL', 210000.00, 3, true),
+(null, 59, 'IMPRESION_CANVAS', 26000.00, 18, true),
+(null, 59, 'DIGITAL', 11000.00, 999, true),
+
+(null, 60, 'ORIGINAL', 280000.00, 2, true),
+(null, 60, 'DIGITAL', 14000.00, 999, true),
+
+(null, 61, 'ORIGINAL', 650000.00, 1, true),
+(null, 61, 'IMPRESION_CANVAS', 65000.00, 8, true),
+(null, 61, 'DIGITAL', 25000.00, 999, true),
+
+(null, 62, 'ORIGINAL', 580000.00, 1, true),
+(null, 62, 'DIGITAL', 23000.00, 999, true),
+
+(null, 63, 'ORIGINAL', 190000.00, 4, true),
+(null, 63, 'IMPRESION_CANVAS', 22000.00, 20, true),
+(null, 63, 'DIGITAL', 9500.00, 999, true),
+
+(null, 64, 'ORIGINAL', 220000.00, 3, true),
+(null, 64, 'DIGITAL', 11000.00, 999, true),
+
+(null, 65, 'ORIGINAL', 420000.00, 1, true),
+(null, 65, 'IMPRESION_CANVAS', 42000.00, 10, true),
+(null, 65, 'IMPRESION_PREMIUM', 58000.00, 6, true),
+(null, 65, 'DIGITAL', 18000.00, 999, true),
+
+(null, 66, 'ORIGINAL', 380000.00, 1, true),
+(null, 66, 'DIGITAL', 16000.00, 999, true),
+
+(null, 67, 'ORIGINAL', 220000.00, 2, true),
+(null, 67, 'IMPRESION_CANVAS', 26000.00, 15, true),
+(null, 67, 'DIGITAL', 11000.00, 999, true),
+
+(null, 68, 'ORIGINAL', 290000.00, 1, true),
+(null, 68, 'DIGITAL', 14000.00, 999, true),
+
+(null, 69, 'ORIGINAL', 180000.00, 3, true),
+(null, 69, 'IMPRESION_CANVAS', 22000.00, 18, true),
+(null, 69, 'DIGITAL', 9000.00, 999, true),
+
+(null, 70, 'ORIGINAL', 240000.00, 2, true),
+(null, 70, 'DIGITAL', 12000.00, 999, true),
+
+(null, 71, 'ORIGINAL', 780000.00, 1, true),
+(null, 71, 'IMPRESION_CANVAS', 75000.00, 6, true),
+(null, 71, 'IMPRESION_PREMIUM', 95000.00, 3, true),
+(null, 71, 'DIGITAL', 32000.00, 999, true),
+
+(null, 72, 'ORIGINAL', 540000.00, 2, true),
+(null, 72, 'DIGITAL', 22000.00, 999, true),
+
+(null, 73, 'ORIGINAL', 75000.00, 8, true),
+(null, 73, 'IMPRESION_CANVAS', 10000.00, 40, true),
+(null, 73, 'DIGITAL', 5000.00, 999, true),
+
+(null, 75, 'ORIGINAL', 110000.00, 9, true),
+(null, 75, 'IMPRESION_CANVAS', 14000.00, 35, true),
+(null, 75, 'DIGITAL', 7000.00, 999, true),
+
+(null, 76, 'ORIGINAL', 125000.00, 7, true),
+(null, 76, 'DIGITAL', 8000.00, 999, true),
+
+(null, 77, 'ORIGINAL', 920000.00, 1, true),
+(null, 77, 'IMPRESION_CANVAS', 88000.00, 5, true),
+(null, 77, 'DIGITAL', 38000.00, 999, true),
+
+(null, 78, 'ORIGINAL', 1100000.00, 1, true),
+(null, 78, 'DIGITAL', 45000.00, 999, true),
+
+(null, 79, 'ORIGINAL', 180000.00, 3, true),
+(null, 79, 'IMPRESION_CANVAS', 22000.00, 20, true),
+(null, 79, 'DIGITAL', 9000.00, 999, true),
+
+(null, 80, 'ORIGINAL', 160000.00, 4, true),
+(null, 80, 'DIGITAL', 8500.00, 999, true),
+
+(null, 81, 'ORIGINAL', 340000.00, 2, true),
+(null, 81, 'IMPRESION_CANVAS', 35000.00, 12, true),
+(null, 81, 'IMPRESION_PREMIUM', 48000.00, 8, true),
+(null, 81, 'DIGITAL', 15000.00, 999, true),
+
+(null, 82, 'ORIGINAL', 290000.00, 3, true),
+(null, 82, 'DIGITAL', 14000.00, 999, true),
+
+(null, 83, 'ORIGINAL', 680000.00, 1, true),
+(null, 83, 'IMPRESION_CANVAS', 65000.00, 8, true),
+(null, 83, 'DIGITAL', 28000.00, 999, true),
+
+(null, 84, 'ORIGINAL', 450000.00, 2, true),
+(null, 84, 'DIGITAL', 18000.00, 999, true),
+
+(null, 85, 'ORIGINAL', 85000.00, 10, true),
+(null, 85, 'IMPRESION_CANVAS', 12000.00, 40, true),
+(null, 85, 'DIGITAL', 5500.00, 999, true),
+
+(null, 86, 'ORIGINAL', 95000.00, 8, true),
+(null, 86, 'DIGITAL', 6000.00, 999, true),
+
+(null, 87, 'ORIGINAL', 280000.00, 4, true),
+(null, 87, 'IMPRESION_CANVAS', 32000.00, 16, true),
+(null, 87, 'DIGITAL', 14000.00, 999, true),
+
+(null, 88, 'ORIGINAL', 190000.00, 3, true),
+(null, 88, 'DIGITAL', 9500.00, 999, true),
+
+(null, 89, 'ORIGINAL', 95000.00, 8, true),
+(null, 89, 'IMPRESION_CANVAS', 13000.00, 35, true),
+(null, 89, 'DIGITAL', 6000.00, 999, true),
+
+(null, 90, 'ORIGINAL', 180000.00, 5, true),
+(null, 90, 'DIGITAL', 9000.00, 999, true),
+
+(null, 91, 'ORIGINAL', 88000.00, 10, true),
+(null, 91, 'IMPRESION_CANVAS', 12000.00, 38, true),
+(null, 91, 'DIGITAL', 5800.00, 999, true),
+
+(null, 92, 'ORIGINAL', 65000.00, 12, true),
+(null, 92, 'DIGITAL', 4500.00, 999, true),
+
+(null, 93, 'ORIGINAL', 890000.00, 1, true),
+(null, 93, 'IMPRESION_CANVAS', 85000.00, 6, true),
+(null, 93, 'IMPRESION_PREMIUM', 115000.00, 3, true),
+(null, 93, 'DIGITAL', 35000.00, 999, true),
+
+(null, 95, 'ORIGINAL', 210000.00, 3, true),
+(null, 95, 'IMPRESION_CANVAS', 26000.00, 18, true),
+(null, 95, 'DIGITAL', 11000.00, 999, true),
+
+(null, 96, 'ORIGINAL', 280000.00, 2, true),
+(null, 96, 'DIGITAL', 14000.00, 999, true),
+
+(null, 97, 'ORIGINAL', 140000.00, 8, true),
+(null, 97, 'IMPRESION_CANVAS', 18000.00, 32, true),
+(null, 97, 'DIGITAL', 8000.00, 999, true),
+
+(null, 98, 'ORIGINAL', 165000.00, 6, true),
+(null, 98, 'DIGITAL', 9500.00, 999, true),
+
+(null, 99, 'ORIGINAL', 420000.00, 1, true),
+(null, 99, 'IMPRESION_CANVAS', 42000.00, 10, true),
+(null, 99, 'DIGITAL', 18000.00, 999, true),
+
+(null, 100, 'ORIGINAL', 380000.00, 1, true),
+(null, 100, 'DIGITAL', 16000.00, 999, true);
+
 
 -- Asignar categorías a las obras (las obras se numeran desde 1)
 INSERT INTO obra_categorias (obra_id, categoria) VALUES
--- J. Doe - Abstracto/Retrato
-(1, 'ABSTRACTO'), (1, 'PINTURA'),
-(2, 'RETRATO'), (2, 'MODERNO'),
-(3, 'PINTURA'), (3, 'OTRO'),
+-- Leonardo Da Vinci (1-2)
+(1, 'PINTURA'), (1, 'RETRATO'),
+(2, 'PINTURA'), (2, 'RETRATO'),
 
--- María García - Moderno
-(4, 'MODERNO'), (4, 'FOTOGRAFIA'),
-(5, 'MODERNO'), (5, 'ARTE_DIGITAL'),
-(6, 'MODERNO'), (6, 'FOTOGRAFIA'),
+-- Van Gogh (3-5)
+(3, 'PINTURA'), (3, 'MODERNO'),
+(4, 'PINTURA'), (4, 'MODERNO'),
+(5, 'PINTURA'), (5, 'MODERNO'),
 
--- Carlos López - Naturaleza
-(7, 'PINTURA'), (7, 'OTRO'),
-(8, 'PINTURA'), (8, 'OTRO'),
+-- Picasso (6-8)
+(6, 'PINTURA'), (6, 'ABSTRACTO'),
+(7, 'PINTURA'), (7, 'ABSTRACTO'),
+(8, 'PINTURA'), (8, 'ABSTRACTO'),
 
--- Ana Martínez - Abstracto/Moderno  
-(9, 'ABSTRACTO'), (9, 'MODERNO'),
-(10, 'ABSTRACTO'), (10, 'MODERNO'),
-(11, 'ABSTRACTO'), (11, 'MODERNO'),
+-- Monet (9-11)
+(9, 'PINTURA'), (9, 'MODERNO'),
+(10, 'PINTURA'), (10, 'MODERNO'),
+(11, 'PINTURA'), (11, 'MODERNO'),
 
--- Luis Fernández - Arte Mixto
-(12, 'ARTE_MIXTO'), (12, 'MODERNO'),
-(13, 'ARTE_MIXTO'), (13, 'MODERNO'),
+-- Frida Kahlo (12-13)
+(12, 'PINTURA'), (12, 'RETRATO'),
+(13, 'PINTURA'), (13, 'SURREALISMO'),
 
--- Sofía Romano - Arte Digital
-(14, 'ARTE_DIGITAL'), (14, 'MODERNO'),
-(15, 'ARTE_DIGITAL'), (15, 'MODERNO'),
-(16, 'ARTE_DIGITAL'), (16, 'MODERNO'),
+-- Salvador Dalí (14-15)
+(14, 'PINTURA'), (14, 'SURREALISMO'),
+(15, 'PINTURA'), (15, 'SURREALISMO'),
 
--- Diego Morales - Surrealismo
-(17, 'SURREALISMO'), (17, 'PINTURA'),
-(18, 'SURREALISMO'), (18, 'PINTURA'),
-(19, 'SURREALISMO'), (19, 'PINTURA'),
+-- Georgia O’Keeffe (16-17)
+(16, 'PINTURA'), (16, 'ABSTRACTO'),
+(17, 'PINTURA'), (17, 'ABSTRACTO'),
 
--- Isabella Chen - Dibujo/Otro
-(20, 'DIBUJO'), (20, 'OTRO'),
-(21, 'DIBUJO'), (21, 'OTRO'),
-(22, 'DIBUJO'), (22, 'OTRO'),
+-- Andy Warhol (18-19)
+(18, 'ARTE_MIXTO'), (18, 'MODERNO'),
+(19, 'ARTE_MIXTO'), (19, 'MODERNO'),
 
--- Roberto Silva - Fotografia
-(23, 'FOTOGRAFIA'), (23, 'MODERNO'),
-(24, 'FOTOGRAFIA'), (24, 'MODERNO'),
-(25, 'FOTOGRAFIA'), (25, 'MODERNO'),
+-- Jackson Pollock (20-21)
+(20, 'PINTURA'), (20, 'ABSTRACTO'),
+(21, 'PINTURA'), (21, 'ABSTRACTO'),
 
--- Elena Volkov - Pintura/Retrato
-(26, 'PINTURA'), (26, 'RETRATO'),
-(27, 'PINTURA'), (27, 'OTRO'),
-(28, 'PINTURA'), (28, 'RETRATO'),
+-- Kandinsky (22-23)
+(22, 'PINTURA'), (22, 'ABSTRACTO'), (22, 'COSMICO'),
+(23, 'PINTURA'), (23, 'ABSTRACTO'), (23, 'COSMICO'),
 
--- Kenji Nakamura - Arte Digital/Dibujo
-(29, 'ARTE_DIGITAL'), (29, 'DIBUJO'),
-(30, 'ARTE_DIGITAL'), (30, 'DIBUJO'),
-(31, 'ARTE_DIGITAL'), (31, 'DIBUJO'),
+-- Isabella Chen (24-25)
+(24, 'PINTURA'), (24, 'ARTE_MIXTO'),
+(25, 'PINTURA'), (25, 'ARTE_MIXTO'),
 
--- Pierre Dubois - Pintura
-(32, 'PINTURA'), (32, 'MODERNO'),
-(33, 'PINTURA'), (33, 'MODERNO'),
-(34, 'PINTURA'), (34, 'RETRATO'),
+-- Marcus Thompson (26-27)
+(26, 'FOTOGRAFIA'),
+(27, 'FOTOGRAFIA'),
 
--- Ahmed Hassan - Arte Mixto
-(35, 'ARTE_MIXTO'), (35, 'OTRO'),
-(36, 'ARTE_MIXTO'), (36, 'OTRO'),
+-- Yuki Nakamura (28-29)
+(28, 'ARTE_DIGITAL'),
+(29, 'ARTE_DIGITAL'),
 
--- Frida Esperanza - Arte Textil/Ceramico
-(37, 'ARTE_TEXTIL'), (37, 'OTRO'),
-(38, 'ARTE_CERAMICO'), (38, 'OTRO'),
-(39, 'ARTE_TEXTIL'), (39, 'OTRO'),
+-- Amara Okafor (30-31)
+(30, 'ESCULTURA'),
+(31, 'ARTE_MIXTO'),
 
--- Viktor Petrov - Escultura/Arte Mixto
-(40, 'ESCULTURA'), (40, 'ARTE_MIXTO'),
-(41, 'ESCULTURA'), (41, 'ARTE_MIXTO'),
+-- Diego Mendoza (32-33)
+(32, 'ARTE_MIXTO'),
+(33, 'ARTE_MIXTO'),
 
--- Amélie Laurent - Pintura
-(42, 'PINTURA'), (42, 'OTRO'),
-(43, 'PINTURA'), (43, 'OTRO'),
-(44, 'PINTURA'), (44, 'OTRO'),
+-- Svetlana Petrov (34-35)
+(34, 'PINTURA'),
+(35, 'PINTURA'),
 
--- Jackson Rivers - Arte Mixto
-(45, 'ARTE_MIXTO'), (45, 'MODERNO'),
-(46, 'ARTE_MIXTO'), (46, 'MODERNO'),
+-- Ahmed Al-Rashid (36-37)
+(36, 'ARTE_MIXTO'),
+(37, 'ARTE_MIXTO'),
 
--- Yuki Tanaka - Arte Digital/Sci-Fi
-(47, 'ARTE_DIGITAL'), (47, 'MODERNO'),
-(48, 'ARTE_DIGITAL'), (48, 'MODERNO'),
+-- Marie Dubois (38-39)
+(38, 'PINTURA'), (38, 'MODERNO'),
+(39, 'PINTURA'), (39, 'MODERNO'),
 
--- Leonardo Rossi - Fotografia/Dibujo
-(49, 'FOTOGRAFIA'), (49, 'MODERNO'),
-(50, 'DIBUJO'), (50, 'OTRO'),
+-- Raj Patel (40-41)
+(40, 'ARTE_MIXTO'),
+(41, 'ARTE_MIXTO'),
 
--- Emma Thompson - Pintura
-(51, 'PINTURA'), (51, 'OTRO'),
-(52, 'PINTURA'), (52, 'OTRO');
+-- Elena Rossi (42-43)
+(42, 'ESCULTURA'),
+(43, 'ESCULTURA'),
+
+-- Benjamin Carter (44-45)
+(44, 'FOTOGRAFIA'),
+(45, 'FOTOGRAFIA'),
+
+-- Fatima Benali (46-47)
+(46, 'ARTE_TEXTIL'),
+(47, 'ARTE_TEXTIL'),
+
+-- Hiroshi Tanaka (48-49)
+(48, 'ARTE_CERAMICO'),
+(49, 'ARTE_CERAMICO'),
+
+-- Lucia Santos (50-51)
+(50, 'ARTE_MIXTO'),
+(51, 'ARTE_MIXTO'),
+
+-- Olaf Eriksen (52-53)
+(52, 'PINTURA'),
+(53, 'PINTURA'),
+
+-- Priya Sharma (54-55)
+(54, 'ARTE_MIXTO'),
+(55, 'ARTE_MIXTO'),
+
+-- Alessandro Bianchi (56-57)
+(56, 'PINTURA'),
+(57, 'PINTURA'),
+
+-- Kofi Asante (58-59)
+(58, 'ESCULTURA'),
+(59, 'ESCULTURA'),
+
+-- Ingrid Larsson (60-61)
+(60, 'ARTE_MIXTO'),
+(61, 'ARTE_MIXTO'),
+
+-- Rafael Guerrero (62-63)
+(62, 'DIBUJO'),
+(63, 'DIBUJO'),
+
+-- Aisha Williams (64-65)
+(64, 'FOTOGRAFIA'),
+(65, 'FOTOGRAFIA'),
+
+-- Dmitri Volkov (66-67)
+(66, 'ESCULTURA'),
+(67, 'ESCULTURA'),
+
+-- Carmen Delgado (68-69)
+(68, 'PINTURA'),
+(69, 'PINTURA'),
+
+-- James Mitchell (70-71)
+(70, 'PINTURA'), (70, 'ABSTRACTO'),
+(71, 'PINTURA'), (71, 'ABSTRACTO'),
+
+-- Noor Al-Zahra (72-73)
+(72, 'ARTE_MIXTO'),
+(73, 'ARTE_MIXTO'),
+
+-- Erik Nielsen (74-75)
+(74, 'DIBUJO'),
+(75, 'DIBUJO'),
+
+-- Catalina Ruiz (76-77)
+(76, 'ARTE_TEXTIL'),
+(77, 'ARTE_TEXTIL'),
+
+-- Hassan Ouni (78-79)
+(78, 'FOTOGRAFIA'),
+(79, 'FOTOGRAFIA'),
+
+-- Anastasia Popov (80-81)
+(80, 'PINTURA'),
+(81, 'PINTURA'),
+
+-- Tony Chang (82-83)
+(82, 'ARTE_MIXTO'),
+(83, 'ARTE_MIXTO'),
+
+-- Isabella Martinez (84-85)
+(84, 'ESCULTURA'),
+(85, 'ESCULTURA'),
+
+-- Kwame Osei (86-87)
+(86, 'PINTURA'),
+(87, 'PINTURA'),
+
+-- Helena Kozlova (88-89)
+(88, 'ESCULTURA'),
+(89, 'ESCULTURA'),
+
+-- Samuel Andersson (90-91)
+(90, 'ESCULTURA'),
+(91, 'ESCULTURA'),
+
+-- Yasmin Farouk (92-93)
+(92, 'PINTURA'),
+(93, 'PINTURA'),
+
+-- Marco Santini (94-95)
+(94, 'PINTURA'),
+(95, 'PINTURA'),
+
+-- Keiko Yamamoto (96-97)
+(96, 'DIBUJO'),
+(97, 'DIBUJO'),
+
+-- Thabo Mthembu (98-99)
+(98, 'ESCULTURA'),
+(99, 'ARTE_MIXTO'),
+
+-- Zara Hassan (100)
+(100, 'ARTE_TEXTIL');

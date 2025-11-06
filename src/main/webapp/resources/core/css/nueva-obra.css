@@ -1,0 +1,156 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+body {
+    font-family: 'Inter', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
+    background-color: #f3f4f6; /* gris claro */
+    color: #1f2937; /* gris oscuro */
+}
+
+/* --- CONTENEDOR PRINCIPAL --- */
+.obra-page {
+    width: 100%;
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 16px;
+    box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+    .obra-page {
+        flex-direction: column;
+        justify-content: center;
+        padding: 48px;
+    }
+}
+
+/* --- TÍTULO --- */
+.obra-page h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: #111827;
+    text-align: center;
+}
+
+/* --- FORMULARIO --- */
+.formulario-obra {
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 700px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* --- CAMPOS --- */
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.campo label {
+    font-weight: 600;
+    color: #374151;
+}
+
+.campo input[type="text"],
+.campo input[type="number"],
+.campo textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    background-color: #fafafa;
+}
+
+.campo input:focus,
+.campo textarea:focus {
+    border-color: #3b82f6;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.campo textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* --- IMAGEN --- */
+.campo img {
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    background-color: #e5e7eb;
+}
+
+/* --- CATEGORÍAS --- */
+.obra-categorias {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.obra-categorias .relative input[type="checkbox"] {
+    display: none;
+}
+
+.obra-categorias label {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    border-radius: 999px;
+    border: 1px solid #d1d5db;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background-color: #e5e7eb;
+    color: #374151;
+}
+
+.obra-categorias label:hover {
+    background-color: #d1d5db;
+}
+
+.obra-categorias input:checked + label {
+    background-color: #3b82f6;
+    color: white;
+    border-color: #3b82f6;
+}
+
+/* --- BOTÓN GUARDAR --- */
+.btn-guardar {
+    align-self: center;
+    background-color: #3b82f6;
+    color: white;
+    padding: 10px 24px;
+    border: none;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.25s ease, transform 0.1s ease;
+}
+
+.btn-guardar:hover {
+    background-color: #2563eb;
+    transform: translateY(-1px);
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 640px) {
+    .formulario-obra {
+        padding: 1.5rem;
+    }
+
+    .obra-page h2 {
+        font-size: 1.75rem;
+    }
+}

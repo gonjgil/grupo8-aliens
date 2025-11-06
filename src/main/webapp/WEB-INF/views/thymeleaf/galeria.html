@@ -72,7 +72,8 @@
         <div class="carousel-container relative">
           <div id="spotlight-track" class="carousel-track">
             <!-- Carousel items will be injected here by JS -->
-              <a th:href="@{/obra/{id}(id=${obra.id})}" th:each="obra : ${obrasSpotlight}" class="carousel-item group cursor-pointer transition-transform duration-300 transform hover:scale-105" th:style="|background-image: url('${obra.imagenUrl}')|">
+             <!-- encerrando la variable de la url en @{ } la construye en el contexto de la aplicacion (spring) -->
+              <a th:href="@{/obra/{id}(id=${obra.id})}" th:each="obra : ${obrasSpotlight}" class="carousel-item group cursor-pointer transition-transform duration-300 transform hover:scale-105" th:style="|background-image: url('@{${obra.imagenUrl}}')|">
                 <div class="image-overlay">
                   <p class="text-sm font-semibold text-white" th:text="${obra.titulo}"></p>
                   <p class="text-xs text-gray-300" th:text="${obra.autor}"></p>
@@ -356,6 +357,7 @@
                 return;
             }
 
+            let springDir;
             try {
                 const response = await fetch(`/spring/busqueda?query=${encodeURIComponent(query)}`);
                 if (!response.ok) throw new Error();
@@ -364,10 +366,11 @@
 
                 // Construir carrusel de obras
                 if (data.obras?.length) {
+                    springDir = '/spring';
                     obrasTrack.innerHTML = data.obras.map(o => `
                     <a href="/spring/obra/${o.id}"
                        class="carousel-item group cursor-pointer transition-transform duration-300 transform hover:scale-105 relative rounded-xl overflow-hidden bg-cover bg-center"
-                       style="background-image: url('${o.imagenUrl || '/img/default-obra.jpg'}');">
+                       style="background-image: url('${springDir}${o.imagenUrl}');">
                         <div class="image-overlay absolute inset-0 bg-black/40 flex flex-col justify-end p-3">
                             <p class="text-sm font-semibold text-white">${o.titulo}</p>
                             <p class="text-xs text-gray-300">${o.autor}</p>
