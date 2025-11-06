@@ -25,8 +25,7 @@ public class Obra {
 //    //Cada vez que Hibernate actualiza la entidad, incrementa automáticamente el campo version. Si otro usuario modificó la misma entidad en paralelo, Hibernate lanza una OptimisticLockException.
 //    private Integer version;
 
-    @Column(nullable = false)
-    private Double precio;
+
 
     @ManyToMany
     @JoinTable(
@@ -46,26 +45,27 @@ public class Obra {
     @JoinColumn(name = "artista")
     private Artista artista;
 
+    @OneToMany(mappedBy = "obra", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<FormatoObra> formatos = new HashSet<>();
+
     public Obra() { }
 
-    public Obra(String titulo, String autor, String imagenUrl, String descripcion, Integer stock, Set<Categoria> categorias, Double precio) {
+    public Obra(String titulo, String autor, String imagenUrl, String descripcion, Integer stock, Set<Categoria> categorias) {
         this.titulo = titulo;
         this.autor = autor;
         this.imagenUrl = imagenUrl;
         this.descripcion = descripcion;
         this.stock = stock;
         this.categorias = categorias;
-        this.precio = precio;
     }
 
-    public Obra(String titulo, String autor, String imagenUrl, String descripcion, Integer stock, Set<Categoria> categorias, Double precio, Artista artista) {
+    public Obra(String titulo, String autor, String imagenUrl, String descripcion, Integer stock, Set<Categoria> categorias, Artista artista) {
         this.titulo = titulo;
         this.autor = autor;
         this.imagenUrl = imagenUrl;
         this.descripcion = descripcion;
         this.stock = stock;
         this.categorias = categorias;
-        this.precio = precio;
         this.artista = artista;
     }
 
@@ -84,8 +84,7 @@ public class Obra {
     public String getDescripcion() { return descripcion; }
     public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
 
-    public Double getPrecio() { return precio; }
-    public void setPrecio(Double precio) { this.precio = precio; }
+
 
     public Set<Usuario> getUsuariosQueDieronLike() { return usuariosQueDieronLike; }
     public void setUsuariosQueDieronLike(Set<Usuario> usuariosQueDieronLike) { this.usuariosQueDieronLike = usuariosQueDieronLike; }
@@ -100,10 +99,18 @@ public class Obra {
     }
 
     public Set<Categoria> getCategorias() { return categorias; }
+    public void setCategorias(Set<Categoria> categorias) { this.categorias = categorias; }
     public void agregarCategoria(Categoria categoria) { this.categorias.add(categoria); }
 
      public Artista getArtista() { return artista; }
      public void setArtista(Artista artista) { this.artista = artista; }
+
+    public Set<FormatoObra> getFormatos() { return formatos; }
+    public void setFormatos(Set<FormatoObra> formatos) { this.formatos = formatos; }
+    public void agregarFormato(FormatoObra formato) { 
+        this.formatos.add(formato); 
+        formato.setObra(this);
+    }
 
     public Integer getStock() { return stock; }
     public void setStock(Integer stock) { this.stock = stock; }
@@ -135,15 +142,5 @@ public class Obra {
         if (o == null || getClass() != o.getClass()) return false;
         Obra obra = (Obra) o;
         return Objects.equals(id, obra.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
-    public Obra toEntity() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'toEntity'");
     }
 }

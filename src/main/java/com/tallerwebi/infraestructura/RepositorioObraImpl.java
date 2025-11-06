@@ -23,8 +23,9 @@ public class RepositorioObraImpl implements RepositorioObra {
     }
 
     @Override // testeado
-    public void guardar(Obra obra) {
+    public Obra guardar(Obra obra) {
         this.sessionFactory.getCurrentSession().saveOrUpdate(obra);
+        return obra;
     }
 
     @Override // testeado
@@ -92,8 +93,9 @@ public class RepositorioObraImpl implements RepositorioObra {
     @Override
     public List<Obra> obtenerPorRangoDePrecio(Double precioMin, Double precioMax) {
         try {
+            // Buscar obras que tengan al menos un formato con precio en el rango especificado
             return this.sessionFactory.getCurrentSession()
-                    .createQuery("FROM Obra WHERE precio BETWEEN :precioMin AND :precioMax", Obra.class)
+                    .createQuery("SELECT DISTINCT o FROM Obra o JOIN o.formatos f WHERE f.precio BETWEEN :precioMin AND :precioMax", Obra.class)
                     .setParameter("precioMin", precioMin)
                     .setParameter("precioMax", precioMax)
                     .getResultList();

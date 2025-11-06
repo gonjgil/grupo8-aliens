@@ -4,6 +4,7 @@ import com.tallerwebi.dominio.entidades.Artista;
 import com.tallerwebi.dominio.ServicioCloudinary;
 import com.tallerwebi.dominio.ServicioPerfilArtista;
 import com.tallerwebi.dominio.entidades.Usuario;
+import com.tallerwebi.dominio.enums.TipoImagen;
 import com.tallerwebi.dominio.excepcion.NoExisteArtista;
 import com.tallerwebi.presentacion.dto.PerfilArtistaDTO;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpSession;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -87,7 +89,7 @@ public class ControladorPerfilArtistaTest {
 
         MultipartFile archivoMock = mock(MultipartFile.class);
         when(archivoMock.isEmpty()).thenReturn(false);
-        when(servicioCloudinaryMock.subirImagen(any(MultipartFile.class)))
+        when(servicioCloudinaryMock.subirImagen(any(MultipartFile.class), eq(TipoImagen.PERFIL_ARTISTA)))
                 .thenReturn("https://cloudinary.com/foto.jpg");
         when(servicioPerfilArtistaMock.crearPerfilArtista(any(PerfilArtistaDTO.class), any(Usuario.class)))
                 .thenReturn(artistaCreado);
@@ -101,6 +103,27 @@ public class ControladorPerfilArtistaTest {
         // Validación
         assertThat(redirectUrl, is(equalTo("redirect:/perfilArtista/ver/10"))); // Verifica la URL de redirección
 
+    }
+
+    @Test
+    public void queUnUsuarioNoPuedaEditarElPerfilDeOtroArtista() {
+        // Preparación
+        Long idArtista = 1L;
+        PerfilArtistaDTO artistaMock = new PerfilArtistaDTO();
+        artistaMock.setUsuarioId(2L); // El artista pertenece a otro usuario
+
+        when(servicioPerfilArtistaMock.obtenerPerfilArtista(idArtista)).thenReturn(artistaMock);
+
+        Usuario usuarioLogueado = new Usuario();
+        usuarioLogueado.setId(3L); // Usuario logueado diferente
+        when(sessionMock.getAttribute("usuarioLogueado")).thenReturn(usuarioLogueado);
+
+        // Ejecución
+        ModelAndView modelAndView = controladorPerfilArtista.mostrarFormularioDeEdicion(idArtista, requestMock);
+
+        // Validación
+        assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/galeria"));
+        assertThat(modelAndView.getModel().get("error").toString(), equalToIgnoringCase("No tienes permiso para editar este perfil."));
     }
 
 }

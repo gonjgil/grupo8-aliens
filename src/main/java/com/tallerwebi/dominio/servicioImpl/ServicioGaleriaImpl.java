@@ -135,5 +135,17 @@ public class ServicioGaleriaImpl implements ServicioGaleria {
         }
     }
 
+    @Override
+    public Obra guardar(Obra obra, Artista artista, String urlImagen) {
+        if(obra == null) {
+            throw new NullPointerException("La obra no puede ser nula");
+        }
+        if(urlImagen != null && !urlImagen.isEmpty()) {
+            obra.setImagenUrl(urlImagen);
+        }
+        obra.setArtista(artista);
+        obra.setAutor(artista.getNombre());
+        return repositorioObra.guardar(obra);
+    }
 
 }

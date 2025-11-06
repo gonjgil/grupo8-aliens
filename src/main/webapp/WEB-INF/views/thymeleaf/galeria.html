@@ -22,11 +22,20 @@
         <div class="flex items-center space-x-4 text-gray-200">
             <div th:if="${usuario != null}" class="flex items-center space-x-4 text-xl">
         <div th:text=" 'Hola, ' + ${usuario.email}"></div>
-          <a th:href="@{/perfilArtista/nuevo}"
-            class="hover:bg-gray-800 hover:outline hover:outline-2 hover:outline-white text-white font-bold py-2 px-4 rounded transition duration-300 shadow-lg"
-            title="Crear nuevo artista">
-            <i class="bi bi-person-plus text-2xl"></i>
-          </a>
+
+                <a th:if="${artistaUsuario != null}"
+                   th:href="@{'/perfilArtista/ver/' + ${artistaUsuario.id}}"
+                   class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg"
+                   title="Ver mi perfil de artista">
+                    <i class="bi bi-palette-fill"></i>
+                </a>
+
+                <a th:if="${artistaUsuario == null}"
+                   th:href="@{/perfilArtista/nuevo}"
+                   class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg"
+                   title="Crear nuevo artista">
+                    <i class="bi bi-person-plus"></i>
+                </a>
           <a th:href="@{/carrito}"
               class="hover:bg-gray-800 hover:outline hover:outline-2 hover:outline-white text-white font-bold py-2 px-4 rounded transition duration-300 shadow-lg"
           title="Carrito de compras">
@@ -65,7 +74,8 @@
         <div class="carousel-container relative">
           <div id="spotlight-track" class="carousel-track">
             <!-- Carousel items will be injected here by JS -->
-              <a th:href="@{/obra/{id}(id=${obra.id})}" th:each="obra : ${obrasSpotlight}" class="carousel-item group cursor-pointer transition-transform duration-300 transform hover:scale-105" th:style="|background-image: url('${obra.imagenUrl}')|">
+             <!-- encerrando la variable de la url en @{ } la construye en el contexto de la aplicacion (spring) -->
+              <a th:href="@{/obra/{id}(id=${obra.id})}" th:each="obra : ${obrasSpotlight}" class="carousel-item group cursor-pointer transition-transform duration-300 transform hover:scale-105" th:style="|background-image: url('@{${obra.imagenUrl}}')|">
                 <div class="image-overlay">
                   <p class="text-sm font-semibold text-white" th:text="${obra.titulo}"></p>
                   <p class="text-xs text-gray-300" th:text="${obra.autor}"></p>
@@ -350,6 +360,7 @@
                 return;
             }
 
+            let springDir;
             try {
                 const response = await fetch(`/spring/busqueda?query=${encodeURIComponent(query)}`);
                 if (!response.ok) throw new Error();
@@ -358,10 +369,11 @@
 
                 // Construir carrusel de obras
                 if (data.obras?.length) {
+                    springDir = '/spring';
                     obrasTrack.innerHTML = data.obras.map(o => `
                     <a href="/spring/obra/${o.id}"
                        class="carousel-item group cursor-pointer transition-transform duration-300 transform hover:scale-105 relative rounded-xl overflow-hidden bg-cover bg-center"
-                       style="background-image: url('${o.imagenUrl || '/img/default-obra.jpg'}');">
+                       style="background-image: url('${springDir}${o.imagenUrl}');">
                         <div class="image-overlay absolute inset-0 bg-black/40 flex flex-col justify-end p-3">
                             <p class="text-sm font-semibold text-white">${o.titulo}</p>
                             <p class="text-xs text-gray-300">${o.autor}</p>

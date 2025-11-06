@@ -5,7 +5,9 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 import com.tallerwebi.dominio.entidades.Artista;
+import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.repositorios.RepositorioArtista;
+import com.tallerwebi.dominio.repositorios.RepositorioUsuario;
 import com.tallerwebi.infraestructura.config.HibernateTestInfraestructuraConfig;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -112,6 +114,25 @@ public class RepositorioArtistaImplTest {
         } catch (Exception e) {
             assertThat(e.getMessage().contains("No row with the given identifier exists"), is(true));
         }
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queSePuedaObtenerUnArtistaPorSuUsuario() {
+        RepositorioUsuario repositorioUsuario = new RepositorioUsuarioImpl(sessionFactory);
+        Usuario usuario = new Usuario();
+        usuario.setEmail("asd@mail.com");
+        repositorioUsuario.guardar(usuario);
+
+        Artista artista = new Artista();
+        artista.setNombre("Artista Usuario");
+        artista.setUsuario(usuario);
+
+        repositorioArtista.guardar(artista);
+
+        Artista artistaEncontrado = repositorioArtista.buscarArtistaPorUsuario(usuario);
+        assertThat(artistaEncontrado.getNombre(), is(equalTo("Artista Usuario")));
     }
 
 

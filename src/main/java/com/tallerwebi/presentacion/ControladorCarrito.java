@@ -4,6 +4,7 @@ import com.tallerwebi.dominio.*;
 import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
 import com.tallerwebi.dominio.excepcion.NoHayStockSuficiente;
+import com.tallerwebi.dominio.enums.Formato;
 
 import com.tallerwebi.presentacion.dto.ItemCarritoDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,7 @@ public class ControladorCarrito {
 
     @PostMapping("/agregar")
     public String agregarAlCarrito(@RequestParam Long id, 
+                                   @RequestParam(required = false) String formato,
                                    RedirectAttributes redirectAttributes, 
                                    HttpSession session) {
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
@@ -58,12 +60,18 @@ public class ControladorCarrito {
         }
 
         try {
-            servicioCarrito.agregarObraAlCarrito(usuario, id);
+            // Si no se especifica formato, usar DIGITAL por defecto
+            Formato formatoEnum = (formato != null && !formato.isEmpty()) ? 
+                Formato.valueOf(formato.toUpperCase()) : Formato.DIGITAL;
+            
+            servicioCarrito.agregarObraAlCarrito(usuario, id, formatoEnum);
             redirectAttributes.addFlashAttribute("mensaje", "Obra agregada al carrito correctamente!");
         } catch (NoExisteLaObra e) {
             redirectAttributes.addFlashAttribute("error", "La obra no existe.");
         } catch (NoHayStockSuficiente e) {
-            redirectAttributes.addFlashAttribute("error", "No hay stock suficiente.");
+            redirectAttributes.addFlashAttribute("error", "No hay stock suficiente para el formato seleccionado.");
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("error", "Formato no válido.");
         }
 
         return "redirect:/obra/" + id;
@@ -71,15 +79,20 @@ public class ControladorCarrito {
 
     @PostMapping("/aumentar/{obraId}")
     public String aumentarCantidad(@PathVariable Long obraId, HttpSession session,
-                                   @RequestParam(required = false) String redirect,
-                                   RedirectAttributes redirectAttributes) {
+            @RequestParam(required = false) String redirect,
+            @RequestParam String formato,
+                    RedirectAttributes redirectAttributes) {
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
-        if (usuario == null) return "redirect:/login";
+        if (usuario == null)
+            return "redirect:/login";
 
         try {
-            servicioCarrito.agregarObraAlCarrito(usuario, obraId);
+            Formato formatoEnum = Formato.valueOf(formato.toUpperCase());
+            servicioCarrito.agregarObraAlCarrito(usuario, obraId,formatoEnum);
         } catch (NoHayStockSuficiente e) {
             redirectAttributes.addFlashAttribute("error", "No hay stock suficiente.");
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("error", "Formato Invalido");
         }
         if ("obra".equals(redirect)) {
             return "redirect:/obra/" + obraId;
@@ -88,23 +101,23 @@ public class ControladorCarrito {
     }
 
     @PostMapping("/disminuir/{obraId}")
-    public String disminuirCantidad(@PathVariable Long obraId,
-                                    @RequestParam(required = false) String redirect,
+    public String disminuirCantidad(@PathVariable Long obraId, 
+                                    @RequestParam String formato,
                                     HttpSession session) {
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
         if (usuario == null) return "redirect:/login";
 
-        servicioCarrito.disminuirCantidadDeObraDelCarrito(usuario, obraId);
-
-        if ("obra".equals(redirect)) {
-            return "redirect:/obra/" + obraId;
+        try {
+            Formato formatoEnum = Formato.valueOf(formato.toUpperCase());
+            servicioCarrito.disminuirCantidadDeObraDelCarrito(usuario, obraId, formatoEnum);
+        } catch (IllegalArgumentException e) {
         }
         return "redirect:/carrito";
     }
 
-
     @PostMapping("/eliminar/{obraId}")
     public String eliminarDelCarrito(@PathVariable Long obraId,
+                                     @RequestParam String formato,
                                      HttpSession session,
                                      RedirectAttributes redirectAttributes) {
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
@@ -113,8 +126,13 @@ public class ControladorCarrito {
             return "redirect:/login";
         }
 
-        servicioCarrito.eliminarObraDelCarrito(usuario, obraId);
-        redirectAttributes.addFlashAttribute("mensaje", "Obra eliminada del carrito.");
+        try {
+            Formato formatoEnum = Formato.valueOf(formato.toUpperCase());
+            servicioCarrito.eliminarObraDelCarrito(usuario, obraId, formatoEnum);
+            redirectAttributes.addFlashAttribute("mensaje", "Obra eliminada del carrito.");
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("error", "Formato no válido.");
+        }
         
         return "redirect:/carrito";
     }

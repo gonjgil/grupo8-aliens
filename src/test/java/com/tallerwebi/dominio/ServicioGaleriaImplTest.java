@@ -12,14 +12,13 @@ import com.tallerwebi.presentacion.dto.ObraDto;
 import org.junit.jupiter.api.Test;
 
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -206,4 +205,42 @@ class ServicioGaleriaImplTest {
         assertThat(recomendadas.get(4), is(equalTo(obra4)));
     }
 
+    @Test
+    public void queSePuedaGuardarUnaObra() {
+        RepositorioObra repositorioObra = mock(RepositorioObra.class);
+        ServicioGaleria servicioGaleria = new ServicioGaleriaImpl(repositorioObra);
+
+        List<Obra> listaObras = new ArrayList<>();
+
+        Artista artista = new Artista();
+        artista.setId(1L);
+        artista.setNombre("Nuevo Artista");
+
+        Obra obra = new Obra();
+        obra.setId(1L);
+        obra.setTitulo("Nueva Obra");
+        obra.setAutor("Nuevo Autor");
+
+        String imgenUrl = "http://imagen.url/nueva_obra.jpg";
+
+        when(repositorioObra.guardar(obra)).thenReturn(obra);
+
+        when(repositorioObra.obtenerPorId(1L)).thenReturn(obra);
+
+        servicioGaleria.guardar(obra, artista, imgenUrl);
+
+        Obra obraObtenida = servicioGaleria.obtenerPorId(1L);
+
+        assertThat(obraObtenida.getTitulo(), is("Nueva Obra"));
+    }
+
+    @Test
+    public void queNoSePuedaGuardarUnaObraNula() {
+        RepositorioObra repositorioObra = mock(RepositorioObra.class);
+        ServicioGaleria servicioGaleria = new ServicioGaleriaImpl(repositorioObra);
+
+        assertThrows(NullPointerException.class, () -> {
+            servicioGaleria.guardar(null, null, null);
+        });
+    }
 }

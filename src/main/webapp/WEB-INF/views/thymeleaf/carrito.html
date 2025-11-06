@@ -51,6 +51,7 @@
             <thead class="table-light">
             <tr>
                 <th>Obra</th>
+                <th>Formato</th>
                 <th>Precio</th>
                 <th>Cantidad</th>
                 <th>Subtotal</th>
@@ -61,10 +62,14 @@
             <tbody>
             <tr th:each="item : ${items}">
                 <td th:text="${item.obraTitulo}"></td>
+                <td>
+                    <span class="badge bg-secondary" th:text="${item.formatoNombre}"></span>
+                </td>
                 <td th:text="'$' + ${#numbers.formatDecimal(item.obraPrecio, 1, 2)}"></td>
                 <td>
                     <div class="flex items-center justify-start space-x-2">
                         <form th:action="@{/carrito/disminuir/{id}(id=${item.obraId})}" method="post" style="display:inline">
+                            <input type="hidden" name="formato" th:value="${item.formato}" />
                             <button type="submit" class="w-8 h-8 flex items-center justify-center
                             hover:text-white bg-gray-300 hover:bg-black rounded text-lg font-bold">-</button>
                         </form>
@@ -72,6 +77,7 @@
                         <span class="w-10 text-center font-semibold"><span th:text="${item.cantidad}">1</span></span>
 
                         <form th:action="@{/carrito/aumentar/{id}(id=${item.obraId})}" method="post" style="display:inline">
+                            <input type="hidden" name="formato" th:value="${item.formato}" />
                             <button type="submit" class="w-8 h-8 flex items-center justify-center
                             hover:text-white bg-gray-300 hover:bg-black rounded text-lg font-bold">+</button>
                         </form>
@@ -102,10 +108,8 @@
                     <button class="text-red-700 hover:bg-red-700 hover:text-white font-bold py-2 px-4 rounded transition duration-200" type="submit">Vaciar carrito</button>
                 </form>
                 <div>
-                    <a th:href="@{/galeria}">
-                       <button class="border border-gray-700 text-gray-500 hover:bg-gray-300 hover:text-white font-semibold py-2 px-4 rounded transition duration-200">Seguir comprando</button>
-                    </a>
-                    <button id="finalizarCompraBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-200">Finalizar compra</button>
+                    <a th:href="@{/galeria}" class="border border-gray-900  text-gray-400 hover:bg-gray-400 hover:text-white font-semibold py-2 px-4 rounded transition duration-200">Seguir comprando</a>
+                    <button id="finalizarCompraBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Finalizar compra</button>
                 </div>
             </div>
         </div>

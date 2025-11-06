@@ -1,8 +1,10 @@
 package com.tallerwebi.presentacion.dto;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.tallerwebi.dominio.entidades.Obra;
 import com.tallerwebi.dominio.entidades.Usuario;
@@ -17,8 +19,10 @@ public class ObraDto {
     private Integer stock;
     private Set<Usuario> usuariosQueDieronLike;
     private Set<Categoria> categorias = new HashSet<>();
-    private Double precio;
+    private List<FormatoObraDto> formatos;
     private PerfilArtistaDTO artista;
+
+    public ObraDto() {}
 
     public ObraDto(Obra obra) {
         this.id = obra.getId();
@@ -28,8 +32,12 @@ public class ObraDto {
         this.stock = obra.getStock();
         this.usuariosQueDieronLike = obra.getUsuariosQueDieronLike() != null ? obra.getUsuariosQueDieronLike() : new HashSet<>();
         this.categorias = obra.getCategorias();
-        this.precio = obra.getPrecio();
         this.autor = obra.getAutor();
+        if (obra.getFormatos() != null) {
+            this.formatos = obra.getFormatos().stream()
+                .map(FormatoObraDto::new)
+                .collect(Collectors.toList());
+        }
         if (obra.getArtista() != null) {
             this.artista = new PerfilArtistaDTO(obra.getArtista());
         }
@@ -61,16 +69,35 @@ public class ObraDto {
     public void setStock(Integer stock) {this.stock = stock; }
     public Integer getStock() {return stock;}
 
-    public Double getPrecio() { return precio; }
-    public void setPrecio(Double precio) { this.precio = precio; }
+    public List<FormatoObraDto> getFormatos() { return formatos; }
+    public void setFormatos(List<FormatoObraDto> formatos) { this.formatos = formatos; }
 
     public PerfilArtistaDTO getArtista() { return artista; }
     public void setArtista(PerfilArtistaDTO artista) { this.artista = artista; }
 
     public Obra toObra() {
-        Obra obra = new Obra(this.titulo, this.autor, this.imagenUrl, this.descripcion, this.stock, this.categorias, this.precio, this.artista.toArtista());
+        Obra obra = new Obra();
         obra.setId(this.id);
-        obra.setUsuariosQueDieronLike(this.usuariosQueDieronLike);
+        obra.setTitulo(this.titulo);
+        obra.setDescripcion(this.descripcion);
+        obra.setStock(this.stock);
+        obra.setImagenUrl(this.imagenUrl);
+        obra.setAutor(this.autor);
+        if (this.categorias != null && !this.categorias.isEmpty()) {
+            obra.setCategorias(new HashSet<>(this.categorias));
+        }
+        if(this.artista != null) {
+            obra.setArtista(artista.toArtista());
+        }
+        if (this.usuariosQueDieronLike != null && !this.usuariosQueDieronLike.isEmpty()) {
+            obra.setUsuariosQueDieronLike(new HashSet<>(this.usuariosQueDieronLike));
+        }
+        obra.setFormatos(new HashSet<>());
+        if (this.formatos != null && !this.formatos.isEmpty()) {
+            for (FormatoObraDto formatoDto : this.formatos) {
+                obra.agregarFormato(formatoDto.toFormatoObra());
+            }
+        }
         return obra;
     }
 
