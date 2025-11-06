@@ -1,9 +1,9 @@
 package com.tallerwebi.presentacion.dto;
 
-import com.tallerwebi.dominio.entidades.ItemOrden;
+import com.tallerwebi.dominio.entidades.ItemCompra;
 
 
-public class ItemOrdenDto {
+public class ItemCompraDto {
 
     private Long id;
     private Long obraId;
@@ -14,7 +14,7 @@ public class ItemOrdenDto {
     private Integer cantidad;
     private Double subtotal;
 
-    public ItemOrdenDto(ItemOrden item) {
+    public ItemCompraDto(ItemCompra item) {
         this.id = item.getId();
         this.obraId = item.getObra().getId();
         this.obraTitulo = item.getObra().getTitulo();

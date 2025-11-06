@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orden de Compra • Detalle</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+  <link rel="stylesheet" th:href="@{/css/compraHecha.css}"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.4/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<header class="bg-white p-6 flex justify-between items-center shadow-md">
+    <h1 class="text-4xl font-extrabold text-gray-900 tracking-wider">
+        <a th:href="@{/galeria}" class="hover:text-blue-600 transition-colors">
+            ArtRoom
+        </a>
+    </h1>
+
+    <div class="flex items-center space-x-4">
+        <div th:if="${usuario != null}" class="flex items-center space-x-4">
+            <div th:text=" 'Hola, ' + ${usuario.email}"></div>
+
+            <a th:if="${artistaUsuario != null}"
+               th:href="@{'/perfilArtista/ver/' + ${artistaUsuario.id}}"
+               class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg"
+               title="Ver mi perfil de artista">
+                <i class="bi bi-palette-fill"></i>
+            </a>
+
+            <a th:if="${artistaUsuario == null}"
+               th:href="@{/perfilArtista/nuevo}"
+               class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg"
+               title="Crear nuevo artista">
+                <i class="bi bi-person-plus"></i>
+            </a>
+            <a th:href="@{/carrito}"
+               class="bg-blue-600 hover:bg-blue-700 fas fa-shopping-cart mr-2 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg"
+               title="Ver carrito">
+            </a>
+            <a th:href="@{/compras/historial}"
+               class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-3 rounded-full transition duration-300 shadow-lg"
+               title="Ver mis compras">
+                <i class="bi bi-bag-check"></i>
+            </a>
+            <a th:href="@{/logout}"
+               class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg" title="Cerrar sesion">
+                <i class="bi bi-box-arrow-right"></i>
+            </a>
+        </div>
+        <div th:unless="${usuario != null}">
+            <button
+                    th:onclick="|location.href='@{/login}'|"
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg"
+            >
+                Iniciar Sesión
+            </button>
+        </div>
+    </div>
+</header>
+<div class="container">
+    <!-- Envolver el contenido en un div centrado -->
+    <div class="order-cards-container">
+        <!-- Remove the dropdown filter -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h3">Mis Compras</h1>
+        </div>
+        <div th:if="${compras == null or #lists.isEmpty(compras)}" class="alert alert-info">No se encontraron compras registradas.</div>
+        <div class="row g-3">
+            <!-- Order Card Template - Repeat for each order -->
+            <div class="col-md-6 col-lg-4" th:each="compra : ${compras}">
+                <!-- Update the order card template -->
+                <div class="card order-card" data-bs-toggle="modal" data-bs-target="#orderDetail" th:attr="data-order-id=${compra.id}">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h6 class="mb-1">Orden <strong th:text="${'#' + compra.id}"></strong></h6>
+                                <div class="text-muted small"><span th:text="${#dates.format(compra.fechayHora, 'dd/MM/yyyy HH:mm')}"></span></div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between">
+                            <div class="small" th:text="${compra.cantidadItems + 'obras'}"></div>
+                            <strong th:text="${'$' + #numbers.formatDecimal(compra.precioFinal, 0, 'POINT', 0, 'COMMA')}"></strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-between mt-4">
+            <a th:if="${paginaActual > 0}" th:href="@{/compras(pagina=${paginaActual - 1})}" class="btn btn-outline-secondary">Anterior</a>
+            <a th:if="${paginaActual + 1 < totalPaginas}" th:href="@{/compras(pagina=${paginaActual + 1})}" class="btn btn-outline-secondary">Siguiente</a>
+        </div>
+
+    </div>
+    <footer class="text-center small-muted mt-4">ArtRoom - Tus compras</footer>
+
+<!-- Order Detail Modal -->
+<div class="modal fade" id="orderDetail" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-start mb-3">
+                    <div>
+                        <h3 class="h5 mb-1">Orden de Compra N° <strong class="order-id"></strong></h3>
+                        <div class="small-muted order-date"></div>
+                    </div>
+                    <div class="text-md-end mt-3 mt-md-0">
+                        <div class="mb-1">
+                            <span class="status-dot"></span>
+                            <strong class="order-status"></strong>
+                        </div>
+                        <div class="small-muted">Total: <strong class="order-total"></strong></div>
+                    </div>
+                </div>
+
+                <hr />
+
+                <h6 class="mb-2">🛒 Detalle de productos</h6>
+                <div class="table-responsive order-items">
+                    <!-- Table will be populated by JS -->
+                </div>
+
+                <div class="row g-3 mt-3">
+                    <div class="col-md-6">
+                        <div class="summary-box">
+                            <h6 class="mb-1">💳 Información de pago</h6>
+                            <div class="small-muted mb-2">Método: <strong class="payment-method"></strong></div>
+                            <div class="small-muted mb-1">Estado del pago: <span class="payment-status"></span></div>
+                            <div class="small-muted">Fecha de pago: <span class="payment-date"></span></div>
+                            <div class="small-muted">ID de transacción: <span class="payment-id"></span></div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="summary-box">
+                            <h6 class="mb-1">🚚 Envío</h6>
+                            <div class="small-muted mb-1">Dirección: <span class="shipping-address"></span></div>
+                            <div class="small-muted mb-1">Método: <span class="shipping-method"></span></div>
+                            <div class="small-muted mb-1">Estado: <strong class="shipping-status"></strong></div>
+                            <div class="small-muted">Número de seguimiento: <span class="shipping-tracking"></span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex flex-wrap justify-content-between align-items-center mt-4 actions">
+                    <div class="mb-2">
+                        <button class="btn btn-outline-primary btn-sm"><i class="bi bi-file-earmark-pdf"></i> Ver factura PDF</button>
+                        <button class="btn btn-link btn-sm" data-bs-dismiss="modal">Volver a mis órdenes</button>
+                    </div>
+
+                    <div class="mb-2 order-actions">
+                        <!-- Actions will be populated by JS based on order status -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Custom JS -->
+  <script th:href="@{/javascript/compraHecha.js}"></script>
+</body>
+</html>

@@ -1,20 +1,18 @@
 package com.tallerwebi.dominio;
 
 import com.mercadopago.client.payment.PaymentClient;
-import com.mercadopago.exceptions.MPApiException;
-import com.mercadopago.exceptions.MPException;
 import com.mercadopago.resources.payment.Payment;
 import com.tallerwebi.dominio.entidades.Carrito;
 import com.tallerwebi.dominio.entidades.Obra;
-import com.tallerwebi.dominio.entidades.OrdenCompra;
+import com.tallerwebi.dominio.entidades.CompraHecha;
 import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.enums.EstadoCarrito;
-import com.tallerwebi.dominio.enums.EstadoOrdenCompra;
 import com.tallerwebi.dominio.excepcion.CarritoNoEncontradoException;
 import com.tallerwebi.dominio.excepcion.CarritoVacioException;
 import com.tallerwebi.dominio.repositorios.RepositorioCarrito;
-import com.tallerwebi.dominio.repositorios.RepositorioOrdenCompra;
-import com.tallerwebi.dominio.servicioImpl.ServicioOrdenCompraImpl;
+import com.tallerwebi.dominio.repositorios.RepositorioCompraHecha;
+import com.tallerwebi.dominio.servicioImpl.ServicioCompraHechaImpl;
+import com.tallerwebi.presentacion.dto.CompraHechaDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -28,26 +26,25 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class ServicioOrdenCompraTest {
+public class ServicioCompraHechaTest {
 
-    private RepositorioOrdenCompra repositorioOrdenCompra;
+    private RepositorioCompraHecha repositorioCompraHecha;
     private RepositorioCarrito repositorioCarrito;
     private PaymentClient mpClient;
     private Payment pagoMP;
-    private ServicioOrdenCompraImpl servicioOrdenCompra;
+    private ServicioCompraHechaImpl servicioOrdenCompra;
 
     @BeforeEach
     public void init() {
-        this.repositorioOrdenCompra = mock(RepositorioOrdenCompra.class);
+        this.repositorioCompraHecha = mock(RepositorioCompraHecha.class);
         this.repositorioCarrito = mock(RepositorioCarrito.class);
         this.mpClient = mock(PaymentClient.class);
         this.pagoMP = mock(Payment.class);
-        this.servicioOrdenCompra = new ServicioOrdenCompraImpl(repositorioOrdenCompra, repositorioCarrito,  mpClient);
+        this.servicioOrdenCompra = new ServicioCompraHechaImpl(repositorioCompraHecha, repositorioCarrito,  mpClient);
     }
 
-
     @Test
-    public void deberiaCrearOrdenDeCompraAPartirDeCarritoCorrectamente() throws CarritoVacioException, CarritoNoEncontradoException {
+    public void deberiaCrearCompraHechaAPartirDeCarritoCorrectamente() throws CarritoVacioException, CarritoNoEncontradoException {
         Usuario usuario = new Usuario();
         Carrito carrito = new Carrito(usuario);
 
@@ -65,7 +62,7 @@ public class ServicioOrdenCompraTest {
 
         when(repositorioCarrito.obtenerPorId(1L)).thenReturn(carrito);
 
-        OrdenCompra ordenCreada = this.servicioOrdenCompra.crearOrdenDeCompraAPartirDeCarrito(carrito);
+        CompraHecha ordenCreada = this.servicioOrdenCompra.crearCompraHechaAPartirDeCarrito(carrito);
 
         assertThat(ordenCreada.getUsuario(), is(carrito.getUsuario()));
         assertThat(ordenCreada.getPrecioFinal(), is(carrito.getTotal()));
@@ -73,7 +70,7 @@ public class ServicioOrdenCompraTest {
     }
 
     @Test
-    public void deberiaCrearOrdenDeCompraAPartirDeCarritoCorrectamenteItemCarritoDebeConvertirseEnItemOrdenCorrectamente() throws CarritoVacioException, CarritoNoEncontradoException {
+    public void deberiaCrearOrdenDeCompraAPartirDeCarritoCorrectamenteItemCarritoDebeConvertirseEnItemOrdenCorrectamenteHecha() throws CarritoVacioException, CarritoNoEncontradoException {
         Usuario usuario = new Usuario();
         Carrito carrito = new Carrito(usuario);
 
@@ -91,7 +88,7 @@ public class ServicioOrdenCompraTest {
 
         when(repositorioCarrito.obtenerPorId(1L)).thenReturn(carrito);
 
-        OrdenCompra ordenCreada = this.servicioOrdenCompra.crearOrdenDeCompraAPartirDeCarrito(carrito);
+        CompraHecha ordenCreada = this.servicioOrdenCompra.crearCompraHechaAPartirDeCarrito(carrito);
 
         assertThat(ordenCreada.getItems().size(), is(carrito.getItems().size()));
         assertThat(ordenCreada.getCarrito().buscarItemPorObra(obra1), is(carrito.buscarItemPorObra(obra1)));
@@ -110,7 +107,7 @@ public class ServicioOrdenCompraTest {
         when(repositorioCarrito.obtenerPorId(1L)).thenReturn(carrito);
 
         try {
-            this.servicioOrdenCompra.crearOrdenDeCompraAPartirDeCarrito(carrito);
+            this.servicioOrdenCompra.crearCompraHechaAPartirDeCarrito(carrito);
             fail("Se esperaba CarritoVacioException pero no fue lanzada");
         } catch (CarritoVacioException | CarritoNoEncontradoException e) {
 
@@ -119,48 +116,23 @@ public class ServicioOrdenCompraTest {
     }
 
     @Test
-    public void enCasoDeQueElPagoSeaRechazadoElEstadoDeLaOrdenDeCompraDebeSerRECHAZADA() throws MPException, MPApiException {
-        OrdenCompra orden = new OrdenCompra();
-        orden.setId(1L);
-        orden.setPagoId(1L);
+    public void deberiaObtenerPorIdCorrectamente() throws CarritoNoEncontradoException, CarritoVacioException {
+        Usuario usuario = new Usuario();
+        usuario.setId(10L);
 
-        when(repositorioOrdenCompra.obtenerPorId(1L)).thenReturn(orden);
-        when(mpClient.get(1L)).thenReturn(pagoMP);
-        when(pagoMP.getStatus()).thenReturn("rejected");
+        CompraHecha compra = new CompraHecha();
+        compra.setId(1L);
+        compra.setUsuario(usuario);
+        compra.setPrecioFinal(200.0);
 
-        EstadoOrdenCompra estado = servicioOrdenCompra.obtenerEstadoDeOrden(1L);
+        when(repositorioCompraHecha.obtenerPorId(1L)).thenReturn(compra);
 
-        assertEquals(EstadoOrdenCompra.RECHAZADA, estado);
-    }
+        CompraHecha resultado = servicioOrdenCompra.obtenerCompraPorId(1L);
 
-    @Test
-    public void deberiaObtenerOrdenesDeCompraPorEstadoDeOrdenCorrectamente(){
-        OrdenCompra orden1 = new OrdenCompra();
-        orden1.setId(1L);
-        orden1.setPagoId(1L);
-        orden1.setEstado(EstadoOrdenCompra.RECHAZADA);
-
-        OrdenCompra orden2 = new OrdenCompra();
-        orden2.setId(2L);
-        orden2.setPagoId(2L);
-        orden2.setEstado(EstadoOrdenCompra.RECHAZADA);
-
-        OrdenCompra orden3 = new OrdenCompra();
-        orden3.setId(3L);
-        orden3.setPagoId(3L);
-        orden3.setEstado(EstadoOrdenCompra.APROBADA);
-
-
-        when(repositorioOrdenCompra.obtenerPorEstado(EstadoOrdenCompra.RECHAZADA)).thenReturn(List.of(orden1, orden2));
-
-
-        List<OrdenCompra> ordenes = servicioOrdenCompra.obtenerOrdenesDeCompraPorEstadoDeOrden(EstadoOrdenCompra.RECHAZADA);
-
-        assertThat(ordenes.size(), is(2));
-        assertThat(ordenes, contains(orden1, orden2));
-        assertThat(ordenes, not(hasItem(orden3)));
+        assertThat(resultado, is(compra));
 
     }
+
 
 
 }

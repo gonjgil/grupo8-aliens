@@ -3,16 +3,16 @@ package com.tallerwebi.dominio.entidades;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "ItemOrden")
-public class ItemOrden {
+@Table(name = "ItemCompra")
+public class ItemCompra {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "orden_id")
-    private OrdenCompra orden;
+    @JoinColumn(name = "compra_id")
+    private CompraHecha compra;
 
     @ManyToOne
     @JoinColumn(name = "obra_id")
@@ -20,10 +20,10 @@ public class ItemOrden {
     private Integer cantidad;
     private Double precioUnitario;
 
-    public ItemOrden() {}
+    public ItemCompra() {}
 
 
-    public ItemOrden(ItemCarrito itemCarrito) {
+    public ItemCompra(ItemCarrito itemCarrito) {
         this.obra = itemCarrito.getObra();
         this.cantidad = itemCarrito.getCantidad();
         this.precioUnitario = itemCarrito.getPrecioUnitario();
@@ -37,8 +37,8 @@ public class ItemOrden {
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public OrdenCompra getOrden() { return orden; }
-    public void setOrden(OrdenCompra orden) { this.orden = orden; }
+    public CompraHecha getCompra() { return compra; }
+    public void setCompra(CompraHecha orden) { this.compra = orden; }
 
     public Obra getObra() { return obra; }
     public void setObra(Obra obra) { this.obra = obra; }
