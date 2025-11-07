@@ -4,6 +4,7 @@ import com.tallerwebi.dominio.ServicioLogin;
 import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.UsuarioExistente;
 import com.tallerwebi.presentacion.dto.DatosLogin;
+import com.tallerwebi.presentacion.dto.UsuarioDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.servlet.ModelAndView;
@@ -20,6 +21,7 @@ public class ControladorLoginTest {
 
 	private ControladorLogin controladorLogin;
 	private Usuario usuarioMock;
+	private UsuarioDto usuarioDtoMock;
 	private DatosLogin datosLoginMock;
 	private HttpServletRequest requestMock;
 	private HttpSession sessionMock;
@@ -28,11 +30,17 @@ public class ControladorLoginTest {
 	@BeforeEach
 	public void init() {
 		datosLoginMock = new DatosLogin("dami@unlam.com", "123");
+
 		usuarioMock = mock(Usuario.class);
 		when(usuarioMock.getEmail()).thenReturn("dami@unlam.com");
+
+		usuarioDtoMock = mock(UsuarioDto.class);
+		when(usuarioDtoMock.toUsuario()).thenReturn(usuarioMock);
+
 		requestMock = mock(HttpServletRequest.class);
 		sessionMock = mock(HttpSession.class);
 		servicioLoginMock = mock(ServicioLogin.class);
+
 		controladorLogin = new ControladorLogin(servicioLoginMock);
 	}
 
@@ -73,7 +81,7 @@ public class ControladorLoginTest {
 	public void registrameSiUsuarioNoExisteDeberiaCrearUsuarioYVolverAlLogin() throws UsuarioExistente {
 
 		// ejecucion
-		ModelAndView modelAndView = controladorLogin.registrarme(usuarioMock);
+		ModelAndView modelAndView = controladorLogin.registrarme(usuarioDtoMock);
 
 		// validacion
 		assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/login"));
@@ -86,7 +94,7 @@ public class ControladorLoginTest {
 		doThrow(UsuarioExistente.class).when(servicioLoginMock).registrar(usuarioMock);
 
 		// ejecucion
-		ModelAndView modelAndView = controladorLogin.registrarme(usuarioMock);
+		ModelAndView modelAndView = controladorLogin.registrarme(usuarioDtoMock);
 
 		// validacion
 		assertThat(modelAndView.getViewName(), equalToIgnoringCase("nuevo-usuario"));
@@ -99,7 +107,7 @@ public class ControladorLoginTest {
 		doThrow(RuntimeException.class).when(servicioLoginMock).registrar(usuarioMock);
 
 		// ejecucion
-		ModelAndView modelAndView = controladorLogin.registrarme(usuarioMock);
+		ModelAndView modelAndView = controladorLogin.registrarme(usuarioDtoMock);
 
 		// validacion
 		assertThat(modelAndView.getViewName(), equalToIgnoringCase("nuevo-usuario"));

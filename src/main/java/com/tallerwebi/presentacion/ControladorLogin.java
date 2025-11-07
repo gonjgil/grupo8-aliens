@@ -5,6 +5,7 @@ import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.enums.Categoria;
 import com.tallerwebi.dominio.excepcion.UsuarioExistente;
 import com.tallerwebi.presentacion.dto.DatosLogin;
+import com.tallerwebi.presentacion.dto.UsuarioDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -33,22 +34,25 @@ public class ControladorLogin {
         return new ModelAndView("login", modelo);
     }
 
-    @RequestMapping(path = "/validar-login", method = RequestMethod.POST)
-    public ModelAndView validarLogin(@ModelAttribute("datosLogin") DatosLogin datosLogin, HttpServletRequest request) {
-        ModelMap model = new ModelMap();
 
-        Usuario usuarioBuscado = servicioLogin.consultarUsuario(datosLogin.getEmail(), datosLogin.getPassword());
-        if (usuarioBuscado != null) {
-            // Configurar la sesión para que persista
-            request.getSession().setMaxInactiveInterval(3600); // 1 hora
-            request.getSession().setAttribute("ROL", usuarioBuscado.getRol());
-            request.getSession().setAttribute("usuarioLogueado", usuarioBuscado);
-            return new ModelAndView("redirect:/galeria");
-        } else {
-            model.put("error", "Usuario o clave incorrecta");
-        }
+@RequestMapping(path = "/validar-login", method = RequestMethod.POST)
+public ModelAndView validarLogin(@ModelAttribute("datosLogin") DatosLogin datosLogin, HttpServletRequest request) {
+    ModelMap model = new ModelMap();
+
+    Usuario usuarioBuscado = servicioLogin.consultarUsuario(datosLogin.getEmail(), datosLogin.getPassword());
+
+    if (usuarioBuscado != null) {
+
+        request.getSession().setMaxInactiveInterval(3600); // 1 hora
+        request.getSession().setAttribute("ROL", usuarioBuscado.getRol());
+        request.getSession().setAttribute("usuarioLogueado", usuarioBuscado);
+
+        return new ModelAndView("redirect:/galeria");
+    } else {
+        model.put("error", "Usuario o clave incorrecta");
         return new ModelAndView("login", model);
     }
+}
 
     @RequestMapping(path = "/logout", method = RequestMethod.GET)
     public ModelAndView logout(HttpServletRequest request) {
@@ -58,55 +62,45 @@ public class ControladorLogin {
         return new ModelAndView("redirect:/galeria");
     }
 
-//    @RequestMapping(path = "/registrarme", method = RequestMethod.POST)
-//    public ModelAndView registrarme(@ModelAttribute("usuario") Usuario usuario) {
-//        ModelMap model = new ModelMap();
-//        try{
-//            servicioLogin.registrar(usuario);
-//        } catch (UsuarioExistente e){
-//            model.put("error", "El usuario ya existe");
-//            return new ModelAndView("nuevo-usuario", model);
-//        } catch (Exception e){
-//            model.put("error", "Error al registrar el nuevo usuario");
-//            return new ModelAndView("nuevo-usuario", model);
-//        }
-//        return new ModelAndView("redirect:/login");
-//    }
 
     @RequestMapping(path = "/registrarme", method = RequestMethod.POST)
-    public ModelAndView registrarme(@ModelAttribute("usuario") Usuario usuario) {
+    public ModelAndView registrarme(@ModelAttribute("usuario") UsuarioDto usuarioDto) {
         ModelMap model = new ModelMap();
-        try{
-            // Validación backend: máximo 3 categorías
+
+        try {
+            // Conversión DTO -> Entidad
+            Usuario usuario = usuarioDto.toUsuario();
+
+            // Validación
             if (usuario.getCategoriasFavoritas() != null && usuario.getCategoriasFavoritas().size() > 3) {
                 model.put("error", "Solo se pueden elegir hasta 3 categorías favoritas.");
-                model.put("usuario", usuario);
+                model.put("usuario", usuarioDto);
                 model.put("categoriasDisponibles", Categoria.values());
                 return new ModelAndView("nuevo-usuario", model);
             }
+
+            // Llamada al servicio
             servicioLogin.registrar(usuario);
-        } catch (UsuarioExistente e){
+
+            return new ModelAndView("redirect:/login");
+
+        } catch (UsuarioExistente e) {
             model.put("error", "El usuario ya existe");
-            model.put("categoriasDisponibles", Categoria.values());
-            return new ModelAndView("nuevo-usuario", model);
-        } catch (Exception e){
+        } catch (Exception e) {
             model.put("error", "Error al registrar el nuevo usuario");
-            model.put("categoriasDisponibles", Categoria.values());
-            return new ModelAndView("nuevo-usuario", model);
         }
-        return new ModelAndView("redirect:/login");
+
+        // En caso de error, se recarga la vista con los datos del DTO
+        model.put("usuario", usuarioDto);
+        model.put("categoriasDisponibles", Categoria.values());
+        return new ModelAndView("nuevo-usuario", model);
     }
 
-//    @RequestMapping(path = "/nuevo-usuario", method = RequestMethod.GET)
-//    public ModelAndView nuevoUsuario() {
-//        ModelMap model = new ModelMap();
-//        model.put("usuario", new Usuario());
-//        return new ModelAndView("nuevo-usuario", model);
-//    }
+
     @RequestMapping(path = "/nuevo-usuario", method = RequestMethod.GET)
     public ModelAndView nuevoUsuario() {
         ModelMap model = new ModelMap();
-        model.put("usuario", new Usuario());
+        model.put("usuario", new UsuarioDto());
         model.put("categoriasDisponibles", Categoria.values());
         return new ModelAndView("nuevo-usuario", model);
     }
