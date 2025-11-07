@@ -1,48 +1,114 @@
 <!DOCTYPE HTML>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <title>Taller Web I</title>
+    <title>Taller Web I</title>
 
-  <!-- Boostrap core css -->
-  <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
-
-  <!-- custom style -->
-  <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <script src="https://cdn.tailwindcss.com"></script>
 
 </head>
 
-<body>
+<body class="h-full">
 
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-  <a class="navbar-brand" href="#">UNLAM</a>
-</nav>
-
-<main role="main" class="container">
-
-  <div class = "container">
-    <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-      <form action="#" th:action="@{/registrarme}" method="POST" th:object="${usuario}">
-        <h3 class="form-signin-heading">Nuevo Usuario</h3>
-        <hr class="colorgraph"><br>
-
-        <input th:field="*{email}" id="email" class="form-control" required/>
-        <input th:field="*{password}" type="password" id="password" class="form-control" required/>
-
-        <button id="btn-registrarme" class="btn btn-lg btn-primary btn-block" Type="Submit">Registrarme</button>
-        <p th:if="${error != null}" class="alert alert-danger" th:text="'Error ' + ${error}">
-        </p>
-      </form>
-
+<div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+    <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+        <h1 class="mt-10 text-center text-4xl font-bold tracking-tight text-indigo-600">ArtRoom</h1>
+        <h2 class="mt-5 text-center text-2xl/9 font-bold tracking-tight text-gray-900">Registrate</h2>
     </div>
-  </div>
+    <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <form action="#" th:action="@{/registrarme}" method="POST" th:object="${usuario}" class="space-y-6">
+            <div>
+                <label for="email" class="block text-sm/6 font-medium text-gray-900">Dirección de Correo
+                    Electrónico</label>
+                <div class="mt-2">
+                    <input
+                            th:field="*{email}"
+                            id="email"
+                            type="email"
+                            name="email"
+                            required
+                            autocomplete="email"
+                            class="block w-full rounded-md border border-gray-300 bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                    />
+                </div>
+            </div>
 
-</main>
-<!-- /.container -->
+            <div>
+                <div class="flex items-center justify-between">
+                    <label for="password" class="block text-sm/6 font-medium text-gray-900">Contraseña</label>
+                </div>
+                <div class="mt-2">
+                    <input
+                            th:field="*{password}"
+                            id="password"
+                            type="password"
+                            name="password"
+                            required autocomplete="current-password"
+                            class="block w-full rounded-md border border-gray-300 bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"/>
+                </div>
+            </div>
 
-<!-- Boostrap core js -->
-<script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
+            <!-- categorías -->
+            <div class="mt-4">
+                <label class="block text-sm font-medium text-gray-700">
+                    Elegí tus categorías favoritas (máximo 3):
+                </label>
+
+                <div class="obra-categorias flex flex-wrap gap-2 mt-3">
+                    <div th:each="cat : ${T(com.tallerwebi.dominio.enums.Categoria).values()}" th:if="${cat.name() != 'TEST'}" class="relative">
+                        <input
+                                type="checkbox"
+                                th:id="'cat-' + ${cat.name()}"
+                                th:name="categoriasFavoritas"
+                                th:value="${cat}"
+                                th:field="*{categoriasFavoritas}"
+                                class="hidden peer"
+                        />
+                        <label
+                                th:for="'cat-' + ${cat.name()}"
+                                th:text="${cat.categoria}"
+                                class="px-3 py-1 rounded-full text-sm cursor-pointer border transition
+               bg-gray-200 text-gray-700 border-gray-300
+               peer-checked:bg-indigo-400 peer-checked:text-white peer-checked:border-indigo-400
+               hover:bg-gray-300"
+                        ></label>
+                    </div>
+                </div>
+
+                <p class="text-sm text-gray-500 mt-2">
+                    Estas categorías se priorizarán en la galería.
+                </p>
+            </div>
+
+            <div>
+                <button type="submit" id="btn-registrarme"
+                        class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                    Registrarme
+                </button>
+            </div>
+
+
+            <p th:if="${error != null}" class="alert alert-danger mt-2" th:text="'Error ' + ${error}"></p>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const checkboxes = document.querySelectorAll('input[type="checkbox"][name="categoriasFavoritas"]');
+      checkboxes.forEach(cb => {
+        cb.addEventListener('change', () => {
+          const seleccionados = Array.from(checkboxes).filter(c => c.checked);
+          if (seleccionados.length > 3) {
+            cb.checked = false;
+            alert("Solo podés elegir hasta 3 categorías.");
+          }
+        });
+      });
+    });
+</script>
+
 </body>
 </html>

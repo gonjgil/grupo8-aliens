@@ -63,11 +63,11 @@ class ServicioLoginImplTest {
         usuario.setEmail("nuevo@mail.com");
         usuario.setPassword("123");
 
-        when(repositorioUsuario.buscarUsuario("nuevo@mail.com", "123")).thenReturn(null);
+        when(repositorioUsuario.buscar("nuevo@mail.com")).thenReturn(null);
 
         servicioLogin.registrar(usuario);
 
-        verify(repositorioUsuario, times(1)).buscarUsuario("nuevo@mail.com", "123");
+        verify(repositorioUsuario, times(1)).buscar("nuevo@mail.com");
         verify(repositorioUsuario, times(1)).guardar(usuario);
     }
 
@@ -77,11 +77,11 @@ class ServicioLoginImplTest {
         usuario.setEmail("existente@mail.com");
         usuario.setPassword("123");
 
-        when(repositorioUsuario.buscarUsuario("existente@mail.com", "123")).thenReturn(usuario);
+        when(repositorioUsuario.buscar("existente@mail.com")).thenReturn(usuario);
 
         assertThrows(UsuarioExistente.class, () -> servicioLogin.registrar(usuario));
 
-        verify(repositorioUsuario, times(1)).buscarUsuario("existente@mail.com", "123");
+        verify(repositorioUsuario, times(1)).buscar("existente@mail.com");
         verify(repositorioUsuario, never()).guardar(any());
     }
 }
