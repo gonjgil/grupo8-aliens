@@ -40,7 +40,7 @@ public class Obra {
     @Column(name = "categoria")
     private Set<Categoria> categorias = new HashSet<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "artista")
     private Artista artista;
 

@@ -43,7 +43,7 @@ public class RepositorioObraImpl implements RepositorioObra {
     public List<Obra> obtenerPorAutor(String autor) {
         try {
             return this.sessionFactory.getCurrentSession()
-                    .createQuery("FROM Obra WHERE lower(autor) LIKE :autor", Obra.class)
+                    .createQuery("SELECT o FROM Obra o LEFT JOIN o.artista a WHERE lower(a.nombre) LIKE :autor", Obra.class)
                     .setParameter("autor", "%" + autor.toLowerCase() + "%")
                     .getResultList();
         } catch (IllegalArgumentException e) {
@@ -145,26 +145,26 @@ public class RepositorioObraImpl implements RepositorioObra {
     @Override
     public List<Obra> buscarPorString(String palabraBuscada) {
         try {
-            // String categoriaEnum = obtenerCategoriaEnumSiUnica(palabraBuscada);
+            String categoriaEnum = obtenerCategoriaEnumSiUnica(palabraBuscada);
             String query = "SELECT DISTINCT o FROM Obra o " +
                     "LEFT JOIN FETCH o.usuariosQueDieronLike u " +
                     "LEFT JOIN FETCH o.artista a " +
-                    // "JOIN o.categorias c " +
+                    "LEFT JOIN o.categorias c " +
                     "WHERE lower(o.titulo) LIKE :palabra " +
-                    // "OR lower(o.descripcion) LIKE :palabra " +
+                    "OR lower(o.descripcion) LIKE :palabra " +
                     "OR (a IS NOT NULL AND lower(a.nombre) LIKE :palabra)";
 
-            // if (categoriaEnum != null) {
-            //     query += " OR c = :categoriaEnum";
-            // }
+            if (categoriaEnum != null) {
+                query += " OR c = :categoriaEnum";
+            }
 
             var q = this.sessionFactory.getCurrentSession()
                     .createQuery(query, Obra.class)
                     .setParameter("palabra", "%" + palabraBuscada.toLowerCase() + "%");
 
-            // if (categoriaEnum != null) {
-            //     q.setParameter("categoriaEnum", Categoria.valueOf(categoriaEnum));
-            // }
+            if (categoriaEnum != null) {
+                q.setParameter("categoriaEnum", Categoria.valueOf(categoriaEnum));
+            }
 
             return q.getResultList();
 
