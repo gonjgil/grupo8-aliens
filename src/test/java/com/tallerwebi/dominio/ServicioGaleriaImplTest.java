@@ -210,8 +210,6 @@ class ServicioGaleriaImplTest {
         RepositorioObra repositorioObra = mock(RepositorioObra.class);
         ServicioGaleria servicioGaleria = new ServicioGaleriaImpl(repositorioObra);
 
-        List<Obra> listaObras = new ArrayList<>();
-
         Artista artista = new Artista();
         artista.setId(1L);
         artista.setNombre("Nuevo Artista");

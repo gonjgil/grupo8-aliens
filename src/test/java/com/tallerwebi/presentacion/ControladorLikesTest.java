@@ -46,7 +46,6 @@ public class ControladorLikesTest {
         Obra obra = new Obra();
         obra.setId(id);
 
-        ObraDto obraDto = new ObraDto(obra);
         when(servicioGaleria.obtenerPorId(id)).thenReturn(obra);
         when(servicioLike.toggleLike(usuario, id)).thenAnswer(invocation -> {
             obra.darLike(usuario);
@@ -92,7 +91,6 @@ public class ControladorLikesTest {
         obra.setId(id);
         obra.darLike(usuario); // el usuario ya había dado like antes
 
-        ObraDto obraDto = new ObraDto(obra);
         when(servicioGaleria.obtenerPorId(id)).thenReturn(obra);
         when(servicioLike.toggleLike(usuario, id)).thenAnswer(invocation -> {
             obra.quitarLike(usuario);
