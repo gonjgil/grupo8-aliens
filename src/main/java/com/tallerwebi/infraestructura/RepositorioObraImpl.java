@@ -145,26 +145,26 @@ public class RepositorioObraImpl implements RepositorioObra {
     @Override
     public List<Obra> buscarPorString(String palabraBuscada) {
         try {
-            String categoriaEnum = obtenerCategoriaEnumSiUnica(palabraBuscada);
-
+            // String categoriaEnum = obtenerCategoriaEnumSiUnica(palabraBuscada);
             String query = "SELECT DISTINCT o FROM Obra o " +
-                    "LEFT JOIN FETCH o.usuariosQueDieronLike u " + // <-- fetch join
-                    "JOIN o.categorias c " +
+                    "LEFT JOIN FETCH o.usuariosQueDieronLike u " +
+                    "LEFT JOIN FETCH o.artista a " +
+                    // "JOIN o.categorias c " +
                     "WHERE lower(o.titulo) LIKE :palabra " +
-                    "OR lower(o.descripcion) LIKE :palabra " +
-                    "OR lower(o.autor) LIKE :palabra";
+                    // "OR lower(o.descripcion) LIKE :palabra " +
+                    "OR (a IS NOT NULL AND lower(a.nombre) LIKE :palabra)";
 
-            if (categoriaEnum != null) {
-                query += " OR c = :categoriaEnum";
-            }
+            // if (categoriaEnum != null) {
+            //     query += " OR c = :categoriaEnum";
+            // }
 
             var q = this.sessionFactory.getCurrentSession()
                     .createQuery(query, Obra.class)
                     .setParameter("palabra", "%" + palabraBuscada.toLowerCase() + "%");
 
-            if (categoriaEnum != null) {
-                q.setParameter("categoriaEnum", Categoria.valueOf(categoriaEnum));
-            }
+            // if (categoriaEnum != null) {
+            //     q.setParameter("categoriaEnum", Categoria.valueOf(categoriaEnum));
+            // }
 
             return q.getResultList();
 

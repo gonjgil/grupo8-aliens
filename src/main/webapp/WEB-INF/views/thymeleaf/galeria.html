@@ -169,7 +169,7 @@
       </div>
 
       <section class="obras-container" style="display: none">
-        <h2 class="text-3xl font-bold mb-6 text-gray-900">Obras</h2>
+        <h2 class="text-3xl font-bold mb-6 text-gray-900 pt-3">Obras</h2>
         <div class="carousel-container relative">
           <div id="obras-track" class="carousel-track">
             <!-- Carousel items will be injected here by JS -->
@@ -222,7 +222,7 @@
       </section>
 
       <section class="mb-16 artistas-container" style="display: none">
-        <h2 class="text-3xl font-bold mb-6 text-gray-900">Artistas</h2>
+        <h2 class="text-3xl font-bold mb-6 text-gray-900 pt-3">Artistas</h2>
         <div class="carousel-container relative">
           <div id="artistas-track" class="carousel-track">
             <!-- Carousel items will be injected here by JS -->
@@ -279,7 +279,7 @@
     <footer
       class="bg-gray-300 p-6 text-center text-gray-700 mt-12 shadow-inner"
     >
-      <p>&copy; 2025 Grupo 8</p>
+      <p>&copy; 2025 Alines (Grupo 8)</p>
       <p class="integrantes">Gil - Solodujin - Landín - Santillan - Torrico</p>
     </footer>
 
@@ -421,16 +421,16 @@
 
           // Construir carrusel de obras
           if (data.obras?.length) {
-            springDir = "/spring";
+            // springDir = "/spring";
             obrasTrack.innerHTML = data.obras
               .map(
                 (o) => `
                     <a href="/spring/obra/${o.id}"
                        class="carousel-item group cursor-pointer transition-transform duration-300 transform hover:scale-105 relative rounded-xl overflow-hidden bg-cover bg-center"
-                       style="background-image: url('${springDir}${o.imagenUrl}');">
+                       style="background-image: url('${o.imagenUrl.startsWith('http') ? o.imagenUrl : springDir + o.imagenUrl}');">
                         <div class="image-overlay absolute inset-0 bg-black/40 flex flex-col justify-end p-3">
                             <p class="text-sm font-semibold text-white">${o.titulo}</p>
-                            <p class="text-xs text-gray-300">${o.autor}</p>
+                            <p class="text-xs text-gray-300">${o.artista && o.artista.nombre ? o.artista.nombre : o.autor || 'Artista desconocido'}</p>
                         </div>
                     </a>
             `
@@ -448,22 +448,14 @@
             artistasTrack.innerHTML = data.artistas
               .map(
                 (a) => `
-                <a href="/spring/perfilArtista/ver/${a.id}"
-                   class="carousel-item cursor-pointer transition-transform duration-300 transform hover:scale-105 relative rounded-xl overflow-hidden bg-cover bg-center"
-                   style="background-image: url('${
-                     a.urlFotoPerfil || "/img/default-artista.jpg"
-                   }');">
-
-                    <!-- Overlay siempre visible -->
-                    <div class="absolute inset-0 bg-black/40 flex flex-col justify-end p-3">
-                        <p class="text-sm font-semibold text-white">${
-                          a.nombre
-                        }</p>
-                        <p class="text-xs text-gray-300 line-clamp-2">${
-                          a.biografia || ""
-                        }</p>
-                    </div>
-                </a>
+                    <a href="/spring/perfilArtista/ver/${a.id}"
+                       class="carousel-item group cursor-pointer transition-transform duration-300 transform hover:scale-105 relative rounded-xl overflow-hidden bg-cover bg-center"
+                       style="background-image: url('${a.urlFotoPerfil && a.urlFotoPerfil.startsWith('http') ? a.urlFotoPerfil : '/spring' + (a.urlFotoPerfil || '/img/default-artista.jpg')}');">
+                        <div class="image-overlay absolute inset-0 bg-black/40 flex flex-col justify-end p-3">
+                            <p class="text-sm font-semibold text-white">${a.nombre}</p>
+                            <p class="text-xs text-gray-300">${a.biografia || 'Sin biografía'}</p>
+                        </div>
+                    </a>
             `
               )
               .join("");
