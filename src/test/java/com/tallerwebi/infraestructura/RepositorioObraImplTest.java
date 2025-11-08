@@ -10,6 +10,7 @@ import javax.transaction.Transactional;
 
 import java.util.List;
 
+import com.tallerwebi.dominio.entidades.Artista;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,8 +45,11 @@ public class RepositorioObraImplTest {
     @Transactional
     @Rollback
     public void deberiaGuardarUnaObra() {
+        Artista artista = persistirArtista("Artista de la Obra Guardada");
+
         Obra obra = generarObra1();
         obra.setTitulo("Titulo de la Obra Guardada");
+        obra.setArtista(artista);
         
         this.repositorioObra.guardar(obra);
 
@@ -62,9 +66,15 @@ public class RepositorioObraImplTest {
     @Transactional
     @Rollback
     public void alListarTodasLasObrasDeberiaObtenerLaListaCompleta() {
+        Artista artista = persistirArtista("Artista 1");
+
         Obra obra1 = generarObra1();
         Obra obra2 = generarObra2();
         Obra obra3 = generarObra3();
+
+        obra1.setArtista(artista);
+        obra2.setArtista(artista);
+        obra3.setArtista(artista);
 
         this.repositorioObra.guardar(obra1);
         this.repositorioObra.guardar(obra2);
@@ -84,12 +94,18 @@ public class RepositorioObraImplTest {
     @Transactional
     @Rollback
     public void alListarObrasPorCategoriaYNoExistirNingunaDeberiaObtenerUnaListaVacia() {
+        Artista artista = persistirArtista("Artista 1");
+
         Obra obra1 = generarObra1();
         Obra obra2 = generarObra2();
         Obra obra3 = generarObra3();
         obra1.agregarCategoria(Categoria.ABSTRACTO);
         obra2.agregarCategoria(Categoria.SURREALISMO);
         obra3.agregarCategoria(Categoria.RETRATO);
+
+        obra1.setArtista(artista);
+        obra2.setArtista(artista);
+        obra3.setArtista(artista);
 
         this.repositorioObra.guardar(obra1);
         this.repositorioObra.guardar(obra2);
@@ -107,17 +123,21 @@ public class RepositorioObraImplTest {
     @Transactional
     @Rollback
     public void alListarObrasPorAutorDeberiaObtenerSoloTodasSusObras() {
+        Artista artista = persistirArtista("Autor de dos Obras");
+        Artista artistaOtro = persistirArtista("Autor de una Obra");
+
         Obra obra1 = generarObra1();
         Obra obra2 = generarObra2();
         Obra obra3 = generarObra3();
-        obra1.setAutor("Autor de dos Obras");
-        obra3.setAutor("Autor de dos Obras");
+        obra1.setArtista(artista);
+        obra2.setArtista(artistaOtro);
+        obra3.setArtista(artista);
 
         this.repositorioObra.guardar(obra1);
         this.repositorioObra.guardar(obra2);
         this.repositorioObra.guardar(obra3);
 
-        String hql = "FROM Obra WHERE autor = :autor";
+        String hql = "SELECT o FROM Obra o LEFT JOIN o.artista a WHERE a.nombre = :autor";
         TypedQuery<Obra> query = this.sessionFactory.getCurrentSession().createQuery(hql, Obra.class);
         query.setParameter("autor", "Autor de dos Obras");
         List<Obra> obrasObtenidas = query.getResultList();
@@ -131,11 +151,17 @@ public class RepositorioObraImplTest {
     @Transactional
     @Rollback
     public void alListarObrasPorCategoriaDeberiaObtenerSoloTodasLasObrasDeEsaCategoria() {
+        Artista artista = persistirArtista("Artista 1");
+
         Obra obra1 = generarObra1();
         Obra obra2 = generarObra2();
         Obra obra3 = generarObra3();
         obra1.agregarCategoria(Categoria.ABSTRACTO);
         obra3.agregarCategoria(Categoria.ABSTRACTO);
+
+        obra1.setArtista(artista);
+        obra2.setArtista(artista);
+        obra3.setArtista(artista);
 
         this.repositorioObra.guardar(obra1);
         this.repositorioObra.guardar(obra2);
@@ -155,7 +181,11 @@ public class RepositorioObraImplTest {
     @Transactional
     @Rollback
     public void alBuscarObraPorIdDeberiaObtenerLaObraCorrespondiente() {
+        Artista artista = persistirArtista("Artista 1");
+
         Obra obra1 = generarObra1();
+
+        obra1.setArtista(artista);
 
         this.repositorioObra.guardar(obra1);
 
@@ -171,12 +201,17 @@ public class RepositorioObraImplTest {
     @Transactional
     @Rollback
     public void queAlBuscarPorTituloObtengaLasObrasCorrespondientes() {
+        Artista artista = persistirArtista("Artista 1");
+
         Obra obra1 = generarObra1();
         Obra obra2 = generarObra2();
         Obra obra3 = generarObra3();
         obra1.setTitulo("Obra Especial");
         obra2.setTitulo("Otra Obra Especial");
         obra3.setTitulo("Obra Común");
+        obra1.setArtista(artista);
+        obra2.setArtista(artista);
+        obra3.setArtista(artista);
 
         this.repositorioObra.guardar(obra1);
         this.repositorioObra.guardar(obra2);
@@ -193,6 +228,8 @@ public class RepositorioObraImplTest {
     @Transactional
     @Rollback
     public void queAlBuscarPorRangoDePrecioObtengaLasObrasCorrespondientes() {
+        Artista artista = persistirArtista("Artista 1");
+
         Obra obra1 = generarObra1();
         Obra obra2 = generarObra2();
         Obra obra3 = generarObra3();
@@ -205,6 +242,10 @@ public class RepositorioObraImplTest {
         obra1.agregarFormato(formato1);
         obra2.agregarFormato(formato2);
         obra3.agregarFormato(formato3);
+
+        obra1.setArtista(artista);
+        obra2.setArtista(artista);
+        obra3.setArtista(artista);
 
         this.repositorioObra.guardar(obra1);
         this.repositorioObra.guardar(obra2);
@@ -221,12 +262,17 @@ public class RepositorioObraImplTest {
     @Transactional
     @Rollback
     public void queAlBuscarPorDescripcionObtengaLasObrasCorrespondientes() {
+        Artista artista = persistirArtista("Artista 1");
+
         Obra obra1 = generarObra1();
         Obra obra2 = generarObra2();
         Obra obra3 = generarObra3();
         obra1.setDescripcion("Esta es una obra maravillosa");
         obra2.setDescripcion("Una obra que destaca por su belleza");
         obra3.setDescripcion("Obra común sin nada especial");
+        obra1.setArtista(artista);
+        obra2.setArtista(artista);
+        obra3.setArtista(artista);
 
         this.repositorioObra.guardar(obra1);
         this.repositorioObra.guardar(obra2);
@@ -244,12 +290,17 @@ public class RepositorioObraImplTest {
     @Transactional
     @Rollback
     public void queAlBuscarPorDescripcionYNoEncuentreCoincidenciasDevuelvaUnaListaVacia() {
+        Artista artista = persistirArtista("Artista 1");
+
         Obra obra1 = generarObra1();
         Obra obra2 = generarObra2();
         Obra obra3 = generarObra3();
         obra1.setDescripcion("Esta es una obra maravillosa");
         obra2.setDescripcion("Una obra que destaca por su belleza");
         obra3.setDescripcion("Obra común sin nada especial");
+        obra1.setArtista(artista);
+        obra2.setArtista(artista);
+        obra3.setArtista(artista);
 
         this.repositorioObra.guardar(obra1);
         this.repositorioObra.guardar(obra2);
@@ -264,6 +315,8 @@ public class RepositorioObraImplTest {
     @Transactional
     @Rollback
     public void queAlBuscarPorRangoDePrecioSinCoincidenciasDevuelvaUnaListaVacia() {
+        Artista artista = persistirArtista("Artista 1");
+
         Obra obra1 = generarObra1();
         Obra obra2 = generarObra2();
         Obra obra3 = generarObra3();
@@ -276,6 +329,10 @@ public class RepositorioObraImplTest {
         obra1.agregarFormato(formato1);
         obra2.agregarFormato(formato2);
         obra3.agregarFormato(formato3);
+
+        obra1.setArtista(artista);
+        obra2.setArtista(artista);
+        obra3.setArtista(artista);
 
         this.repositorioObra.guardar(obra1);
         this.repositorioObra.guardar(obra2);
@@ -290,9 +347,15 @@ public class RepositorioObraImplTest {
     @Transactional
     @Rollback
     public void queAlBuscarPorTituloSinCoincidenciasDevuelvaUnaListaVacia() {
+        Artista artista = persistirArtista("Artista 1");
+
         Obra obra1 = generarObra1();
         Obra obra2 = generarObra2();
         Obra obra3 = generarObra3();
+
+        obra1.setArtista(artista);
+        obra2.setArtista(artista);
+        obra3.setArtista(artista);
 
         this.repositorioObra.guardar(obra1);
         this.repositorioObra.guardar(obra2);
@@ -304,9 +367,11 @@ public class RepositorioObraImplTest {
     }
 
     private Obra generarObra1() {
+        Artista artista = new Artista();
+        artista.setNombre("Artista de la Obra 1");
         Obra obra1 = new Obra();
         obra1.setTitulo("Titulo de la Obra 1");
-        obra1.setAutor("Autor de la Obra 1");
+        obra1.setArtista(artista);
         obra1.setDescripcion("Descripcion de la Obra 1");
         obra1.setImagenUrl("http://imagen.com/obra1.jpg");
         obra1.agregarCategoria(Categoria.ABSTRACTO);
@@ -314,9 +379,11 @@ public class RepositorioObraImplTest {
     }
     
     private Obra generarObra2() {
+        Artista artista = new Artista();
+        artista.setNombre("Artista de la Obra 2");
         Obra obra2 = new Obra();
         obra2.setTitulo("Titulo de la Obra 2");
-        obra2.setAutor("Autor de la Obra 2");
+        obra2.setArtista(artista);
         obra2.setDescripcion("Descripcion de la Obra 2");
         obra2.setImagenUrl("http://imagen.com/obra2.jpg");
         obra2.agregarCategoria(Categoria.SURREALISMO);
@@ -324,12 +391,22 @@ public class RepositorioObraImplTest {
     }
 
     private Obra generarObra3() {
+        Artista artista = new Artista();
+        artista.setNombre("Autor de la obra 3");
         Obra obra3 = new Obra();
         obra3.setTitulo("Titulo de la Obra 3");
-        obra3.setAutor("Autor de la Obra 3");
+        obra3.setArtista(artista);
         obra3.setDescripcion("Descripcion de la Obra 3");
         obra3.setImagenUrl("http://imagen.com/obra3.jpg");
         obra3.agregarCategoria(Categoria.ABSTRACTO);
         return obra3;
     }
+
+    private Artista persistirArtista(String nombre) {
+        Artista a = new Artista();
+        a.setNombre(nombre);
+        this.sessionFactory.getCurrentSession().save(a);
+        return a;
+    }
+
 }

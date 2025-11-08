@@ -52,10 +52,11 @@ public class ControladorObraTest {
         ServicioPerfilArtista servicioPerfilArtista = mock(ServicioPerfilArtista.class);
         ServicioCloudinary servicioCloudinary = mock(ServicioCloudinary.class);
 
+        Artista artista = new Artista("Autor A", "Biografia", "http://example.com/autorA.jpg");
         Obra obra = mock(Obra.class);
         obra.setId(1L);
         obra.setTitulo("Obra A");
-        obra.setAutor("Autor A");
+        obra.setArtista(artista);
         obra.setDescripcion("Lorem Ipsum");
 
         ObraDto obraDto = new ObraDto(obra);

@@ -62,13 +62,18 @@ class ServicioGaleriaImplTest {
     public void obtenerPorAutor_deberiaRetornarSoloObrasDeEseAutor() {
         RepositorioObra repositorioObra = mock(RepositorioObra.class);
 
+        Artista artistaA = new Artista();
+        artistaA.setNombre("Autor A");
+        Artista artistaB = new Artista();
+        artistaB.setNombre("Autor B");
+
         Obra obra1 = new Obra();
         obra1.setTitulo("Obra A");
-        obra1.setAutor("Autor A");
+        obra1.setArtista(artistaA);
 
         Obra obra2 = new Obra();
         obra2.setTitulo("Obra B");
-        obra2.setAutor("Autor B");
+        obra2.setArtista(artistaB);
 
         when(repositorioObra.obtenerPorAutor("Autor A")).thenReturn(List.of(obra1));
 
@@ -81,7 +86,7 @@ class ServicioGaleriaImplTest {
         }
 
         assertThat(resultado.size(), is(1));
-        assertThat(resultado.get(0).getAutor(), is(equalTo("Autor A")));
+        assertThat(resultado.get(0).getArtista().getNombre(), is(equalTo("Autor A")));
     }
 
     @Test
@@ -116,11 +121,13 @@ class ServicioGaleriaImplTest {
     @Test
     public void obtenerPorId_deberiaRetornarLaObraConEseId() throws NoExisteLaObra {
         RepositorioObra repositorioObra = mock(RepositorioObra.class);
-        
+
+        Artista artista = new Artista();
+        artista.setNombre("Autor de la Obra");
         Obra obra = new Obra();
         obra.setId(1L);
         obra.setTitulo("Titulo de la Obra");
-        obra.setAutor("Autor de la Obra");
+        obra.setArtista(artista);
         
         when(repositorioObra.obtenerPorId(anyLong())).thenReturn(obra);
 
@@ -128,7 +135,7 @@ class ServicioGaleriaImplTest {
 
         ObraDto resultado = new ObraDto(servicio.obtenerPorId(1234L));
 
-        assertThat(resultado.getAutor(), is("Autor de la Obra"));
+        assertThat(resultado.getArtista().getNombre(), is("Autor de la Obra"));
         assertThat(resultado.getId(), is(notNullValue()));
     }
 
@@ -155,7 +162,6 @@ class ServicioGaleriaImplTest {
         obra1.setId(1L);
         obra1.setTitulo("Titulo de la Obra 1");
         obra1.setArtista(artista1);
-        obra1.setAutor(artista1.getNombre());
         obra1.agregarCategoria(Categoria.ABSTRACTO);
         obra1.darLike(usuario); // el usuario likea esta obra
 
@@ -163,28 +169,24 @@ class ServicioGaleriaImplTest {
         obra2.setId(2L);
         obra2.setTitulo("Titulo de la Obra 2");
         obra2.setArtista(artista1); // mismo artista que obra1
-        obra2.setAutor(artista1.getNombre());
         obra2.agregarCategoria(Categoria.SURREALISMO);
 
         Obra obra3 = new Obra();
         obra3.setId(3L);
         obra3.setTitulo("Titulo de la Obra 3");
         obra3.setArtista(artista2);
-        obra3.setAutor(artista2.getNombre());
         obra3.agregarCategoria(Categoria.ABSTRACTO); // misma categoría que obra1
 
         Obra obra4 = new Obra();
         obra4.setId(4L);
         obra4.setTitulo("Titulo de la Obra 4");
         obra4.setArtista(artista2);
-        obra4.setAutor(artista2.getNombre());
         obra4.agregarCategoria(Categoria.SURREALISMO);
 
         Obra obra5 = new Obra();
         obra5.setId(5L);
         obra5.setTitulo("Titulo de la Obra 5");
         obra5.setArtista(artista3);
-        obra5.setAutor(artista3.getNombre());
         obra5.agregarCategoria(Categoria.ABSTRACTO); // misma categoría que obra1
 
         List<Obra> todasLasObras = List.of(obra1, obra2, obra3, obra4, obra5);
@@ -217,7 +219,7 @@ class ServicioGaleriaImplTest {
         Obra obra = new Obra();
         obra.setId(1L);
         obra.setTitulo("Nueva Obra");
-        obra.setAutor("Nuevo Autor");
+        obra.setArtista(artista);
 
         String imgenUrl = "http://imagen.url/nueva_obra.jpg";
 
