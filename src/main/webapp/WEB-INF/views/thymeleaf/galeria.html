@@ -75,7 +75,7 @@
               <a th:href="@{/obra/{id}(id=${obra.id})}" th:each="obra : ${obrasSpotlight}" class="carousel-item group cursor-pointer transition-transform duration-300 transform hover:scale-105" th:style="|background-image: url('${obra.imagenUrl}')|">
                 <div class="image-overlay">
                   <p class="text-sm font-semibold text-white" th:text="${obra.titulo}"></p>
-                  <p class="text-xs text-gray-300" th:text="${obra.autor}"></p>
+                  <p class="text-xs text-gray-300" th:text="${obra.artista.nombre}"></p>
                 </div>
               </a>
           </div>

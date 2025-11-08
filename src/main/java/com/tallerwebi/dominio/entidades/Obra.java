@@ -16,7 +16,6 @@ public class Obra {
     private Long id;
     
     private String titulo;
-    private String autor;
     private String imagenUrl;
     private String descripcion;
     private Integer stock;
@@ -41,7 +40,7 @@ public class Obra {
     @Column(name = "categoria")
     private Set<Categoria> categorias = new HashSet<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "artista")
     private Artista artista;
 
@@ -50,18 +49,16 @@ public class Obra {
 
     public Obra() { }
 
-    public Obra(String titulo, String autor, String imagenUrl, String descripcion, Integer stock, Set<Categoria> categorias) {
+    public Obra(String titulo, String imagenUrl, String descripcion, Integer stock, Set<Categoria> categorias) {
         this.titulo = titulo;
-        this.autor = autor;
         this.imagenUrl = imagenUrl;
         this.descripcion = descripcion;
         this.stock = stock;
         this.categorias = categorias;
     }
 
-    public Obra(String titulo, String autor, String imagenUrl, String descripcion, Integer stock, Set<Categoria> categorias, Artista artista) {
+    public Obra(String titulo, String imagenUrl, String descripcion, Integer stock, Set<Categoria> categorias, Artista artista) {
         this.titulo = titulo;
-        this.autor = autor;
         this.imagenUrl = imagenUrl;
         this.descripcion = descripcion;
         this.stock = stock;
@@ -74,9 +71,6 @@ public class Obra {
     
     public String getTitulo() { return titulo; }
     public void setTitulo(String titulo) { this.titulo = titulo; }
-    
-    public String getAutor() { return autor; }
-    public void setAutor(String autor) { this.autor = autor; }
     
     public String getImagenUrl() { return imagenUrl; }
     public void setImagenUrl(String imagenUrl) { this.imagenUrl = imagenUrl; }

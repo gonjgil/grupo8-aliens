@@ -144,7 +144,6 @@ public class ServicioGaleriaImpl implements ServicioGaleria {
             obra.setImagenUrl(urlImagen);
         }
         obra.setArtista(artista);
-        obra.setAutor(artista.getNombre());
         return repositorioObra.guardar(obra);
     }
 

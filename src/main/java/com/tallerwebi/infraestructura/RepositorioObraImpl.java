@@ -149,10 +149,11 @@ public class RepositorioObraImpl implements RepositorioObra {
 
             String query = "SELECT DISTINCT o FROM Obra o " +
                     "LEFT JOIN FETCH o.usuariosQueDieronLike u " + // <-- fetch join
-                    "JOIN o.categorias c " +
+                    "LEFT JOIN o.categorias c " +
+                    "LEFT JOIN o.artista a " +
                     "WHERE lower(o.titulo) LIKE :palabra " +
                     "OR lower(o.descripcion) LIKE :palabra " +
-                    "OR lower(o.autor) LIKE :palabra";
+                    "OR lower(a.nombre) LIKE :palabra";
 
             if (categoriaEnum != null) {
                 query += " OR c = :categoriaEnum";
