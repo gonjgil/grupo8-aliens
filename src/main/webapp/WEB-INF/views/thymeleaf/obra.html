@@ -383,11 +383,11 @@
     function actualizarContadorCarrito() {
       fetch('/spring/carrito/contador')
         .then((response) => response.json())
-        .then((count) => {
+        .then((data) => {
           const contador = document.querySelector('[data-carrito-count]');
           if (contador) {
-            if (count > 0) {
-              contador.textContent = count;
+            if (data.count > 0) {
+              contador.textContent = data.count;
               contador.classList.remove('hidden');
             } else {
               contador.classList.add('hidden');

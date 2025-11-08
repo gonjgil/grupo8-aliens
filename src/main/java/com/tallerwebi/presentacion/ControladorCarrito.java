@@ -153,14 +153,15 @@ public class ControladorCarrito {
 
     @GetMapping("/contador")
     @ResponseBody
-    public int obtenerContadorCarrito(HttpSession session) {
+    public String obtenerContadorCarrito(HttpSession session) {
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
         
         if (usuario == null) {
-            return 0;
+            return "{\"count\": 0}";
         }
         
         List<ItemCarritoDto> items = servicioCarrito.obtenerItems(usuario);
-        return items.stream().mapToInt(ItemCarritoDto::getCantidad).sum();
+        int total = items.stream().mapToInt(ItemCarritoDto::getCantidad).sum();
+        return "{\"count\": " + total + "}";
     }
 }
