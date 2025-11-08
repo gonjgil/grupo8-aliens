@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>ALIENS - Obra</title>
+    <title>Obra</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
@@ -56,20 +56,22 @@
             </a>
 
             <a th:href="@{/carrito}"
-               class="bg-blue-600 hover:bg-blue-700 fas fa-shopping-cart mr-2 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg">
+               class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg relative">
+                <i class="fas fa-shopping-cart"></i>
+                <span data-carrito-count 
+                      class="hidden absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
+                    0
+                </span>
             </a>
             <a th:href="@{/logout}"
                class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg">
                 <i class="bi bi-box-arrow-right"></i>
             </a>
         </div>
-        <div th:unless="${usuario != null}">
-            <button
-                    th:onclick="|location.href='@{/login}'|"
-                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg"
-            >
+        <div th:unless="${usuario != null}" class="flex items-center space-x-4">
+            <a th:href="@{/login}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg">
                 Iniciar Sesión
-            </button>
+            </a>
         </div>
     </div>
 
@@ -170,27 +172,24 @@
         </div>
       </div> -->
         <div class="obra-meta flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div class="flex gap-2">
+            <div th:if="${usuario != null}" id="botones-container" class="flex gap-2" style="display: none;">
                 <form id="form-agregar-carrito" th:action="@{/carrito/agregar}" method="post">
                     <input type="hidden" name="id" th:value="${obra.id}"/>
                     <input type="hidden" name="formato" id="formato-seleccionado" value=""/>
 
                     <button id="btn-agregar-carrito" type="submit" 
-                            class="btn bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full transition duration-300"
-                            disabled>
+                            class="btn bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full transition duration-300">
                         <i class="fas fa-shopping-cart mr-2"></i>
-                        Selecciona formato
+                        Agregar al Carrito
                     </button>
                 </form>
                 
                 <button
                         class="btn btn-primary bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300"
-                        id="comprarBtn"
-                >
+                        id="comprarBtn">
                     Comprar Ahora
                 </button>
             </div>
-
         </div>
     </div>
 
@@ -206,12 +205,7 @@
       // Verificar si hay formatos disponibles
       const formatosDisponibles = document.querySelectorAll('.formato-option[data-disponible="true"]');
       
-      if (formatosDisponibles.length > 0) {
-        // Seleccionar el primer formato disponible por defecto
-        const primerFormato = formatosDisponibles[0];
-        seleccionarFormato(primerFormato);
-      } else {
-        // No hay formatos disponibles, deshabilitar botones
+      if (formatosDisponibles.length == 0) {
         deshabilitarBotones();
       }
     });
@@ -238,22 +232,10 @@
 
     // Función para deshabilitar botones cuando no hay formatos
     function deshabilitarBotones() {
-      const btnAgregar = document.getElementById('btn-agregar-carrito');
-      const btnComprar = document.getElementById('comprarBtn');
-      
-      if (btnAgregar) {
-        btnAgregar.disabled = true;
-        btnAgregar.classList.add('opacity-50', 'cursor-not-allowed');
-        btnAgregar.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i>Sin formatos disponibles';
-      }
-      
-      if (btnComprar) {
-        btnComprar.classList.add('opacity-50', 'cursor-not-allowed');
-        btnComprar.innerHTML = 'Sin formatos disponibles';
-        btnComprar.onclick = function(e) {
-          e.preventDefault();
-          alert('No hay formatos disponibles para esta obra');
-        };
+      // Simplemente ocultar el contenedor de botones
+      const botonesContainer = document.getElementById('botones-container');
+      if (botonesContainer) {
+        botonesContainer.style.display = 'none';
       }
     }
 
@@ -274,18 +256,29 @@
       // Actualizar campo hidden del formulario
       document.getElementById('formato-seleccionado').value = formatoSeleccionado;
       
-      // Habilitar/deshabilitar botón según disponibilidad
-      const btnAgregar = document.getElementById('btn-agregar-carrito');
+      // Mostrar botones solo si formato está disponible
       const disponible = elemento.getAttribute('data-disponible') === 'true';
+      const botonesContainer = document.getElementById('botones-container');
       
-      if (disponible && btnAgregar) {
-        btnAgregar.disabled = false;
-        btnAgregar.classList.remove('opacity-50', 'cursor-not-allowed');
-        btnAgregar.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i>Agregar al Carrito';
-      } else if (btnAgregar) {
-        btnAgregar.disabled = true;
-        btnAgregar.classList.add('opacity-50', 'cursor-not-allowed');
-        btnAgregar.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i>No disponible';
+      if (disponible && botonesContainer) {
+        botonesContainer.style.display = 'flex';
+      }
+    }
+
+    // Función para limpiar la selección después de agregar al carrito
+    function limpiarSeleccion() {
+      document.querySelectorAll('.formato-option').forEach(opt => {
+        opt.classList.remove('selected');
+      });
+      
+      formatoSeleccionado = null;
+      precioActual = 0;
+      document.getElementById('formato-seleccionado').value = '';
+      
+      // Ocultar botones cuando no hay selección
+      const botonesContainer = document.getElementById('botones-container');
+      if (botonesContainer) {
+        botonesContainer.style.display = 'none';
       }
     }
 
@@ -313,7 +306,12 @@
         alert('El formato seleccionado no está disponible');
         return false;
       }
+
+      setTimeout(() => {
+        limpiarSeleccion();
+      }, 100);
     });
+
 
     // funcion original para comprar actualizada con formato
     document
@@ -383,13 +381,13 @@
 
     // actualizar el contador del carrito
     function actualizarContadorCarrito() {
-      fetch('/spring/carrito/count')
+      fetch('/spring/carrito/contador')
         .then((response) => response.json())
-        .then((count) => {
+        .then((data) => {
           const contador = document.querySelector('[data-carrito-count]');
           if (contador) {
-            if (count > 0) {
-              contador.textContent = count;
+            if (data.count > 0) {
+              contador.textContent = data.count;
               contador.classList.remove('hidden');
             } else {
               contador.classList.add('hidden');

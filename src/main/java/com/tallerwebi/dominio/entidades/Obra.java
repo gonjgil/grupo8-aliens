@@ -45,6 +45,7 @@ public class Obra {
     private Artista artista;
 
     @OneToMany(mappedBy = "obra", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OrderBy("id ASC") // mantiene el orden en el frontend
     private Set<FormatoObra> formatos = new HashSet<>();
 
     public Obra() { }

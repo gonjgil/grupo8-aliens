@@ -150,4 +150,18 @@ public class ControladorCarrito {
         
         return "redirect:/carrito";
     }
+
+    @GetMapping("/contador")
+    @ResponseBody
+    public String obtenerContadorCarrito(HttpSession session) {
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+        
+        if (usuario == null) {
+            return "{\"count\": 0}";
+        }
+        
+        List<ItemCarritoDto> items = servicioCarrito.obtenerItems(usuario);
+        int total = items.stream().mapToInt(ItemCarritoDto::getCantidad).sum();
+        return "{\"count\": " + total + "}";
+    }
 }
