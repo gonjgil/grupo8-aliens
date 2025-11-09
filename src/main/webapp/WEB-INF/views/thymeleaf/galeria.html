@@ -3,81 +3,119 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ALIENS - Portfolio</title>
+    <title>Portfolio</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <link rel="stylesheet" th:href="@{/css/galeria.css}"/>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+    />
+    <link rel="stylesheet" th:href="@{/css/galeria.css}" />
   </head>
   <body class="bg-gray-100 text-gray-800">
     <!-- Header -->
     <header class="bg-white p-6 flex justify-between items-center shadow-md">
-        <h1 class="text-4xl font-extrabold text-gray-900 tracking-wider">
-            <a th:href="@{/galeria}" class="hover:text-blue-600 transition-colors">
-                ArtRoom
-            </a>
-        </h1>
-
-        <div class="flex items-center space-x-4">
-            <div th:if="${usuario != null}" class="flex items-center space-x-4">
-        <div th:text=" 'Hola, ' + ${usuario.email}"></div>
-
-                <a th:if="${artistaUsuario != null}"
-                   th:href="@{'/perfilArtista/ver/' + ${artistaUsuario.id}}"
-                   class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg"
-                   title="Ver mi perfil de artista">
-                    <i class="bi bi-palette-fill"></i>
-                </a>
-
-                <a th:if="${artistaUsuario == null}"
-                   th:href="@{/perfilArtista/nuevo}"
-                   class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg"
-                   title="Crear nuevo artista">
-                    <i class="bi bi-person-plus"></i>
-                </a>
-          <a th:href="@{/carrito}"
-              class="bg-blue-600 hover:bg-blue-700 fas fa-shopping-cart mr-2 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg">
-          </a>
-        <a th:href="@{/logout}" 
-           class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg">
-          <i class="bi bi-box-arrow-right"></i>
+      <h1 class="text-4xl font-extrabold text-gray-900 tracking-wider">
+        <a th:href="@{/galeria}" class="hover:text-blue-600 transition-colors">
+          ArtRoom
         </a>
-            </div>
-            <div th:unless="${usuario != null}">
-                <button
-                        th:onclick="|location.href='@{/login}'|"
-                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg"
-                >
-                    Iniciar Sesión
-                </button>
-            </div>
+      </h1>
+
+      <div class="flex items-center space-x-4">
+        <div th:if="${usuario != null}" class="flex items-center space-x-4">
+          <div th:text=" 'Hola, ' + ${usuario.email}"></div>
+
+          <a
+            th:if="${artistaUsuario != null}"
+            th:href="@{'/perfilArtista/ver/' + ${artistaUsuario.id}}"
+            class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg"
+            title="Ver mi perfil de artista"
+          >
+            <i class="bi bi-palette-fill"></i>
+          </a>
+
+          <a
+            th:if="${artistaUsuario == null}"
+            th:href="@{/perfilArtista/nuevo}"
+            class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg"
+            title="Crear nuevo artista"
+          >
+            <i class="bi bi-person-plus"></i>
+          </a>
+          <a
+            th:href="@{/carrito}"
+            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg relative"
+          >
+            <i class="fas fa-shopping-cart"></i>
+            <span
+              data-carrito-count
+              class="hidden absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold"
+            >
+              0
+            </span>
+          </a>
+          <a
+            th:href="@{/logout}"
+            class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg"
+          >
+            <i class="bi bi-box-arrow-right"></i>
+          </a>
         </div>
-
-
+        <div th:unless="${usuario != null}">
+          <button
+            th:onclick="|location.href='@{/login}'|"
+            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg"
+          >
+            Iniciar Sesión
+          </button>
+        </div>
+      </div>
     </header>
 
     <main class="container mx-auto py-12 px-4">
       <!-- Mock Payment Success Message -->
-      <div th:if="${param.payment != null and param.payment[0] == 'mock-success'}" 
-           class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
-        <strong>¡Pago simulado exitoso!</strong> En un entorno real, esto sería procesado por MercadoPago.
-        <span class="float-right cursor-pointer" onclick="this.parentElement.style.display='none'">&times;</span>
+      <div
+        th:if="${param.payment != null and param.payment[0] == 'mock-success'}"
+        class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6"
+      >
+        <strong>¡Pago simulado exitoso!</strong>
+        En un entorno real, esto sería procesado por MercadoPago.
+        <span
+          class="float-right cursor-pointer"
+          onclick="this.parentElement.style.display='none'"
+        >
+          &times;
+        </span>
       </div>
-      
+
       <!-- Spotlight Carousel -->
       <section class="mb-16">
         <h2 class="text-3xl font-bold mb-6 text-gray-900">Spotlight</h2>
         <div class="carousel-container relative">
           <div id="spotlight-track" class="carousel-track">
             <!-- Carousel items will be injected here by JS -->
-             <!-- encerrando la variable de la url en @{ } la construye en el contexto de la aplicacion (spring) -->
-              <a th:href="@{/obra/{id}(id=${obra.id})}" th:each="obra : ${obrasSpotlight}" class="carousel-item group cursor-pointer transition-transform duration-300 transform hover:scale-105" th:style="|background-image: url('@{${obra.imagenUrl}}')|">
-                <div class="image-overlay">
-                  <p class="text-sm font-semibold text-white" th:text="${obra.titulo}"></p>
-                  <p class="text-xs text-gray-300" th:text="${obra.autor}"></p>
-                </div>
-              </a>
+            <!-- encerrando la variable de la url en @{ } la construye en el contexto de la aplicacion (spring) -->
+            <a
+              th:href="@{/obra/{id}(id=${obra.id})}"
+              th:each="obra : ${obrasSpotlight}"
+              class="carousel-item group cursor-pointer transition-transform duration-300 transform hover:scale-105"
+              th:style="|background-image: url('${obra.imagenUrl}')|"
+            >
+              <div class="image-overlay">
+                <p
+                  class="text-sm font-semibold text-white"
+                  th:text="${obra.titulo}"
+                ></p>
+                <p class="text-xs text-gray-300" th:text="${obra.artista != null ? obra.artista.nombre : 'Desconocido'}"></p>
+              </div>
+            </a>
           </div>
           <button
             class="scroll-button left-button"
@@ -120,21 +158,27 @@
         </div>
       </section>
 
-        <div class="input-group">
-            <input type="search" id="buscador" class="form-control" placeholder="Buscar obras o artistas..." oninput="buscar()">
-        </div>
+      <div class="input-group">
+        <input
+          type="search"
+          id="buscador"
+          class="form-control"
+          placeholder="Buscar obras o artistas..."
+          oninput="buscar()"
+        />
+      </div>
 
       <section class="obras-container" style="display: none">
-        <h2 class="text-3xl font-bold mb-6 text-gray-900">Obras</h2>
+        <h2 class="text-3xl font-bold mb-6 text-gray-900 pt-3">Obras</h2>
         <div class="carousel-container relative">
           <div id="obras-track" class="carousel-track">
             <!-- Carousel items will be injected here by JS -->
-<!--              <a th:href="@{/obra/{id}(id=${obra.id})}" th:each="obra : ${temaObras}" class="carousel-item group cursor-pointer transition-transform duration-300 transform hover:scale-105" th:style="|background-image: url('${obra.imagenUrl}')|">-->
-<!--                <div class="image-overlay">-->
-<!--                  <p class="text-sm font-semibold text-white" th:text="${obra.titulo}"></p>-->
-<!--                  <p class="text-xs text-gray-300" th:text="${obra.autor}"></p>-->
-<!--                </div>-->
-<!--              </a>-->
+            <!--              <a th:href="@{/obra/{id}(id=${obra.id})}" th:each="obra : ${temaObras}" class="carousel-item group cursor-pointer transition-transform duration-300 transform hover:scale-105" th:style="|background-image: url('${obra.imagenUrl}')|">-->
+            <!--                <div class="image-overlay">-->
+            <!--                  <p class="text-sm font-semibold text-white" th:text="${obra.titulo}"></p>-->
+            <!--                  <p class="text-xs text-gray-300" th:text="${obra.autor}"></p>-->
+            <!--                </div>-->
+            <!--              </a>-->
           </div>
           <button
             class="scroll-button left-button"
@@ -177,241 +221,257 @@
         </div>
       </section>
 
-        <section class="mb-16 artistas-container" style="display: none">
-            <h2 class="text-3xl font-bold mb-6 text-gray-900">Artistas</h2>
-            <div class="carousel-container relative">
-                <div id="artistas-track" class="carousel-track">
-                    <!-- Carousel items will be injected here by JS -->
-                    <!--              <a th:href="@{/obra/{id}(id=${obra.id})}" th:each="obra : ${autorObras}" class="carousel-item group cursor-pointer transition-transform duration-300 transform hover:scale-105" th:style="|background-image: url('${obra.imagenUrl}')|">-->
-                    <!--                  <div class="image-overlay">-->
-                    <!--                      <p class="text-sm font-semibold text-white" th:text="${obra.titulo}"></p>-->
-                    <!--                      <p class="text-xs text-gray-300" th:text="${obra.autor}"></p>-->
-                    <!--                  </div>-->
-                    <!--              </a>-->
-                </div>
-                <button
-                        class="scroll-button left-button"
-                        onclick="scrollCarousel('artistas', -1)"
-                >
-                    <svg
-                            class="w-10 h-10"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg"
-                    >
-                        <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M15 19l-7-7 7-7"
-                        ></path>
-                    </svg>
-                </button>
-                <button
-                        class="scroll-button right-button"
-                        onclick="scrollCarousel('artistas', 1)"
-                >
-                    <svg
-                            class="w-10 h-10"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg"
-                    >
-                        <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M9 5l7 7-7 7"
-                        ></path>
-                    </svg>
-                </button>
-            </div>
-        </section>
+      <section class="mb-16 artistas-container" style="display: none">
+        <h2 class="text-3xl font-bold mb-6 text-gray-900 pt-3">Artistas</h2>
+        <div class="carousel-container relative">
+          <div id="artistas-track" class="carousel-track">
+            <!-- Carousel items will be injected here by JS -->
+            <!--              <a th:href="@{/obra/{id}(id=${obra.id})}" th:each="obra : ${autorObras}" class="carousel-item group cursor-pointer transition-transform duration-300 transform hover:scale-105" th:style="|background-image: url('${obra.imagenUrl}')|">-->
+            <!--                  <div class="image-overlay">-->
+            <!--                      <p class="text-sm font-semibold text-white" th:text="${obra.titulo}"></p>-->
+            <!--                      <p class="text-xs text-gray-300" th:text="${obra.autor}"></p>-->
+            <!--                  </div>-->
+            <!--              </a>-->
+          </div>
+          <button
+            class="scroll-button left-button"
+            onclick="scrollCarousel('artistas', -1)"
+          >
+            <svg
+              class="w-10 h-10"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              ></path>
+            </svg>
+          </button>
+          <button
+            class="scroll-button right-button"
+            onclick="scrollCarousel('artistas', 1)"
+          >
+            <svg
+              class="w-10 h-10"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              ></path>
+            </svg>
+          </button>
+        </div>
+      </section>
     </main>
 
     <!-- Footer -->
     <footer
       class="bg-gray-300 p-6 text-center text-gray-700 mt-12 shadow-inner"
     >
-      <p>&copy; 2025 Grupo 8</p>
+      <p>&copy; 2025 Alines (Grupo 8)</p>
       <p class="integrantes">Gil - Solodujin - Landín - Santillan - Torrico</p>
     </footer>
 
     <script th:src="@{/js/galeria.js}"></script>
     <script>
-        // Función para actualizar el contador del carrito
-        function actualizarContadorCarrito() {
-            fetch('/spring/carrito/count')
-                .then(response => response.json())
-                .then(count => {
-                    const contador = document.querySelector('[data-carrito-count]');
+      // Función para actualizar el contador del carrito
+      function actualizarContadorCarrito() {
+        fetch("/spring/carrito/contador")
+          .then((response) => response.json())
+          .then((data) => {
+            const contador = document.querySelector("[data-carrito-count]");
+            if (contador) {
+              if (data.count > 0) {
+                contador.textContent = data.count;
+                contador.classList.remove("hidden");
+              } else {
+                contador.classList.add("hidden");
+              }
+            }
+          })
+          .catch((error) =>
+            console.error("Error actualizando contador:", error)
+          );
+      }
+
+      // Mejorar los botones de "Agregar al Carrito" para usar AJAX
+      document.addEventListener("DOMContentLoaded", function () {
+        // Actualizar contador al cargar la página
+        actualizarContadorCarrito();
+
+        // Manejar clicks en botones de agregar al carrito
+        document
+          .querySelectorAll('form[action*="/carrito/agregar"]')
+          .forEach((form) => {
+            form.addEventListener("submit", function (e) {
+              e.preventDefault(); // Prevenir envío normal del formulario
+
+              const formData = new FormData(this);
+              const obraId = formData.get("obraId");
+              const cantidad = formData.get("cantidad") || 1;
+
+              // Hacer petición AJAX
+              fetch("/spring/carrito/agregar/ajax", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: `obraId=${obraId}&cantidad=${cantidad}`,
+              })
+                .then((response) => response.json())
+                .then((data) => {
+                  if (data.success) {
+                    // Actualizar contador
+                    const contador = document.querySelector(
+                      "[data-carrito-count]"
+                    );
                     if (contador) {
-                        if (count > 0) {
-                            contador.textContent = count;
-                            contador.classList.remove('hidden');
-                        } else {
-                            contador.classList.add('hidden');
-                        }
+                      if (data.carritoCount > 0) {
+                        contador.textContent = data.carritoCount;
+                        contador.classList.remove("hidden");
+                      } else {
+                        contador.classList.add("hidden");
+                      }
                     }
+
+                    // Mostrar mensaje de éxito
+                    mostrarMensaje(data.message, "success");
+
+                    // Efecto visual en el botón
+                    const button = this.querySelector("button");
+                    const originalText = button.innerHTML;
+                    button.innerHTML =
+                      '<i class="fas fa-check mr-2"></i>¡Agregado!';
+                    button.classList.add("bg-green-500");
+
+                    setTimeout(() => {
+                      button.innerHTML = originalText;
+                      button.classList.remove("bg-green-500");
+                    }, 2000);
+                  } else {
+                    mostrarMensaje(data.message, "error");
+                  }
                 })
-                .catch(error => console.error('Error actualizando contador:', error));
-        }
-
-        // Mejorar los botones de "Agregar al Carrito" para usar AJAX
-        document.addEventListener('DOMContentLoaded', function() {
-            // Actualizar contador al cargar la página
-            actualizarContadorCarrito();
-
-            // Manejar clicks en botones de agregar al carrito
-            document.querySelectorAll('form[action*="/carrito/agregar"]').forEach(form => {
-                form.addEventListener('submit', function(e) {
-                    e.preventDefault(); // Prevenir envío normal del formulario
-                    
-                    const formData = new FormData(this);
-                    const obraId = formData.get('obraId');
-                    const cantidad = formData.get('cantidad') || 1;
-
-                    // Hacer petición AJAX
-                    fetch('/spring/carrito/agregar/ajax', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                        },
-                        body: `obraId=${obraId}&cantidad=${cantidad}`
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            // Actualizar contador
-                            const contador = document.querySelector('[data-carrito-count]');
-                            if (contador) {
-                                if (data.carritoCount > 0) {
-                                    contador.textContent = data.carritoCount;
-                                    contador.classList.remove('hidden');
-                                } else {
-                                    contador.classList.add('hidden');
-                                }
-                            }
-
-                            // Mostrar mensaje de éxito
-                            mostrarMensaje(data.message, 'success');
-                            
-                            // Efecto visual en el botón
-                            const button = this.querySelector('button');
-                            const originalText = button.innerHTML;
-                            button.innerHTML = '<i class="fas fa-check mr-2"></i>¡Agregado!';
-                            button.classList.add('bg-green-500');
-                            
-                            setTimeout(() => {
-                                button.innerHTML = originalText;
-                                button.classList.remove('bg-green-500');
-                            }, 2000);
-                        } else {
-                            mostrarMensaje(data.message, 'error');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        mostrarMensaje('Error de conexión', 'error');
-                    });
+                .catch((error) => {
+                  console.error("Error:", error);
+                  mostrarMensaje("Error de conexión", "error");
                 });
             });
-        });
+          });
+      });
 
-    // Función para mostrar mensajes
-    function mostrarMensaje(mensaje, tipo) {
-      // Remover mensajes existentes
-      document.querySelectorAll('.mensaje-dinamico').forEach(el => el.remove());
-      const tipoClases = {
-        'success': 'bg-green-100 text-green-700 border border-green-300',
-        'error': 'bg-red-100 text-red-700 border border-red-300',
-        'info': 'bg-blue-100 text-blue-700 border border-blue-300'
-      };
-      const mensajeEl = document.createElement('div');
-      mensajeEl.className = `mensaje-dinamico fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg ${tipoClases[tipo] || tipoClases.info}`;
-      mensajeEl.innerHTML = `<p>${mensaje}</p>`;
-      document.body.appendChild(mensajeEl);
-      setTimeout(() => {
-        mensajeEl.style.opacity = '0';
-        setTimeout(() => mensajeEl.remove(), 300);
-      }, 3000);
-    }
+      // Función para mostrar mensajes
+      function mostrarMensaje(mensaje, tipo) {
+        // Remover mensajes existentes
+        document
+          .querySelectorAll(".mensaje-dinamico")
+          .forEach((el) => el.remove());
+        const tipoClases = {
+          success: "bg-green-100 text-green-700 border border-green-300",
+          error: "bg-red-100 text-red-700 border border-red-300",
+          info: "bg-blue-100 text-blue-700 border border-blue-300",
+        };
+        const mensajeEl = document.createElement("div");
+        mensajeEl.className = `mensaje-dinamico fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg ${
+          tipoClases[tipo] || tipoClases.info
+        }`;
+        mensajeEl.innerHTML = `<p>${mensaje}</p>`;
+        document.body.appendChild(mensajeEl);
+        setTimeout(() => {
+          mensajeEl.style.opacity = "0";
+          setTimeout(() => mensajeEl.remove(), 300);
+        }, 3000);
+      }
 
+      async function buscar() {
+        const query = document.getElementById("buscador").value.trim();
+        const obrasTrack = document.getElementById("obras-track");
+        const artistasTrack = document.getElementById("artistas-track");
+        const obrasContainer = obrasTrack.closest(".obras-container");
+        const artistasContainer = artistasTrack.closest(".artistas-container");
 
-        async function buscar() {
-            const query = document.getElementById("buscador").value.trim();
-            const obrasTrack = document.getElementById("obras-track");
-            const artistasTrack = document.getElementById("artistas-track");
-            const obrasContainer = obrasTrack.closest(".obras-container");
-            const artistasContainer = artistasTrack.closest(".artistas-container");
-
-            // Limpia carruseles si no hay búsqueda
-            if (query.length === 0) {
-                obrasTrack.innerHTML = "";
-                artistasTrack.innerHTML = "";
-                obrasContainer.style.display = "none";
-                artistasContainer.style.display = "none";
-                return;
-            }
-
-            let springDir;
-            try {
-                const response = await fetch(`/spring/busqueda?query=${encodeURIComponent(query)}`);
-                if (!response.ok) throw new Error();
-
-                const data = await response.json();
-
-                // Construir carrusel de obras
-                if (data.obras?.length) {
-                    springDir = '/spring';
-                    obrasTrack.innerHTML = data.obras.map(o => `
-                    <a href="/spring/obra/${o.id}"
-                       class="carousel-item group cursor-pointer transition-transform duration-300 transform hover:scale-105 relative rounded-xl overflow-hidden bg-cover bg-center"
-                       style="background-image: url('${springDir}${o.imagenUrl}');">
-                        <div class="image-overlay absolute inset-0 bg-black/40 flex flex-col justify-end p-3">
-                            <p class="text-sm font-semibold text-white">${o.titulo}</p>
-                            <p class="text-xs text-gray-300">${o.autor}</p>
-                        </div>
-                    </a>
-            `).join("");
-                    obrasContainer.style.display = "";
-                } else {
-                    //obrasTrack.innerHTML = "<p class='text-gray-400 text-sm p-2'>No se encontraron obras.</p>";
-                    obrasTrack.innerHTML = "";
-                    obrasContainer.style.display = "none";
-                }
-
-                // Construir carrusel de artistas
-                if (data.artistas?.length) {
-                    artistasTrack.innerHTML = data.artistas.map(a => `
-                <a href="/spring/perfilArtista/ver/${a.id}"
-                   class="carousel-item cursor-pointer transition-transform duration-300 transform hover:scale-105 relative rounded-xl overflow-hidden bg-cover bg-center"
-                   style="background-image: url('${a.urlFotoPerfil || '/img/default-artista.jpg'}');">
-
-                    <!-- Overlay siempre visible -->
-                    <div class="absolute inset-0 bg-black/40 flex flex-col justify-end p-3">
-                        <p class="text-sm font-semibold text-white">${a.nombre}</p>
-                        <p class="text-xs text-gray-300 line-clamp-2">${a.biografia || ''}</p>
-                    </div>
-                </a>
-            `).join("");
-                    artistasContainer.style.display = "";
-                } else {
-                    artistasTrack.innerHTML = "";
-                    artistasContainer.style.display = "none";
-                }
-
-            } catch (error) {
-                obrasTrack.innerHTML = "";
-                artistasTrack.innerHTML = "";
-                obrasContainer.style.display = "none";
-                artistasContainer.style.display = "none";
-                console.error("Error en la búsqueda:", error);
-            }
+        // Limpia carruseles si no hay búsqueda
+        if (query.length === 0) {
+          obrasTrack.innerHTML = "";
+          artistasTrack.innerHTML = "";
+          obrasContainer.style.display = "none";
+          artistasContainer.style.display = "none";
+          return;
         }
 
+        let springDir;
+        try {
+          const response = await fetch(
+            `/spring/busqueda?query=${encodeURIComponent(query)}`
+          );
+          if (!response.ok) throw new Error();
+
+          const data = await response.json();
+
+          // Construir carrusel de obras
+          if (data.obras?.length) {
+            // springDir = "/spring";
+            obrasTrack.innerHTML = data.obras
+              .map(
+                (o) => `
+                    <a href="/spring/obra/${o.id}"
+                       class="carousel-item group cursor-pointer transition-transform duration-300 transform hover:scale-105 relative rounded-xl overflow-hidden bg-cover bg-center"
+                       style="background-image: url('${o.imagenUrl.startsWith('http') ? o.imagenUrl : springDir + o.imagenUrl}');">
+                        <div class="image-overlay absolute inset-0 bg-black/40 flex flex-col justify-end p-3">
+                            <p class="text-sm font-semibold text-white">${o.titulo}</p>
+                            <p class="text-xs text-gray-300">${o.artista && o.artista.nombre ? o.artista.nombre : o.autor || 'Artista desconocido'}</p>
+                        </div>
+                    </a>
+            `
+              )
+              .join("");
+            obrasContainer.style.display = "";
+          } else {
+            //obrasTrack.innerHTML = "<p class='text-gray-400 text-sm p-2'>No se encontraron obras.</p>";
+            obrasTrack.innerHTML = "";
+            obrasContainer.style.display = "none";
+          }
+
+          // Construir carrusel de artistas
+          if (data.artistas?.length) {
+            artistasTrack.innerHTML = data.artistas
+              .map(
+                (a) => `
+                    <a href="/spring/perfilArtista/ver/${a.id}"
+                       class="carousel-item group cursor-pointer transition-transform duration-300 transform hover:scale-105 relative rounded-xl overflow-hidden bg-cover bg-center"
+                       style="background-image: url('${a.urlFotoPerfil && a.urlFotoPerfil.startsWith('http') ? a.urlFotoPerfil : '/spring' + (a.urlFotoPerfil || '/img/default-artista.jpg')}');">
+                        <div class="image-overlay absolute inset-0 bg-black/40 flex flex-col justify-end p-3">
+                            <p class="text-sm font-semibold text-white">${a.nombre}</p>
+                            <p class="text-xs text-gray-300">${a.biografia || 'Sin biografía'}</p>
+                        </div>
+                    </a>
+            `
+              )
+              .join("");
+            artistasContainer.style.display = "";
+          } else {
+            artistasTrack.innerHTML = "";
+            artistasContainer.style.display = "none";
+          }
+        } catch (error) {
+          obrasTrack.innerHTML = "";
+          artistasTrack.innerHTML = "";
+          obrasContainer.style.display = "none";
+          artistasContainer.style.display = "none";
+          console.error("Error en la búsqueda:", error);
+        }
+      }
     </script>
   </body>
 </html>
