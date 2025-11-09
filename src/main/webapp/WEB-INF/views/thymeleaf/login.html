@@ -1,48 +1,71 @@
 <!DOCTYPE HTML>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org" class="h-full bg-white">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>Login</title>
+    <title>Inicia Sesión | ArtRoom</title>
 
-    <!-- Boostrap core css -->
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
-
-    <!-- custom style -->
-    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <script src="https://cdn.tailwindcss.com"></script>
 
 </head>
 
-<body>
+<body class="h-full">
 
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-</nav>
-
-<main role="main" class="container">
-
-    <div class = "container">
-        <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-            <form action="#" th:action="@{/validar-login}" method="POST" th:object="${datosLogin}">
-                <h3 class="form-signin-heading">ArtRoom</h3>
-                <hr class="colorgraph"><br>
-
-                <input th:field="*{email}" id="email" type="email" class="form-control" required/>
-                <input th:field="*{password}" type="password" id="password" class="form-control" required/>
-
-                <button id="btn-login" class="btn btn-lg btn-primary btn-block" Type="Submit" disabled>Login</button>
-
-                <p th:if="${error != null}" class="alert alert-danger" th:text="'Error ' + ${error}">
-                </p>
-            </form>
-            <a id="btn-register" href="nuevo-usuario">Registrarme</a>
-        </div>
+<div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+    <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+        <h1 class="mt-10 text-center text-4xl font-bold tracking-tight text-indigo-600">ArtRoom</h1>
+        <h2 class="mt-5 text-center text-2xl/9 font-bold tracking-tight text-gray-900">Inicia sesión en tu cuenta</h2>
     </div>
-</main>
-<!-- /.container -->
 
-<!-- Boostrap core js -->
-<script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
-<script type="module" th:src="@{js/login.js}"></script>
+    <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <form action="#" th:action="@{/validar-login}" method="POST" th:object="${datosLogin}" class="space-y-6">
+            <div>
+                <label for="email" class="block text-sm/6 font-medium text-gray-900">Dirección de Correo Electrónico</label>
+                <div class="mt-2">
+                    <!--<input th:field="*{email}" id="email" type="email" name="email" required autocomplete="email" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" /> -->
+                    <input
+                            th:field="*{email}"
+                            id="email"
+                            type="email"
+                            name="email"
+                            required
+                            autocomplete="email"
+                            class="block w-full rounded-md border border-gray-300 bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                    />
+                </div>
+            </div>
+
+            <div>
+                <div class="flex items-center justify-between">
+                    <label for="password" class="block text-sm/6 font-medium text-gray-900">Contraseña</label>
+                </div>
+                <div class="mt-2">
+                    <input
+                            th:field="*{password}"
+                            id="password"
+                            type="password"
+                            name="password"
+                            required autocomplete="current-password"
+                            class="block w-full rounded-md border border-gray-300 bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
+                </div>
+            </div>
+
+            <div>
+                <button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Iniciar sesión</button>
+            </div>
+
+            <p th:if="${error != null}" class="alert alert-danger text-center text-red-600 text-sm" th:text="'Error: ' + ${error}">
+            </p>
+        </form>
+
+        <p class="mt-10 text-center text-sm/6 text-gray-500">
+            ¿No tienes una cuenta?
+            <a th:href="@{/nuevo-usuario}" class="font-semibold text-indigo-600 hover:text-indigo-500">Regístrate</a>
+        </p>
+    </div>
+</div>
+
+<script type="module" th:src="@{js/login.js}"></script> -->
 </body>
 </html>
