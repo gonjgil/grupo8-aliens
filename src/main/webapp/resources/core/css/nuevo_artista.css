@@ -54,7 +54,7 @@ label {
 
 .custom-file-upload {
   display: inline-block;
-  background-color: #4a90e2;
+  background-color: #6c63ff;
   color: white;
   padding: 8px 16px;
   border-radius: 8px;
@@ -66,7 +66,8 @@ label {
 }
 
 .custom-file-upload:hover {
-  background-color: #357ABD;
+  background-color: #5848e4;
+  transform: scale(1.02);
 }
 
 
