@@ -16,7 +16,6 @@ import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.enums.EstadoPago;
 import com.tallerwebi.dominio.enums.Formato;
 import com.tallerwebi.dominio.repositorios.RepositorioCarrito;
-import com.tallerwebi.dominio.repositorios.RepositorioFormatoObra;
 import com.tallerwebi.dominio.repositorios.RepositorioObra;
 import com.tallerwebi.dominio.repositorios.RepositorioCompraHecha;
 import com.tallerwebi.dominio.repositorios.RepositorioUsuario;
@@ -48,7 +47,6 @@ public class RepositorioCompraHechaImplTest {
 
     private RepositorioObra repositorioObra;
     private RepositorioUsuario repositorioUsuario;
-    private RepositorioFormatoObra repositorioFormatoObra;
 
     @BeforeEach
     void setUp() {
@@ -56,7 +54,6 @@ public class RepositorioCompraHechaImplTest {
         this.repositorioCarrito = new RepositorioCarritoImpl(this.sessionFactory);
         this.repositorioObra = new RepositorioObraImpl(this.sessionFactory);
         this.repositorioUsuario = new RepositorioUsuarioImpl(this.sessionFactory);
-        this.repositorioFormatoObra = new RepositorioFormatoObraImpl(this.sessionFactory);
     }
 
 

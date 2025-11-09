@@ -13,7 +13,6 @@ import com.tallerwebi.dominio.enums.Categoria;
 public class ObraDto {
     private Long id;
     private String titulo;
-    private String autor;
     private String imagenUrl;
     private String descripcion;
     private Integer stock;
@@ -32,7 +31,6 @@ public class ObraDto {
         this.stock = obra.getStock();
         this.usuariosQueDieronLike = obra.getUsuariosQueDieronLike() != null ? obra.getUsuariosQueDieronLike() : new HashSet<>();
         this.categorias = obra.getCategorias();
-        this.autor = obra.getAutor();
         if (obra.getFormatos() != null) {
             this.formatos = obra.getFormatos().stream()
                 .map(FormatoObraDto::new)
@@ -47,9 +45,6 @@ public class ObraDto {
 
     public String getTitulo() { return titulo; }
     public void setTitulo(String titulo) { this.titulo = titulo; }
-
-    public String getAutor() { return autor; }
-    public void setAutor(String autor) { this.autor = autor; }
 
     public String getImagenUrl() { return imagenUrl; }
     public void setImagenUrl(String imagenUrl) { this.imagenUrl = imagenUrl; }
@@ -82,7 +77,6 @@ public class ObraDto {
         obra.setDescripcion(this.descripcion);
         obra.setStock(this.stock);
         obra.setImagenUrl(this.imagenUrl);
-        obra.setAutor(this.autor);
         if (this.categorias != null && !this.categorias.isEmpty()) {
             obra.setCategorias(new HashSet<>(this.categorias));
         }
@@ -105,11 +99,11 @@ public class ObraDto {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         ObraDto obraDto = (ObraDto) o;
-        return Objects.equals(id, obraDto.id) && Objects.equals(titulo, obraDto.titulo) && Objects.equals(autor, obraDto.autor);
+        return Objects.equals(id, obraDto.id) && Objects.equals(titulo, obraDto.titulo);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, titulo, autor);
+        return Objects.hash(id, titulo);
     }
 }

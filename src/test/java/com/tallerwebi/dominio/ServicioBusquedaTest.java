@@ -153,15 +153,20 @@ public class ServicioBusquedaTest {
         Obra obra2 = new Obra();
         Obra obra3 = new Obra();
 
-        obra1.setAutor("Autor 1");
-        obra2.setAutor("Autor 1");
-        obra3.setAutor("Autor 2");
+        Artista autor1 = new Artista();
+        autor1.setNombre("Autor 1");
+        Artista autor2 = new Artista();
+        autor2.setNombre("Autor 2");
+
+        obra1.setArtista(autor1);
+        obra2.setArtista(autor1);
+        obra3.setArtista(autor2);
 
         when(repositorioObra.buscarPorString("Autor 1")).thenReturn(List.of(obra1,obra2));
         List<Obra> obras = servicioBusqueda.buscarObrasPorString("Autor 1");
         assert(obras.size() == 2);
-        assert(obras.get(0).getAutor().equals("Autor 1"));
-        assert(obras.get(1).getAutor().equals("Autor 1"));
+        assert(obras.get(0).getArtista().getNombre().equals("Autor 1"));
+        assert(obras.get(1).getArtista().getNombre().equals("Autor 1"));
     }
 
     // @Test
