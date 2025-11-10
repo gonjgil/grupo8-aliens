@@ -2,22 +2,18 @@ package com.tallerwebi.dominio;
 
 import com.mercadopago.client.payment.PaymentClient;
 import com.mercadopago.resources.payment.Payment;
-import com.tallerwebi.dominio.entidades.Carrito;
-import com.tallerwebi.dominio.entidades.Obra;
-import com.tallerwebi.dominio.entidades.CompraHecha;
-import com.tallerwebi.dominio.entidades.Usuario;
+import com.tallerwebi.dominio.entidades.*;
 import com.tallerwebi.dominio.enums.EstadoCarrito;
+import com.tallerwebi.dominio.enums.Formato;
 import com.tallerwebi.dominio.excepcion.CarritoNoEncontradoException;
 import com.tallerwebi.dominio.excepcion.CarritoVacioException;
 import com.tallerwebi.dominio.repositorios.RepositorioCarrito;
 import com.tallerwebi.dominio.repositorios.RepositorioCompraHecha;
 import com.tallerwebi.dominio.servicioImpl.ServicioCompraHechaImpl;
-import com.tallerwebi.presentacion.dto.CompraHechaDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
-import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -44,25 +40,29 @@ public class ServicioCompraHechaTest {
     }
 
     @Test
-    public void deberiaCrearCompraHechaAPartirDeCarritoCorrectamente() throws CarritoVacioException, CarritoNoEncontradoException {
+    public void deberiaCrearResumenCompraAPartirDeCarritoCorrectamente() throws CarritoVacioException, CarritoNoEncontradoException {
         Usuario usuario = new Usuario();
         Carrito carrito = new Carrito(usuario);
 
         Obra obra1 = new Obra();
         Obra obra2 = new Obra();
 
-        obra1.setPrecio(100.0);
         obra1.setId(1L);
-        carrito.agregarItem(obra1);
-        obra2.setPrecio(100.0);
         obra2.setId(1L);
-        carrito.agregarItem(obra2);
         carrito.setId(1L);
+        FormatoObra formatoObra1 = new FormatoObra(obra1, Formato.ORIGINAL, 2001.0, 5);
+        obra1.agregarFormato(formatoObra1);
+
+        FormatoObra formatoObra2 = new FormatoObra(obra2, Formato.ORIGINAL, 2001.0, 5);
+        obra2.agregarFormato(formatoObra2);
+
+        carrito.agregarItem(obra1, Formato.ORIGINAL, 2001.0);
+        carrito.agregarItem(obra2, Formato.ORIGINAL, 2001.0);
         carrito.setEstado(EstadoCarrito.FINALIZADO);
 
         when(repositorioCarrito.obtenerPorId(1L)).thenReturn(carrito);
 
-        CompraHecha ordenCreada = this.servicioOrdenCompra.crearCompraHechaAPartirDeCarrito(carrito);
+        CompraHecha ordenCreada = this.servicioOrdenCompra.crearResumenCompraAPartirDeCarrito(carrito);
 
         assertThat(ordenCreada.getUsuario(), is(carrito.getUsuario()));
         assertThat(ordenCreada.getPrecioFinal(), is(carrito.getTotal()));
@@ -77,18 +77,23 @@ public class ServicioCompraHechaTest {
         Obra obra1 = new Obra();
         Obra obra2 = new Obra();
 
-        obra1.setPrecio(100.0);
         obra1.setId(1L);
-        carrito.agregarItem(obra1);
-        obra2.setPrecio(100.0);
         obra2.setId(1L);
-        carrito.agregarItem(obra2);
         carrito.setId(1L);
+        FormatoObra formatoObra1 = new FormatoObra(obra1, Formato.ORIGINAL, 2001.0, 5);
+        obra1.agregarFormato(formatoObra1);
+
+        FormatoObra formatoObra2 = new FormatoObra(obra2, Formato.ORIGINAL, 2001.0, 5);
+        obra2.agregarFormato(formatoObra2);
+
+        carrito.agregarItem(obra1, Formato.ORIGINAL, 2001.0);
+        carrito.agregarItem(obra2, Formato.ORIGINAL, 2001.0);
+
         carrito.setEstado(EstadoCarrito.FINALIZADO);
 
         when(repositorioCarrito.obtenerPorId(1L)).thenReturn(carrito);
 
-        CompraHecha ordenCreada = this.servicioOrdenCompra.crearCompraHechaAPartirDeCarrito(carrito);
+        CompraHecha ordenCreada = this.servicioOrdenCompra.crearResumenCompraAPartirDeCarrito(carrito);
 
         assertThat(ordenCreada.getItems().size(), is(carrito.getItems().size()));
         assertThat(ordenCreada.getCarrito().buscarItemPorObra(obra1), is(carrito.buscarItemPorObra(obra1)));
@@ -107,7 +112,7 @@ public class ServicioCompraHechaTest {
         when(repositorioCarrito.obtenerPorId(1L)).thenReturn(carrito);
 
         try {
-            this.servicioOrdenCompra.crearCompraHechaAPartirDeCarrito(carrito);
+            this.servicioOrdenCompra.crearResumenCompraAPartirDeCarrito(carrito);
             fail("Se esperaba CarritoVacioException pero no fue lanzada");
         } catch (CarritoVacioException | CarritoNoEncontradoException e) {
 

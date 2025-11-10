@@ -38,22 +38,22 @@ public class ServicioCompraHechaImpl implements ServicioCompraHecha {
     }
 
     @Override
-    public CompraHecha crearCompraHechaAPartirDeCarrito(Carrito carrito) throws CarritoVacioException, CarritoNoEncontradoException {
-        CompraHecha ordenCreada = new CompraHecha();
+    public CompraHecha crearResumenCompraAPartirDeCarrito(Carrito carrito) throws CarritoVacioException, CarritoNoEncontradoException {
+        CompraHecha resumenCreado = new CompraHecha();
         this.validarCarrito(carrito);
 
         if (repositorioCarrito.obtenerPorId(carrito.getId()) != null && carrito.getEstado() == EstadoCarrito.FINALIZADO) {
             List<ItemCompra> itemsConvertidos = this.convertirItemCarritoAItemOrden(carrito.getItems());
 
-            ordenCreada.setCarrito(carrito);
-            ordenCreada.setUsuario(carrito.getUsuario());
-            ordenCreada.setItems(itemsConvertidos);
-            ordenCreada.setPrecioFinal(carrito.getTotal());
+            resumenCreado.setCarrito(carrito);
+            resumenCreado.setUsuario(carrito.getUsuario());
+            resumenCreado.setItems(itemsConvertidos);
+            resumenCreado.setPrecioFinal(carrito.getTotal());
 
-            repositorioCompraHecha.guardar(ordenCreada);
+            repositorioCompraHecha.guardar(resumenCreado);
         }
 
-        return ordenCreada;
+        return resumenCreado;
     }
 
     private void validarCarrito(Carrito carrito) throws CarritoVacioException, CarritoNoEncontradoException {
@@ -81,25 +81,21 @@ public class ServicioCompraHechaImpl implements ServicioCompraHecha {
 
 
     @Override
-    public List<CompraHechaDto> obtenerComprasPorUsuario(Usuario usuario) {
+    public List<CompraHecha> obtenerComprasPorUsuario(Usuario usuario) {
         List<CompraHecha> compras = repositorioCompraHecha.obtenerTodasPorUsuario(usuario);
-        List<CompraHechaDto> comprasDto = new ArrayList<>();
-        for (CompraHecha compra : compras) {
-            comprasDto.add(new CompraHechaDto(compra));
+        if(compras == null){
+            return null;
         }
-        return comprasDto;
+        return compras;
     }
 
     @Override
-    public List<ItemCompraDto> obtenerItems(Long ordenId) {
-        CompraHecha orden = repositorioCompraHecha.obtenerPorId(ordenId);
-
-        List<ItemCompraDto> itemsEnOrden = new ArrayList<>();
-        for (ItemCompra item : orden.getItems()) {
-            itemsEnOrden.add(new ItemCompraDto(item));
+    public List<ItemCompra> obtenerItems(Long ordenId) {
+        CompraHecha compra = repositorioCompraHecha.obtenerPorId(ordenId);
+        if(compra == null){
+            return null;
         }
-
-        return itemsEnOrden;
+        return compra.getItems();
     }
 
 

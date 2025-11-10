@@ -24,98 +24,92 @@ const orders = [
     // ... más órdenes
 ];
 
-document.addEventListener('DOMContentLoaded', function() {
-    const modal = document.getElementById('orderDetail');
+document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('compraDetail');
+    const modalInstance = new bootstrap.Modal(modal);
 
-    // Agregar event listener a todas las tarjetas de orden
     document.querySelectorAll('.order-card').forEach(card => {
-        card.addEventListener('click', function() {
-            const orderId = this.dataset.orderId;
-            const order = orders.find(o => o.id === orderId);
-            updateModalContent(order);
+        card.addEventListener('click', async () => {
+            const compraId = card.dataset.orderId;
+
+            try {
+                const response = await fetch(`/compras/detalle/${compraId}`);
+
+                if (response.status === 401) {
+                    window.location.href = "/login";
+                    return;
+                }
+                if (!response.ok) throw new Error('Error al obtener la compra');
+
+                const compra = await response.json();
+
+                document.getElementById('compra-id').textContent = compra.id;
+                document.getElementById('compra-fecha').textContent = compra.fechaYHora;
+//                document.getElementById('compra-estado').textContent = compra.estado;
+                document.getElementById('compra-total').textContent = `$${compra.total.toLocaleString()}`;
+                document.getElementById('compra-total-footer').textContent = `$${compra.total.toLocaleString()}`;
+
+                // Productos
+                const tbody = document.getElementById('compra-items');
+                tbody.innerHTML = '';
+                for (const item of compra.items) {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${item.obraTitulo}</td>
+                        <td class="text-center">${item.cantidad}</td>
+                        <td class="text-end">$${item.obraPrecio.toLocaleString()}</td>
+                        <td class="text-end">$${item.subtotal.toLocaleString()}</td>
+                    `;
+                    tbody.appendChild(row);
+                }
+
+                modalInstance.show();
+            } catch (error) {
+                console.error('Error al cargar el detalle:', error);
+                alert('No se pudo cargar el detalle de la compra.');
+            }
         });
     });
+});
 
-    function updateModalContent(order) {
-        // Actualizar título del modal
-        modal.querySelector('.modal-title').textContent = `Detalle de Orden #${order.id}`;
 
-        // Actualizar contenido del modal
-        const modalBody = modal.querySelector('.modal-body');
-
-        // Generar HTML para los productos
-        const productsHTML = order.items.map(item => `
-            <tr>
-                <td>${item.name}</td>
-                <td class="text-center">${item.quantity}</td>
-                <td class="text-end">$${item.price.toLocaleString()}</td>
-                <td class="text-end">$${(item.quantity * item.price).toLocaleString()}</td>
-            </tr>
-        `).join('');
-
-        modalBody.innerHTML = `
-            <div class="row g-3">
-                <div class="col-md-12">
-                    <div class="table-responsive">
-                        <table class="table table-products">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Producto</th>
-                                    <th class="text-center">Cantidad</th>
-                                    <th class="text-end">Precio unitario</th>
-                                    <th class="text-end">Subtotal</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${productsHTML}
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th colspan="3" class="text-end">Total</th>
-                                    <th class="text-end">$${order.total.toLocaleString()}</th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="summary-box">
-                        <h6 class="mb-1">💳 Información de pago</h6>
-                        <div class="small-muted mb-2">Método: <strong>${order.payment.method}</strong></div>
-                        <div class="mb-1">Estado del pago: <span class="status-dot status-${order.payment.status}"></span><strong>${order.payment.status}</strong></div>
-                        <div class="small-muted">Fecha de pago: ${order.payment.date}</div>
-                        <div class="small-muted">ID de transacción: ${order.payment.transactionId}</div>
-                    </div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="summary-box">
-                        <h6 class="mb-1">🚚 Envío</h6>
-                        <div class="small-muted mb-1">Dirección: ${order.shipping.address}</div>
-                        <div class="small-muted mb-1">Método: ${order.shipping.method}</div>
-                        <div>Estado: <strong>${order.shipping.status}</strong></div>
-                        <div class="small-muted">Número de seguimiento: ${order.shipping.tracking}</div>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
+            //     <div class="col-md-6">
+            //         <div class="summary-box">
+            //             <h6 class="mb-1">💳 Información de pago</h6>
+            //             <div class="small-muted mb-2">Método: <strong>${order.payment.method}</strong></div>
+            //             <div class="mb-1">Estado del pago: <span class="status-dot status-${order.payment.status}"></span><strong>${order.payment.status}</strong></div>
+            //             <div class="small-muted">Fecha de pago: ${order.payment.date}</div>
+            //             <div class="small-muted">ID de transacción: ${order.payment.transactionId}</div>
+            //         </div>
+            //     </div>
+            //
+            //     <div class="col-md-6">
+            //         <div class="summary-box">
+            //             <h6 class="mb-1">🚚 Envío</h6>
+            //             <div class="small-muted mb-1">Dirección: ${order.shipping.address}</div>
+            //             <div class="small-muted mb-1">Método: ${order.shipping.method}</div>
+            //             <div>Estado: <strong>${order.shipping.status}</strong></div>
+            //             <div class="small-muted">Número de seguimiento: ${order.shipping.tracking}</div>
+            //         </div>
+            //     </div>
+            // </div>
+    //     `;
+    // }
 
     // Handle status filter
-    document.querySelectorAll('.dropdown-item').forEach(item => {
-        item.addEventListener('click', function(e) {
-            e.preventDefault();
-            const status = this.textContent.toLowerCase();
-            filterOrders(status);
-        });
-    });
-
-    function filterOrders(status) {
-        // Implement order filtering logic here
-        console.log('Filtering by status:', status);
-    }
-});
+//     document.querySelectorAll('.dropdown-item').forEach(item => {
+//         item.addEventListener('click', function(e) {
+//             e.preventDefault();
+//             const status = this.textContent.toLowerCase();
+//             filterOrders(status);
+//         });
+//     });
+//
+//     function filterOrders(status) {
+//         // Implement order filtering logic here
+//         console.log('Filtering by status:', status);
+//     }
+// });
 // This file contains the JavaScript functionality for the purchase order.
 // It handles the toggling between client and admin views, as well as the demo actions for updating the order status.
 
