@@ -5,12 +5,16 @@ import com.tallerwebi.dominio.ServicioCloudinary;
 import com.tallerwebi.dominio.ServicioGaleria;
 import com.tallerwebi.dominio.ServicioPerfilArtista;
 import com.tallerwebi.dominio.entidades.Artista;
+import com.tallerwebi.dominio.entidades.FormatoObra;
 import com.tallerwebi.dominio.entidades.Obra;
 import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.enums.Categoria;
+import com.tallerwebi.dominio.enums.Formato;
 import com.tallerwebi.dominio.enums.TipoImagen;
 import com.tallerwebi.dominio.excepcion.NoExisteArtista;
 import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
+import com.tallerwebi.dominio.repositorios.RepositorioObra;
+import com.tallerwebi.dominio.servicioImpl.ServicioGaleriaImpl;
 import com.tallerwebi.presentacion.dto.ObraDto;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -20,15 +24,20 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import org.hsqldb.lib.Collection;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ControladorObraTest {
 
@@ -156,12 +165,34 @@ public class ControladorObraTest {
 
         String ret = controladorObra.crearObra(obraDto, archivo, request);
 
-//        assertThat(modelAndView.getViewName(), is(equalTo("redirect:/obra/" + obraGuardada.getId())));
-//        assertThat(modelAndView.getModel().get("usuario"), is(equalTo(usuario)));
-//
-//        verify(servicioPerfilArtista).obtenerArtistaPorUsuario(usuario);
-//        verify(servicioCloudinary).subirImagen(archivo, TipoImagen.OBRA);
-//        verify(servicioGaleria).guardar(any(Obra.class), eq(artista), anyString());
+        assertThat(ret, is(equalTo("redirect:/obra/" + obraGuardada.getId())));
+    }
+
+    @Test
+    public void queSePuedaGuardarUnNuevoFormatoParaUnaObra() {
+        ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
+        ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
+        ServicioPerfilArtista servicioPerfilArtista = mock(ServicioPerfilArtista.class);
+        ServicioCloudinary servicioCloudinary = mock(ServicioCloudinary.class);
+
+        ControladorObra controladorObra = new ControladorObra(
+                servicioGaleria,
+                servicioCarrito,
+                servicioPerfilArtista,
+                servicioCloudinary
+        );
+
+        Long obraId = 1L;
+        Formato formato = Formato.DIGITAL;
+        Double precio = 1500.0;
+        Integer stock = 10;
+
+        String resultado = controladorObra.agregarFormato(obraId, formato, precio, stock);
+
+        verify(servicioGaleria, times(1))
+                .agregarFormatoObra(obraId, formato, precio, stock);
+
+        assertThat(resultado, is("redirect:/obra/" + obraId));
     }
 
 

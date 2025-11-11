@@ -3,6 +3,8 @@ package com.tallerwebi.dominio.servicioImpl;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.tallerwebi.dominio.entidades.FormatoObra;
+import com.tallerwebi.dominio.enums.Formato;
 import com.tallerwebi.dominio.repositorios.RepositorioObra;
 import com.tallerwebi.dominio.ServicioGaleria;
 import com.tallerwebi.dominio.entidades.Artista;
@@ -159,6 +161,16 @@ public class ServicioGaleriaImpl implements ServicioGaleria {
         }
         obra.setArtista(artista);
         return repositorioObra.guardar(obra);
+    }
+
+    @Override
+    public void agregarFormatoObra(Long obraId, Formato formato, Double precio, Integer stock) {
+        Obra obra = repositorioObra.obtenerPorId(obraId);
+        if (obra != null) {
+            FormatoObra nuevoFormato = new FormatoObra(obra, formato, precio, stock);
+            obra.agregarFormato(nuevoFormato);
+            repositorioObra.guardar(obra);
+        }
     }
 
 }

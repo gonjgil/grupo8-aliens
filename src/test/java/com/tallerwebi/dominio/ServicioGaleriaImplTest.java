@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.enums.Formato;
 import com.tallerwebi.dominio.repositorios.RepositorioObra;
 import com.tallerwebi.dominio.servicioImpl.ServicioGaleriaImpl;
 import com.tallerwebi.dominio.entidades.Artista;
@@ -242,5 +243,30 @@ class ServicioGaleriaImplTest {
         assertThrows(NullPointerException.class, () -> {
             servicioGaleria.guardar(null, null, null);
         });
+    }
+
+    @Test
+    public void queSePuedaAgregarUnNuevoFormatoAUnaObra() {
+        RepositorioObra repositorioObra = mock(RepositorioObra.class);
+        ServicioGaleria servicioGaleria = new ServicioGaleriaImpl(repositorioObra);
+
+        Artista artista = new Artista();
+        artista.setId(1L);
+        artista.setNombre("Artista Existente");
+
+        Obra obra = new Obra();
+        obra.setId(1L);
+        obra.setTitulo("Obra Existente");
+        obra.setArtista(artista);
+
+        when(repositorioObra.obtenerPorId(1L)).thenReturn(obra);
+        when(repositorioObra.guardar(obra)).thenReturn(obra);
+
+        servicioGaleria.agregarFormatoObra(1L, Formato.DIGITAL, 150.0, 10);
+
+        Obra obraActualizada = servicioGaleria.obtenerPorId(1L);
+
+        assertThat(obraActualizada.getFormatos().size(), is(1));
+        assertThat(obraActualizada.getFormatos().iterator().next().getFormato(), is(Formato.DIGITAL));
     }
 }

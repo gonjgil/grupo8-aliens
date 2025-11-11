@@ -153,6 +153,46 @@
                  class="formato-selector p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
                 <p class="text-yellow-800">No hay formatos disponibles para esta obra en este momento.</p>
             </div>
+
+            <div th:if="${esArtistaDuenio == true}" class="mt-8 border-t pt-6">
+
+                <!-- Botón para mostrar/ocultar el formulario -->
+                <button id="toggle-formato-form"
+                        class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-md transition">
+                    Agregar Formato
+                </button>
+
+                <!-- Formulario oculto inicialmente -->
+                <form th:action="@{/obra/{id}/agregar-formato(id=${obra.id})}"
+                      method="post"
+                      id="formato-form"
+                      class="mt-4 p-4 border border-gray-300 rounded-md bg-gray-50 hidden">
+
+                    <!-- Select de Formatos -->
+                    <label class="block mb-2 font-medium text-gray-800">Formato</label>
+                    <select name="formato" class="w-full p-2 border rounded-md mb-4">
+                        <option th:each="f : ${T(tu.paquete.Formato).values()}"
+                                th:value="${f}"
+                                th:text="${f.descripcion}">
+                        </option>
+                    </select>
+
+                    <!-- Precio -->
+                    <label class="block mb-2 font-medium text-gray-800">Precio</label>
+                    <input type="number" step="0.01" name="precio" required
+                           class="w-full p-2 border rounded-md mb-4"/>
+
+                    <!-- Stock -->
+                    <label class="block mb-2 font-medium text-gray-800">Stock</label>
+                    <input type="number" name="stock" min="0" required
+                           class="w-full p-2 border rounded-md mb-6"/>
+
+                    <button type="submit"
+                            class="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded-md transition w-full">
+                        Guardar Formato
+                    </button>
+                </form>
+            </div>
         </div>
 
         <!-- <div class="obra-meta flex flex-col sm:flex-row justify-between items-center gap-4">
@@ -192,6 +232,7 @@
             </div>
         </div>
     </div>
+</main>
 
   <script th:inline="javascript">
     // Variables globales
@@ -429,6 +470,15 @@
       }, 3000);
     }
 
+    const toggleBtn = document.getElementById("toggle-formato-form");
+    const form = document.getElementById("formato-form");
+
+    toggleBtn.addEventListener("click", () => {
+        form.classList.toggle("hidden");
+    });
+
 </script>
 <script th:src="@{/js/obra.js}"></script>
+
+</body>
 </html>

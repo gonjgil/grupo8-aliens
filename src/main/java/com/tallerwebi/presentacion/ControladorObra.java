@@ -8,6 +8,7 @@ import com.tallerwebi.dominio.entidades.Artista;
 import com.tallerwebi.dominio.entidades.Obra;
 import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.enums.Categoria;
+import com.tallerwebi.dominio.enums.Formato;
 import com.tallerwebi.dominio.enums.TipoImagen;
 import com.tallerwebi.dominio.excepcion.NoExisteArtista;
 import com.tallerwebi.presentacion.dto.ObraDto;
@@ -49,6 +50,11 @@ public class ControladorObra {
         if (usuario != null) {
             Artista artistaUsuario = servicioPerfilArtista.obtenerArtistaPorUsuario(usuario);
             model.put("artistaUsuario", artistaUsuario);
+
+            if (artistaUsuario != null) {
+                boolean esArtistaDuenio = artistaUsuario.getUsuario().equals(usuario);
+                model.put("esArtistaDuenio", esArtistaDuenio);
+            }
         }
 
         try {
@@ -99,5 +105,16 @@ public class ControladorObra {
         } catch (NoExisteArtista e) {
             return "redirect:/galeria";
         }
+    }
+
+    @RequestMapping(path = "/obra/{id}/agregar-formato", method = RequestMethod.POST)
+    public String agregarFormato(
+            @PathVariable Long id,
+            @RequestParam Formato formato,
+            @RequestParam Double precio,
+            @RequestParam Integer stock) {
+
+        servicioGaleria.agregarFormatoObra(id, formato, precio, stock);
+        return "redirect:/obra/" + id;
     }
 }

@@ -6,6 +6,7 @@ import com.tallerwebi.dominio.entidades.Artista;
 import com.tallerwebi.dominio.entidades.Obra;
 import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.enums.Categoria;
+import com.tallerwebi.dominio.enums.Formato;
 
 public interface ServicioGaleria {
     List<Obra> obtener();
@@ -15,4 +16,5 @@ public interface ServicioGaleria {
     Obra obtenerPorId(Long id);
     List<Obra> obtenerObrasParaUsuario(Usuario usuario);
     Obra guardar(Obra obra, Artista artista, String urlImagen);
+    void agregarFormatoObra(Long obra, Formato formato, Double precio, Integer stock);
 }
