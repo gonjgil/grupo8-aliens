@@ -106,9 +106,12 @@
                     <button class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-200" type="submit">Vaciar carrito</button>
                 </form>
                 <div>
+                    <form th:action="@{/carrito/finalizar}" method="post">
                     <a th:href="@{/galeria}" class="border border-gray-900  text-gray-400 hover:bg-gray-400 hover:text-white font-semibold py-2 px-4 rounded transition duration-200">Seguir comprando</a>
                     <button id="finalizarCompraBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Finalizar compra</button>
+                    </form>
                 </div>
+
             </div>
         </div>
     </div>
