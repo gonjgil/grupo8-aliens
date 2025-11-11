@@ -1,23 +1,30 @@
 package com.tallerwebi.dominio.servicioImpl;
 
+import com.tallerwebi.dominio.entidades.Obra;
 import com.tallerwebi.dominio.repositorios.RepositorioArtista;
 import com.tallerwebi.dominio.ServicioPerfilArtista;
 import com.tallerwebi.dominio.entidades.Artista;
 import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.NoExisteArtista;
+import com.tallerwebi.dominio.repositorios.RepositorioObra;
+import com.tallerwebi.presentacion.dto.ObraDto;
 import com.tallerwebi.presentacion.dto.PerfilArtistaDTO;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service("servicioPerfilArtista")
 @Transactional
 public class ServicioPerfilArtistaImpl implements ServicioPerfilArtista {
 
     private RepositorioArtista repositorioArtista;
+    private RepositorioObra repositorioObra;
 
-    public ServicioPerfilArtistaImpl(RepositorioArtista repositorioArtista) {
+    public ServicioPerfilArtistaImpl(RepositorioArtista repositorioArtista, RepositorioObra repositorioObra) {
         this.repositorioArtista = repositorioArtista;
+        this.repositorioObra = repositorioObra;
     }
 
     @Override
@@ -104,6 +111,17 @@ public class ServicioPerfilArtistaImpl implements ServicioPerfilArtista {
     @Override
     public Artista obtenerArtistaPorUsuario(Usuario usuario) {
         return repositorioArtista.buscarArtistaPorUsuario(usuario);
+    }
+
+    @Override
+    public List<ObraDto> obtenerObrasPorArtista(Long idArtista) {
+        Artista artista = repositorioArtista.buscarArtistaPorId(idArtista);
+        List<Obra> obtenerObras =repositorioObra.obtenerPorAutor(artista.getNombre());
+        List<ObraDto> obrasDto =new ArrayList<>();
+        for (Obra obra : obtenerObras) {
+            obrasDto.add(new ObraDto(obra));
+        }
+        return obrasDto;
     }
 }
 

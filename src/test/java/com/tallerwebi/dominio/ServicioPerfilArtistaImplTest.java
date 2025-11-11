@@ -1,6 +1,7 @@
 package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.repositorios.RepositorioArtista;
+import com.tallerwebi.dominio.repositorios.RepositorioObra;
 import com.tallerwebi.dominio.servicioImpl.ServicioPerfilArtistaImpl;
 import com.tallerwebi.dominio.entidades.Artista;
 import com.tallerwebi.dominio.entidades.Usuario;
@@ -19,11 +20,13 @@ public class ServicioPerfilArtistaImplTest {
 
     private ServicioPerfilArtistaImpl servicioPerfilArtistaImpl;
     private RepositorioArtista repositorioArtistaMock;
+    private RepositorioObra repositorioObraMock;
 
     @BeforeEach
     public void init() {
         repositorioArtistaMock = mock(RepositorioArtista.class);
-        servicioPerfilArtistaImpl = new ServicioPerfilArtistaImpl(repositorioArtistaMock);
+        repositorioObraMock = mock(RepositorioObra.class);
+        servicioPerfilArtistaImpl = new ServicioPerfilArtistaImpl(repositorioArtistaMock, repositorioObraMock);
 
     }
 
