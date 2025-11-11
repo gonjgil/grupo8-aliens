@@ -41,32 +41,29 @@ public class RepositorioUsuarioImplTest {
     }
 
     @Test
-    public void queBusqueUsuarioPorEmailYPasswordYLoEncuentre() {
+    public void queBusqueUsuarioPorEmailYLoEncuentre() {
         Usuario usuario = new Usuario();
         usuario.setEmail("test@mail.com");
-        usuario.setPassword("123");
 
         when(session.createQuery(anyString(), eq(Usuario.class))).thenReturn(query);
         when(query.setParameter(eq("email"), eq("test@mail.com"))).thenReturn(query);
-        when(query.setParameter(eq("password"), eq("123"))).thenReturn(query);
         when(query.uniqueResult()).thenReturn(usuario);
 
-        Usuario resultado = repositorioUsuario.buscarUsuario("test@mail.com", "123");
+        Usuario resultado = repositorioUsuario.buscarUsuario("test@mail.com");
 
         assertThat(resultado, is(usuario));
         verify(session, times(1)).createQuery(contains("FROM Usuario u"), eq(Usuario.class));
         verify(query, times(1)).setParameter("email", "test@mail.com");
-        verify(query, times(1)).setParameter("password", "123");
         verify(query, times(1)).uniqueResult();
     }
 
     @Test
-    public void queBusqueUsuarioPorEmailYPasswordYNoEncuentre() {
+    public void queBusqueUsuarioPorEmailYNoEncuentre() {
         when(session.createQuery(anyString(), eq(Usuario.class))).thenReturn(query);
         when(query.setParameter(anyString(), any())).thenReturn(query);
         when(query.uniqueResult()).thenReturn(null);
 
-        Usuario resultado = repositorioUsuario.buscarUsuario("no@mail.com", "clave");
+        Usuario resultado = repositorioUsuario.buscarUsuario("no@mail.com");
 
         assertThat(resultado, is(nullValue()));
         verify(session, times(1)).createQuery(contains("FROM Usuario u"), eq(Usuario.class));
@@ -82,35 +79,6 @@ public class RepositorioUsuarioImplTest {
 
         verify(sessionFactory, times(1)).getCurrentSession();
         verify(session, times(1)).saveOrUpdate(usuario);
-    }
-
-    @Test
-    public void queBusqueUsuarioPorEmailYLoEncuentre() {
-        Usuario usuario = new Usuario();
-        usuario.setEmail("correo@mail.com");
-
-        when(session.createCriteria(Usuario.class)).thenReturn(criteria);
-        when(criteria.add(any())).thenReturn(criteria);
-        when(criteria.uniqueResult()).thenReturn(usuario);
-
-        Usuario resultado = repositorioUsuario.buscar("correo@mail.com");
-
-        assertThat(resultado, is(usuario));
-        verify(session, times(1)).createCriteria(Usuario.class);
-        verify(criteria, times(1)).add(any());
-        verify(criteria, times(1)).uniqueResult();
-    }
-
-    @Test
-    public void queBusqueUsuarioPorEmailYNoLoEncuentre() {
-        when(session.createCriteria(Usuario.class)).thenReturn(criteria);
-        when(criteria.add(any())).thenReturn(criteria);
-        when(criteria.uniqueResult()).thenReturn(null);
-
-        Usuario resultado = repositorioUsuario.buscar("noexiste@mail.com");
-
-        assertThat(resultado, is(nullValue()));
-        verify(criteria, times(1)).uniqueResult();
     }
 
     @Test

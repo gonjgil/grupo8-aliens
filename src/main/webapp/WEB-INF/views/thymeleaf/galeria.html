@@ -19,7 +19,7 @@
     />
     <link rel="stylesheet" th:href="@{/css/galeria.css}" />
   </head>
-  <body class="bg-gray-100 text-gray-800">
+  <body class="bg-gray-100 text-gray-800 flex flex-col min-h-screen">
     <!-- Header -->
     <header class="bg-white p-6 flex justify-between items-center shadow-md">
       <h1 class="text-4xl font-extrabold text-gray-900 tracking-wider">
@@ -79,7 +79,7 @@
       </div>
     </header>
 
-    <main class="container mx-auto py-12 px-4">
+    <main class="container mx-auto flex-grow py-12 px-4">
       <!-- Mock Payment Success Message -->
       <div
         th:if="${param.payment != null and param.payment[0] == 'mock-success'}"
@@ -282,6 +282,7 @@
       <p>&copy; 2025 Alines (Grupo 8)</p>
       <p class="integrantes">Gil - Solodujin - Landín - Santillan - Torrico</p>
     </footer>
+  </body>
 
     <script th:src="@{/js/galeria.js}"></script>
     <script>
@@ -473,5 +474,5 @@
         }
       }
     </script>
-  </body>
+
 </html>
