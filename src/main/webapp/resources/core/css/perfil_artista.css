@@ -92,3 +92,20 @@ body {
   background-color: #5848e4;
   transform: scale(1.03);
 }
+
+.btn-nueva-obra{
+  background-color: #9958b6;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.1s ease;
+}
+
+.btn-nueva-obra:hover {
+  background-color: #733390;
+  transform: scale(1.03);
+  color: white;
+}

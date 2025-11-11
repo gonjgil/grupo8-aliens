@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>ALIENS - Obra</title>
+    <title>Obra | ArtRoom</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
@@ -30,15 +30,15 @@
 </head>
 <body class="bg-gray-100 text-gray-800">
 <!-- Header -->
-<header class="bg-black p-6 flex justify-between items-center shadow-md">
-    <h1 class="text-4xl font-extrabold text-gray-200 tracking-wider">
+<header class="bg-white p-6 flex justify-between items-center shadow-md">
+    <h1 class="text-4xl font-extrabold text-gray-900 tracking-wider">
         <a th:href="@{/galeria}" class="hover:text-blue-600 transition-colors">
             ArtRoom
         </a>
     </h1>
 
-    <div class="flex items-center space-x-4 text-gray-200">
-        <div th:if="${usuario != null}" class="flex items-center space-x-4 text-xl">
+    <div class="flex items-center space-x-4">
+        <div th:if="${usuario != null}" class="flex items-center space-x-4">
             <div th:text=" 'Hola, ' + ${usuario.email}"></div>
 
             <a th:if="${artistaUsuario != null}"
@@ -52,27 +52,26 @@
                th:href="@{/perfilArtista/nuevo}"
                class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg"
                title="Crear nuevo artista">
-                <i class="bi bi-person-plus text-2xl"></i>
+                <i class="bi bi-person-plus"></i>
             </a>
 
             <a th:href="@{/carrito}"
-               class="hover:bg-gray-800 hover:outline hover:outline-2 hover:outline-white text-white font-bold py-2 px-4 rounded transition duration-300 shadow-lg"
-               title="Carrito de compras">
-                <i class="bi bi-bag text-2xl"></i>
+               class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg relative">
+                <i class="fas fa-shopping-cart"></i>
+                <span data-carrito-count 
+                      class="hidden absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
+                    0
+                </span>
             </a>
             <a th:href="@{/logout}"
-               class="hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300 shadow-lg"
-               title="Cerrar sesión">
-                <i class="bi bi-box-arrow-right text-2xl"></i>
+               class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg">
+                <i class="bi bi-box-arrow-right"></i>
             </a>
         </div>
-        <div th:unless="${usuario != null}">
-            <button
-                    th:onclick="|location.href='@{/login}'|"
-                    class="hover:outline hover:outline-2 hover:outline-white text-white font-bold py-2 px-6 rounded-lg transition duration-300 shadow-lg"
-            >
+        <div th:unless="${usuario != null}" class="flex items-center space-x-4">
+            <a th:href="@{/login}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg">
                 Iniciar Sesión
-            </button>
+            </a>
         </div>
     </div>
 
@@ -111,7 +110,7 @@
 
         <div class="obra-body flex-grow mb-8">
             <p class="obra-descripcion text-lg" th:text="${obra.descripcion}"></p>
-
+            
             <!-- Sección de Likes -->
             <div class="likes flex items-center gap-2 mt-6 mb-6">
                 <div th:if="${usuario != null}">
@@ -124,33 +123,33 @@
                 <span id="like-count" th:text="${obra.getCantidadLikes()}"></span>
                 <span class="likes-label text-gray-500 text-sm">personas dieron like</span>
             </div>
-
+            
             <!-- Selector de Formatos -->
             <div class="formato-selector" th:if="${obra.formatos != null and not #lists.isEmpty(obra.formatos)}">
                 <h3 class="text-lg font-semibold mb-3 text-gray-800">Formatos Disponibles:</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <div th:each="formato : ${obra.formatos}"
+                    <div th:each="formato : ${obra.formatos}" 
                          class="formato-option p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-blue-300 transition-all duration-200"
-                         th:attr="data-formato=${formato.formato},
-                                  data-precio=${formato.precio},
+                         th:attr="data-formato=${formato.formato}, 
+                                  data-precio=${formato.precio}, 
                                   data-disponible=${formato.disponible and formato.stock > 0},
                                   data-stock=${formato.stock}">
-
+                        
                         <div class="flex justify-between items-center">
                             <div>
                                 <h4 class="font-medium text-gray-900" th:text="${formato.formato.descripcion}"></h4>
                             </div>
                             <div class="text-right">
-                                <p class="text-lg font-bold text-green-600"
+                                <p class="text-lg font-bold text-green-600" 
                                    th:text="'$' + ${#numbers.formatDecimal(formato.precio, 1, 'COMMA', 2, 'POINT')}"></p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
+            
             <!-- Mensaje si no hay formatos -->
-            <div th:if="${obra.formatos == null or #lists.isEmpty(obra.formatos)}"
+            <div th:if="${obra.formatos == null or #lists.isEmpty(obra.formatos)}" 
                  class="formato-selector p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
                 <p class="text-yellow-800">No hay formatos disponibles para esta obra en este momento.</p>
             </div>
@@ -173,30 +172,28 @@
         </div>
       </div> -->
         <div class="obra-meta flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div class="flex gap-2">
+            <div th:if="${usuario != null}" id="botones-container" class="flex gap-2" style="display: none;">
                 <form id="form-agregar-carrito" th:action="@{/carrito/agregar}" method="post">
                     <input type="hidden" name="id" th:value="${obra.id}"/>
                     <input type="hidden" name="formato" id="formato-seleccionado" value=""/>
 
-                    <button id="btn-agregar-carrito" type="submit"
-                            class="btn bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full transition duration-300"
-                            disabled>
+                    <button id="btn-agregar-carrito" type="submit" 
+                            class="btn bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full transition duration-300">
                         <i class="fas fa-shopping-cart mr-2"></i>
-                        Selecciona formato
+                        Agregar al Carrito
                     </button>
                 </form>
-
+                
                 <button
                         class="btn btn-primary bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300"
-                        id="comprarBtn"
-                >
+                        id="comprarBtn">
                     Comprar Ahora
                 </button>
             </div>
-
         </div>
     </div>
 </main>
+</body>
 
   <script th:inline="javascript">
     // Variables globales
@@ -206,16 +203,11 @@
     // Inicialización
     document.addEventListener('DOMContentLoaded', function() {
       inicializarSelectorFormatos();
-
+      
       // Verificar si hay formatos disponibles
       const formatosDisponibles = document.querySelectorAll('.formato-option[data-disponible="true"]');
-
-      if (formatosDisponibles.length > 0) {
-        // Seleccionar el primer formato disponible por defecto
-        const primerFormato = formatosDisponibles[0];
-        seleccionarFormato(primerFormato);
-      } else {
-        // No hay formatos disponibles, deshabilitar botones
+      
+      if (formatosDisponibles.length == 0) {
         deshabilitarBotones();
       }
     });
@@ -223,15 +215,15 @@
     // Función para inicializar el selector de formatos
     function inicializarSelectorFormatos() {
       const formatoOptions = document.querySelectorAll('.formato-option');
-
+      
       formatoOptions.forEach(option => {
         const disponible = option.getAttribute('data-disponible') === 'true';
-
+        
         if (!disponible) {
           option.classList.add('disabled');
           return;
         }
-
+        
         option.addEventListener('click', function() {
           if (!this.classList.contains('disabled')) {
             seleccionarFormato(this);
@@ -242,22 +234,10 @@
 
     // Función para deshabilitar botones cuando no hay formatos
     function deshabilitarBotones() {
-      const btnAgregar = document.getElementById('btn-agregar-carrito');
-      const btnComprar = document.getElementById('comprarBtn');
-
-      if (btnAgregar) {
-        btnAgregar.disabled = true;
-        btnAgregar.classList.add('opacity-50', 'cursor-not-allowed');
-        btnAgregar.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i>Sin formatos disponibles';
-      }
-
-      if (btnComprar) {
-        btnComprar.classList.add('opacity-50', 'cursor-not-allowed');
-        btnComprar.innerHTML = 'Sin formatos disponibles';
-        btnComprar.onclick = function(e) {
-          e.preventDefault();
-          alert('No hay formatos disponibles para esta obra');
-        };
+      // Simplemente ocultar el contenedor de botones
+      const botonesContainer = document.getElementById('botones-container');
+      if (botonesContainer) {
+        botonesContainer.style.display = 'none';
       }
     }
 
@@ -267,29 +247,40 @@
       document.querySelectorAll('.formato-option').forEach(opt => {
         opt.classList.remove('selected');
       });
-
+      
       // Agregar selección actual
       elemento.classList.add('selected');
-
+      
       // Actualizar variables
       formatoSeleccionado = elemento.getAttribute('data-formato');
       precioActual = parseFloat(elemento.getAttribute('data-precio'));
-
+      
       // Actualizar campo hidden del formulario
       document.getElementById('formato-seleccionado').value = formatoSeleccionado;
-
-      // Habilitar/deshabilitar botón según disponibilidad
-      const btnAgregar = document.getElementById('btn-agregar-carrito');
+      
+      // Mostrar botones solo si formato está disponible
       const disponible = elemento.getAttribute('data-disponible') === 'true';
+      const botonesContainer = document.getElementById('botones-container');
+      
+      if (disponible && botonesContainer) {
+        botonesContainer.style.display = 'flex';
+      }
+    }
 
-      if (disponible && btnAgregar) {
-        btnAgregar.disabled = false;
-        btnAgregar.classList.remove('opacity-50', 'cursor-not-allowed');
-        btnAgregar.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i>Agregar al Carrito';
-      } else if (btnAgregar) {
-        btnAgregar.disabled = true;
-        btnAgregar.classList.add('opacity-50', 'cursor-not-allowed');
-        btnAgregar.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i>No disponible';
+    // Función para limpiar la selección después de agregar al carrito
+    function limpiarSeleccion() {
+      document.querySelectorAll('.formato-option').forEach(opt => {
+        opt.classList.remove('selected');
+      });
+      
+      formatoSeleccionado = null;
+      precioActual = 0;
+      document.getElementById('formato-seleccionado').value = '';
+      
+      // Ocultar botones cuando no hay selección
+      const botonesContainer = document.getElementById('botones-container');
+      if (botonesContainer) {
+        botonesContainer.style.display = 'none';
       }
     }
 
@@ -304,20 +295,25 @@
       }
 
       const formatoSeleccionadoElement = document.querySelector('.formato-option.selected');
-
+      
       if (!formatoSeleccionadoElement) {
         e.preventDefault();
         alert('Por favor selecciona un formato');
         return false;
       }
-
+      
       const disponible = formatoSeleccionadoElement.getAttribute('data-disponible') === 'true';
       if (!disponible) {
         e.preventDefault();
         alert('El formato seleccionado no está disponible');
         return false;
       }
+
+      setTimeout(() => {
+        limpiarSeleccion();
+      }, 100);
     });
+
 
     // funcion original para comprar actualizada con formato
     document
@@ -387,13 +383,13 @@
 
     // actualizar el contador del carrito
     function actualizarContadorCarrito() {
-      fetch('/spring/carrito/count')
+      fetch('/spring/carrito/contador')
         .then((response) => response.json())
-        .then((count) => {
+        .then((data) => {
           const contador = document.querySelector('[data-carrito-count]');
           if (contador) {
-            if (count > 0) {
-              contador.textContent = count;
+            if (data.count > 0) {
+              contador.textContent = data.count;
               contador.classList.remove('hidden');
             } else {
               contador.classList.add('hidden');

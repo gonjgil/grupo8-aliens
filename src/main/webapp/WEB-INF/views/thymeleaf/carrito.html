@@ -3,36 +3,34 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ALIENS - Carrito de Compras</title>
+    <title>Carrito de Compras | ArtRoom</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <!-- Boostrap core css -->
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" th:href="@{/css/galeria.css}"/>
 </head>
 
 <body class="bg-gray-100 text-gray-800 flex flex-col min-h-screen">
 <!-- Header -->
-<header class="bg-black p-6 flex justify-between items-center shadow-md">
-    <h1 class="text-4xl font-extrabold text-gray-200 tracking-wider">
+<header class="bg-white p-6 flex justify-between items-center shadow-md">
+    <h1 class="text-4xl font-extrabold text-gray-900 tracking-wider">
         <a th:href="@{/galeria}" class="hover:text-blue-600 transition-colors">
             ArtRoom
         </a>
     </h1>
 
-    <div class="flex items-center space-x-4 text-gray-200">
-        <div th:if="${usuario != null}" class="flex items-center space-x-4 text-xl">
+    <div class="flex items-center space-x-4">
+        <div th:if="${usuario != null}" class="flex items-center space-x-4">
             <div th:text=" 'Hola, ' + ${usuario.email}"></div>
             <a th:href="@{/logout}"
-               class="hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300 shadow-lg">
-                <i class="bi bi-box-arrow-right text-2xl"></i>
+               class="bg-red-600 hover:bg-red-700 fa-solid fa-right-from-bracket text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg">
             </a>
         </div>
         <div th:unless="${usuario != null}">
             <button
                     th:onclick="|location.href='@{/login}'|"
-                    class="hover:outline hover:outline-2 hover:outline-white text-white font-bold py-2 px-6 rounded-lg transition duration-300 shadow-lg"
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg"
             >
                 Iniciar Sesión
             </button>
@@ -71,7 +69,7 @@
                         <form th:action="@{/carrito/disminuir/{id}(id=${item.obraId})}" method="post" style="display:inline">
                             <input type="hidden" name="formato" th:value="${item.formato}" />
                             <button type="submit" class="w-8 h-8 flex items-center justify-center
-                            hover:text-white bg-gray-300 hover:bg-black rounded text-lg font-bold">-</button>
+                            bg-gray-200 hover:bg-gray-300 rounded-full text-lg font-bold">-</button>
                         </form>
 
                         <span class="w-10 text-center font-semibold"><span th:text="${item.cantidad}">1</span></span>
@@ -79,13 +77,14 @@
                         <form th:action="@{/carrito/aumentar/{id}(id=${item.obraId})}" method="post" style="display:inline">
                             <input type="hidden" name="formato" th:value="${item.formato}" />
                             <button type="submit" class="w-8 h-8 flex items-center justify-center
-                            hover:text-white bg-gray-300 hover:bg-black rounded text-lg font-bold">+</button>
+                            bg-gray-200 hover:bg-gray-300 rounded-full text-lg font-bold">+</button>
                         </form>
                     </div>
                 </td>
                 <td th:text="'$' + ${#numbers.formatDecimal(item.subtotal, 1, 2)}"></td>
                 <td>
                     <form th:action="@{/carrito/eliminar/{obraId}(obraId=${item.obraId})}" method="post">
+                        <input type="hidden" name="formato" th:value="${item.formato}" />
                         <button type="submit" class="text-red-600 hover:text-red-800 font-semibold">
                             <i class="fas fa-trash mr-2"></i>
                         </button>
@@ -105,7 +104,7 @@
             </p>
             <div class="d-flex justify-content-between align-items-center mt-4">
                 <form th:action="@{/carrito/vaciar}" method="post">
-                    <button class="text-red-700 hover:bg-red-700 hover:text-white font-bold py-2 px-4 rounded transition duration-200" type="submit">Vaciar carrito</button>
+                    <button class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-200" type="submit">Vaciar carrito</button>
                 </form>
                 <div>
                     <a th:href="@{/galeria}" class="border border-gray-900  text-gray-400 hover:bg-gray-400 hover:text-white font-semibold py-2 px-4 rounded transition duration-200">Seguir comprando</a>

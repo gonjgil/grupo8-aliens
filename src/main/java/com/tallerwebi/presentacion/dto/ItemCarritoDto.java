@@ -19,7 +19,7 @@ public class ItemCarritoDto {
         this.id = item.getId();
         this.obraId = item.getObra().getId();
         this.obraTitulo = item.getObra().getTitulo();
-        this.obraAutor = item.getObra().getAutor();
+        this.obraAutor = item.getObra().getArtista() != null ? item.getObra().getArtista().getNombre() : "Desconocido";
         this.obraImagenUrl = item.getObra().getImagenUrl();
         this.obraPrecio = item.getPrecioUnitario();
         this.cantidad = item.getCantidad();
