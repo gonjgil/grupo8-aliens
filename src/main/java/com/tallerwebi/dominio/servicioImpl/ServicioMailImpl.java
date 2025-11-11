@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ServicioMailImpl implements ServicioMail {
     private final Mailer mailer;
-    private final String remitente; // reemplazá por tu cuenta
+    private final String remitente;
     private final String nombreRemitente = "ArtRoom";
 
     public ServicioMailImpl() {
@@ -23,7 +23,7 @@ public class ServicioMailImpl implements ServicioMail {
         String mailPassword = System.getenv().getOrDefault("MAIL_PASSWORD", "password");
 
 
-        // Configuración SMTP
+
         this.mailer = MailerBuilder
                 .withSMTPServer(mailHost, mailPort, remitente, mailPassword)
                 .withTransportStrategy(TransportStrategy.SMTP_TLS)
