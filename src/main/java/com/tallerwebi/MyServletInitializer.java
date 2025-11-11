@@ -1,9 +1,6 @@
 package com.tallerwebi;
 
-import com.tallerwebi.config.CloudinaryConfig;
-import com.tallerwebi.config.DatabaseInitializationConfig;
-import com.tallerwebi.config.HibernateConfig;
-import com.tallerwebi.config.SpringWebConfig;
+import com.tallerwebi.config.*;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 import javax.servlet.MultipartConfigElement;
