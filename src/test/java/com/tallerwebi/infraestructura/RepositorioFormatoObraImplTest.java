@@ -172,4 +172,58 @@ public class RepositorioFormatoObraImplTest {
 
         assertThat(formatoObraRecuperado, is(equalTo(null)));
     }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queSePuedaActualizarElPrecioDeUnFormato() {
+        // Arrange
+        FormatoObra formato = new FormatoObra();
+        formato.setFormato(Formato.ORIGINAL);
+        formato.setPrecio(1000.0);
+        formato.setStock(5);
+        formato.setObra(persistirObraDePrueba());
+        sessionFactory.getCurrentSession().save(formato);
+
+        repositorioFormato.actualizarPrecio(formato.getId(), 2000.0);
+
+        FormatoObra formatoActualizado = repositorioFormato.obtenerPorId(formato.getId());
+        assertThat(formatoActualizado.getPrecio(), is(equalTo(2000.0)));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queNoSeActualiceElPrecioSiElFormatoNoExiste() {
+        repositorioFormato.actualizarPrecio(999L, 3000.0);
+
+        assertThat(repositorioFormato.obtenerTodos().size(), is(equalTo(0)));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queSePuedaActualizarElStockDeUnFormato() {
+        FormatoObra formato = new FormatoObra();
+        formato.setFormato(Formato.IMPRESION_CANVAS);
+        formato.setPrecio(500.0);
+        formato.setStock(10);
+        formato.setObra(persistirObraDePrueba());
+        sessionFactory.getCurrentSession().save(formato);
+
+        repositorioFormato.actualizarStock(formato.getId(), 50);
+
+        FormatoObra formatoActualizado = repositorioFormato.obtenerPorId(formato.getId());
+        assertThat(formatoActualizado.getStock(), is(equalTo(50)));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queNoSeActualiceElStockSiElFormatoNoExiste() {
+        repositorioFormato.actualizarStock(888L, 100);
+
+        assertThat(repositorioFormato.obtenerTodos().size(), is(equalTo(0)));
+    }
+
 }
