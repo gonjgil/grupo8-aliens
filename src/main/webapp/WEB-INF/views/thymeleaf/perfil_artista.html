@@ -95,23 +95,33 @@
         <h2 class="text-3xl font-bold mb-6 text-gray-900 text-center">Obras</h2>
 
         <div class="flex flex-wrap justify-center gap-6">
-            <a th:each="obra : ${obras}"
-               th:href="@{/obra/{id}(id=${obra.id})}"
-               class="perfil-card bg-white rounded-lg shadow-md overflow-hidden w-96">
+            <div th:each="obra : ${obras}" class="relative perfil-card bg-white rounded-lg shadow-md overflow-hidden w-96">
 
-                <div class="w-full h-64 overflow-hidden">
-                    <img th:src="${obra.imagenUrl}" alt="Imagen de obra"
-                         class="w-full h-full object-cover">
+                <!-- Imagen de la obra -->
+                <a th:href="@{/obra/{id}(id=${obra.id})}">
+                    <div class="w-full h-64 overflow-hidden">
+                        <img th:src="${obra.imagenUrl}" alt="Imagen de obra"
+                             class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
+                    </div>
+                </a>
+
+                <!-- Botones flotantes -->
+                <div th:if="${esDuenio}" class="absolute top-2 right-2 flex gap-2">
+                    <!-- Editar -->
+                    <a th:href="@{'/obra/' + ${obra.id} + '/editar'}"
+                       class="bg-yellow-500 hover:bg-yellow-600 text-white p-2 rounded shadow-lg transition"
+                       title="Editar obra">
+                        <i class="bi bi-pencil"></i>
+                    </a>
                 </div>
 
+                <!-- Título -->
                 <div class="p-2 text-center">
                     <h3 class="text-lg font-semibold text-black" th:text="${obra.titulo}">Título de la obra</h3>
                 </div>
-            </a>
+            </div>
         </div>
     </section>
-
-
 
 </main>
 
