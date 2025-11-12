@@ -258,7 +258,7 @@ class ServicioGaleriaImplTest {
         dto.setTitulo("Nuevo título");
         dto.setDescripcion("Nueva descripción");
 
-        List<String> categoriasSeleccionadas = List.of("ESCULTURA", "ARTE_MIXTO");
+        List<String> categoriasSeleccionadas = List.of("PINTURA","ESCULTURA", "ARTE_MIXTO");
         String nuevaUrl = "nueva-url.jpg";
 
         servicioGaleria.actualizarObra(1L, dto, categoriasSeleccionadas, nuevaUrl);

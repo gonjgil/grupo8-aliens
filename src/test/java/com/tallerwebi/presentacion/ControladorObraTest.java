@@ -256,7 +256,7 @@ public class ControladorObraTest {
         dto.setTitulo("Nuevo título");
         dto.setDescripcion("Nueva descripción");
 
-        List<String> categoriasSeleccionadas = List.of("ESCULTURA", "ARTE_MIXTO");
+        List<String> categoriasSeleccionadas = List.of("PINTURA", "ESCULTURA", "ARTE_MIXTO");
         String nuevaUrl = "nueva-url.jpg";
 
         // ACT
@@ -292,7 +292,7 @@ public class ControladorObraTest {
         dto.setTitulo("Nuevo título");
         dto.setDescripcion("Nueva descripción");
 
-        List<String> categoriasSeleccionadas = List.of("ESCULTURA");
+        List<String> categoriasSeleccionadas = List.of("PINTURA", "ESCULTURA");
 
         // ACT
         servicioGaleria.actualizarObra(idObra, dto, categoriasSeleccionadas, null); // sin nueva imagen

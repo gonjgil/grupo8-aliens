@@ -9,6 +9,7 @@ import com.tallerwebi.dominio.entidades.FormatoObra;
 import com.tallerwebi.dominio.entidades.ItemCarrito;
 import com.tallerwebi.dominio.entidades.Obra;
 import com.tallerwebi.dominio.entidades.Usuario;
+import com.tallerwebi.dominio.enums.EstadoCarrito;
 import com.tallerwebi.dominio.enums.Formato;
 import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
 import com.tallerwebi.dominio.excepcion.NoHayStockSuficiente;
@@ -246,4 +247,24 @@ public class ServicioCarritoImpl implements ServicioCarrito {
         
         return formatosDto;
     }
+
+    @Override
+    public void finalizarCompra(Usuario usuario) {
+        // Obtiene carrito activo
+        Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId());
+        if (carrito == null || carrito.getItems().isEmpty()) {
+            throw new IllegalStateException("El carrito está vacío o no existe.");
+        }
+
+        // Confirma la compra: marca como finalizado
+        carrito.setEstado(EstadoCarrito.FINALIZADO);
+
+        // Guarda el carrito actualizado
+        repositorioCarrito.guardar(carrito);
+
+        // Crea un nuevo carrito vacío para el usuario
+        repositorioCarrito.crearCarritoParaUsuario(usuario);
+    }
+
+
 }

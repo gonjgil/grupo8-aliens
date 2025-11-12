@@ -179,12 +179,9 @@ public class ServicioGaleriaImpl implements ServicioGaleria {
         obraExistente.setImagenUrl(urlImagen);
 
         if (categoriasSeleccionadas != null && !categoriasSeleccionadas.isEmpty()) {
-            Set<Categoria> nuevasCategorias = new HashSet<>(obraExistente.getCategorias());
-            nuevasCategorias.addAll(
-                    categoriasSeleccionadas.stream()
-                            .map(Categoria::valueOf)
-                            .collect(Collectors.toSet())
-            );
+            Set<Categoria> nuevasCategorias = categoriasSeleccionadas.stream()
+                    .map(Categoria::valueOf)
+                    .collect(Collectors.toSet());
             obraExistente.setCategorias(nuevasCategorias);
         }
 

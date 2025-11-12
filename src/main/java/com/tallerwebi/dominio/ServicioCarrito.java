@@ -24,4 +24,5 @@ public interface ServicioCarrito {
     Double calcularPrecioTotalCarrito(Usuario usuario); //testeado
     Integer contarItemsEnCarrito(Usuario usuario); //testeado
     List<FormatoObraDto> obtenerFormatosDisponibles(Long obraId);
+    void finalizarCompra(Usuario usuario);
 }
