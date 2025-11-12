@@ -18,7 +18,6 @@ import com.tallerwebi.presentacion.dto.ObraDto;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -33,9 +32,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
-import java.util.Set;
-
-import java.util.HashSet;
 import java.util.Set;
 
 public class ControladorObraTest {
@@ -440,7 +436,7 @@ public class ControladorObraTest {
     }
 
     @Test
-    public void queSePuedaActualizarElPrecioDeUnFormato() throws NoExisteFormatoObra {
+    public void queSePuedaActualizarUnFormatoObraConPrecioYStock() throws NoExisteFormatoObra {
         ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
         ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
         ServicioPerfilArtista servicioPerfilArtista = mock(ServicioPerfilArtista.class);
@@ -456,17 +452,23 @@ public class ControladorObraTest {
         );
 
         Long obraId = 1L;
-        Long formatoId = 1L;
+        Long formatoId = 10L;
         Double nuevoPrecio = 2500.0;
+        Integer nuevoStock = 15;
 
-        String resultado = controladorObra.actualizarPrecio(obraId, formatoId, nuevoPrecio);
+        Obra obra = new Obra();
+        obra.setId(obraId);
+        when(servicioGaleria.obtenerPorId(obraId)).thenReturn(obra);
 
-        verify(servicioFormatoObra, times(1)).actualizarPrecio(formatoId, nuevoPrecio);
+        String resultado = controladorObra.actualizarFormatoObra(obraId, formatoId, nuevoPrecio, nuevoStock);
+
+        verify(servicioGaleria, times(1)).obtenerPorId(obraId);
+        verify(servicioFormatoObra, times(1)).actualizarFormatoObra(formatoId, nuevoPrecio, nuevoStock);
         assertThat(resultado, is("redirect:/obra/" + obraId));
     }
 
     @Test
-    public void queAlActualizarPrecioDeFormatoInexistenteSeRedirijaAGaleria() throws NoExisteFormatoObra {
+    public void queAlIntentarActualizarFormatoInexistenteSeRedirijaAGaleria() throws NoExisteFormatoObra {
         ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
         ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
         ServicioPerfilArtista servicioPerfilArtista = mock(ServicioPerfilArtista.class);
@@ -484,66 +486,18 @@ public class ControladorObraTest {
         Long obraId = 1L;
         Long formatoId = 99L;
         Double nuevoPrecio = 2500.0;
+        Integer nuevoStock = 10;
 
-        doThrow(new NoExisteFormatoObra()).when(servicioFormatoObra).actualizarPrecio(formatoId, nuevoPrecio);
+        Obra obra = new Obra();
+        obra.setId(obraId);
+        when(servicioGaleria.obtenerPorId(obraId)).thenReturn(obra);
 
-        String resultado = controladorObra.actualizarPrecio(obraId, formatoId, nuevoPrecio);
+        doThrow(new NoExisteFormatoObra()).when(servicioFormatoObra).actualizarFormatoObra(formatoId, nuevoPrecio, nuevoStock);
 
-        verify(servicioFormatoObra, times(1)).actualizarPrecio(formatoId, nuevoPrecio);
-        assertThat(resultado, is("redirect:/galeria"));
-    }
+        String resultado = controladorObra.actualizarFormatoObra(obraId, formatoId, nuevoPrecio, nuevoStock);
 
-    @Test
-    public void queSePuedaActualizarElStockDeUnFormato() throws NoExisteFormatoObra {
-        ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
-        ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
-        ServicioPerfilArtista servicioPerfilArtista = mock(ServicioPerfilArtista.class);
-        ServicioCloudinary servicioCloudinary = mock(ServicioCloudinary.class);
-        ServicioFormatoObra servicioFormatoObra = mock(ServicioFormatoObra.class);
-
-        ControladorObra controladorObra = new ControladorObra(
-                servicioGaleria,
-                servicioCarrito,
-                servicioPerfilArtista,
-                servicioCloudinary,
-                servicioFormatoObra
-        );
-
-        Long obraId = 1L;
-        Long formatoId = 1L;
-        Integer nuevoStock = 15;
-
-        String resultado = controladorObra.actualizarStock(obraId, formatoId, nuevoStock);
-
-        verify(servicioFormatoObra, times(1)).actualizarStock(formatoId, nuevoStock);
-        assertThat(resultado, is("redirect:/obra/" + obraId));
-    }
-
-    @Test
-    public void queAlActualizarStockDeFormatoInexistenteSeRedirijaAGaleria() throws NoExisteFormatoObra {
-        ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
-        ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
-        ServicioPerfilArtista servicioPerfilArtista = mock(ServicioPerfilArtista.class);
-        ServicioCloudinary servicioCloudinary = mock(ServicioCloudinary.class);
-        ServicioFormatoObra servicioFormatoObra = mock(ServicioFormatoObra.class);
-
-        ControladorObra controladorObra = new ControladorObra(
-                servicioGaleria,
-                servicioCarrito,
-                servicioPerfilArtista,
-                servicioCloudinary,
-                servicioFormatoObra
-        );
-
-        Long obraId = 1L;
-        Long formatoId = 99L;
-        Integer nuevoStock = 15;
-
-        doThrow(new NoExisteFormatoObra()).when(servicioFormatoObra).actualizarStock(formatoId, nuevoStock);
-
-        String resultado = controladorObra.actualizarStock(obraId, formatoId, nuevoStock);
-
-        verify(servicioFormatoObra, times(1)).actualizarStock(formatoId, nuevoStock);
+        verify(servicioGaleria, times(1)).obtenerPorId(obraId);
+        verify(servicioFormatoObra, times(1)).actualizarFormatoObra(formatoId, nuevoPrecio, nuevoStock);
         assertThat(resultado, is("redirect:/galeria"));
     }
 

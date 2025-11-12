@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -221,5 +222,75 @@ public class ServicioFormatoObraImplTest {
 
         assertThat(lista, hasSize(2));
         assertThat(lista, containsInAnyOrder(f1, f2));
+    }
+
+    @Test
+    public void queSePuedanObtenerLosFormatosFaltantesDeUnaObra() {
+        Long obraId = 20L;
+
+        FormatoObra formato1 = new FormatoObra();
+        formato1.setFormato(Formato.DIGITAL);
+
+        FormatoObra formato2 = new FormatoObra();
+        formato2.setFormato(Formato.ORIGINAL);
+
+        when(repositorioFormatoObra.obtenerFormatosPorObra(obraId))
+                .thenReturn(Arrays.asList(formato1, formato2));
+
+        List<Formato> formatosFaltantes = servicio.obtenerFormatosFaltantesPorObra(obraId);
+
+        List<Formato> todosLosFormatos = Arrays.asList(Formato.values());
+        List<Formato> formatosExistentes = Arrays.asList(Formato.DIGITAL, Formato.ORIGINAL);
+
+        assertThat(formatosFaltantes, hasSize(todosLosFormatos.size() - formatosExistentes.size()));
+        assertThat(formatosFaltantes, not(containsInAnyOrder(formatosExistentes.toArray(new Formato[0]))));
+
+        verify(repositorioFormatoObra).obtenerFormatosPorObra(obraId);
+    }
+
+    @Test
+    public void queSePuedaActualizarUnFormatoObraExistente() throws NoExisteFormatoObra {
+        RepositorioFormatoObra repositorioFormatoObra = mock(RepositorioFormatoObra.class);
+        RepositorioObra repositorioObra = mock(RepositorioObra.class);
+
+        ServicioFormatoObraImpl servicio = new ServicioFormatoObraImpl(repositorioFormatoObra, repositorioObra);
+
+        Long formatoId = 1L;
+        Double nuevoPrecio = 2500.0;
+        Integer nuevoStock = 15;
+
+        Obra obra = new Obra();
+        FormatoObra formatoExistente = new FormatoObra(obra, Formato.DIGITAL, 1000.0, 5);
+        formatoExistente.setId(formatoId);
+
+        when(repositorioFormatoObra.obtenerPorId(formatoId)).thenReturn(formatoExistente);
+
+        servicio.actualizarFormatoObra(formatoId, nuevoPrecio, nuevoStock);
+
+        verify(repositorioFormatoObra, times(1)).obtenerPorId(formatoId);
+        verify(repositorioFormatoObra, times(1)).guardar(formatoExistente);
+
+        assertThat(formatoExistente.getPrecio(), is(nuevoPrecio));
+        assertThat(formatoExistente.getStock(), is(nuevoStock));
+    }
+
+    @Test
+    public void queAlIntentarActualizarUnFormatoInexistenteSeLanceExcepcion() {
+        RepositorioFormatoObra repositorioFormatoObra = mock(RepositorioFormatoObra.class);
+        RepositorioObra repositorioObra = mock(RepositorioObra.class);
+
+        ServicioFormatoObraImpl servicio = new ServicioFormatoObraImpl(repositorioFormatoObra, repositorioObra);
+
+        Long formatoId = 99L;
+        Double nuevoPrecio = 3000.0;
+        Integer nuevoStock = 20;
+
+        when(repositorioFormatoObra.obtenerPorId(formatoId)).thenReturn(null);
+
+        assertThrows(NoExisteFormatoObra.class, () ->
+                servicio.actualizarFormatoObra(formatoId, nuevoPrecio, nuevoStock)
+        );
+
+        verify(repositorioFormatoObra, never()).guardar(any());
     }
 }

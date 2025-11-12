@@ -128,23 +128,82 @@
             <div class="formato-selector" th:if="${obra.formatos != null and not #lists.isEmpty(obra.formatos)}">
                 <h3 class="text-lg font-semibold mb-3 text-gray-800">Formatos Disponibles:</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <div th:each="formato : ${obra.formatos}" 
+                    <div th:each="formato : ${obra.formatos}"
                          class="formato-option p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-blue-300 transition-all duration-200"
-                         th:attr="data-formato=${formato.formato}, 
-                                  data-precio=${formato.precio}, 
+                         th:attr="data-formato=${formato.formato},
+                                  data-precio=${formato.precio},
                                   data-disponible=${formato.disponible and formato.stock > 0},
                                   data-stock=${formato.stock}">
-                        
+
                         <div class="flex justify-between items-center">
                             <div>
                                 <h4 class="font-medium text-gray-900" th:text="${formato.formato.descripcion}"></h4>
                             </div>
                             <div class="text-right">
-                                <p class="text-lg font-bold text-green-600" 
+                                <p class="text-lg font-bold text-green-600"
                                    th:text="'$' + ${#numbers.formatDecimal(formato.precio, 1, 'COMMA', 2, 'POINT')}"></p>
                             </div>
                         </div>
+
+                        <div class="text-sm text-gray-600 mb-2">
+                            <span th:text="'Stock: ' + ${formato.stock}"></span>
+                            <span th:if="${!formato.disponible}" class="ml-2 text-red-500">(No disponible)</span>
+                        </div>
+
+                        <!-- Botones solo visibles para el artista dueño -->
+                        <div th:if="${esArtistaDuenio == true}" class="flex justify-end gap-2 mt-3">
+                            <!-- Botón Modificar -->
+                            <button type="button"
+                                    class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-3 py-1 rounded-md transition"
+                                    th:attr="data-formatoId=${formato.id}, data-formato=${formato.formato}, data-precio=${formato.precio}, data-stock=${formato.stock}"
+                                    onclick="editarFormato(this)">
+                                Modificar
+                            </button>
+
+                            <!-- Botón Eliminar -->
+                            <form th:action="@{/obra/{obraId}/eliminar-formato(obraId=${obra.id})}" method="post"
+                                  onsubmit="return confirm('¿Estás seguro de eliminar este formato?');">
+                                <input type="hidden" name="formatoId" th:value="${formato.id}" />
+                                <button type="submit"
+                                        class="bg-red-600 hover:bg-red-700 text-white font-semibold px-3 py-1 rounded-md transition">
+                                    Eliminar
+                                </button>
+                            </form>
+                        </div>
                     </div>
+                </div>
+            </div>
+
+            <div id="modalEditarFormato" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                <div class="bg-white rounded-xl p-6 shadow-xl w-96">
+                    <h2 class="text-xl font-bold mb-4">Editar Formato</h2>
+
+                    <form th:action="@{/obra/{obraId}/actualizar-formato(obraId=${obra.id})}" method="post">
+                        <input type="hidden" id="formatoId" name="formatoId" />
+
+                        <div class="mb-3">
+                            <label for="nuevoPrecio" class="block text-sm font-medium text-gray-700">Nuevo Precio</label>
+                            <input type="number" step="0.01" id="nuevoPrecio" name="nuevoPrecio"
+                                   class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="nuevoStock" class="block text-sm font-medium text-gray-700">Nuevo Stock</label>
+                            <input type="number" id="nuevoStock" name="nuevoStock"
+                                   class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required />
+                        </div>
+
+                        <div class="flex justify-end gap-2 mt-4">
+                            <button type="button" onclick="cerrarModal()"
+                                    class="bg-gray-400 hover:bg-gray-500 text-white font-semibold px-3 py-1 rounded-md transition">
+                                Cancelar
+                            </button>
+                            <button type="submit"
+                                    class="bg-green-600 hover:bg-green-700 text-white font-semibold px-3 py-1 rounded-md transition">
+                                Guardar
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
             
@@ -171,7 +230,7 @@
                     <!-- Select de Formatos -->
                     <label class="block mb-2 font-medium text-gray-800">Formato</label>
                     <select name="formato" class="w-full p-2 border rounded-md mb-4">
-                        <option th:each="f : ${T(tu.paquete.Formato).values()}"
+                        <option th:each="f : ${formatosFaltantes}"
                                 th:value="${f}"
                                 th:text="${f.descripcion}">
                         </option>
@@ -195,22 +254,6 @@
             </div>
         </div>
 
-        <!-- <div class="obra-meta flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div class="likes flex items-center gap-2">
-                <form th:action="@{/obra/{id}/like(id=${obra.id})}" method="post">
-                    <button type="submit"
-                            class="like-button px-4 py-2 rounded-full border border-gray-300 hover:bg-blue-50"
-                            aria-pressed="false">&#x2764;</button>
-                </form>
-                <div class="likes flex items-center gap-1">
-                    <span th:text="${obra.getCantidadLikes()}"></span>
-                    <span class="likes-label text-gray-500 text-sm">personas dieron like</span>
-                </div>
-            </div>
-            <a class="btn btn-primary bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300"
-               href="#" id="comprarBtn">Comprar / Más info</a>
-        </div>
-      </div> -->
         <div class="obra-meta flex flex-col sm:flex-row justify-between items-center gap-4">
             <div th:if="${usuario != null}" id="botones-container" class="flex gap-2" style="display: none;">
                 <form id="form-agregar-carrito" th:action="@{/carrito/agregar}" method="post">
@@ -476,6 +519,22 @@
     toggleBtn.addEventListener("click", () => {
         form.classList.toggle("hidden");
     });
+
+    function editarFormato(boton) {
+        const formatoId = boton.getAttribute("data-formatoId");
+        const precio = boton.getAttribute("data-precio");
+        const stock = boton.getAttribute("data-stock");
+
+        document.getElementById("formatoId").value = formatoId;
+        document.getElementById("nuevoPrecio").value = precio;
+        document.getElementById("nuevoStock").value = stock;
+
+        document.getElementById("modalEditarFormato").classList.remove("hidden");
+    }
+
+    function cerrarModal() {
+        document.getElementById("modalEditarFormato").classList.add("hidden");
+    }
 
 </script>
 <script th:src="@{/js/obra.js}"></script>

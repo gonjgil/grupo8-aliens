@@ -12,6 +12,10 @@ public interface ServicioFormatoObra {
     void eliminarFormato(Long formatoObraId) throws NoExisteFormatoObra;
     void actualizarPrecio(Long formatoObraId, Double nuevoPrecio) throws NoExisteFormatoObra;
     void actualizarStock(Long formatoObraId, Integer nuevoStock) throws NoExisteFormatoObra;
+
+    void actualizarFormatoObra(Long formatoObraId, Double nuevoPrecio, Integer nuevoStock) throws NoExisteFormatoObra;
+
     FormatoObra obtenerPorId(Long formatoObraId) throws NoExisteFormatoObra;
     List<FormatoObra> obtenerFormatosPorObra(Long obraId);
+    List<Formato> obtenerFormatosFaltantesPorObra(Long obraId);
 }

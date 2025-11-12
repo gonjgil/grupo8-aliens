@@ -11,7 +11,9 @@ import com.tallerwebi.dominio.repositorios.RepositorioObra;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service("servicioFormatoObra")
 @Transactional
@@ -69,6 +71,17 @@ public class ServicioFormatoObraImpl implements ServicioFormatoObra {
     }
 
     @Override
+    public void actualizarFormatoObra(Long formatoObraId, Double nuevoPrecio, Integer nuevoStock) throws NoExisteFormatoObra {
+        FormatoObra formato = repositorioFormatoObra.obtenerPorId(formatoObraId);
+        if (formato == null) {
+            throw new NoExisteFormatoObra();
+        }
+        formato.setPrecio(nuevoPrecio);
+        formato.setStock(nuevoStock);
+        repositorioFormatoObra.guardar(formato);
+    }
+
+    @Override
     public FormatoObra obtenerPorId(Long formatoObraId) throws NoExisteFormatoObra {
         FormatoObra formato = repositorioFormatoObra.obtenerPorId(formatoObraId);
         if (formato == null) {
@@ -82,53 +95,17 @@ public class ServicioFormatoObraImpl implements ServicioFormatoObra {
         return repositorioFormatoObra.obtenerFormatosPorObra(obraId);
     }
 
-//    @Override
-//    public Obra agregarFormatoObra(Long obraId, Formato formato, Double precio, Integer stock) throws NoExisteLaObra {
-//        Obra obra = repositorioObra.obtenerPorId(obraId);
-//        if (obra == null) {
-//            throw new NoExisteLaObra();
-//        }
-//        FormatoObra nuevoFormato = new FormatoObra(obra, formato, precio, stock);
-//        obra.agregarFormato(nuevoFormato);
-//        return repositorioObra.guardar(obra);
-//    }
-//
-//    @Override
-//    public Obra eliminarFormatoObra(Long obraId, Formato formato) throws NoExisteLaObra, NoExisteFormatoObra {
-//        Obra obra = repositorioObra.obtenerPorId(obraId);
-//        if (obra == null) {
-//            throw new NoExisteLaObra();
-//        }
-//
-//        Optional<FormatoObra> formatoAEliminar = obra.getFormatos().stream()
-//                .filter(f -> f.getFormato().equals(formato))
-//                .findFirst();
-//
-//        if (!formatoAEliminar.isPresent()) {
-//            throw new NoExisteFormatoObra("La obra no tiene el formato especificado.");
-//        }
-//
-//        obra.getFormatos().remove(formatoAEliminar.get());
-//        return repositorioObra.guardar(obra);
-//    }
-//
-//    @Override
-//    public Obra actualizarStockFormatoObra(Long obraId, Formato formato, Integer nuevoStock) {
-//        Obra obra = repositorioObra.obtenerPorId(obraId);
-//        if (obra == null) {
-//            throw new NoExisteLaObra();
-//        }
-//
-//        Optional<FormatoObra> formatoAActualizar = obra.getFormatos().stream()
-//                .filter(f -> f.getFormato().equals(formato))
-//                .findFirst();
-//
-//        if (!formatoAActualizar.isPresent()) {
-//            throw new NoExisteFormatoObra("La obra no tiene el formato especificado.");
-//        }
-//
-//        formatoAActualizar.get().setStock(nuevoStock);
-//        return repositorioObra.guardar(obra);
-//    }
+    @Override
+    public List<Formato> obtenerFormatosFaltantesPorObra(Long obraId) {
+        List<FormatoObra> formatosDeObra = repositorioFormatoObra.obtenerFormatosPorObra(obraId);
+
+        List<Formato> formatosExistentes = formatosDeObra.stream()
+                .map(FormatoObra::getFormato)
+                .collect(Collectors.toList());
+
+        return Arrays.stream(Formato.values())
+                .filter(formato -> !formatosExistentes.contains(formato))
+                .collect(Collectors.toList());
+    }
 
 }

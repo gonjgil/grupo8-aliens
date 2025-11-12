@@ -10,7 +10,6 @@ import com.tallerwebi.dominio.enums.TipoImagen;
 import com.tallerwebi.dominio.excepcion.NoExisteArtista;
 import com.tallerwebi.dominio.excepcion.NoExisteFormatoObra;
 import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
-import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
 import com.tallerwebi.presentacion.dto.ObraDto;
 import com.tallerwebi.presentacion.dto.PerfilArtistaDTO;
 
@@ -51,18 +50,21 @@ public class ControladorObra {
         Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
         model.put("usuario", usuario);
 
-        if (usuario != null) {
-            Artista artistaUsuario = servicioPerfilArtista.obtenerArtistaPorUsuario(usuario);
-            model.put("artistaUsuario", artistaUsuario);
-
-            if (artistaUsuario != null) {
-                boolean esArtistaDuenio = artistaUsuario.getUsuario().equals(usuario);
-                model.put("esArtistaDuenio", esArtistaDuenio);
-            }
-        }
-
         try {
             Obra obra = servicioGaleria.obtenerPorId(id);
+
+            if (usuario != null) {
+                Artista artistaUsuario = servicioPerfilArtista.obtenerArtistaPorUsuario(usuario);
+                model.put("artistaUsuario", artistaUsuario);
+
+                if (artistaUsuario != null) {
+                    boolean esArtistaDuenio = obra.getArtista().getId().equals(artistaUsuario.getId());
+                    model.put("esArtistaDuenio", esArtistaDuenio);
+                }
+            }
+
+            List<Formato> formatosFaltantes = servicioFormatoObra.obtenerFormatosFaltantesPorObra(id);
+            model.put("formatosFaltantes", formatosFaltantes);
 
             Integer cantidad = servicioCarrito.obtenerCantidadDeItemPorId(usuario, obra);
             model.put("cantidad", cantidad);
@@ -181,21 +183,11 @@ public class ControladorObra {
         }
     }
 
-    @RequestMapping(path = "/{obraId}/actualizar-precio", method = RequestMethod.POST)
-    public String actualizarPrecio(@PathVariable Long obraId, @RequestParam Long formatoId, @RequestParam Double nuevoPrecio) {
+    @RequestMapping(path = "/{obraId}/actualizar-formato", method = RequestMethod.POST)
+    public String actualizarFormatoObra(@PathVariable Long obraId, @RequestParam Long formatoId, @RequestParam Double nuevoPrecio, @RequestParam Integer nuevoStock) {
         try {
             Obra obra = servicioGaleria.obtenerPorId(obraId);
-            servicioFormatoObra.actualizarPrecio(formatoId, nuevoPrecio);
-            return "redirect:/obra/" + obraId;
-        } catch (NoExisteFormatoObra e) {
-            return "redirect:/galeria";
-        }
-    }
-
-    @RequestMapping(path = "/{obraId}/actualizar-stock", method = RequestMethod.POST)
-    public String actualizarStock(@PathVariable Long obraId, @RequestParam Long formatoId, @RequestParam Integer nuevoStock) {
-        try {
-            servicioFormatoObra.actualizarStock(formatoId, nuevoStock);
+            servicioFormatoObra.actualizarFormatoObra(formatoId, nuevoPrecio, nuevoStock);
             return "redirect:/obra/" + obraId;
         } catch (NoExisteFormatoObra e) {
             return "redirect:/galeria";
