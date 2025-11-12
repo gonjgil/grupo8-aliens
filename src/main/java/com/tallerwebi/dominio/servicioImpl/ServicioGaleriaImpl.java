@@ -3,14 +3,13 @@ package com.tallerwebi.dominio.servicioImpl;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import com.tallerwebi.dominio.entidades.FormatoObra;
-import com.tallerwebi.dominio.enums.Formato;
-import com.tallerwebi.dominio.excepcion.NoExisteFormatoObra;
+import com.tallerwebi.dominio.excepcion.NoExisteArtista;
 import com.tallerwebi.dominio.repositorios.RepositorioObra;
 import com.tallerwebi.dominio.ServicioGaleria;
 import com.tallerwebi.dominio.entidades.Artista;
 import com.tallerwebi.dominio.entidades.Obra;
 import com.tallerwebi.dominio.entidades.Usuario;
+import com.tallerwebi.presentacion.dto.ObraDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -164,4 +163,28 @@ public class ServicioGaleriaImpl implements ServicioGaleria {
         return repositorioObra.guardar(obra);
     }
 
+    @Override
+    public void actualizarObra(Long idObra, ObraDto dto, List<String> categoriasSeleccionadas, String urlImagen) throws NoExisteLaObra {
+        Obra obraExistente = obtenerPorId(idObra);
+        if (obraExistente == null) {
+            throw new NoExisteArtista();
+        }
+
+        if (urlImagen == null || urlImagen.isEmpty()) {
+            urlImagen = obraExistente.getImagenUrl();
+        }
+
+        obraExistente.setTitulo(dto.getTitulo());
+        obraExistente.setDescripcion(dto.getDescripcion());
+        obraExistente.setImagenUrl(urlImagen);
+
+        if (categoriasSeleccionadas != null && !categoriasSeleccionadas.isEmpty()) {
+            Set<Categoria> nuevasCategorias = categoriasSeleccionadas.stream()
+                    .map(Categoria::valueOf)
+                    .collect(Collectors.toSet());
+            obraExistente.setCategorias(nuevasCategorias);
+        }
+
+        guardar(obraExistente, obraExistente.getArtista(), urlImagen);
+    }
 }

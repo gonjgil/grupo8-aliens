@@ -90,6 +90,39 @@
             </div>
         </div>
     </div>
+
+    <section class="mb-16 p-4" th:if="${obras != null and #lists.size(obras) > 0}">
+        <h2 class="text-3xl font-bold mb-6 text-gray-900 text-center">Obras</h2>
+
+        <div class="flex flex-wrap justify-center gap-6">
+            <div th:each="obra : ${obras}" class="relative perfil-card bg-white rounded-lg shadow-md overflow-hidden w-96">
+
+                <!-- Imagen de la obra -->
+                <a th:href="@{/obra/{id}(id=${obra.id})}">
+                    <div class="w-full h-64 overflow-hidden">
+                        <img th:src="${obra.imagenUrl}" alt="Imagen de obra"
+                             class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
+                    </div>
+                </a>
+
+                <!-- Botones flotantes -->
+                <div th:if="${esDuenio}" class="absolute top-2 right-2 flex gap-2">
+                    <!-- Editar -->
+                    <a th:href="@{'/obra/' + ${obra.id} + '/editar'}"
+                       class="bg-yellow-500 hover:bg-yellow-600 text-white p-2 rounded shadow-lg transition"
+                       title="Editar obra">
+                        <i class="bi bi-pencil"></i>
+                    </a>
+                </div>
+
+                <!-- Título -->
+                <div class="p-2 text-center">
+                    <h3 class="text-lg font-semibold text-black" th:text="${obra.titulo}">Título de la obra</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
 </main>
 
 <script type="text/javascript" th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.bundle.min.js}"></script>
