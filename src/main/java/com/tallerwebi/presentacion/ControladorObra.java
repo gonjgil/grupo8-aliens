@@ -10,6 +10,7 @@ import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.enums.Categoria;
 import com.tallerwebi.dominio.enums.TipoImagen;
 import com.tallerwebi.dominio.excepcion.NoExisteArtista;
+import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
 import com.tallerwebi.presentacion.dto.ObraDto;
 import com.tallerwebi.presentacion.dto.PerfilArtistaDTO;
 
@@ -20,6 +21,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/obra")
@@ -100,4 +103,53 @@ public class ControladorObra {
             return "redirect:/galeria";
         }
     }
+
+    @GetMapping("/{id}/editar")
+    public ModelAndView editarObra(@PathVariable("id") Long idObra, HttpServletRequest request) {
+        ModelMap model = new ModelMap();
+        Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
+        model.put("usuario", usuario);
+
+        try {
+            Obra obra = servicioGaleria.obtenerPorId(idObra);
+            Artista artistaUsuario = servicioPerfilArtista.obtenerArtistaPorUsuario(usuario);
+
+            if (usuario == null || artistaUsuario == null ||
+                    !obra.getArtista().getId().equals(artistaUsuario.getId())) {
+                model.put("error", "No tienes permiso para editar esta obra.");
+                return new ModelAndView("redirect:/galeria", model);
+            }
+
+            model.put("obra", new ObraDto(obra));
+            model.put("categorias", Categoria.values());
+            return new ModelAndView("editar_obra", model);
+
+        } catch (Exception e) {
+            model.put("error", "La obra solicitada no existe.");
+            return new ModelAndView("redirect:/galeria", model);
+        }
+    }
+
+    @PostMapping("/{id}/actualizar")
+    public String actualizarObra(
+            @PathVariable("id") Long idObra, @ModelAttribute ObraDto dto,
+            @RequestParam(value = "categorias", required = false) List<String> categoriasSeleccionadas,
+            @RequestParam(value = "file_obra", required = false) MultipartFile archivo)
+            throws NoExisteLaObra {
+
+        try {
+            String imagenUrl = null;
+            if (archivo != null && !archivo.isEmpty()) {
+                imagenUrl = servicioCloudinary.subirImagen(archivo, TipoImagen.OBRA);
+            }
+
+            servicioGaleria.actualizarObra(idObra, dto, categoriasSeleccionadas, imagenUrl);
+            return "redirect:/obra/" + idObra;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:/galeria";
+        }
+    }
+
 }

@@ -11,19 +11,14 @@ import com.tallerwebi.presentacion.dto.ObraDto;
 
 import org.junit.jupiter.api.Test;
 
+import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 
 class ServicioGaleriaImplTest {
@@ -242,5 +237,51 @@ class ServicioGaleriaImplTest {
         assertThrows(NullPointerException.class, () -> {
             servicioGaleria.guardar(null, null, null);
         });
+    }
+
+    @Test
+    void actualizarObra_deberiaActualizarCamposYGuardar() throws NoExisteArtista {
+        // ARRANGE
+        RepositorioObra repositorioObra = mock(RepositorioObra.class);
+        ServicioGaleria servicioGaleria = new ServicioGaleriaImpl(repositorioObra);
+
+        Obra obraExistente = new Obra();
+        obraExistente.setId(1L);
+        obraExistente.setTitulo("Viejo título");
+        obraExistente.setDescripcion("Vieja descripción");
+        obraExistente.setImagenUrl("vieja-url.jpg");
+        obraExistente.setCategorias(Set.of(Categoria.PINTURA));
+
+        when(repositorioObra.obtenerPorId(1L)).thenReturn(obraExistente);
+
+        ObraDto dto = new ObraDto();
+        dto.setTitulo("Nuevo título");
+        dto.setDescripcion("Nueva descripción");
+
+        List<String> categoriasSeleccionadas = List.of("PINTURA","ESCULTURA", "ARTE_MIXTO");
+        String nuevaUrl = "nueva-url.jpg";
+
+        servicioGaleria.actualizarObra(1L, dto, categoriasSeleccionadas, nuevaUrl);
+
+        assertThat(obraExistente.getTitulo(), is("Nuevo título"));
+        assertThat(obraExistente.getDescripcion(), is("Nueva descripción"));
+        assertThat(obraExistente.getImagenUrl(), is("nueva-url.jpg"));
+        assertThat(obraExistente.getCategorias(), containsInAnyOrder(
+                Categoria.PINTURA, Categoria.ESCULTURA, Categoria.ARTE_MIXTO));
+
+        verify(repositorioObra, times(1)).guardar(obraExistente);
+    }
+
+    @Test
+    void actualizarObra_conObraInexistente_deberiaLanzarExcepcion() {
+        RepositorioObra repositorioObra = mock(RepositorioObra.class);
+        ServicioGaleria servicioGaleria = new ServicioGaleriaImpl(repositorioObra);
+
+        Long idObra = 999L;
+        when(repositorioObra.obtenerPorId(idObra)).thenReturn(null);
+
+        assertThrows(NoExisteLaObra.class, () ->
+                servicioGaleria.actualizarObra(idObra, new ObraDto(), null, null)
+        );
     }
 }

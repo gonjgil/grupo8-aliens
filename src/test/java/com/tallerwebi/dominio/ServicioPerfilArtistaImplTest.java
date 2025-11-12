@@ -1,29 +1,37 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.entidades.Obra;
+import com.tallerwebi.dominio.enums.Categoria;
 import com.tallerwebi.dominio.repositorios.RepositorioArtista;
+import com.tallerwebi.dominio.repositorios.RepositorioObra;
 import com.tallerwebi.dominio.servicioImpl.ServicioPerfilArtistaImpl;
 import com.tallerwebi.dominio.entidades.Artista;
 import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.NoExisteArtista;
+import com.tallerwebi.presentacion.dto.ObraDto;
 import com.tallerwebi.presentacion.dto.PerfilArtistaDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+import java.util.Set;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class ServicioPerfilArtistaImplTest {
 
     private ServicioPerfilArtistaImpl servicioPerfilArtistaImpl;
     private RepositorioArtista repositorioArtistaMock;
+    private RepositorioObra repositorioObraMock;
 
     @BeforeEach
     public void init() {
         repositorioArtistaMock = mock(RepositorioArtista.class);
-        servicioPerfilArtistaImpl = new ServicioPerfilArtistaImpl(repositorioArtistaMock);
+        repositorioObraMock = mock(RepositorioObra.class);
+        servicioPerfilArtistaImpl = new ServicioPerfilArtistaImpl(repositorioArtistaMock, repositorioObraMock);
 
     }
 
@@ -123,5 +131,44 @@ public class ServicioPerfilArtistaImplTest {
         assertThat(artistaObtenido, is(notNullValue()));
         assertThat(artistaObtenido.getId(), is(equalTo(artistaMock.getId())));
         assertThat(artistaObtenido.getUsuario(), is(equalTo(usuario)));
+    }
+
+    @Test
+    void queSePuedaObtenerTodasLasObrasDeUnArtistaPorSuId() {
+        Long idArtista = 1L;
+
+        Artista artista = new Artista();
+        artista.setId(idArtista);
+        artista.setNombre("Juan Perez");
+
+        Obra obra1 = new Obra();
+        obra1.setId(10L);
+        obra1.setTitulo("Obra 1");
+        obra1.setArtista(artista);
+        obra1.setCategorias(Set.of(Categoria.PINTURA));
+
+        Obra obra2 = new Obra();
+        obra2.setId(20L);
+        obra2.setTitulo("Obra 2");
+        obra2.setArtista(artista);
+        obra2.setCategorias(Set.of(Categoria.ESCULTURA));
+
+        List<Obra> obras = List.of(obra1, obra2);
+
+        when(repositorioArtistaMock.buscarArtistaPorId(idArtista)).thenReturn(artista);
+        when(repositorioObraMock.obtenerPorAutor("Juan Perez")).thenReturn(obras);
+
+        List<ObraDto> dtos = servicioPerfilArtistaImpl.obtenerObrasPorArtista(idArtista);
+
+        assertThat(dtos, hasSize(2));
+        assertThat(dtos, contains(
+                allOf(hasProperty("id", is(10L)),
+                hasProperty("titulo", is("Obra 1"))
+                ), allOf(hasProperty("id", is(20L)),
+                hasProperty("titulo", is("Obra 2")
+                ))));
+
+        verify(repositorioArtistaMock, times(1)).buscarArtistaPorId(idArtista);
+        verify(repositorioObraMock, times(1)).obtenerPorAutor("Juan Perez");
     }
 }
