@@ -4,6 +4,7 @@ import com.tallerwebi.dominio.entidades.CompraHecha;
 import com.tallerwebi.dominio.enums.EstadoPago;
 import com.tallerwebi.dominio.repositorios.RepositorioCompraHecha;
 import com.tallerwebi.dominio.entidades.Usuario;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -24,8 +25,11 @@ public class RepositorioCompraHechaImpl implements RepositorioCompraHecha {
 
 
     @Override
-    public void guardar(CompraHecha compraHecha) {
-        sessionFactory.getCurrentSession().save(compraHecha);
+    public CompraHecha guardar(CompraHecha compraHecha) {
+        Session session = sessionFactory.getCurrentSession();
+        session.save(compraHecha);
+
+        return compraHecha;
     }
 
     @Override
@@ -41,7 +45,7 @@ public class RepositorioCompraHechaImpl implements RepositorioCompraHecha {
 
     @Override
     public List<CompraHecha> obtenerTodasPorUsuario(Usuario usuario) {
-        String hql = "FROM CompraHecha o WHERE o.usuario = :usuario";
+        String hql =  "SELECT DISTINCT o FROM CompraHecha o LEFT JOIN FETCH o.items WHERE o.usuario = :usuario";
         return sessionFactory.getCurrentSession()
                 .createQuery(hql, CompraHecha.class)
                 .setParameter("usuario", usuario)

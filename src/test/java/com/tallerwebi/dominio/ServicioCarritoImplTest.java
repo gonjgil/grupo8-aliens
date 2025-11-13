@@ -16,6 +16,7 @@ import com.tallerwebi.dominio.excepcion.NoHayStockSuficiente;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,9 +44,7 @@ public class ServicioCarritoImplTest {
 
     @BeforeEach
     public void init(){
-        this.repositorioObra = mock(RepositorioObra.class);
-        this.repositorioCarrito = mock(RepositorioCarrito.class);
-        this.repositorioFormatoObra = mock(RepositorioFormatoObra.class);
+        MockitoAnnotations.openMocks(this);
         this.servicioCarritoImpl = new ServicioCarritoImpl(repositorioCarrito,repositorioObra,repositorioFormatoObra);
     }
 
@@ -59,6 +58,7 @@ public class ServicioCarritoImplTest {
         Carrito resultado = servicioCarritoImpl.obtenerOCrearCarritoParaUsuario(usuario);
 
         assertThat(resultado, is(equalTo(carritoExistente)));
+        assertThat(resultado.getUsuario(), is(equalTo(usuario)));
     }
 
     @Test
@@ -91,6 +91,7 @@ public class ServicioCarritoImplTest {
 
         when(repositorioObra.obtenerPorId(obra1.getId())).thenReturn(obra1);
         when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId())).thenReturn(carrito);
+        when(repositorioCarrito.obtenerUltimoCarritoPorUsuario(usuario.getId())).thenReturn(carrito);
         when(repositorioFormatoObra.obtenerFormatoPorObraYFormato(obraId, formato)).thenReturn(formatoObra);
 
         servicioCarritoImpl.agregarObraAlCarrito(usuario, obraId, formato);
@@ -389,6 +390,9 @@ public class ServicioCarritoImplTest {
         when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario2.getId())).thenReturn(carrito2);
         when(repositorioFormatoObra.obtenerFormatoPorObraYFormato(obra1.getId(), formato)).thenReturn(formatoObra1);
         when(repositorioFormatoObra.obtenerFormatoPorObraYFormato(obra2.getId(), formato)).thenReturn(formatoObra2);
+        when(repositorioCarrito.obtenerUltimoCarritoPorUsuario(usuario1.getId())).thenReturn(carrito1);
+        when(repositorioCarrito.obtenerUltimoCarritoPorUsuario(usuario2.getId())).thenReturn(carrito2);
+
 
         servicioCarritoImpl.agregarObraAlCarrito(usuario1, obra1.getId(), formato);
         servicioCarritoImpl.agregarObraAlCarrito(usuario1, obra1.getId(), formato);

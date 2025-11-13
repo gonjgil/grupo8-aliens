@@ -1,6 +1,7 @@
 package com.tallerwebi.presentacion.dto;
 
 import com.tallerwebi.dominio.entidades.ItemCompra;
+import com.tallerwebi.dominio.enums.Formato;
 
 
 public class ItemCompraDto {
@@ -13,6 +14,8 @@ public class ItemCompraDto {
     private Double obraPrecio;
     private Integer cantidad;
     private Double subtotal;
+    private Formato formato;
+    private String formatoNombre;
 
     public ItemCompraDto(ItemCompra item) {
         this.id = item.getId();
@@ -23,6 +26,8 @@ public class ItemCompraDto {
         this.obraPrecio = item.getPrecioUnitario();
         this.cantidad = item.getCantidad();
         this.subtotal = item.getSubtotal();
+        this.formato = item.getFormato();
+        this.formatoNombre = item.getFormato() != null ? item.getFormato().getFormato() : "";
     }
 
     public Long getId() {
@@ -87,5 +92,21 @@ public class ItemCompraDto {
 
     public void setSubtotal(Double subtotal) {
         this.subtotal = subtotal;
+    }
+
+    public Formato getFormato() {
+        return formato;
+    }
+
+    public void setFormato(Formato formato) {
+        this.formato = formato;
+    }
+
+    public String getFormatoNombre() {
+        return formatoNombre;
+    }
+
+    public void setFormatoNombre(String formatoNombre) {
+        this.formatoNombre = formatoNombre;
     }
 }

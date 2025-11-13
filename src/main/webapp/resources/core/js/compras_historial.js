@@ -1,39 +1,16 @@
-// Datos de ejemplo - En una aplicación real vendría de una API/Backend
-const orders = [
-    {
-        id: '000123',
-        date: '03/11/2025',
-        items: [
-            { name: 'Camiseta Alien', quantity: 2, price: 10000 },
-            { name: 'Gorro Edición Especial', quantity: 1, price: 8000 }
-        ],
-        total: 28000,
-        payment: {
-            method: 'Mercado Pago',
-            status: 'pending',
-            date: '03/11/2025',
-            transactionId: 'MP-123456789'
-        },
-        shipping: {
-            address: 'Calle Falsa 123, Buenos Aires',
-            method: 'Envío estándar',
-            status: 'Preparando envío',
-            tracking: 'ENV123456'
-        }
-    },
-    // ... más órdenes
-];
-
 document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('compraDetail');
     const modalInstance = new bootstrap.Modal(modal);
+    console.log("Modal encontrado:", modal);
+
+
 
     document.querySelectorAll('.order-card').forEach(card => {
         card.addEventListener('click', async () => {
             const compraId = card.dataset.orderId;
 
             try {
-                const response = await fetch(`/compras/detalle/${compraId}`);
+                const response = await fetch(`/spring/compras/detalle/${compraId}`);
 
                 if (response.status === 401) {
                     window.location.href = "/login";
@@ -46,8 +23,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('compra-id').textContent = compra.id;
                 document.getElementById('compra-fecha').textContent = compra.fechaYHora;
 //                document.getElementById('compra-estado').textContent = compra.estado;
-                document.getElementById('compra-total').textContent = `$${compra.total.toLocaleString()}`;
-                document.getElementById('compra-total-footer').textContent = `$${compra.total.toLocaleString()}`;
+                document.getElementById('compra-total').textContent = `$${compra.precioFinal.toLocaleString()}`;
+                document.getElementById('compra-total-footer').textContent = `$${compra.precioFinal.toLocaleString()}`;
 
                 // Productos
                 const tbody = document.getElementById('compra-items');
@@ -56,7 +33,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
                         <td>${item.obraTitulo}</td>
-                        <td class="text-center">${item.cantidad}</td>
+                        <td class="text-center">${item.formatoNombre}</td>
+                        <td class="text-end">${item.cantidad}</td>
                         <td class="text-end">$${item.obraPrecio.toLocaleString()}</td>
                         <td class="text-end">$${item.subtotal.toLocaleString()}</td>
                     `;
@@ -113,20 +91,20 @@ document.addEventListener('DOMContentLoaded', () => {
 // This file contains the JavaScript functionality for the purchase order.
 // It handles the toggling between client and admin views, as well as the demo actions for updating the order status.
 
-const toggleAdmin = document.getElementById('toggleAdmin');
-const clientView = document.getElementById('clientView');
-const adminView = document.getElementById('adminView');
-const clientPendingActions = document.getElementById('clientPendingActions');
-
-toggleAdmin.addEventListener('change', e => {
-    if (e.target.checked) {
-        clientView.classList.add('d-none');
-        adminView.classList.remove('d-none');
-    } else {
-        clientView.classList.remove('d-none');
-        adminView.classList.add('d-none');
-    }
-});
+// const toggleAdmin = document.getElementById('toggleAdmin');
+// const clientView = document.getElementById('clientView');
+// const adminView = document.getElementById('adminView');
+// const clientPendingActions = document.getElementById('clientPendingActions');
+//
+// toggleAdmin.addEventListener('change', e => {
+//     if (e.target.checked) {
+//         clientView.classList.add('d-none');
+//         adminView.classList.remove('d-none');
+//     } else {
+//         clientView.classList.remove('d-none');
+//         adminView.classList.add('d-none');
+//     }
+// });
 
 // // Demo: admin actions update UI state
 // document.getElementById('markApproved').addEventListener('click', () => {

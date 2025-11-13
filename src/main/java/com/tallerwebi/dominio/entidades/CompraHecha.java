@@ -16,7 +16,7 @@ public class CompraHecha {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "compra")
+    @OneToMany(mappedBy = "compra", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ItemCompra> items;
 
     @OneToOne
@@ -35,8 +35,7 @@ public class CompraHecha {
     private LocalDateTime fechaYHora;
 
 
-    public CompraHecha(Long id, Carrito carrito, Double precioFinal, Usuario usuario) {
-        this.id = id;
+    public CompraHecha(Carrito carrito, Double precioFinal, Usuario usuario) {
         this.items = new ArrayList<>();
         this.carrito = carrito;
         this.precioFinal = precioFinal;
@@ -44,7 +43,18 @@ public class CompraHecha {
         this.usuario = usuario;
     }
 
+    public CompraHecha(List<ItemCompra> items, Carrito carrito, Double precioFinal, Long pagoId, EstadoPago estadoPago, Usuario usuario) {
+        this.items = items;
+        this.carrito = carrito;
+        this.precioFinal = precioFinal;
+        this.pagoId = pagoId;
+        this.estadoPago = estadoPago;
+        this.usuario = usuario;
+        this.fechaYHora = LocalDateTime.now();
+    }
+
     public CompraHecha() {}
+
 
     public EstadoPago getEstadoPago() {
         return estadoPago;

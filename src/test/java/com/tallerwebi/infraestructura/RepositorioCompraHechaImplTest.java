@@ -72,14 +72,15 @@ public class RepositorioCompraHechaImplTest {
         ItemCarrito itemCarrito = carrito.getItems().get(0);
         ItemCompra itemCompra = new ItemCompra(itemCarrito);
 
-        CompraHecha orden = new CompraHecha(1L, carrito, carrito.getTotal(), usuario);
+        CompraHecha orden = new CompraHecha(carrito, carrito.getTotal(), usuario);
         itemCompra.setCompra(orden);
         orden.setItems(List.of(itemCompra));
 
-        repositorioOrden.guardar(orden);
+        CompraHecha ordenGuardada = repositorioOrden.guardar(orden);
         CompraHecha ordenObtenida = repositorioOrden.obtenerPorId(orden.getId());
 
         assertThat(ordenObtenida, is(equalTo(orden)));
+        assertThat(ordenGuardada.getId(), is(equalTo(ordenObtenida.getId())));
         assertEquals(orden.getId(), ordenObtenida.getId());
         assertEquals(orden.getItems().size(), ordenObtenida.getItems().size());
     }
@@ -107,8 +108,8 @@ public class RepositorioCompraHechaImplTest {
         ItemCarrito itemCarrito2 = carrito2.getItems().get(0);
         ItemCompra itemCompra2 = new ItemCompra(itemCarrito2);
 
-        CompraHecha orden = new CompraHecha(1L, carrito, carrito.getTotal(), usuario);
-        CompraHecha orden2 = new CompraHecha(2L, carrito2, carrito2.getTotal(), usuario);
+        CompraHecha orden = new CompraHecha(carrito, carrito.getTotal(), usuario);
+        CompraHecha orden2 = new CompraHecha(carrito2, carrito2.getTotal(), usuario);
 
         itemCompra.setCompra(orden);
         orden.setItems(List.of(itemCompra));
@@ -169,9 +170,9 @@ public class RepositorioCompraHechaImplTest {
             ItemCarrito itemCarrito3 = carrito3.getItems().get(0);
             ItemCompra itemCompra3 = new ItemCompra(itemCarrito3);
 
-            CompraHecha orden = new CompraHecha(1L, carrito, carrito.getTotal(), usuario);
-            CompraHecha orden2 = new CompraHecha(2L, carrito2, carrito2.getTotal(), usuario);
-            CompraHecha orden3 = new CompraHecha(3L, carrito3, carrito3.getTotal(), usuario2);
+            CompraHecha orden = new CompraHecha(carrito, carrito.getTotal(), usuario);
+            CompraHecha orden2 = new CompraHecha(carrito2, carrito2.getTotal(), usuario);
+            CompraHecha orden3 = new CompraHecha(carrito3, carrito3.getTotal(), usuario2);
 
             itemCompra.setCompra(orden);
             orden.setItems(List.of(itemCompra));

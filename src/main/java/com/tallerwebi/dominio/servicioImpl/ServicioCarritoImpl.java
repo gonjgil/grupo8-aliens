@@ -3,6 +3,7 @@ package com.tallerwebi.dominio.servicioImpl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tallerwebi.dominio.enums.EstadoCarrito;
 import com.tallerwebi.dominio.excepcion.CarritoNoEncontradoException;
 import com.tallerwebi.dominio.excepcion.CarritoVacioException;
 import com.tallerwebi.dominio.repositorios.RepositorioCarrito;
@@ -256,5 +257,20 @@ public class ServicioCarritoImpl implements ServicioCarrito {
         }
 
         return formatosDto;
+    }
+
+    @Override
+    @Transactional
+    public void finalizarCarrito(Usuario usuario) {
+        if (usuario == null) {
+            throw new IllegalArgumentException("Usuario no puede ser null");
+        }
+
+        Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId());
+        if (carrito == null) {
+            throw new IllegalStateException("No se encontró carrito para el usuario");
+        }
+        carrito.setEstado(EstadoCarrito.FINALIZADO);
+        repositorioCarrito.actualizarEstado(carrito.getId(), EstadoCarrito.FINALIZADO);
     }
 }

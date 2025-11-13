@@ -1,15 +1,27 @@
 package com.tallerwebi.presentacion;
 
+import com.mercadopago.client.preference.PreferenceBackUrlsRequest;
 import com.mercadopago.client.preference.PreferenceClient;
 import com.mercadopago.client.preference.PreferenceItemRequest;
 import com.mercadopago.client.preference.PreferenceRequest;
 import com.mercadopago.resources.preference.Preference;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.exceptions.MPApiException;
+import com.tallerwebi.dominio.ServicioCarrito;
+import com.tallerwebi.dominio.ServicioCompraHecha;
+import com.tallerwebi.dominio.entidades.Carrito;
+import com.tallerwebi.dominio.entidades.CompraHecha;
+import com.tallerwebi.dominio.entidades.Usuario;
+import com.tallerwebi.dominio.excepcion.CarritoNoEncontradoException;
+import com.tallerwebi.dominio.excepcion.CarritoVacioException;
+import com.tallerwebi.dominio.excepcion.PagoNoAprobadoException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,6 +32,12 @@ import java.util.Map;
 @RequestMapping("/api")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class ControladorPagos {
+
+    @Autowired
+    private ServicioCompraHecha servicioCompraHecha;
+
+    @Autowired
+    private ServicioCarrito servicioCarrito;
 
     @PostConstruct
     public void init() {
@@ -134,17 +152,20 @@ public class ControladorPagos {
             }
             
             // Para testing local, comentamos las URLs de callback que causan problemas con localhost
-            // PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder()
-            //     .success(com.tallerwebi.config.MercadoPagoConfig.getSuccessUrl())
-            //     .failure(com.tallerwebi.config.MercadoPagoConfig.getFailureUrl())
-            //     .pending(com.tallerwebi.config.MercadoPagoConfig.getPendingUrl())
-            //     .build();
+             PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder()
+                 .success(com.tallerwebi.config.MercadoPagoConfig.getSuccessUrl())
+                 .failure(com.tallerwebi.config.MercadoPagoConfig.getFailureUrl())
+                 .pending(com.tallerwebi.config.MercadoPagoConfig.getPendingUrl())
+                 .build();
             
             // Crear la preferencia (sin autoReturn para evitar problemas con URLs localhost)
             PreferenceRequest preferenceRequest = PreferenceRequest.builder()
-                .items(mpItems)
-                .externalReference("GALERIA-" + System.currentTimeMillis())
-                .build();
+                    .items(mpItems)
+                    .backUrls(backUrls)
+                    .autoReturn("approved")
+                    .externalReference("GALERIA-" + System.currentTimeMillis())
+                    .build();
+
             
             // Crear la preferencia usando el SDK real de MercadoPago
             PreferenceClient client = new PreferenceClient();
@@ -186,17 +207,31 @@ public class ControladorPagos {
     }
     
     @GetMapping("/pagos/success")
-    public ResponseEntity<?> pagoExitoso(@RequestParam(required = false) String payment_id,
-                                        @RequestParam(required = false) String status,
-                                        @RequestParam(required = false) String merchant_order_id) {
-        Map<String, Object> response = new HashMap<>();
-        response.put("message", "Pago procesado exitosamente");
-        response.put("payment_id", payment_id);
-        response.put("status", status);
-        
-        return ResponseEntity.ok(response);
+    public ModelAndView pagoExitoso(@RequestParam("payment_id") Long paymentId, HttpSession session) {
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+
+        if (usuario == null) {
+            return new ModelAndView("redirect:/login");
+        }
+
+        try {
+            Carrito carrito = servicioCarrito.obtenerCarritoConItems(usuario);
+            CompraHecha compra = servicioCompraHecha.crearResumenCompraAPartirDeCarrito(carrito, paymentId);
+
+            if (compra == null || compra.getId() == null) {
+
+                return new ModelAndView("redirect:/compras/error");
+            }
+            return new ModelAndView("redirect:/compras/historial");
+
+        } catch (CarritoVacioException | CarritoNoEncontradoException | PagoNoAprobadoException e) {
+            return new ModelAndView("redirect:/compras/error");
+        } catch (Exception e) {
+//            e.printStackTrace(); // para ver el stack completo
+            return new ModelAndView("redirect:/compras/error");
+        }
     }
-    
+
     @GetMapping("/pagos/failure")
     public ResponseEntity<?> pagoFallido() {
         Map<String, String> response = new HashMap<>();

@@ -8,6 +8,8 @@ import com.tallerwebi.dominio.enums.Formato;
 
 import com.tallerwebi.presentacion.dto.ItemCarritoDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -151,6 +153,16 @@ public class ControladorCarrito {
         return "redirect:/carrito";
     }
 
+    @PostMapping("/finalizar")
+    public ResponseEntity<?> finalizarCarrito(HttpSession session) {
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+        if (usuario == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+          servicioCarrito.finalizarCarrito(usuario);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/contador")
     @ResponseBody
     public String obtenerContadorCarrito(HttpSession session) {
@@ -164,4 +176,7 @@ public class ControladorCarrito {
         int total = items.stream().mapToInt(ItemCarritoDto::getCantidad).sum();
         return "{\"count\": " + total + "}";
     }
+
+
+
 }

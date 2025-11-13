@@ -19,8 +19,9 @@ public class CompraHechaDto {
 
     public CompraHechaDto(CompraHecha compra, List<ItemCompraDto> items) {
         this.id = compra.getId();
-        this.nombreUsuario = compra.getUsuario().getNombre();
+        this.nombreUsuario = compra.getUsuario().getNombre()!= null ? compra.getUsuario().getNombre() : "Desconocido";
         this.fechaYHora = compra.getFechaYHora().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+        this.pagoId = compra.getPagoId();
         this.cantidadItems = compra.getItems().size();
         this.items = items;
         this.precioFinal = compra.getPrecioFinal();

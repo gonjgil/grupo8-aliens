@@ -10,8 +10,10 @@ import com.tallerwebi.dominio.entidades.ItemCompra;
 import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.CarritoNoEncontradoException;
 import com.tallerwebi.dominio.excepcion.CarritoVacioException;
+import com.tallerwebi.dominio.excepcion.PagoNoAprobadoException;
 import com.tallerwebi.presentacion.dto.ItemCompraDto;
 import com.tallerwebi.presentacion.dto.CompraHechaDto;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -29,36 +32,13 @@ import java.util.List;
 public class ControladorCompraHecha {
 
     private ServicioCompraHecha servicioCompraHecha;
-    private ServicioCarrito servicioCarrito;
 
     @Autowired
-    public ControladorCompraHecha(ServicioCompraHecha servicioCompraHecha, ServicioCarrito servicioCarrito) {
+    public ControladorCompraHecha(ServicioCompraHecha servicioCompraHecha) {
         this.servicioCompraHecha = servicioCompraHecha;
-        this.servicioCarrito = servicioCarrito;
+
     }
 
-    @GetMapping("/{id}")
-    public ModelAndView verCompra(@PathVariable Long ordenId, HttpSession session) throws MPException, MPApiException, CarritoNoEncontradoException, CarritoVacioException {
-        ModelMap modelo = new ModelMap();
-        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
-
-        if (usuario == null) {
-            return new ModelAndView("redirect:/login");
-        }
-
-        Carrito carrito = servicioCarrito.obtenerCarritoConItems(usuario);
-        CompraHecha compra = servicioCompraHecha.crearResumenCompraAPartirDeCarrito(carrito);
-        List<ItemCompra> items = servicioCompraHecha.obtenerItems(ordenId);
-        List<ItemCompraDto> itemsDto = new ArrayList<>();
-        for (ItemCompra item : items) {
-            itemsDto.add(new ItemCompraDto(item));
-        }
-        modelo.put("items", itemsDto);
-        modelo.put("compra", compra);
-        modelo.put("usuario", usuario);
-
-        return new ModelAndView("compras_historial", modelo);
-    }
 
     @GetMapping("/detalle/{id}")
     @ResponseBody
@@ -73,13 +53,11 @@ public class ControladorCompraHecha {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        List<ItemCompra> items = servicioCompraHecha.obtenerItems(id);
         List<ItemCompraDto> itemsDto = new ArrayList<>();
 
-        for (ItemCompra item : items) {
+        for (ItemCompra item : compra.getItems()) {
             itemsDto.add(new ItemCompraDto(item));
         }
-
 
         CompraHechaDto dto = new CompraHechaDto(compra, itemsDto);
         return ResponseEntity.ok(dto);
@@ -94,21 +72,33 @@ public class ControladorCompraHecha {
         if (usuario == null) {
             return new ModelAndView("redirect:/login");
         }
-        int tamanioPorPagina = 6;
+        int tamanioPorPagina = 9;
         List<CompraHecha> compras = servicioCompraHecha.obtenerComprasPorUsuario(usuario);
         List<CompraHechaDto> comprasDto = new ArrayList<>();
         for (CompraHecha compra : compras) {
+            compra.getItems().size();
             comprasDto.add(new CompraHechaDto(compra));
         }
 
         int desde = pagina * tamanioPorPagina;
         int hasta = Math.min(desde + tamanioPorPagina, compras.size());
         List<CompraHechaDto> comprasEnPagina = comprasDto.subList(desde, hasta);
-
+        if (comprasDto.isEmpty()) {
+            modelo.put("compras", Collections.emptyList());
+            modelo.put("totalPaginas", 0);
+        } else {
         modelo.put("compras", comprasEnPagina);
         modelo.put("usuario", usuario);
         modelo.put("paginaActual", pagina);
         modelo.put("totalPaginas", (int) Math.ceil((double) compras.size() / tamanioPorPagina));
+        }
         return new ModelAndView("compras_historial", modelo);
     }
+
+    @GetMapping("/error")
+    public ModelAndView mostrarError() {
+        return new ModelAndView("compras_error");
+    }
+
+
 }

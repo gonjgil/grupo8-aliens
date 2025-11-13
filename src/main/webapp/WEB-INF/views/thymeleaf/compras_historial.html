@@ -40,7 +40,7 @@
                title="Ver carrito">
             </a>
             <a th:href="@{/compras/historial}"
-               class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-3 rounded-full transition duration-300 shadow-lg"
+               class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-3 rounded-full transition duration-300 shadow-lg"
                title="Ver mis compras">
                 <i class="bi bi-bag-check"></i>
             </a>
@@ -70,22 +70,22 @@
             <!-- Order Card Template - Repeat for each order -->
             <div class="col-md-6 col-lg-4" th:each="compra : ${compras}">
                 <!-- Update the order card template -->
-                <div class="card order-card" data-bs-toggle="modal" data-bs-target="#orderDetail" th:attr="data-order-id=${compra.id}">
+                <div class="card order-card"  th:attr="data-order-id=${compra.id}">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start">
                             <div>
                                 <h6 class="mb-1">Orden <strong th:text="${'#' + compra.id}"></strong></h6>
-                                <div class="text-muted small"><span th:text="${#dates.format(compra.fechayHora, 'dd/MM/yyyy HH:mm')}"></span></div>
+                                <div class="text-muted small"><span th:text="${#dates.format(compra.fechaYHora, 'dd/MM/yyyy HH:mm')}"></span></div>
                             </div>
                         </div>
                         <hr>
                         <div class="d-flex justify-content-between">
-                            <div class="small" th:text="${compra.cantidadItems + 'obras'}"></div>
+                            <div class="small" th:text="${compra.cantidadItems + ' obras'}"></div>
                             <strong th:text="${'$' + #numbers.formatDecimal(compra.precioFinal, 0, 'POINT', 0, 'COMMA')}"></strong>
                         </div>
-                        <div class="order-card" data-order-id="123">
-                            <button class="btn btn-outline-primary">Ver detalle</button>
-                        </div>
+<!--                        <div class="order-card" >-->
+<!--                            <button class="btn btn-outline-primary">Ver detalle</button>-->
+<!--                        </div>-->
                     </div>
                 </div>
             </div>
@@ -129,7 +129,8 @@
                             <thead class="table-light">
                             <tr>
                                 <th>Obra</th>
-                                <th class="text-center">Cantidad</th>
+                                <th class="text-center">Formato</th>
+                                <th class="text-end">Cantidad</th>
                                 <th class="text-end">Precio unitario</th>
                                 <th class="text-end">Subtotal</th>
                             </tr>
@@ -137,7 +138,7 @@
                             <tbody id="compra-items"></tbody>
                             <tfoot>
                             <tr>
-                                <th colspan="3" class="text-end">Total</th>
+                                <th colspan="4" class="text-end">Total</th>
                                 <th class="text-end" id="compra-total-footer"></th>
                             </tr>
                             </tfoot>
@@ -147,34 +148,6 @@
             </div>
         </div>
     </div>
-
-<!--                <div class="row g-3 mt-3">-->
-<!--                    <div class="col-md-6">-->
-<!--                        <div class="summary-box">-->
-<!--                            <h6 class="mb-1"><i class="bi bi-credit-card-fill"></i> Información de pago</h6>-->
-<!--                            <div class="small-muted mb-2">Método: <strong class="payment-method"></strong></div>-->
-<!--                            <div class="small-muted mb-1">Estado del pago: <span class="payment-status"></span></div>-->
-<!--                            <div class="small-muted">Fecha de pago: <span class="payment-date"></span></div>-->
-<!--                            <div class="small-muted">ID de transacción: <span class="payment-id"></span></div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-
-<!--                    <div class="col-md-6">-->
-<!--                        <div class="summary-box">-->
-<!--                            <h6 class="mb-1"><i class="bi bi-truck"></i> Envío</h6>-->
-<!--                            <div class="small-muted mb-1">Dirección: <span class="shipping-address"></span></div>-->
-<!--                            <div class="small-muted mb-1">Método: <span class="shipping-method"></span></div>-->
-<!--                            <div class="small-muted mb-1">Estado: <strong class="shipping-status"></strong></div>-->
-<!--                            <div class="small-muted">Número de seguimiento: <span class="shipping-tracking"></span></div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-
-                <div class="d-flex flex-wrap justify-content-between align-items-center mt-4 actions">
-                    <div class="mb-2">
-                        <button class="btn btn-outline-primary btn-sm"><i class="bi bi-file-earmark-pdf"></i> Ver factura PDF</button>
-                        <button class="btn btn-link btn-sm" data-bs-dismiss="modal">Volver a mis órdenes</button>
-                    </div>
 
                     <div class="mb-2 order-actions">
                         <!-- Actions will be populated by JS based on order status -->
@@ -188,6 +161,6 @@
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Custom JS -->
-  <script th:href="@{/javascript/compras_historial.js}"></script>
+  <script th:src="@{/js/compras_historial.js}"></script>
 </body>
 </html>

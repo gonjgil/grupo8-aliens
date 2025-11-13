@@ -4,7 +4,8 @@ public enum EstadoPago {
 
     PENDIENTE("Pendiente"),
     APROBADO("Aprobado"),
-    RECHAZADO("Rechazado");
+    RECHAZADO("Rechazado"),
+    ERROR("Error");
 
     private final String descripcion;
 
