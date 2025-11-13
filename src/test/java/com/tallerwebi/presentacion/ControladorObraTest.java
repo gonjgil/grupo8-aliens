@@ -501,5 +501,76 @@ public class ControladorObraTest {
         assertThat(resultado, is("redirect:/galeria"));
     }
 
+    @Test
+    void queSePuedaEliminarUnaObraSiElUsuarioEsElArtista() {
+        ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
+        ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
+        ServicioPerfilArtista servicioPerfilArtista = mock(ServicioPerfilArtista.class);
+        ServicioCloudinary servicioCloudinary = mock(ServicioCloudinary.class);
+        ServicioFormatoObra servicioFormatoObra = mock(ServicioFormatoObra.class);
 
+        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioCarrito,
+                servicioPerfilArtista, servicioCloudinary, servicioFormatoObra);
+
+        Usuario usuario = new Usuario();
+        usuario.setId(1L);
+
+        Artista artista = new Artista();
+        artista.setId(10L);
+        artista.setUsuario(usuario);
+
+        Obra obra = new Obra();
+        obra.setId(5L);
+        obra.setArtista(artista);
+
+        when(request.getSession().getAttribute("usuarioLogueado")).thenReturn(usuario);
+        when(servicioPerfilArtista.obtenerArtistaPorUsuario(usuario)).thenReturn(artista);
+        when(servicioGaleria.obtenerPorId(5L)).thenReturn(obra);
+
+        String resultado = controladorObra.eliminarObra(5L, request);
+
+        verify(servicioGaleria).eliminarObra(obra);
+        assertThat(resultado, equalTo("redirect:/galeria"));
+    }
+
+    @Test
+    void queNoSePuedaEliminarUnaObraSiElUsuarioNoEsElArtista() {
+        ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
+        ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
+        ServicioPerfilArtista servicioPerfilArtista = mock(ServicioPerfilArtista.class);
+        ServicioCloudinary servicioCloudinary = mock(ServicioCloudinary.class);
+        ServicioFormatoObra servicioFormatoObra = mock(ServicioFormatoObra.class);
+
+        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioCarrito,
+                servicioPerfilArtista, servicioCloudinary, servicioFormatoObra);
+
+        Usuario usuario = new Usuario();
+        usuario.setId(1L);
+
+        Artista artista = new Artista();
+        artista.setId(10L);
+        artista.setUsuario(usuario);
+
+        Obra obra = new Obra();
+        obra.setId(5L);
+        obra.setArtista(artista);
+
+        Usuario otroUsuario = new Usuario();
+        otroUsuario.setId(99L);
+
+        Artista otroArtista = new Artista();
+        otroArtista.setId(20L);
+        otroArtista.setUsuario(otroUsuario);
+
+        when(request.getSession().getAttribute("usuarioLogueado")).thenReturn(otroUsuario);
+        when(servicioPerfilArtista.obtenerArtistaPorUsuario(otroUsuario)).thenReturn(otroArtista);
+        when(servicioGaleria.obtenerPorId(5L)).thenReturn(obra);
+
+        // when
+        String resultado = controladorObra.eliminarObra(5L, request);
+
+        // then
+        verify(servicioGaleria, never()).eliminarObra(any());
+        assertThat(resultado, equalTo("redirect:/galeria"));
+    }
 }

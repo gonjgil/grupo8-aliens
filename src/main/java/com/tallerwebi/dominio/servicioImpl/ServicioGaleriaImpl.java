@@ -187,4 +187,12 @@ public class ServicioGaleriaImpl implements ServicioGaleria {
 
         guardar(obraExistente, obraExistente.getArtista(), urlImagen);
     }
+
+    @Override
+    public void eliminarObra(Obra obra) {
+        if (obra == null) {
+            throw new IllegalArgumentException("La obra no puede ser nula");
+        }
+        repositorioObra.eliminar(obra);
+    }
 }
