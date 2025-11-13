@@ -12,4 +12,8 @@ public interface RepositorioFormatoObra {
     FormatoObra obtenerFormatoPorObraYFormato(Long obraId, Formato formato);
     void eliminar(FormatoObra formatoObra);
     List<FormatoObra> obtenerTodos();
+
+    void actualizarPrecio(Long formatoObraId, Double nuevoPrecio);
+
+    void actualizarStock(Long formatoObraId, Integer nuevoStock);
 }

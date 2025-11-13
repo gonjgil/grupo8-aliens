@@ -113,6 +113,15 @@
                        title="Editar obra">
                         <i class="bi bi-pencil"></i>
                     </a>
+                    <!-- Eliminar -->
+                    <form th:action="@{'/obra/' + ${obra.id} + '/eliminar'}" method="post"
+                          onsubmit="return confirm('¿Seguro que querés eliminar esta obra?');">
+                        <button type="submit"
+                                class="bg-red-600 hover:bg-red-700 text-white p-2 rounded shadow-lg transition"
+                                title="Eliminar obra">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </form>
                 </div>
 
                 <!-- Título -->

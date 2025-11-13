@@ -172,4 +172,9 @@ public class RepositorioObraImpl implements RepositorioObra {
             return new ArrayList<>();
         }
     }
+
+    @Override
+    public void eliminar(Obra obra) {
+        sessionFactory.getCurrentSession().delete(obra);
+    }
 }

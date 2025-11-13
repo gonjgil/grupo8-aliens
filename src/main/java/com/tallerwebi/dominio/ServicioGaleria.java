@@ -18,4 +18,5 @@ public interface ServicioGaleria {
     List<Obra> obtenerObrasParaUsuario(Usuario usuario);
     Obra guardar(Obra obra, Artista artista, String urlImagen);
     void actualizarObra(Long idObra, ObraDto dto, List<String> categoriasSeleccionadas, String urlImagen) throws NoExisteLaObra;
+    void eliminarObra(Obra obra);
 }

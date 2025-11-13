@@ -60,4 +60,23 @@ public class RepositorioFormatoObraImpl implements RepositorioFormatoObra {
                 .createQuery("FROM FormatoObra", FormatoObra.class)
                 .getResultList();
     }
+
+    @Override
+    public void actualizarPrecio(Long formatoObraId, Double nuevoPrecio) {
+        FormatoObra formato = obtenerPorId(formatoObraId);
+        if (formato != null) {
+            formato.setPrecio(nuevoPrecio);
+            sessionFactory.getCurrentSession().saveOrUpdate(formato);
+        }
+    }
+
+    @Override
+    public void actualizarStock(Long formatoObraId, Integer nuevoStock) {
+        FormatoObra formato = obtenerPorId(formatoObraId);
+        if (formato != null) {
+            formato.setStock(nuevoStock);
+            sessionFactory.getCurrentSession().saveOrUpdate(formato);
+        }
+    }
+
 }

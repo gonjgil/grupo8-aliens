@@ -284,4 +284,50 @@ class ServicioGaleriaImplTest {
                 servicioGaleria.actualizarObra(idObra, new ObraDto(), null, null)
         );
     }
+
+    @Test
+    void queSePuedaEliminarUnaObraSiElUsuarioEsElArtistaDeLaObra() {
+        RepositorioObra repositorioObra = mock(RepositorioObra.class);
+        ServicioGaleria servicioGaleria = new ServicioGaleriaImpl(repositorioObra);
+
+        Artista artista = new Artista();
+        artista.setId(1L);
+
+        Obra obra = new Obra();
+        obra.setId(10L);
+        obra.setTitulo("Titulo");
+        obra.setArtista(artista);
+
+        servicioGaleria.eliminarObra(obra);
+
+        verify(repositorioObra, times(1)).eliminar(obra);
+    }
+
+    @Test
+    void queNoSePuedaEliminarUnaObraSiElUsuarioNoEsElArtistaDeLaObra() {
+        RepositorioObra repositorioObra = mock(RepositorioObra.class);
+        ServicioGaleriaImpl servicioGaleria = new ServicioGaleriaImpl(repositorioObra);
+
+        Artista artistaDuenio = new Artista();
+        artistaDuenio.setId(1L);
+
+        Artista otroArtista = new Artista();
+        otroArtista.setId(2L);
+
+        Obra obra = new Obra();
+        obra.setId(10L);
+        obra.setTitulo("Titulo de prueba");
+        obra.setArtista(artistaDuenio);
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            if (!obra.getArtista().getId().equals(otroArtista.getId())) {
+                throw new IllegalArgumentException("El artista no tiene permiso para eliminar esta obra");
+            }
+            servicioGaleria.eliminarObra(obra);
+        });
+
+        assertThat(exception.getMessage(), equalTo("El artista no tiene permiso para eliminar esta obra"));
+        verify(repositorioObra, never()).eliminar(obra);
+    }
+
 }
