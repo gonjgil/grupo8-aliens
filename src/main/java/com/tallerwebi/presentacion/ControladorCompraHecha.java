@@ -72,7 +72,7 @@ public class ControladorCompraHecha {
         if (usuario == null) {
             return new ModelAndView("redirect:/login");
         }
-        int tamanioPorPagina = 9;
+//        int tamanioPorPagina = 9;
         List<CompraHecha> compras = servicioCompraHecha.obtenerComprasPorUsuario(usuario);
         List<CompraHechaDto> comprasDto = new ArrayList<>();
         for (CompraHecha compra : compras) {
@@ -80,18 +80,13 @@ public class ControladorCompraHecha {
             comprasDto.add(new CompraHechaDto(compra));
         }
 
-        int desde = pagina * tamanioPorPagina;
-        int hasta = Math.min(desde + tamanioPorPagina, compras.size());
-        List<CompraHechaDto> comprasEnPagina = comprasDto.subList(desde, hasta);
         if (comprasDto.isEmpty()) {
             modelo.put("compras", Collections.emptyList());
-            modelo.put("totalPaginas", 0);
         } else {
-        modelo.put("compras", comprasEnPagina);
-        modelo.put("usuario", usuario);
-        modelo.put("paginaActual", pagina);
-        modelo.put("totalPaginas", (int) Math.ceil((double) compras.size() / tamanioPorPagina));
+            modelo.put("compras", comprasDto);
         }
+
+        modelo.put("usuario", usuario);
         return new ModelAndView("compras_historial", modelo);
     }
 

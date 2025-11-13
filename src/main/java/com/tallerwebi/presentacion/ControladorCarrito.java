@@ -178,7 +178,7 @@ public class ControladorCarrito {
 
         try {
             // Lógica de finalización de compra
-            servicioCarrito.finalizarCompra(usuario);
+ //           servicioCarrito.finalizarCompra(usuario);
 
 
             // Envia correo de confirmación

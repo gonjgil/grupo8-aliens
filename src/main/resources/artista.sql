@@ -1,51 +1,50 @@
-INSERT INTO Artista (id, nombre, biografia) VALUES
-(1, 'Elena Morales', 'Fotógrafa contemporánea especializada en capturar momentos espontáneos de la vida urbana. Graduada de la Escuela de Artes Visuales de Buenos Aires.'),
-(2, 'Tomás Rivera', 'Artista visual que explora la relación entre arquitectura y naturaleza a través de la fotografía documental y experimental.'),
-(3, 'Sofía Méndez', 'Creadora multidisciplinaria que combina fotografía análoga con técnicas digitales para crear narrativas visuales únicas.'),
-(4, 'Martín Ávila', 'Fotógrafo de paisajes urbanos que documenta la transformación de las ciudades latinoamericanas en el siglo XXI.'),
-(5, 'Carmen Vega', 'Artista visual enfocada en la exploración de texturas y formas geométricas encontradas en entornos cotidianos.'),
-(6, 'Diego Santos', 'Fotógrafo conceptual que utiliza la luz natural como herramienta principal para crear composiciones minimalistas.'),
-(7, 'Ana Herrera', 'Creadora que investiga la percepción del espacio y el tiempo a través de instalaciones fotográficas inmersivas.'),
-(8, 'Luis Campos', 'Artista que combina fotografía callejera con elementos de abstracción para crear obras que cuestionan la realidad urbana.'),
-(9, 'María Torres', 'Fotógrafa especializada en capturar la esencia poética de arquitecturas abandonadas y espacios en transición.'),
-(10, 'Carlos Núñez', 'Creador visual que explora conceptos de identidad y pertenencia mediante retratos y paisajes contemplativos.'),
-(11, 'Valeria Ramos', 'Artista que utiliza la fotografía como medio para investigar patrones y repeticiones en la naturaleza urbana.'),
-(12, 'Andrés Silva', 'Fotógrafo documental que se enfoca en capturar la vida cotidiana desde perspectivas no convencionales.'),
-(13, 'Isabel Rojas', 'Creadora que fusiona fotografía tradicional con elementos digitales para explorar nuevas formas de narrativa visual.'),
-(14, 'Francisco Paz', 'Artista especializado en fotografía de arquitectura que busca revelar la dimensión emocional de los espacios construidos.'),
-(15, 'Lucía Ramírez', 'Fotógrafa que investiga la relación entre luz, sombra y forma en composiciones de gran formato.'),
-(16, 'Roberto García', 'Creador visual que utiliza técnicas experimentales para capturar la esencia temporal de paisajes urbanos.'),
-(17, 'Amanda López', 'Artista que explora conceptos de memoria y nostalgia a través de fotografías que evocan atmósferas melancólicas.'),
-(18, 'Pedro Jiménez', 'Fotógrafo que se especializa en capturar momentos de quietud y contemplación en entornos urbanos acelerados.'),
-(19, 'Natalia Cruz', 'Creadora que investiga la geometría oculta en paisajes naturales y arquitecturas contemporáneas.'),
-(20, 'Sebastián Mora', 'Artista visual que combina fotografía documental con elementos de ficción para crear historias visuales complejas.'),
-(21, 'Gabriela Ortiz', 'Fotógrafa que explora la tensión entre lo público y lo privado en espacios urbanos contemporáneos.'),
-(22, 'Emilio Vargas', 'Creador que utiliza la fotografía para investigar conceptos de soledad y comunidad en la ciudad moderna.'),
-(23, 'Patricia Soto', 'Artista especializada en capturar la poesía visual de objetos cotidianos bajo diferentes condiciones lumínicas.'),
-(24, 'Joaquín Peña', 'Fotógrafo que documenta la transformación del paisaje urbano con una perspectiva crítica y estética.'),
-(25, 'Mónica Castillo', 'Creadora que fusiona fotografía analógica y digital para explorar conceptos de temporalidad y memoria.'),
-(26, 'Alejandro Reyes', 'Artista que utiliza la fotografía como herramienta de investigación social y crítica urbana.'),
-(27, 'Daniela Flores', 'Fotógrafa especializada en capturar atmósferas íntimas en espacios públicos mediante técnicas de observación silenciosa.'),
-(28, 'Raúl Medina', 'Creador visual que explora la abstracción fotográfica a través de elementos arquitectónicos y naturales.'),
-(29, 'Cristina Aguilar', 'Artista que investiga la percepción del color y la luz en entornos urbanos contemporáneos.'),
-(30, 'Nicolás Guerrero', 'Fotógrafo documental que se enfoca en capturar la diversidad cultural de las metrópolis modernas.'),
-(31, 'Verónica Ruiz', 'Creadora que utiliza la fotografía para explorar conceptos de identidad femenina en contextos urbanos.'),
-(32, 'Mauricio León', 'Artista especializado en fotografía conceptual que cuestiona las convenciones de la representación visual.'),
-(33, 'Adriana Cabrera', 'Fotógrafa que investiga la relación entre naturaleza y artificio en paisajes urbanos contemporáneos.'),
-(34, 'Gustavo Mendoza', 'Creador que combina fotografía callejera con elementos de performance para crear obras interdisciplinarias.'),
-(35, 'Lorena Sandoval', 'Artista visual que explora conceptos de movimiento y estaticidad a través de composiciones fotográficas dinámicas.'),
-(36, 'Óscar Delgado', 'Fotógrafo que se especializa en capturar la dimensión emocional de espacios arquitectónicos abandonados.'),
-(37, 'Fernanda Castro', 'Creadora que utiliza técnicas experimentales de revelado para crear fotografías que desafían la percepción tradicional.'),
-(38, 'Ricardo Moreno', 'Artista que investiga la relación entre espacio público y privado mediante fotografías de gran formato.'),
-(39, 'Alejandra Peñaloza', 'Fotógrafa especializada en capturar la poética de la vida urbana nocturna con sensibilidad documental.'),
-(40, 'Iván Herrera', 'Creador visual que explora conceptos de fragmentación y totalidad en paisajes urbanos contemporáneos.'),
-(41, 'Camila Escobar', 'Artista que utiliza la fotografía para investigar patrones de comportamiento social en espacios públicos.'),
-(42, 'Felipe Álvarez', 'Fotógrafo que combina técnicas tradicionales con nuevas tecnologías para crear obras visuales innovadoras.'),
-(43, 'Roxana Figueroa', 'Creadora que explora la tensión entre realidad y ficción a través de narrativas fotográficas complejas.'),
-(44, 'Manuel Contreras', 'Artista especializado en fotografía de arquitectura que revela la dimensión poética de estructuras urbanas.'),
-(45, 'Silvia Romero', 'Fotógrafa que investiga conceptos de intimidad y distancia en retratos urbanos contemporáneos.'),
-(46, 'Héctor Navarro', 'Creador visual que utiliza la fotografía documental para explorar temas de migración y identidad cultural.'),
-(47, 'Carolina Bermúdez', 'Artista que combina fotografía con elementos de instalación para crear experiencias visuales inmersivas.'),
-(48, 'Pablo Serrano', 'Fotógrafo especializado en capturar la esencia temporal de paisajes en transformación constante.'),
-(49, 'Mariana Cordero', 'Creadora que explora conceptos de memoria colectiva a través de fotografías que evocan narrativas históricas.'),
-(50, 'Álvaro Quintero', 'Artista visual que utiliza la fotografía como medio para cuestionar las convenciones sociales y culturales.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Elena Morales', 'Fotógrafa contemporánea especializada en capturar momentos espontáneos de la vida urbana. Graduada de la Escuela de Artes Visuales de Buenos Aires.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Tomás Rivera', 'Artista visual que explora la relación entre arquitectura y naturaleza a través de la fotografía documental y experimental.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Sofía Méndez', 'Creadora multidisciplinaria que combina fotografía análoga con técnicas digitales para crear narrativas visuales únicas.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Martín Ávila', 'Fotógrafo de paisajes urbanos que documenta la transformación de las ciudades latinoamericanas en el siglo XXI.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Carmen Vega', 'Artista visual enfocada en la exploración de texturas y formas geométricas encontradas en entornos cotidianos.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Diego Santos', 'Fotógrafo conceptual que utiliza la luz natural como herramienta principal para crear composiciones minimalistas.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Ana Herrera', 'Creadora que investiga la percepción del espacio y el tiempo a través de instalaciones fotográficas inmersivas.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Luis Campos', 'Artista que combina fotografía callejera con elementos de abstracción para crear obras que cuestionan la realidad urbana.');
+INSERT INTO Artista (nombre, biografia) VALUES ('María Torres', 'Fotógrafa especializada en capturar la esencia poética de arquitecturas abandonadas y espacios en transición.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Carlos Núñez', 'Creador visual que explora conceptos de identidad y pertenencia mediante retratos y paisajes contemplativos.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Valeria Ramos', 'Artista que utiliza la fotografía como medio para investigar patrones y repeticiones en la naturaleza urbana.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Andrés Silva', 'Fotógrafo documental que se enfoca en capturar la vida cotidiana desde perspectivas no convencionales.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Isabel Rojas', 'Creadora que fusiona fotografía tradicional con elementos digitales para explorar nuevas formas de narrativa visual.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Francisco Paz', 'Artista especializado en fotografía de arquitectura que busca revelar la dimensión emocional de los espacios construidos.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Lucía Ramírez', 'Fotógrafa que investiga la relación entre luz, sombra y forma en composiciones de gran formato.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Roberto García', 'Creador visual que utiliza técnicas experimentales para capturar la esencia temporal de paisajes urbanos.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Amanda López', 'Artista que explora conceptos de memoria y nostalgia a través de fotografías que evocan atmósferas melancólicas.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Pedro Jiménez', 'Fotógrafo que se especializa en capturar momentos de quietud y contemplación en entornos urbanos acelerados.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Natalia Cruz', 'Creadora que investiga la geometría oculta en paisajes naturales y arquitecturas contemporáneas.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Sebastián Mora', 'Artista visual que combina fotografía documental con elementos de ficción para crear historias visuales complejas.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Gabriela Ortiz', 'Fotógrafa que explora la tensión entre lo público y lo privado en espacios urbanos contemporáneos.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Emilio Vargas', 'Creador que utiliza la fotografía para investigar conceptos de soledad y comunidad en la ciudad moderna.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Patricia Soto', 'Artista especializada en capturar la poesía visual de objetos cotidianos bajo diferentes condiciones lumínicas.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Joaquín Peña', 'Fotógrafo que documenta la transformación del paisaje urbano con una perspectiva crítica y estética.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Mónica Castillo', 'Creadora que fusiona fotografía analógica y digital para explorar conceptos de temporalidad y memoria.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Alejandro Reyes', 'Artista que utiliza la fotografía como herramienta de investigación social y crítica urbana.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Daniela Flores', 'Fotógrafa especializada en capturar atmósferas íntimas en espacios públicos mediante técnicas de observación silenciosa.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Raúl Medina', 'Creador visual que explora la abstracción fotográfica a través de elementos arquitectónicos y naturales.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Cristina Aguilar', 'Artista que investiga la percepción del color y la luz en entornos urbanos contemporáneos.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Nicolás Guerrero', 'Fotógrafo documental que se enfoca en capturar la diversidad cultural de las metrópolis modernas.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Verónica Ruiz', 'Creadora que utiliza la fotografía para explorar conceptos de identidad femenina en contextos urbanos.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Mauricio León', 'Artista especializado en fotografía conceptual que cuestiona las convenciones de la representación visual.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Adriana Cabrera', 'Fotógrafa que investiga la relación entre naturaleza y artificio en paisajes urbanos contemporáneos.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Gustavo Mendoza', 'Creador que combina fotografía callejera con elementos de performance para crear obras interdisciplinarias.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Lorena Sandoval', 'Artista visual que explora conceptos de movimiento y estaticidad a través de composiciones fotográficas dinámicas.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Óscar Delgado', 'Fotógrafo que se especializa en capturar la dimensión emocional de espacios arquitectónicos abandonados.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Fernanda Castro', 'Creadora que utiliza técnicas experimentales de revelado para crear fotografías que desafían la percepción tradicional.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Ricardo Moreno', 'Artista que investiga la relación entre espacio público y privado mediante fotografías de gran formato.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Alejandra Peñaloza', 'Fotógrafa especializada en capturar la poética de la vida urbana nocturna con sensibilidad documental.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Iván Herrera', 'Creador visual que explora conceptos de fragmentación y totalidad en paisajes urbanos contemporáneos.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Camila Escobar', 'Artista que utiliza la fotografía para investigar patrones de comportamiento social en espacios públicos.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Felipe Álvarez', 'Fotógrafo que combina técnicas tradicionales con nuevas tecnologías para crear obras visuales innovadoras.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Roxana Figueroa', 'Creadora que explora la tensión entre realidad y ficción a través de narrativas fotográficas complejas.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Manuel Contreras', 'Artista especializado en fotografía de arquitectura que revela la dimensión poética de estructuras urbanas.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Silvia Romero', 'Fotógrafa que investiga conceptos de intimidad y distancia en retratos urbanos contemporáneos.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Héctor Navarro', 'Creador visual que utiliza la fotografía documental para explorar temas de migración y identidad cultural.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Carolina Bermúdez', 'Artista que combina fotografía con elementos de instalación para crear experiencias visuales inmersivas.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Pablo Serrano', 'Fotógrafo especializado en capturar la esencia temporal de paisajes en transformación constante.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Mariana Cordero', 'Creadora que explora conceptos de memoria colectiva a través de fotografías que evocan narrativas históricas.');
+INSERT INTO Artista (nombre, biografia) VALUES ('Álvaro Quintero', 'Artista visual que utiliza la fotografía como medio para cuestionar las convenciones sociales y culturales.');

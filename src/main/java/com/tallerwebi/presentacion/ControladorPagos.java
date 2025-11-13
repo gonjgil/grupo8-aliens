@@ -217,7 +217,7 @@ public class ControladorPagos {
         try {
             Carrito carrito = servicioCarrito.obtenerCarritoConItems(usuario);
             CompraHecha compra = servicioCompraHecha.crearResumenCompraAPartirDeCarrito(carrito, paymentId);
-
+            System.out.println("Compra creada con ID: " + compra.getId());
             if (compra == null || compra.getId() == null) {
 
                 return new ModelAndView("redirect:/compras/error");
@@ -227,7 +227,7 @@ public class ControladorPagos {
         } catch (CarritoVacioException | CarritoNoEncontradoException | PagoNoAprobadoException e) {
             return new ModelAndView("redirect:/compras/error");
         } catch (Exception e) {
-//            e.printStackTrace(); // para ver el stack completo
+            e.printStackTrace(); // para ver el stack completo
             return new ModelAndView("redirect:/compras/error");
         }
     }
