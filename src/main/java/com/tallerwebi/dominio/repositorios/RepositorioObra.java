@@ -15,4 +15,5 @@ public interface RepositorioObra {
     List<Obra> obtenerPorRangoDePrecio(Double precioMin, Double precioMax);
     //List<Obra> buscarPorDescripcion(String descripcion);
     List<Obra> buscarPorString(String palabraBuscada);
+    void eliminar(Obra obra);
 }

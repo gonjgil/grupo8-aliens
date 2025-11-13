@@ -1,8 +1,7 @@
 package com.tallerwebi.infraestructura;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -409,4 +408,21 @@ public class RepositorioObraImplTest {
         return a;
     }
 
+    @Test
+    @Transactional
+    @Rollback
+    void queSePuedaEliminarUnaObraExistente() {
+        Artista artista = new Artista();
+        artista.setNombre("Artista");
+
+        Obra obra = new Obra();
+        obra.setTitulo("Obra para eliminar");
+        obra.setArtista(artista);
+        repositorioObra.guardar(obra);
+
+        repositorioObra.eliminar(obra);
+
+        Obra obraEliminada = sessionFactory.getCurrentSession().get(Obra.class, obra.getId());
+        assertThat(obraEliminada, is(nullValue()));
+    }
 }

@@ -193,4 +193,30 @@ public class ControladorObra {
             return "redirect:/galeria";
         }
     }
+
+    @RequestMapping(path = "/{id}/eliminar", method = RequestMethod.POST)
+    public String eliminarObra(@PathVariable("id") Long idObra, HttpServletRequest request) {
+        Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
+
+        if (usuario == null) {
+            return "redirect:/login";
+        }
+
+        try {
+            Artista artistaUsuario = servicioPerfilArtista.obtenerArtistaPorUsuario(usuario);
+            Obra obra = servicioGaleria.obtenerPorId(idObra);
+
+            if (!obra.getArtista().getId().equals(artistaUsuario.getId())) {
+                return "redirect:/galeria";
+            }
+
+            servicioGaleria.eliminarObra(obra);
+            return "redirect:/galeria";
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:/galeria";
+        }
+    }
+
 }
