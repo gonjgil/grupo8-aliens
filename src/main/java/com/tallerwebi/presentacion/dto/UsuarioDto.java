@@ -1,6 +1,10 @@
 package com.tallerwebi.presentacion.dto;
 
 import com.tallerwebi.dominio.entidades.Usuario;
+import com.tallerwebi.dominio.enums.Categoria;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class UsuarioDto {
 
@@ -11,6 +15,9 @@ public class UsuarioDto {
     private String rol;
     private Boolean activo = false;
     private Long telefono;
+    private Set<Categoria> categoriasFavoritas = new HashSet<>();
+
+    public UsuarioDto() {}
 
     public UsuarioDto (Usuario usuario) {
         this.id = usuario.getId();
@@ -20,6 +27,7 @@ public class UsuarioDto {
         this.activo = getActivo();
         this.telefono = usuario.getTelefono();
         this.nombres = usuario.getNombre();
+        this.categoriasFavoritas = usuario.getCategoriasFavoritas();
     }
 
     public Long getId() {
@@ -65,5 +73,20 @@ public class UsuarioDto {
 
     public void setNombres(String nombres) {
         this.nombres = nombres;
+    }
+    public Set<Categoria> getCategoriasFavoritas() { return categoriasFavoritas; }
+    public void setCategoriasFavoritas(Set<Categoria> categoriasFavoritas) {
+        this.categoriasFavoritas = categoriasFavoritas;
+    }
+
+    public Usuario toUsuario() {
+        Usuario usuario = new Usuario();
+        usuario.setId(this.id);
+        usuario.setEmail(this.email);
+        usuario.setPassword(this.password);
+        usuario.setRol(this.rol);
+        usuario.setActivo(this.activo);
+        usuario.setCategoriasFavoritas(this.categoriasFavoritas);
+        return usuario;
     }
 }

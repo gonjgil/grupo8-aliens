@@ -17,9 +17,7 @@ import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.enums.Formato;
 import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
 import com.tallerwebi.dominio.excepcion.NoHayStockSuficiente;
-import com.tallerwebi.dominio.repositorios.RepositorioCarrito;
 import com.tallerwebi.dominio.repositorios.RepositorioFormatoObra;
-import com.tallerwebi.dominio.repositorios.RepositorioObra;
 import com.tallerwebi.presentacion.dto.FormatoObraDto;
 import com.tallerwebi.presentacion.dto.ItemCarritoDto;
 
@@ -249,28 +247,33 @@ public class ServicioCarritoImpl implements ServicioCarrito {
     public List<FormatoObraDto> obtenerFormatosDisponibles(Long obraId) {
         List<FormatoObra> formatos = repositorioFormatoObra.obtenerFormatosPorObra(obraId);
         List<FormatoObraDto> formatosDto = new ArrayList<>();
-
+        
         for (FormatoObra formato : formatos) {
             if (formato.getDisponible()) {
                 formatosDto.add(new FormatoObraDto(formato));
             }
         }
-
+        
         return formatosDto;
     }
 
     @Override
-    @Transactional
-    public void finalizarCarrito(Usuario usuario) {
-        if (usuario == null) {
-            throw new IllegalArgumentException("Usuario no puede ser null");
+    public void finalizarCompra(Usuario usuario) {
+        // Obtiene carrito activo
+        Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId());
+        if (carrito == null || carrito.getItems().isEmpty()) {
+            throw new IllegalStateException("El carrito está vacío o no existe.");
         }
 
-        Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId());
-        if (carrito == null) {
-            throw new IllegalStateException("No se encontró carrito para el usuario");
-        }
+        // Confirma la compra: marca como finalizado
         carrito.setEstado(EstadoCarrito.FINALIZADO);
-        repositorioCarrito.actualizarEstado(carrito.getId(), EstadoCarrito.FINALIZADO);
+
+        // Guarda el carrito actualizado
+        repositorioCarrito.guardar(carrito);
+
+        // Crea un nuevo carrito vacío para el usuario
+        repositorioCarrito.crearCarritoParaUsuario(usuario);
     }
+
+
 }

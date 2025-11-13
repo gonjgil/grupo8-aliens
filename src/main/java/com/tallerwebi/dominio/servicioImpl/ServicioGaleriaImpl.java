@@ -3,11 +3,13 @@ package com.tallerwebi.dominio.servicioImpl;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.tallerwebi.dominio.excepcion.NoExisteArtista;
 import com.tallerwebi.dominio.repositorios.RepositorioObra;
 import com.tallerwebi.dominio.ServicioGaleria;
 import com.tallerwebi.dominio.entidades.Artista;
 import com.tallerwebi.dominio.entidades.Obra;
 import com.tallerwebi.dominio.entidades.Usuario;
+import com.tallerwebi.presentacion.dto.ObraDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,31 +43,19 @@ public class ServicioGaleriaImpl implements ServicioGaleria {
 
     @Override
     public List<Obra> ordenarRandom() {
-        try {
-            List<Obra> todas = repositorioObra.obtenerTodas();
-            Collections.shuffle(todas);
-            return convertirYValidar(todas);
-        } catch (NoHayObrasExistentes e) {
-            return new ArrayList<>();
-        }
+        List<Obra> todas = repositorioObra.obtenerTodas();
+        Collections.shuffle(todas);
+        return convertirYValidar(todas);
     }
 
     @Override
     public List<Obra> obtenerPorAutor(String autor) {
-        try {
-            return convertirYValidar((repositorioObra.obtenerPorAutor(autor)));
-        } catch (NoHayObrasExistentes e) {
-            return new ArrayList<>();
-        }
+        return convertirYValidar((repositorioObra.obtenerPorAutor(autor)));
     }
 
     @Override
     public List<Obra> obtenerPorCategoria(Categoria categoria) {
-        try {
-            return convertirYValidar(repositorioObra.obtenerPorCategoria(categoria));
-        } catch (NoHayObrasExistentes e) {
-            return new ArrayList<>();
-        }
+        return convertirYValidar(repositorioObra.obtenerPorCategoria(categoria));
     }
 
     @Override
@@ -77,62 +67,71 @@ public class ServicioGaleriaImpl implements ServicioGaleria {
         return obra;
     }
 
+
     @Override
     public List<Obra> obtenerObrasParaUsuario(Usuario usuario) {
-        try {
-            List<Obra> todasLasObras = convertirYValidar(repositorioObra.obtenerTodas());
-            Set<Obra> obrasLikeadas = usuario.getObrasLikeadas();
+        List<Obra> todasLasObras = convertirYValidar(repositorioObra.obtenerTodas());
+        Set<Obra> obrasLikeadas = usuario.getObrasLikeadas();
+        Set<Categoria> categoriasFavoritas = usuario.getCategoriasFavoritas(); // 👈 NUEVO
 
-            if (obrasLikeadas == null || obrasLikeadas.isEmpty()) {
-                List<Obra> aleatorias = new ArrayList<>(todasLasObras);
-                Collections.shuffle(aleatorias);
-                return aleatorias;
-            }
-
-            // Artistas y categorías de interés
-            Set<Artista> artistasDeInteres = obrasLikeadas.stream()
-                    .map(Obra::getArtista)
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toSet());
-
-            Set<Categoria> categoriasDeInteres = obrasLikeadas.stream()
-                    .flatMap(o -> o.getCategorias().stream())
-                    .collect(Collectors.toSet());
-
-            // Filtrar obras de interés usando Set para evitar duplicados
-            Set<Obra> setFiltradas = todasLasObras.stream()
-                    .filter(o ->
-                            obrasLikeadas.contains(o) ||
-                                    artistasDeInteres.contains(o.getArtista()) ||
-                                    o.getCategorias().stream().anyMatch(categoriasDeInteres::contains)
-                    )
-                    .collect(Collectors.toCollection(LinkedHashSet::new)); // mantiene orden de inserción
-
-            // Orden aleatorio penalizando las obras likeadas
-            List<Obra> listaFiltrada = new ArrayList<>(setFiltradas);
-            listaFiltrada.sort(Comparator.comparingDouble(o -> {
-                double base = Math.random();
-                if (obrasLikeadas.contains(o)) base += 0.4; // penaliza un poco más
-                return base;
-            }));
-
-            // Obras no relacionadas
-            List<Obra> obrasNoRelacionadas = todasLasObras.stream()
-                    .filter(o -> !setFiltradas.contains(o))
-                    .collect(Collectors.toList());
-            Collections.shuffle(obrasNoRelacionadas);
-
-            listaFiltrada.addAll(obrasNoRelacionadas);
-
-            LinkedHashMap<Long, Obra> mapaFinal = new LinkedHashMap<>();
-            for (Obra obra : listaFiltrada) {
-                mapaFinal.putIfAbsent(obra.getId(), obra);
-            }
-
-            return new ArrayList<>(mapaFinal.values());
-        } catch (NoHayObrasExistentes e) {
-            return new ArrayList<>();
+        if ((obrasLikeadas == null || obrasLikeadas.isEmpty()) &&
+                (categoriasFavoritas == null || categoriasFavoritas.isEmpty())) {
+            List<Obra> aleatorias = new ArrayList<>(todasLasObras);
+            Collections.shuffle(aleatorias);
+            return aleatorias;
         }
+
+        // Artistas y categorías de interés derivadas de likes
+        Set<Artista> artistasDeInteres = obrasLikeadas == null ? new HashSet<>() :
+                obrasLikeadas.stream()
+                        .map(Obra::getArtista)
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.toSet());
+
+        Set<Categoria> categoriasDeInteres = obrasLikeadas == null ? new HashSet<>() :
+                obrasLikeadas.stream()
+                        .flatMap(o -> o.getCategorias().stream())
+                        .collect(Collectors.toSet());
+
+        // Combina categorías de interés con favoritas
+        if (categoriasFavoritas != null) {
+            categoriasDeInteres.addAll(categoriasFavoritas);
+        }
+
+        // Filtra obras relevantes (por artista o categoría)
+        Set<Obra> setFiltradas = todasLasObras.stream()
+                .filter(o ->
+                        (obrasLikeadas != null && obrasLikeadas.contains(o)) ||
+                                artistasDeInteres.contains(o.getArtista()) ||
+                                o.getCategorias().stream().anyMatch(categoriasDeInteres::contains)
+                )
+                .collect(Collectors.toCollection(LinkedHashSet::new));
+
+        // Ordena con prioridad: favoritas -> likeadas -> resto
+        List<Obra> listaFiltrada = new ArrayList<>(setFiltradas);
+        listaFiltrada.sort(Comparator.comparingDouble(o -> {
+            double prioridad = Math.random();
+            if (categoriasFavoritas != null && o.getCategorias().stream().anyMatch(categoriasFavoritas::contains))
+                prioridad -= 0.5; // prioriza favoritas
+            if (obrasLikeadas != null && obrasLikeadas.contains(o))
+                prioridad += 0.4; // penaliza likeadas para no repetir
+            return prioridad;
+        }));
+
+        // Agrega las no relacionadas al final
+        List<Obra> obrasNoRelacionadas = todasLasObras.stream()
+                .filter(o -> !setFiltradas.contains(o))
+                .collect(Collectors.toList());
+        Collections.shuffle(obrasNoRelacionadas);
+        listaFiltrada.addAll(obrasNoRelacionadas);
+
+        // Elimina duplicados preservando orden
+        LinkedHashMap<Long, Obra> mapaFinal = new LinkedHashMap<>();
+        for (Obra obra : listaFiltrada) {
+            mapaFinal.putIfAbsent(obra.getId(), obra);
+        }
+
+        return new ArrayList<>(mapaFinal.values());
     }
 
     @Override
@@ -147,4 +146,36 @@ public class ServicioGaleriaImpl implements ServicioGaleria {
         return repositorioObra.guardar(obra);
     }
 
+    @Override
+    public void actualizarObra(Long idObra, ObraDto dto, List<String> categoriasSeleccionadas, String urlImagen) throws NoExisteLaObra {
+        Obra obraExistente = obtenerPorId(idObra);
+        if (obraExistente == null) {
+            throw new NoExisteArtista();
+        }
+
+        if (urlImagen == null || urlImagen.isEmpty()) {
+            urlImagen = obraExistente.getImagenUrl();
+        }
+
+        obraExistente.setTitulo(dto.getTitulo());
+        obraExistente.setDescripcion(dto.getDescripcion());
+        obraExistente.setImagenUrl(urlImagen);
+
+        if (categoriasSeleccionadas != null && !categoriasSeleccionadas.isEmpty()) {
+            Set<Categoria> nuevasCategorias = categoriasSeleccionadas.stream()
+                    .map(Categoria::valueOf)
+                    .collect(Collectors.toSet());
+            obraExistente.setCategorias(nuevasCategorias);
+        }
+
+        guardar(obraExistente, obraExistente.getArtista(), urlImagen);
+    }
+
+    @Override
+    public void eliminarObra(Obra obra) {
+        if (obra == null) {
+            throw new IllegalArgumentException("La obra no puede ser nula");
+        }
+        repositorioObra.eliminar(obra);
+    }
 }

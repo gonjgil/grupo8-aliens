@@ -1,34 +1,38 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.ServicioCarrito;
-import com.tallerwebi.dominio.ServicioCloudinary;
-import com.tallerwebi.dominio.ServicioGaleria;
-import com.tallerwebi.dominio.ServicioPerfilArtista;
+import com.tallerwebi.dominio.*;
 import com.tallerwebi.dominio.entidades.Artista;
+import com.tallerwebi.dominio.entidades.FormatoObra;
 import com.tallerwebi.dominio.entidades.Obra;
 import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.enums.Categoria;
+import com.tallerwebi.dominio.enums.Formato;
 import com.tallerwebi.dominio.enums.TipoImagen;
 import com.tallerwebi.dominio.excepcion.NoExisteArtista;
+import com.tallerwebi.dominio.excepcion.NoExisteFormatoObra;
 import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
+import com.tallerwebi.dominio.repositorios.RepositorioObra;
+import com.tallerwebi.dominio.servicioImpl.ServicioGaleriaImpl;
 import com.tallerwebi.presentacion.dto.ObraDto;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
+import java.util.Set;
 
 public class ControladorObraTest {
 
@@ -51,6 +55,7 @@ public class ControladorObraTest {
         ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
         ServicioPerfilArtista servicioPerfilArtista = mock(ServicioPerfilArtista.class);
         ServicioCloudinary servicioCloudinary = mock(ServicioCloudinary.class);
+        ServicioFormatoObra servicioFormatoObra = mock(ServicioFormatoObra.class);
 
         Artista artista = new Artista("Autor A", "Biografia", "http://example.com/autorA.jpg");
         Obra obra = mock(Obra.class);
@@ -62,7 +67,7 @@ public class ControladorObraTest {
         ObraDto obraDto = new ObraDto(obra);
         when(servicioGaleria.obtenerPorId(1L)).thenReturn(obra);
 
-        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioCarrito, servicioPerfilArtista, servicioCloudinary);
+        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioCarrito, servicioPerfilArtista, servicioCloudinary, servicioFormatoObra);
 
         ModelAndView modelAndView = controladorObra.verObra(1L, request);
 
@@ -76,10 +81,11 @@ public class ControladorObraTest {
         ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
         ServicioPerfilArtista servicioPerfilArtista = mock(ServicioPerfilArtista.class);
         ServicioCloudinary servicioCloudinary = mock(ServicioCloudinary.class);
+        ServicioFormatoObra servicioFormatoObra = mock(ServicioFormatoObra.class);
 
         when(servicioGaleria.obtenerPorId(999L)).thenThrow(new NoExisteLaObra());
 
-        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioCarrito, servicioPerfilArtista, servicioCloudinary);
+        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioCarrito, servicioPerfilArtista, servicioCloudinary, servicioFormatoObra);
         ModelAndView modelAndView = controladorObra.verObra(999L, request);
 
         assertThat(modelAndView.getViewName(), is(equalTo("redirect:/galeria")));
@@ -91,12 +97,14 @@ public class ControladorObraTest {
         ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
         ServicioPerfilArtista servicioPerfilArtista = mock(ServicioPerfilArtista.class);
         ServicioCloudinary servicioCloudinary = mock(ServicioCloudinary.class);
+        ServicioFormatoObra servicioFormatoObra = mock(ServicioFormatoObra.class);
 
         ControladorObra controladorObra = new ControladorObra(
                 servicioGaleria,
                 servicioCarrito,
                 servicioPerfilArtista,
-                servicioCloudinary
+                servicioCloudinary,
+                servicioFormatoObra
         );
 
         Artista artista = new Artista("Frida Kahlo", "Pintora mexicana", "http://example.com/frida.jpg");
@@ -115,13 +123,14 @@ public class ControladorObraTest {
         ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
         ServicioPerfilArtista servicioPerfilArtista = mock(ServicioPerfilArtista.class);
         ServicioCloudinary servicioCloudinary = mock(ServicioCloudinary.class);
+        ServicioFormatoObra servicioFormatoObra = mock(ServicioFormatoObra.class);
 
         Usuario usuarioNoArtista = mock(Usuario.class);
 
         when(servicioPerfilArtista.obtenerArtistaPorUsuario(usuarioNoArtista)).thenThrow(new NoExisteArtista());
         when(request.getSession().getAttribute("usuarioLogueado")).thenReturn(usuarioNoArtista);
 
-        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioCarrito, servicioPerfilArtista, servicioCloudinary);
+        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioCarrito, servicioPerfilArtista, servicioCloudinary, servicioFormatoObra);
 
         ModelAndView modelAndView = controladorObra.nuevaObra(request);
 
@@ -134,12 +143,14 @@ public class ControladorObraTest {
         ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
         ServicioPerfilArtista servicioPerfilArtista = mock(ServicioPerfilArtista.class);
         ServicioCloudinary servicioCloudinary = mock(ServicioCloudinary.class);
+        ServicioFormatoObra servicioFormatoObra = mock(ServicioFormatoObra.class);
 
         ControladorObra controladorObra = new ControladorObra(
                 servicioGaleria,
                 servicioCarrito,
                 servicioPerfilArtista,
-                servicioCloudinary
+                servicioCloudinary,
+                servicioFormatoObra
         );
 
         ObraDto obraDto = mock(ObraDto.class);
@@ -156,13 +167,410 @@ public class ControladorObraTest {
 
         String ret = controladorObra.crearObra(obraDto, archivo, request);
 
-//        assertThat(modelAndView.getViewName(), is(equalTo("redirect:/obra/" + obraGuardada.getId())));
-//        assertThat(modelAndView.getModel().get("usuario"), is(equalTo(usuario)));
-//
-//        verify(servicioPerfilArtista).obtenerArtistaPorUsuario(usuario);
-//        verify(servicioCloudinary).subirImagen(archivo, TipoImagen.OBRA);
-//        verify(servicioGaleria).guardar(any(Obra.class), eq(artista), anyString());
+        assertThat(ret, is(equalTo("redirect:/obra/" + obraGuardada.getId())));
     }
 
+    @Test
+    void queUnArtistaRegistradoPuedaEditarUnaObraPropia() {
+        ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
+        ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
+        ServicioPerfilArtista servicioPerfilArtista = mock(ServicioPerfilArtista.class);
+        ServicioCloudinary servicioCloudinary = mock(ServicioCloudinary.class);
+        ServicioFormatoObra servicioFormatoObra = mock(ServicioFormatoObra.class);
 
+        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioCarrito,
+                servicioPerfilArtista, servicioCloudinary, servicioFormatoObra);
+
+        Long idObra = 1L;
+
+        Artista artista = new Artista();
+        artista.setId(10L);
+
+        Obra obra = new Obra();
+        obra.setId(idObra);
+        obra.setTitulo("Mi obra original");
+        obra.setDescripcion("Descripción vieja");
+        obra.setArtista(artista);
+
+        when(servicioGaleria.obtenerPorId(idObra)).thenReturn(obra);
+        when(servicioPerfilArtista.obtenerArtistaPorUsuario(usuario)).thenReturn(artista);
+
+        ModelAndView mav = controladorObra.editarObra(idObra, request);
+
+        assertThat("Debe devolver la vista de edición de la obra",
+                mav.getViewName(), is("editar_obra"));
+
+        assertThat("El modelo debe contener el DTO de la obra",
+                mav.getModel().get("obra"), notNullValue());
+
+        assertThat("El modelo debe contener las categorías",
+                mav.getModel().get("categorias"), notNullValue());
+        verify(servicioGaleria, times(1)).obtenerPorId(idObra);
+        verify(servicioPerfilArtista, times(1)).obtenerArtistaPorUsuario(usuario);
+    }
+
+    @Test
+    void queUnUsuarioNoArtistaNoPuedaEditarUnaObra() {
+        ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
+        ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
+        ServicioPerfilArtista servicioPerfilArtista = mock(ServicioPerfilArtista.class);
+        ServicioCloudinary servicioCloudinary = mock(ServicioCloudinary.class);
+        ServicioFormatoObra servicioFormatoObra = mock(ServicioFormatoObra.class);
+
+        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioCarrito,
+                servicioPerfilArtista, servicioCloudinary, servicioFormatoObra);
+
+        Long idObra = 1L;
+
+        Obra obra = new Obra();
+        Artista artistaPropietario = new Artista();
+        artistaPropietario.setId(10L); // Otro artista distinto
+        obra.setId(idObra);
+        obra.setArtista(artistaPropietario);
+
+        when(servicioGaleria.obtenerPorId(idObra)).thenReturn(obra);
+        when(servicioPerfilArtista.obtenerArtistaPorUsuario(usuario)).thenReturn(null); // No es artista
+
+        ModelAndView mav = controladorObra.editarObra(idObra, request);
+
+        assertThat("El usuario no artista debería ser redirigido a galería",
+                mav.getViewName(), is("redirect:/galeria"));
+
+        assertThat("El modelo debe contener mensaje de error",
+                mav.getModel().get("error"), is("No tienes permiso para editar esta obra."));
+
+        verify(servicioGaleria, times(1)).obtenerPorId(idObra);
+        verify(servicioPerfilArtista, times(1)).obtenerArtistaPorUsuario(usuario);
+    }
+
+    @Test
+    void queSeActualicenTodosLosCamposDeLaObraCorrectamente() {
+        RepositorioObra repositorioObra = mock(RepositorioObra.class);
+        ServicioGaleria servicioGaleria = new ServicioGaleriaImpl(repositorioObra);
+
+        Long idObra = 1L;
+        Obra obraExistente = new Obra();
+        obraExistente.setId(idObra);
+        obraExistente.setTitulo("Viejo título");
+        obraExistente.setDescripcion("Vieja descripción");
+        obraExistente.setImagenUrl("vieja-url.jpg");
+        obraExistente.setCategorias(Set.of(Categoria.PINTURA));
+
+        when(repositorioObra.obtenerPorId(idObra)).thenReturn(obraExistente);
+
+        ObraDto dto = new ObraDto();
+        dto.setTitulo("Nuevo título");
+        dto.setDescripcion("Nueva descripción");
+
+        List<String> categoriasSeleccionadas = List.of("PINTURA", "ESCULTURA", "ARTE_MIXTO");
+        String nuevaUrl = "nueva-url.jpg";
+
+        // ACT
+        servicioGaleria.actualizarObra(idObra, dto, categoriasSeleccionadas, nuevaUrl);
+
+        // ASSERT con Hamcrest
+        assertThat(obraExistente.getTitulo(), is("Nuevo título"));
+        assertThat(obraExistente.getDescripcion(), is("Nueva descripción"));
+        assertThat(obraExistente.getImagenUrl(), is("nueva-url.jpg"));
+        assertThat(obraExistente.getCategorias(), containsInAnyOrder(
+                Categoria.PINTURA, Categoria.ESCULTURA, Categoria.ARTE_MIXTO
+        ));
+
+        verify(repositorioObra, times(1)).guardar(obraExistente);
+    }
+
+    @Test
+    void queActualizarObraSinCambiarImagenMantieneLaImagenExistente() {
+        RepositorioObra repositorioObra = mock(RepositorioObra.class);
+        ServicioGaleria servicioGaleria = new ServicioGaleriaImpl(repositorioObra);
+
+        Long idObra = 1L;
+        Obra obraExistente = new Obra();
+        obraExistente.setId(idObra);
+        obraExistente.setTitulo("Viejo título");
+        obraExistente.setDescripcion("Vieja descripción");
+        obraExistente.setImagenUrl("vieja-url.jpg");
+        obraExistente.setCategorias(Set.of(Categoria.PINTURA));
+
+        when(repositorioObra.obtenerPorId(idObra)).thenReturn(obraExistente);
+
+        ObraDto dto = new ObraDto();
+        dto.setTitulo("Nuevo título");
+        dto.setDescripcion("Nueva descripción");
+
+        List<String> categoriasSeleccionadas = List.of("PINTURA", "ESCULTURA");
+
+        // ACT
+        servicioGaleria.actualizarObra(idObra, dto, categoriasSeleccionadas, null); // sin nueva imagen
+
+        // ASSERT con Hamcrest
+        assertThat(obraExistente.getTitulo(), is("Nuevo título"));
+        assertThat(obraExistente.getDescripcion(), is("Nueva descripción"));
+        assertThat(obraExistente.getImagenUrl(), is("vieja-url.jpg")); // se mantiene la imagen
+        assertThat(obraExistente.getCategorias(), containsInAnyOrder(
+                Categoria.PINTURA, Categoria.ESCULTURA
+        ));
+
+        verify(repositorioObra, times(1)).guardar(obraExistente);
+    }
+
+    @Test
+    public void queSePuedaCrearUnNuevoFormatoParaUnaObra() throws NoExisteLaObra {
+        ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
+        ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
+        ServicioPerfilArtista servicioPerfilArtista = mock(ServicioPerfilArtista.class);
+        ServicioCloudinary servicioCloudinary = mock(ServicioCloudinary.class);
+        ServicioFormatoObra servicioFormatoObra = mock(ServicioFormatoObra.class);
+
+        ControladorObra controladorObra = new ControladorObra(
+                servicioGaleria,
+                servicioCarrito,
+                servicioPerfilArtista,
+                servicioCloudinary,
+                servicioFormatoObra
+        );
+
+        Long obraId = 1L;
+        Formato formato = Formato.DIGITAL;
+        Double precio = 1500.0;
+        Integer stock = 10;
+
+        Obra obra = new Obra("Título", "imagen.jpg", "Descripción", null, null);
+        obra.setId(obraId);
+        FormatoObra formatoObra = new FormatoObra(obra, formato, precio, stock);
+
+        when(servicioFormatoObra.crearFormato(obraId, formato, precio, stock))
+                .thenReturn(formatoObra);
+
+        String resultado = controladorObra.agregarFormato(obraId, formato, precio, stock);
+
+        verify(servicioFormatoObra, times(1))
+                .crearFormato(obraId, formato, precio, stock);
+
+        assertThat(resultado, is("redirect:/obra/" + obraId));
+        assertThat(formatoObra.getFormato(), is(formato));
+        assertThat(formatoObra.getPrecio(), is(precio));
+        assertThat(formatoObra.getStock(), is(stock));
+    }
+
+    @Test
+    public void queAlIntentarCrearFormatoDeObraInexistenteSeRedirijaAGaleria() throws NoExisteLaObra {
+        ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
+        ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
+        ServicioPerfilArtista servicioPerfilArtista = mock(ServicioPerfilArtista.class);
+        ServicioCloudinary servicioCloudinary = mock(ServicioCloudinary.class);
+        ServicioFormatoObra servicioFormatoObra = mock(ServicioFormatoObra.class);
+
+        ControladorObra controladorObra = new ControladorObra(
+                servicioGaleria,
+                servicioCarrito,
+                servicioPerfilArtista,
+                servicioCloudinary,
+                servicioFormatoObra
+        );
+
+        Long obraId = 99L;
+        Formato formato = Formato.ORIGINAL;
+
+        doThrow(new NoExisteLaObra())
+                .when(servicioFormatoObra)
+                .crearFormato(eq(obraId), eq(formato), anyDouble(), anyInt());
+
+        String resultado = controladorObra.agregarFormato(obraId, formato, 1000.0, 5);
+
+        verify(servicioFormatoObra, times(1))
+                .crearFormato(eq(obraId), eq(formato), anyDouble(), anyInt());
+
+        assertThat(resultado, is("redirect:/galeria"));
+    }
+
+    @Test
+    public void queSePuedaEliminarUnFormatoDeUnaObra() throws NoExisteFormatoObra {
+        ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
+        ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
+        ServicioPerfilArtista servicioPerfilArtista = mock(ServicioPerfilArtista.class);
+        ServicioCloudinary servicioCloudinary = mock(ServicioCloudinary.class);
+        ServicioFormatoObra servicioFormatoObra = mock(ServicioFormatoObra.class);
+
+        ControladorObra controladorObra = new ControladorObra(
+                servicioGaleria,
+                servicioCarrito,
+                servicioPerfilArtista,
+                servicioCloudinary,
+                servicioFormatoObra
+        );
+
+        Long formatoId = 1L;
+        Long obraId = 1L;
+
+        String resultado = controladorObra.eliminarFormato(obraId, formatoId);
+
+        verify(servicioFormatoObra, times(1)).eliminarFormato(formatoId);
+        assertThat(resultado, is("redirect:/obra/" + obraId));
+    }
+
+    @Test
+    public void queAlEliminarFormatoInexistenteSeRedirijaAGaleria() throws NoExisteFormatoObra {
+        ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
+        ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
+        ServicioPerfilArtista servicioPerfilArtista = mock(ServicioPerfilArtista.class);
+        ServicioCloudinary servicioCloudinary = mock(ServicioCloudinary.class);
+        ServicioFormatoObra servicioFormatoObra = mock(ServicioFormatoObra.class);
+
+        ControladorObra controladorObra = new ControladorObra(
+                servicioGaleria,
+                servicioCarrito,
+                servicioPerfilArtista,
+                servicioCloudinary,
+                servicioFormatoObra
+        );
+
+        Long formatoId = 99L;
+        Long obraId = 1L;
+        doThrow(new NoExisteFormatoObra()).when(servicioFormatoObra).eliminarFormato(formatoId);
+
+        String resultado = controladorObra.eliminarFormato(obraId, formatoId);
+
+        verify(servicioFormatoObra, times(1)).eliminarFormato(formatoId);
+        assertThat(resultado, is("redirect:/galeria"));
+    }
+
+    @Test
+    public void queSePuedaActualizarUnFormatoObraConPrecioYStock() throws NoExisteFormatoObra {
+        ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
+        ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
+        ServicioPerfilArtista servicioPerfilArtista = mock(ServicioPerfilArtista.class);
+        ServicioCloudinary servicioCloudinary = mock(ServicioCloudinary.class);
+        ServicioFormatoObra servicioFormatoObra = mock(ServicioFormatoObra.class);
+
+        ControladorObra controladorObra = new ControladorObra(
+                servicioGaleria,
+                servicioCarrito,
+                servicioPerfilArtista,
+                servicioCloudinary,
+                servicioFormatoObra
+        );
+
+        Long obraId = 1L;
+        Long formatoId = 10L;
+        Double nuevoPrecio = 2500.0;
+        Integer nuevoStock = 15;
+
+        Obra obra = new Obra();
+        obra.setId(obraId);
+        when(servicioGaleria.obtenerPorId(obraId)).thenReturn(obra);
+
+        String resultado = controladorObra.actualizarFormatoObra(obraId, formatoId, nuevoPrecio, nuevoStock);
+
+        verify(servicioGaleria, times(1)).obtenerPorId(obraId);
+        verify(servicioFormatoObra, times(1)).actualizarFormatoObra(formatoId, nuevoPrecio, nuevoStock);
+        assertThat(resultado, is("redirect:/obra/" + obraId));
+    }
+
+    @Test
+    public void queAlIntentarActualizarFormatoInexistenteSeRedirijaAGaleria() throws NoExisteFormatoObra {
+        ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
+        ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
+        ServicioPerfilArtista servicioPerfilArtista = mock(ServicioPerfilArtista.class);
+        ServicioCloudinary servicioCloudinary = mock(ServicioCloudinary.class);
+        ServicioFormatoObra servicioFormatoObra = mock(ServicioFormatoObra.class);
+
+        ControladorObra controladorObra = new ControladorObra(
+                servicioGaleria,
+                servicioCarrito,
+                servicioPerfilArtista,
+                servicioCloudinary,
+                servicioFormatoObra
+        );
+
+        Long obraId = 1L;
+        Long formatoId = 99L;
+        Double nuevoPrecio = 2500.0;
+        Integer nuevoStock = 10;
+
+        Obra obra = new Obra();
+        obra.setId(obraId);
+        when(servicioGaleria.obtenerPorId(obraId)).thenReturn(obra);
+
+        doThrow(new NoExisteFormatoObra()).when(servicioFormatoObra).actualizarFormatoObra(formatoId, nuevoPrecio, nuevoStock);
+
+        String resultado = controladorObra.actualizarFormatoObra(obraId, formatoId, nuevoPrecio, nuevoStock);
+
+        verify(servicioGaleria, times(1)).obtenerPorId(obraId);
+        verify(servicioFormatoObra, times(1)).actualizarFormatoObra(formatoId, nuevoPrecio, nuevoStock);
+        assertThat(resultado, is("redirect:/galeria"));
+    }
+
+    @Test
+    void queSePuedaEliminarUnaObraSiElUsuarioEsElArtista() {
+        ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
+        ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
+        ServicioPerfilArtista servicioPerfilArtista = mock(ServicioPerfilArtista.class);
+        ServicioCloudinary servicioCloudinary = mock(ServicioCloudinary.class);
+        ServicioFormatoObra servicioFormatoObra = mock(ServicioFormatoObra.class);
+
+        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioCarrito,
+                servicioPerfilArtista, servicioCloudinary, servicioFormatoObra);
+
+        Usuario usuario = new Usuario();
+        usuario.setId(1L);
+
+        Artista artista = new Artista();
+        artista.setId(10L);
+        artista.setUsuario(usuario);
+
+        Obra obra = new Obra();
+        obra.setId(5L);
+        obra.setArtista(artista);
+
+        when(request.getSession().getAttribute("usuarioLogueado")).thenReturn(usuario);
+        when(servicioPerfilArtista.obtenerArtistaPorUsuario(usuario)).thenReturn(artista);
+        when(servicioGaleria.obtenerPorId(5L)).thenReturn(obra);
+
+        String resultado = controladorObra.eliminarObra(5L, request);
+
+        verify(servicioGaleria).eliminarObra(obra);
+        assertThat(resultado, equalTo("redirect:/galeria"));
+    }
+
+    @Test
+    void queNoSePuedaEliminarUnaObraSiElUsuarioNoEsElArtista() {
+        ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
+        ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
+        ServicioPerfilArtista servicioPerfilArtista = mock(ServicioPerfilArtista.class);
+        ServicioCloudinary servicioCloudinary = mock(ServicioCloudinary.class);
+        ServicioFormatoObra servicioFormatoObra = mock(ServicioFormatoObra.class);
+
+        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioCarrito,
+                servicioPerfilArtista, servicioCloudinary, servicioFormatoObra);
+
+        Usuario usuario = new Usuario();
+        usuario.setId(1L);
+
+        Artista artista = new Artista();
+        artista.setId(10L);
+        artista.setUsuario(usuario);
+
+        Obra obra = new Obra();
+        obra.setId(5L);
+        obra.setArtista(artista);
+
+        Usuario otroUsuario = new Usuario();
+        otroUsuario.setId(99L);
+
+        Artista otroArtista = new Artista();
+        otroArtista.setId(20L);
+        otroArtista.setUsuario(otroUsuario);
+
+        when(request.getSession().getAttribute("usuarioLogueado")).thenReturn(otroUsuario);
+        when(servicioPerfilArtista.obtenerArtistaPorUsuario(otroUsuario)).thenReturn(otroArtista);
+        when(servicioGaleria.obtenerPorId(5L)).thenReturn(obra);
+
+        // when
+        String resultado = controladorObra.eliminarObra(5L, request);
+
+        // then
+        verify(servicioGaleria, never()).eliminarObra(any());
+        assertThat(resultado, equalTo("redirect:/galeria"));
+    }
 }

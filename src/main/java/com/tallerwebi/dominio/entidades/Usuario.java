@@ -1,6 +1,7 @@
 package com.tallerwebi.dominio.entidades;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.tallerwebi.dominio.enums.Categoria;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -75,6 +76,21 @@ public class Usuario {
 
     public void activar() {
         activo = true;
+    }
+
+    @ElementCollection(targetClass = Categoria.class, fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
+    @CollectionTable(name = "usuario_categorias_favoritas", joinColumns = @JoinColumn(name = "usuario_id"))
+
+    @Column(name = "categoria")
+    private Set<Categoria> categoriasFavoritas = new HashSet<>();
+
+    public Set<Categoria> getCategoriasFavoritas() {
+        return categoriasFavoritas;
+    }
+
+    public void setCategoriasFavoritas(Set<Categoria> categoriasFavoritas) {
+        this.categoriasFavoritas = categoriasFavoritas;
     }
 
     @Override

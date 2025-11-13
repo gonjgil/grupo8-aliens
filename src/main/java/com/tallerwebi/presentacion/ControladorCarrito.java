@@ -8,8 +8,6 @@ import com.tallerwebi.dominio.enums.Formato;
 
 import com.tallerwebi.presentacion.dto.ItemCarritoDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -24,10 +22,12 @@ import java.util.List;
 public class ControladorCarrito {
 
     private final ServicioCarrito servicioCarrito;
+    private final ServicioMail servicioMail;
 
     @Autowired
-    public ControladorCarrito(ServicioCarrito servicioCarrito) {
+    public ControladorCarrito(ServicioCarrito servicioCarrito, ServicioMail servicioMail) {
         this.servicioCarrito = servicioCarrito;
+        this.servicioMail = servicioMail;
     }
 
     @GetMapping
@@ -153,16 +153,6 @@ public class ControladorCarrito {
         return "redirect:/carrito";
     }
 
-    @PostMapping("/finalizar")
-    public ResponseEntity<?> finalizarCarrito(HttpSession session) {
-        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
-        if (usuario == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-          servicioCarrito.finalizarCarrito(usuario);
-        return ResponseEntity.ok().build();
-    }
-
     @GetMapping("/contador")
     @ResponseBody
     public String obtenerContadorCarrito(HttpSession session) {
@@ -177,6 +167,38 @@ public class ControladorCarrito {
         return "{\"count\": " + total + "}";
     }
 
+    @PostMapping("/finalizar")
+    public String finalizarCompra(HttpSession session, RedirectAttributes redirectAttributes) {
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+
+        if (usuario == null) {
+            redirectAttributes.addFlashAttribute("error", "Iniciá sesión para finalizar la compra.");
+            return "redirect:/login";
+        }
+
+        try {
+            // Lógica de finalización de compra
+            servicioCarrito.finalizarCompra(usuario);
+
+
+            // Envia correo de confirmación
+            String asunto = "Confirmación de compra - ArtRoom";
+            String cuerpo = "¡Hola " + usuario.getEmail() + "!\n\n" +
+                    "Tu compra fue realizada con éxito.\n" +
+                    "Gracias por confiar en nosotros";
+
+            servicioMail.enviarMail(usuario.getEmail(), asunto, cuerpo);
+
+            // Mensaje de éxito y redirección
+            redirectAttributes.addFlashAttribute("mensaje", "Compra finalizada con éxito. Se envió un correo de confirmación.");
+            return "redirect:/galeria";
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Hubo un error al finalizar la compra.");
+            return "redirect:/carrito";
+        }
+    }
 
 
 }

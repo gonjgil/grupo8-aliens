@@ -22,17 +22,16 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
     }
 
     @Override
-    public Usuario buscarUsuario(String email, String password) {
+    public Usuario buscarUsuario(String email) {
 
         final Session session = sessionFactory.getCurrentSession();
 
         String hql = "SELECT u FROM Usuario u " +
                 "LEFT JOIN FETCH u.obrasLikeadas " +
-                "WHERE u.email = :email AND u.password = :password";
+                "WHERE u.email = :email";
 
         return session.createQuery(hql, Usuario.class)
                 .setParameter("email", email)
-                .setParameter("password", password)
                 .uniqueResult();
     }
 
@@ -41,12 +40,6 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
         sessionFactory.getCurrentSession().saveOrUpdate(usuario);
     }
 
-    @Override
-    public Usuario buscar(String email) {
-        return (Usuario) sessionFactory.getCurrentSession().createCriteria(Usuario.class)
-                .add(Restrictions.eq("email", email))
-                .uniqueResult();
-    }
 
     @Override
     public List<Usuario> obtenerTodos() {

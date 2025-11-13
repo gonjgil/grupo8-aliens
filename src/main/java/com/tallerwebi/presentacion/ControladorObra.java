@@ -1,15 +1,15 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.ServicioCarrito;
-import com.tallerwebi.dominio.ServicioGaleria;
-import com.tallerwebi.dominio.ServicioPerfilArtista;
-import com.tallerwebi.dominio.ServicioCloudinary;
+import com.tallerwebi.dominio.*;
 import com.tallerwebi.dominio.entidades.Artista;
 import com.tallerwebi.dominio.entidades.Obra;
 import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.enums.Categoria;
+import com.tallerwebi.dominio.enums.Formato;
 import com.tallerwebi.dominio.enums.TipoImagen;
 import com.tallerwebi.dominio.excepcion.NoExisteArtista;
+import com.tallerwebi.dominio.excepcion.NoExisteFormatoObra;
+import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
 import com.tallerwebi.presentacion.dto.ObraDto;
 import com.tallerwebi.presentacion.dto.PerfilArtistaDTO;
 
@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/obra")
 public class ControladorObra {
@@ -30,13 +32,15 @@ public class ControladorObra {
     private ServicioCarrito servicioCarrito;
     private ServicioPerfilArtista servicioPerfilArtista;
     private ServicioCloudinary servicioCloudinary;
+    private ServicioFormatoObra servicioFormatoObra;
 
     @Autowired
-    public ControladorObra(ServicioGaleria servicioGaleria, ServicioCarrito servicioCarrito, ServicioPerfilArtista servicioPerfilArtista, ServicioCloudinary servicioCloudinary) {
+    public ControladorObra(ServicioGaleria servicioGaleria, ServicioCarrito servicioCarrito, ServicioPerfilArtista servicioPerfilArtista, ServicioCloudinary servicioCloudinary, ServicioFormatoObra servicioFormatoObra) {
         this.servicioGaleria = servicioGaleria;
         this.servicioCarrito = servicioCarrito;
         this.servicioPerfilArtista = servicioPerfilArtista;
         this.servicioCloudinary = servicioCloudinary;
+        this.servicioFormatoObra = servicioFormatoObra;
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
@@ -46,13 +50,21 @@ public class ControladorObra {
         Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
         model.put("usuario", usuario);
 
-        if (usuario != null) {
-            Artista artistaUsuario = servicioPerfilArtista.obtenerArtistaPorUsuario(usuario);
-            model.put("artistaUsuario", artistaUsuario);
-        }
-
         try {
             Obra obra = servicioGaleria.obtenerPorId(id);
+
+            if (usuario != null) {
+                Artista artistaUsuario = servicioPerfilArtista.obtenerArtistaPorUsuario(usuario);
+                model.put("artistaUsuario", artistaUsuario);
+
+                if (artistaUsuario != null) {
+                    boolean esArtistaDuenio = obra.getArtista().getId().equals(artistaUsuario.getId());
+                    model.put("esArtistaDuenio", esArtistaDuenio);
+                }
+            }
+
+            List<Formato> formatosFaltantes = servicioFormatoObra.obtenerFormatosFaltantesPorObra(id);
+            model.put("formatosFaltantes", formatosFaltantes);
 
             Integer cantidad = servicioCarrito.obtenerCantidadDeItemPorId(usuario, obra);
             model.put("cantidad", cantidad);
@@ -100,4 +112,111 @@ public class ControladorObra {
             return "redirect:/galeria";
         }
     }
+
+    @GetMapping("/{id}/editar")
+    public ModelAndView editarObra(@PathVariable("id") Long idObra, HttpServletRequest request) {
+        ModelMap model = new ModelMap();
+        Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
+        model.put("usuario", usuario);
+
+        try {
+            Obra obra = servicioGaleria.obtenerPorId(idObra);
+            Artista artistaUsuario = servicioPerfilArtista.obtenerArtistaPorUsuario(usuario);
+
+            if (usuario == null || artistaUsuario == null ||
+                    !obra.getArtista().getId().equals(artistaUsuario.getId())) {
+                model.put("error", "No tienes permiso para editar esta obra.");
+                return new ModelAndView("redirect:/galeria", model);
+            }
+
+            model.put("obra", new ObraDto(obra));
+            model.put("categorias", Categoria.values());
+            return new ModelAndView("editar_obra", model);
+
+        } catch (Exception e) {
+            model.put("error", "La obra solicitada no existe.");
+            return new ModelAndView("redirect:/galeria", model);
+        }
+    }
+
+    @PostMapping("/{id}/actualizar")
+    public String actualizarObra(
+            @PathVariable("id") Long idObra, @ModelAttribute ObraDto dto,
+            @RequestParam(value = "categorias", required = false) List<String> categoriasSeleccionadas,
+            @RequestParam(value = "file_obra", required = false) MultipartFile archivo)
+            throws NoExisteLaObra {
+
+        try {
+            String imagenUrl = null;
+            if (archivo != null && !archivo.isEmpty()) {
+                imagenUrl = servicioCloudinary.subirImagen(archivo, TipoImagen.OBRA);
+            }
+
+            servicioGaleria.actualizarObra(idObra, dto, categoriasSeleccionadas, imagenUrl);
+            return "redirect:/obra/" + idObra;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:/galeria";
+        }
+    }
+
+    @RequestMapping(path = "/{obraId}/agregar-formato", method = RequestMethod.POST)
+    public String agregarFormato(@PathVariable Long obraId, @RequestParam Formato formato, @RequestParam Double precio, @RequestParam Integer stock) {
+        try {
+            Obra obra = servicioGaleria.obtenerPorId(obraId);
+            servicioFormatoObra.crearFormato(obraId, formato, precio, stock);
+            return "redirect:/obra/" + obraId;
+        } catch (NoExisteLaObra e) {
+            return "redirect:/galeria";
+        }
+    }
+
+    @RequestMapping(path = "/{obraId}/eliminar-formato", method = RequestMethod.POST)
+    public String eliminarFormato(@PathVariable Long obraId, @RequestParam Long formatoId) {
+        try {
+            Obra obra = servicioGaleria.obtenerPorId(obraId);
+            servicioFormatoObra.eliminarFormato(formatoId);
+            return "redirect:/obra/" + obraId;
+        } catch (NoExisteLaObra | NoExisteFormatoObra e) {
+            return "redirect:/galeria";
+        }
+    }
+
+    @RequestMapping(path = "/{obraId}/actualizar-formato", method = RequestMethod.POST)
+    public String actualizarFormatoObra(@PathVariable Long obraId, @RequestParam Long formatoId, @RequestParam Double nuevoPrecio, @RequestParam Integer nuevoStock) {
+        try {
+            Obra obra = servicioGaleria.obtenerPorId(obraId);
+            servicioFormatoObra.actualizarFormatoObra(formatoId, nuevoPrecio, nuevoStock);
+            return "redirect:/obra/" + obraId;
+        } catch (NoExisteFormatoObra e) {
+            return "redirect:/galeria";
+        }
+    }
+
+    @RequestMapping(path = "/{id}/eliminar", method = RequestMethod.POST)
+    public String eliminarObra(@PathVariable("id") Long idObra, HttpServletRequest request) {
+        Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
+
+        if (usuario == null) {
+            return "redirect:/login";
+        }
+
+        try {
+            Artista artistaUsuario = servicioPerfilArtista.obtenerArtistaPorUsuario(usuario);
+            Obra obra = servicioGaleria.obtenerPorId(idObra);
+
+            if (!obra.getArtista().getId().equals(artistaUsuario.getId())) {
+                return "redirect:/galeria";
+            }
+
+            servicioGaleria.eliminarObra(obra);
+            return "redirect:/galeria";
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:/galeria";
+        }
+    }
+
 }
