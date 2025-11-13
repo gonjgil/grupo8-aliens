@@ -10,7 +10,7 @@ public class MercadoPagoConfig {
     // credenciales de MercadoPago TEST harcodeadas para desarrollo, ver como inyectarlas en produccion con Spring
     private static final String ACCESS_TOKEN = "TEST-6153218614070129-100119-44856ce364468a90fdd1390c950cfb90-97406022";
     private static final String PUBLIC_KEY = "TEST-12b898d1-056f-4353-9d79-d6cfa383e217";
-    private static final String BASE_URL = "http://localhost:8080/spring";
+    private static final String BASE_URL = "https://imminent-rolando-soppingly.ngrok-free.dev/spring";
 
 
     static {
