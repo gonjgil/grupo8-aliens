@@ -48,12 +48,9 @@ public class ControladorGaleria {
             if (usuario != null) {
                 Artista artistaUsuario = servicioPerfilArtista.obtenerArtistaPorUsuario(usuario);
                 model.put("artistaUsuario", artistaUsuario);
-            }
-
-            if(usuario == null) {
+            } else {
                 model.put("obrasSpotlight", this.servicioGaleria.ordenarRandom());
                 model.put("exito", "Hay obras.");
-                return  new ModelAndView("galeria", model);
             }
 
             List<Obra> obrasSpotlight = this.servicioGaleria.obtenerObrasParaUsuario(usuario);
@@ -69,10 +66,6 @@ public class ControladorGaleria {
             model.put("error", "No hay obras.");
             return  new ModelAndView("galeria", model);
         }
-        
-        //model.put("randomObras", servicioGaleria.ordenarRandom());
-        //model.put("autorObras", servicioGaleria.obtenerPorAutor("J. Doe"));
-        //model.put("temaObras", servicioGaleria.obtenerPorCategoria(Categoria.ABSTRACTO));
 
         return new ModelAndView("galeria", model);
     }
