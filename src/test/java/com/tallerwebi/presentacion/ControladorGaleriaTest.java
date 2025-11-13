@@ -85,32 +85,4 @@ public class ControladorGaleriaTest {
         assertThat(modelAndView.getModel().get("exito").toString(), equalToIgnoringCase("Hay obras."));
     }
 
-//    @Test
-//    public void alMostrarseLaGaleriaDeberianMostrarseTresListasDiferentes() {
-//        ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
-//
-//        List<Obra> obras = new ArrayList<>();
-//        obras.add(mock(Obra.class));
-//
-//        List<Obra> randomObras = new ArrayList<>();
-//        List<Obra> autorObras = new ArrayList<>();
-//        List<Obra> temaObras = new ArrayList<>();
-//
-//        when(servicioGaleria.obtener()).thenReturn(obras);
-//        when(servicioGaleria.ordenarRandom()).thenReturn(randomObras);
-//        when(servicioGaleria.obtenerPorAutor(Mockito.anyString())).thenReturn(autorObras);
-//        when(servicioGaleria.obtenerPorCategoria(Mockito.any(Categoria.class))).thenReturn(temaObras);
-//
-//        ControladorGaleria controladorGaleria = new ControladorGaleria(servicioGaleria);
-//
-//        ModelAndView modelAndView = controladorGaleria.mostrarGaleria(this.request);
-//
-//
-//        assertThat(modelAndView.getViewName(), is(equalTo("galeria")));
-//        assertThat(modelAndView.getModel().get("randomObras"), is(equalTo(randomObras)));
-//        assertThat(modelAndView.getModel().get("autorObras"), is(equalTo(autorObras)));
-//        assertThat(modelAndView.getModel().get("temaObras"), is(equalTo(temaObras)));
-//        // assertThat(modelAndView.getModel().get("cantidadItems"), is(equalTo(1)));
-//    }
-
 }
