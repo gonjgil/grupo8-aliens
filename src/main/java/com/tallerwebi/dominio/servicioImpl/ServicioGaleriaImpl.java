@@ -71,14 +71,6 @@ public class ServicioGaleriaImpl implements ServicioGaleria {
     @Override
     public List<Obra> obtenerObrasParaUsuario(Usuario usuario) {
         List<Obra> todasLasObras = convertirYValidar(repositorioObra.obtenerTodas());
-
-        // Si no hay usuario logueado, devuelve obras mezcladas
-        if (usuario == null) {
-            List<Obra> aleatorias = new ArrayList<>(todasLasObras);
-            Collections.shuffle(aleatorias);
-            return aleatorias;
-        }
-
         Set<Obra> obrasLikeadas = usuario.getObrasLikeadas();
         Set<Categoria> categoriasFavoritas = usuario.getCategoriasFavoritas();
 
