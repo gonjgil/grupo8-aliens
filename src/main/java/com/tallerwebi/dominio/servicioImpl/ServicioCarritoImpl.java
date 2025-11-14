@@ -3,19 +3,21 @@ package com.tallerwebi.dominio.servicioImpl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tallerwebi.dominio.enums.EstadoCarrito;
+import com.tallerwebi.dominio.excepcion.CarritoNoEncontradoException;
+import com.tallerwebi.dominio.excepcion.CarritoVacioException;
+import com.tallerwebi.dominio.repositorios.RepositorioCarrito;
+import com.tallerwebi.dominio.repositorios.RepositorioObra;
 import com.tallerwebi.dominio.ServicioCarrito;
 import com.tallerwebi.dominio.entidades.Carrito;
 import com.tallerwebi.dominio.entidades.FormatoObra;
 import com.tallerwebi.dominio.entidades.ItemCarrito;
 import com.tallerwebi.dominio.entidades.Obra;
 import com.tallerwebi.dominio.entidades.Usuario;
-import com.tallerwebi.dominio.enums.EstadoCarrito;
 import com.tallerwebi.dominio.enums.Formato;
 import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
 import com.tallerwebi.dominio.excepcion.NoHayStockSuficiente;
-import com.tallerwebi.dominio.repositorios.RepositorioCarrito;
 import com.tallerwebi.dominio.repositorios.RepositorioFormatoObra;
-import com.tallerwebi.dominio.repositorios.RepositorioObra;
 import com.tallerwebi.presentacion.dto.FormatoObraDto;
 import com.tallerwebi.presentacion.dto.ItemCarritoDto;
 
@@ -32,7 +34,7 @@ public class ServicioCarritoImpl implements ServicioCarrito {
     private final RepositorioFormatoObra repositorioFormatoObra;
 
     @Autowired
-    public ServicioCarritoImpl(RepositorioCarrito repositorioCarrito, RepositorioObra repositorioObra, 
+    public ServicioCarritoImpl(RepositorioCarrito repositorioCarrito, RepositorioObra repositorioObra,
                                RepositorioFormatoObra repositorioFormatoObra) {
         this.repositorioCarrito = repositorioCarrito;
         this.repositorioObra = repositorioObra;
@@ -61,7 +63,7 @@ public class ServicioCarritoImpl implements ServicioCarrito {
         }
 
         Carrito carrito = obtenerOCrearCarritoParaUsuario(usuario);
-        
+
         // Verificar si ya existe un item con la misma obra y formato
         ItemCarrito itemExistente = null;
         for (ItemCarrito item : carrito.getItems()) {
@@ -100,7 +102,7 @@ public class ServicioCarritoImpl implements ServicioCarrito {
                         break;
                     }
                 }
-                
+
                 if (itemADisminuir != null) {
                     if (itemADisminuir.getCantidad() > 1) {
                         // Disminuir cantidad
@@ -109,7 +111,7 @@ public class ServicioCarritoImpl implements ServicioCarrito {
                         // Eliminar item si cantidad es 1
                         carrito.getItems().remove(itemADisminuir);
                     }
-                    
+
                     // Devolver stock al formato
                     formatoObra.devolverStock();
                     repositorioFormatoObra.guardar(formatoObra);
@@ -133,7 +135,7 @@ public class ServicioCarritoImpl implements ServicioCarrito {
                         break;
                     }
                 }
-                
+
                 if (itemAEliminar != null) {
                     // Devolver todo el stock del item
                     for (int i = 0; i < itemAEliminar.getCantidad(); i++) {
@@ -168,8 +170,16 @@ public class ServicioCarritoImpl implements ServicioCarrito {
     }
 
     @Override
-    public Carrito obtenerCarritoConItems(Usuario usuario) {
-        return repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId());
+    public Carrito obtenerCarritoConItems(Usuario usuario) throws CarritoVacioException, CarritoNoEncontradoException {
+        Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId());
+        if (carrito == null) {
+            throw new CarritoNoEncontradoException("Carrito no encontrado para el usuario");
+        }
+        if (carrito.getItems() == null || carrito.getItems().isEmpty()) {
+
+            throw new CarritoVacioException("El carrito no puede ser vacio");
+        }
+        return carrito;
     }
 
     @Override

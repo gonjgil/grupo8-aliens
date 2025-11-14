@@ -1,265 +1,264 @@
-INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES
-(1, 'ORIGINAL', 2500000.00, 1, true),
-(1, 'ORIGINAL_FIRMADO', 3000000.00, 1, true),
-(1, 'IMPRESION_CANVAS', 85000.00, 10, true),
-(1, 'IMPRESION_PREMIUM', 120000.00, 5, true),
-(2, 'ORIGINAL', 2200000.00, 1, true),
-(2, 'DIGITAL', 22000.00, 999, true),
-(2, 'IMPRESION_CANVAS', 75000.00, 8, true),
-(3, 'ORIGINAL', 1800000.00, 2, true),
-(3, 'ORIGINAL_FIRMADO', 2200000.00, 1, true),
-(3, 'IMPRESION_CANVAS', 95000.00, 15, true),
-(3, 'IMPRESION_PREMIUM', 135000.00, 8, true),
-(3, 'DIGITAL', 28000.00, 999, true),
-(4, 'ORIGINAL', 1650000.00, 1, true),
-(4, 'DIGITAL', 26000.00, 999, true),
-(5, 'ORIGINAL', 1750000.00, 3, true),
-(5, 'ORIGINAL_FIRMADO', 2100000.00, 2, true),
-(5, 'IMPRESION_CANVAS', 92000.00, 20, true),
-(6, 'ORIGINAL', 2100000.00, 2, true),
-(6, 'IMPRESION_CANVAS', 105000.00, 12, true),
-(6, 'IMPRESION_PREMIUM', 145000.00, 6, true),
-(6, 'DIGITAL', 32000.00, 999, true),
-(7, 'ORIGINAL', 1950000.00, 1, true),
-(8, 'ORIGINAL', 2000000.00, 1, true),
-(8, 'ORIGINAL_FIRMADO', 2500000.00, 1, true),
-(8, 'IMPRESION_CANVAS', 102000.00, 8, true),
-(8, 'DIGITAL', 31000.00, 999, true),
-(9, 'ORIGINAL', 1500000.00, 4, true),
-(9, 'IMPRESION_CANVAS', 78000.00, 25, true),
-(9, 'DIGITAL', 24000.00, 999, true),
-(10, 'ORIGINAL', 1450000.00, 2, true),
-(10, 'ORIGINAL_FIRMADO', 1800000.00, 1, true),
-(10, 'IMPRESION_CANVAS', 75000.00, 18, true),
-(10, 'IMPRESION_PREMIUM', 110000.00, 10, true),
-(11, 'ORIGINAL', 1600000.00, 3, true),
-(11, 'DIGITAL', 25000.00, 999, true),
-(12, 'ORIGINAL', 1400000.00, 1, true),
-(12, 'ORIGINAL_FIRMADO', 1750000.00, 1, true),
-(12, 'IMPRESION_CANVAS', 95000.00, 8, true),
-(12, 'DIGITAL', 35000.00, 999, true),
-(13, 'ORIGINAL', 890000.00, 2, true),
-(13, 'IMPRESION_CANVAS', 68000.00, 12, true),
-(13, 'DIGITAL', 28000.00, 999, true),
-(14, 'ORIGINAL', 1350000.00, 1, true),
-(14, 'ORIGINAL_FIRMADO', 1680000.00, 1, true),
-(14, 'IMPRESION_CANVAS', 88000.00, 6, true),
-(14, 'IMPRESION_PREMIUM', 125000.00, 3, true),
-(14, 'DIGITAL', 42000.00, 999, true),
-(15, 'ORIGINAL', 1500000.00, 1, true),
-(15, 'DIGITAL', 45000.00, 999, true),
-(16, 'ORIGINAL', 480000.00, 3, true),
-(16, 'IMPRESION_CANVAS', 35000.00, 15, true),
-(16, 'DIGITAL', 15000.00, 999, true),
-(17, 'ORIGINAL', 620000.00, 2, true),
-(17, 'IMPRESION_CANVAS', 42000.00, 12, true),
-(17, 'IMPRESION_PREMIUM', 58000.00, 8, true),
-(17, 'DIGITAL', 18000.00, 999, true),
-(18, 'ORIGINAL', 320000.00, 5, true),
-(18, 'DIGITAL', 12000.00, 999, true),
-(18, 'DIGITAL_NFT', 45000.00, 50, true),
-(19, 'ORIGINAL', 380000.00, 4, true),
-(19, 'IMPRESION_CANVAS', 32000.00, 20, true),
-(19, 'DIGITAL', 14000.00, 999, true),
-(19, 'DIGITAL_NFT', 52000.00, 40, true),
-(20, 'ORIGINAL', 1800000.00, 1, true),
-(20, 'ORIGINAL_FIRMADO', 2250000.00, 1, true),
-(20, 'IMPRESION_CANVAS', 125000.00, 3, true),
-(21, 'DIGITAL', 35000.00, 999, true),
-(21, 'DIGITAL_NFT', 125000.00, 10, true),
-(21, 'IMPRESION_CANVAS', 65000.00, 15, true),
-(21, 'IMPRESION_PREMIUM', 85000.00, 8, true),
-(22, 'DIGITAL', 28000.00, 999, true),
-(22, 'DIGITAL_NFT', 95000.00, 15, true),
-(23, 'ORIGINAL', 140000.00, 5, true),
-(23, 'IMPRESION_CANVAS', 18000.00, 30, true),
-(23, 'DIGITAL', 8000.00, 999, true),
-(24, 'ORIGINAL', 165000.00, 4, true),
-(24, 'IMPRESION_CANVAS', 22000.00, 25, true),
-(24, 'DIGITAL', 9500.00, 999, true),
-(25, 'ORIGINAL', 180000.00, 3, true),
-(25, 'DIGITAL', 8500.00, 999, true),
-(26, 'ORIGINAL', 240000.00, 2, true),
-(26, 'DIGITAL', 12000.00, 999, true),
-(27, 'ORIGINAL', 220000.00, 3, true),
-(27, 'IMPRESION_CANVAS', 28000.00, 15, true),
-(27, 'DIGITAL', 11000.00, 999, true),
-(28, 'ORIGINAL', 340000.00, 2, true),
-(28, 'DIGITAL', 15000.00, 999, true),
-(29, 'ORIGINAL', 520000.00, 1, true),
-(29, 'DIGITAL', 22000.00, 999, true),
-(29, 'DIGITAL_NFT', 75000.00, 25, true),
-(30, 'ORIGINAL', 160000.00, 4, true),
-(30, 'IMPRESION_CANVAS', 20000.00, 20, true),
-(30, 'DIGITAL', 9000.00, 999, true),
-(31, 'ORIGINAL', 200000.00, 3, true),
-(31, 'IMPRESION_CANVAS', 25000.00, 15, true),
-(32, 'ORIGINAL', 140000.00, 5, true),
-(32, 'DIGITAL', 8000.00, 999, true),
-(33, 'ORIGINAL', 165000.00, 4, true),
-(33, 'IMPRESION_CANVAS', 22000.00, 18, true),
-(33, 'DIGITAL', 9500.00, 999, true),
-(34, 'ORIGINAL', 95000.00, 8, true),
-(34, 'DIGITAL', 6000.00, 999, true),
-(35, 'ORIGINAL', 110000.00, 6, true),
-(35, 'IMPRESION_CANVAS', 15000.00, 25, true),
-(35, 'DIGITAL', 7000.00, 999, true),
-(36, 'ORIGINAL', 85000.00, 12, true),
-(36, 'DIGITAL', 5500.00, 999, true),
-(37, 'ORIGINAL', 75000.00, 15, true),
-(37, 'IMPRESION_CANVAS', 12000.00, 30, true),
-(37, 'DIGITAL', 5000.00, 999, true),
-(38, 'ORIGINAL', 450000.00, 1, true),
-(38, 'DIGITAL', 18000.00, 999, true),
-(39, 'ORIGINAL', 380000.00, 1, true),
-(39, 'IMPRESION_CANVAS', 38000.00, 10, true),
-(39, 'DIGITAL', 16000.00, 999, true),
-(40, 'ORIGINAL', 220000.00, 2, true),
-(40, 'DIGITAL', 11000.00, 999, true),
-(41, 'ORIGINAL', 290000.00, 1, true),
-(41, 'IMPRESION_CANVAS', 32000.00, 12, true),
-(41, 'DIGITAL', 14000.00, 999, true),
-(42, 'ORIGINAL', 180000.00, 3, true),
-(43, 'ORIGINAL', 240000.00, 2, true),
-(43, 'IMPRESION_CANVAS', 28000.00, 15, true),
-(43, 'DIGITAL', 12000.00, 999, true),
-(44, 'ORIGINAL', 520000.00, 1, true),
-(44, 'DIGITAL', 22000.00, 999, true),
-(45, 'ORIGINAL', 340000.00, 2, true),
-(45, 'IMPRESION_CANVAS', 35000.00, 10, true),
-(45, 'DIGITAL', 15000.00, 999, true),
-(46, 'ORIGINAL', 160000.00, 4, true),
-(46, 'DIGITAL', 8500.00, 999, true),
-(47, 'ORIGINAL', 200000.00, 3, true),
-(47, 'IMPRESION_CANVAS', 24000.00, 18, true),
-(47, 'DIGITAL', 10000.00, 999, true),
-(48, 'ORIGINAL', 140000.00, 5, true),
-(48, 'DIGITAL', 8000.00, 999, true),
-(49, 'ORIGINAL', 165000.00, 4, true),
-(49, 'IMPRESION_CANVAS', 20000.00, 22, true),
-(49, 'IMPRESION_PREMIUM', 28000.00, 12, true),
-(49, 'DIGITAL', 9500.00, 999, true),
-(50, 'ORIGINAL', 180000.00, 3, true),
-(50, 'DIGITAL', 9000.00, 999, true),
-(51, 'ORIGINAL', 95000.00, 8, true),
-(51, 'DIGITAL', 6000.00, 999, true),
-(52, 'ORIGINAL', 110000.00, 6, true),
-(52, 'IMPRESION_CANVAS', 14000.00, 25, true),
-(52, 'DIGITAL', 7000.00, 999, true),
-(53, 'ORIGINAL', 85000.00, 12, true),
-(53, 'DIGITAL', 5500.00, 999, true),
-(55, 'ORIGINAL', 88000.00, 10, true),
-(55, 'IMPRESION_CANVAS', 12000.00, 35, true),
-(55, 'DIGITAL', 5800.00, 999, true),
-(56, 'ORIGINAL', 65000.00, 12, true),
-(56, 'DIGITAL', 4500.00, 999, true),
-(57, 'ORIGINAL', 890000.00, 1, true),
-(57, 'IMPRESION_CANVAS', 85000.00, 5, true),
-(57, 'DIGITAL', 35000.00, 999, true),
-(58, 'ORIGINAL', 720000.00, 1, true),
-(58, 'DIGITAL', 28000.00, 999, true),
-(59, 'ORIGINAL', 210000.00, 3, true),
-(59, 'IMPRESION_CANVAS', 26000.00, 18, true),
-(59, 'DIGITAL', 11000.00, 999, true),
-(60, 'ORIGINAL', 280000.00, 2, true),
-(60, 'DIGITAL', 14000.00, 999, true),
-(61, 'ORIGINAL', 650000.00, 1, true),
-(61, 'IMPRESION_CANVAS', 65000.00, 8, true),
-(61, 'DIGITAL', 25000.00, 999, true),
-(62, 'ORIGINAL', 580000.00, 1, true),
-(62, 'DIGITAL', 23000.00, 999, true),
-(63, 'ORIGINAL', 190000.00, 4, true),
-(63, 'IMPRESION_CANVAS', 22000.00, 20, true),
-(63, 'DIGITAL', 9500.00, 999, true),
-(64, 'ORIGINAL', 220000.00, 3, true),
-(64, 'DIGITAL', 11000.00, 999, true),
-(65, 'ORIGINAL', 420000.00, 1, true),
-(65, 'IMPRESION_CANVAS', 42000.00, 10, true),
-(65, 'IMPRESION_PREMIUM', 58000.00, 6, true),
-(65, 'DIGITAL', 18000.00, 999, true),
-(66, 'ORIGINAL', 380000.00, 1, true),
-(66, 'DIGITAL', 16000.00, 999, true),
-(67, 'ORIGINAL', 220000.00, 2, true),
-(67, 'IMPRESION_CANVAS', 26000.00, 15, true),
-(67, 'DIGITAL', 11000.00, 999, true),
-(68, 'ORIGINAL', 290000.00, 1, true),
-(68, 'DIGITAL', 14000.00, 999, true),
-(69, 'ORIGINAL', 180000.00, 3, true),
-(69, 'IMPRESION_CANVAS', 22000.00, 18, true),
-(69, 'DIGITAL', 9000.00, 999, true),
-(70, 'ORIGINAL', 240000.00, 2, true),
-(70, 'DIGITAL', 12000.00, 999, true),
-(71, 'ORIGINAL', 780000.00, 1, true),
-(71, 'IMPRESION_CANVAS', 75000.00, 6, true),
-(71, 'IMPRESION_PREMIUM', 95000.00, 3, true),
-(71, 'DIGITAL', 32000.00, 999, true),
-(72, 'ORIGINAL', 540000.00, 2, true),
-(72, 'DIGITAL', 22000.00, 999, true),
-(73, 'ORIGINAL', 75000.00, 8, true),
-(73, 'IMPRESION_CANVAS', 10000.00, 40, true),
-(73, 'DIGITAL', 5000.00, 999, true),
-(75, 'ORIGINAL', 110000.00, 9, true),
-(75, 'IMPRESION_CANVAS', 14000.00, 35, true),
-(75, 'DIGITAL', 7000.00, 999, true),
-(76, 'ORIGINAL', 125000.00, 7, true),
-(76, 'DIGITAL', 8000.00, 999, true),
-(77, 'ORIGINAL', 920000.00, 1, true),
-(77, 'IMPRESION_CANVAS', 88000.00, 5, true),
-(77, 'DIGITAL', 38000.00, 999, true),
-(78, 'ORIGINAL', 1100000.00, 1, true),
-(78, 'DIGITAL', 45000.00, 999, true),
-(79, 'ORIGINAL', 180000.00, 3, true),
-(79, 'IMPRESION_CANVAS', 22000.00, 20, true),
-(79, 'DIGITAL', 9000.00, 999, true),
-(80, 'ORIGINAL', 160000.00, 4, true),
-(80, 'DIGITAL', 8500.00, 999, true),
-(81, 'ORIGINAL', 340000.00, 2, true),
-(81, 'IMPRESION_CANVAS', 35000.00, 12, true),
-(81, 'IMPRESION_PREMIUM', 48000.00, 8, true),
-(81, 'DIGITAL', 15000.00, 999, true),
-(82, 'ORIGINAL', 290000.00, 3, true),
-(82, 'DIGITAL', 14000.00, 999, true),
-(83, 'ORIGINAL', 680000.00, 1, true),
-(83, 'IMPRESION_CANVAS', 65000.00, 8, true),
-(83, 'DIGITAL', 28000.00, 999, true),
-(84, 'ORIGINAL', 450000.00, 2, true),
-(84, 'DIGITAL', 18000.00, 999, true),
-(85, 'ORIGINAL', 85000.00, 10, true),
-(85, 'IMPRESION_CANVAS', 12000.00, 40, true),
-(85, 'DIGITAL', 5500.00, 999, true),
-(86, 'ORIGINAL', 95000.00, 8, true),
-(86, 'DIGITAL', 6000.00, 999, true),
-(87, 'ORIGINAL', 280000.00, 4, true),
-(87, 'IMPRESION_CANVAS', 32000.00, 16, true),
-(87, 'DIGITAL', 14000.00, 999, true),
-(88, 'ORIGINAL', 190000.00, 3, true),
-(88, 'DIGITAL', 9500.00, 999, true),
-(89, 'ORIGINAL', 95000.00, 8, true),
-(89, 'IMPRESION_CANVAS', 13000.00, 35, true),
-(89, 'DIGITAL', 6000.00, 999, true),
-(90, 'ORIGINAL', 180000.00, 5, true),
-(90, 'DIGITAL', 9000.00, 999, true),
-(91, 'ORIGINAL', 88000.00, 10, true),
-(91, 'IMPRESION_CANVAS', 12000.00, 38, true),
-(91, 'DIGITAL', 5800.00, 999, true),
-(92, 'ORIGINAL', 65000.00, 12, true),
-(92, 'DIGITAL', 4500.00, 999, true),
-(93, 'ORIGINAL', 890000.00, 1, true),
-(93, 'IMPRESION_CANVAS', 85000.00, 6, true),
-(93, 'IMPRESION_PREMIUM', 115000.00, 3, true),
-(93, 'DIGITAL', 35000.00, 999, true),
-(95, 'ORIGINAL', 210000.00, 3, true),
-(95, 'IMPRESION_CANVAS', 26000.00, 18, true),
-(95, 'DIGITAL', 11000.00, 999, true),
-(96, 'ORIGINAL', 280000.00, 2, true),
-(96, 'DIGITAL', 14000.00, 999, true),
-(97, 'ORIGINAL', 140000.00, 8, true),
-(97, 'IMPRESION_CANVAS', 18000.00, 32, true),
-(97, 'DIGITAL', 8000.00, 999, true),
-(98, 'ORIGINAL', 165000.00, 6, true),
-(98, 'DIGITAL', 9500.00, 999, true),
-(99, 'ORIGINAL', 420000.00, 1, true),
-(99, 'IMPRESION_CANVAS', 42000.00, 10, true),
-(99, 'DIGITAL', 18000.00, 999, true),
-(100, 'ORIGINAL', 380000.00, 1, true),
-(100, 'DIGITAL', 16000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (1, 'ORIGINAL', 275.00, 1, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (1, 'ORIGINAL_FIRMADO', 3000000.00, 1, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (1, 'IMPRESION_CANVAS', 85000.00, 10, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (1, 'IMPRESION_PREMIUM', 120000.00, 5, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (2, 'ORIGINAL', 2200000.00, 1, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (2, 'DIGITAL', 22000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (2, 'IMPRESION_CANVAS', 75000.00, 8, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (3, 'ORIGINAL', 1800000.00, 2, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (3, 'ORIGINAL_FIRMADO', 2200000.00, 1, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (3, 'IMPRESION_CANVAS', 850.00, 15, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (3, 'IMPRESION_PREMIUM', 135000.00, 8, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (3, 'DIGITAL', 28000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (4, 'ORIGINAL', 1650000.00, 1, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (4, 'DIGITAL', 26000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (5, 'ORIGINAL', 1750000.00, 3, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (5, 'ORIGINAL_FIRMADO', 2100000.00, 2, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (5, 'IMPRESION_CANVAS', 92000.00, 20, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (6, 'ORIGINAL', 2100000.00, 2, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (6, 'IMPRESION_CANVAS', 105000.00, 12, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (6, 'IMPRESION_PREMIUM', 145000.00, 6, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (6, 'DIGITAL', 32000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (7, 'ORIGINAL', 1950000.00, 1, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (8, 'ORIGINAL', 2000000.00, 1, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (8, 'ORIGINAL_FIRMADO', 2500000.00, 1, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (8, 'IMPRESION_CANVAS', 102000.00, 8, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (8, 'DIGITAL', 31000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (9, 'ORIGINAL', 1500000.00, 4, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (9, 'IMPRESION_CANVAS', 78000.00, 25, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (9, 'DIGITAL', 24000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (10, 'ORIGINAL', 1450000.00, 2, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (10, 'ORIGINAL_FIRMADO', 1800000.00, 1, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (10, 'IMPRESION_CANVAS', 75000.00, 18, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (10, 'IMPRESION_PREMIUM', 110000.00, 10, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (11, 'ORIGINAL', 1600000.00, 3, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (11, 'DIGITAL', 25000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (12, 'ORIGINAL', 1400000.00, 1, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (12, 'ORIGINAL_FIRMADO', 1750000.00, 1, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (12, 'IMPRESION_CANVAS', 95000.00, 8, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (12, 'DIGITAL', 35000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (13, 'ORIGINAL', 890000.00, 2, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (13, 'IMPRESION_CANVAS', 68000.00, 12, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (13, 'DIGITAL', 28000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (14, 'ORIGINAL', 1350000.00, 1, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (14, 'ORIGINAL_FIRMADO', 1680000.00, 1, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (14, 'IMPRESION_CANVAS', 88000.00, 6, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (14, 'IMPRESION_PREMIUM', 125000.00, 3, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (14, 'DIGITAL', 42000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (15, 'ORIGINAL', 1500000.00, 1, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (15, 'DIGITAL', 45000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (16, 'ORIGINAL', 480000.00, 3, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (16, 'IMPRESION_CANVAS', 35000.00, 15, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (16, 'DIGITAL', 15000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (17, 'ORIGINAL', 620000.00, 2, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (17, 'IMPRESION_CANVAS', 42000.00, 12, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (17, 'IMPRESION_PREMIUM', 58000.00, 8, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (17, 'DIGITAL', 18000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (18, 'ORIGINAL', 320000.00, 5, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (18, 'DIGITAL', 12000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (18, 'DIGITAL_NFT', 45000.00, 50, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (19, 'ORIGINAL', 380000.00, 4, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (19, 'IMPRESION_CANVAS', 32000.00, 20, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (19, 'DIGITAL', 14000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (19, 'DIGITAL_NFT', 52000.00, 40, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (20, 'ORIGINAL', 1800000.00, 1, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (20, 'ORIGINAL_FIRMADO', 2250000.00, 1, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (20, 'IMPRESION_CANVAS', 125000.00, 3, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (21, 'DIGITAL', 35000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (21, 'DIGITAL_NFT', 125000.00, 10, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (21, 'IMPRESION_CANVAS', 65000.00, 15, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (21, 'IMPRESION_PREMIUM', 85000.00, 8, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (22, 'DIGITAL', 28000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (22, 'DIGITAL_NFT', 95000.00, 15, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (23, 'ORIGINAL', 140000.00, 5, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (23, 'IMPRESION_CANVAS', 18000.00, 30, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (23, 'DIGITAL', 8000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (24, 'ORIGINAL', 165000.00, 4, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (24, 'IMPRESION_CANVAS', 22000.00, 25, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (24, 'DIGITAL', 9500.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (25, 'ORIGINAL', 180000.00, 3, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (25, 'DIGITAL', 8500.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (26, 'ORIGINAL', 240000.00, 2, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (26, 'DIGITAL', 12000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (27, 'ORIGINAL', 220000.00, 3, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (27, 'IMPRESION_CANVAS', 28000.00, 15, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (27, 'DIGITAL', 11000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (28, 'ORIGINAL', 340000.00, 2, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (28, 'DIGITAL', 15000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (29, 'ORIGINAL', 520000.00, 1, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (29, 'DIGITAL', 22000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (29, 'DIGITAL_NFT', 75000.00, 25, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (30, 'ORIGINAL', 160000.00, 4, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (30, 'IMPRESION_CANVAS', 20000.00, 20, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (30, 'DIGITAL', 9000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (31, 'ORIGINAL', 200000.00, 3, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (31, 'IMPRESION_CANVAS', 25000.00, 15, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (32, 'ORIGINAL', 140000.00, 5, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (32, 'DIGITAL', 8000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (33, 'ORIGINAL', 165000.00, 4, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (33, 'IMPRESION_CANVAS', 22000.00, 18, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (33, 'DIGITAL', 9500.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (34, 'ORIGINAL', 95000.00, 8, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (34, 'DIGITAL', 6000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (35, 'ORIGINAL', 110000.00, 6, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (35, 'IMPRESION_CANVAS', 15000.00, 25, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (35, 'DIGITAL', 7000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (36, 'ORIGINAL', 85000.00, 12, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (36, 'DIGITAL', 5500.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (37, 'ORIGINAL', 75000.00, 15, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (37, 'IMPRESION_CANVAS', 12000.00, 30, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (37, 'DIGITAL', 5000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (38, 'ORIGINAL', 450000.00, 1, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (38, 'DIGITAL', 18000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (39, 'ORIGINAL', 380000.00, 1, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (39, 'IMPRESION_CANVAS', 38000.00, 10, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (39, 'DIGITAL', 16000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (40, 'ORIGINAL', 220000.00, 2, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (40, 'DIGITAL', 11000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (41, 'ORIGINAL', 290000.00, 1, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (41, 'IMPRESION_CANVAS', 32000.00, 12, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (41, 'DIGITAL', 14000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (42, 'ORIGINAL', 180000.00, 3, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (43, 'ORIGINAL', 240000.00, 2, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (43, 'IMPRESION_CANVAS', 28000.00, 15, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (43, 'DIGITAL', 12000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (44, 'ORIGINAL', 520000.00, 1, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (44, 'DIGITAL', 22000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (45, 'ORIGINAL', 340000.00, 2, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (45, 'IMPRESION_CANVAS', 35000.00, 10, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (45, 'DIGITAL', 15000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (46, 'ORIGINAL', 160000.00, 4, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (46, 'DIGITAL', 8500.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (47, 'ORIGINAL', 200000.00, 3, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (47, 'IMPRESION_CANVAS', 24000.00, 18, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (47, 'DIGITAL', 10000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (48, 'ORIGINAL', 140000.00, 5, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (48, 'DIGITAL', 8000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (49, 'ORIGINAL', 165000.00, 4, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (49, 'IMPRESION_CANVAS', 20000.00, 22, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (49, 'IMPRESION_PREMIUM', 28000.00, 12, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (49, 'DIGITAL', 9500.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (50, 'ORIGINAL', 180000.00, 3, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (50, 'DIGITAL', 9000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (51, 'ORIGINAL', 95000.00, 8, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (51, 'DIGITAL', 6000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (52, 'ORIGINAL', 110000.00, 6, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (52, 'IMPRESION_CANVAS', 14000.00, 25, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (52, 'DIGITAL', 7000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (53, 'ORIGINAL', 85000.00, 12, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (53, 'DIGITAL', 5500.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (55, 'ORIGINAL', 88000.00, 10, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (55, 'IMPRESION_CANVAS', 12000.00, 35, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (55, 'DIGITAL', 5800.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (56, 'ORIGINAL', 65000.00, 12, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (56, 'DIGITAL', 4500.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (57, 'ORIGINAL', 890000.00, 1, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (57, 'IMPRESION_CANVAS', 85000.00, 5, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (57, 'DIGITAL', 35000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (58, 'ORIGINAL', 720000.00, 1, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (58, 'DIGITAL', 28000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (59, 'ORIGINAL', 210000.00, 3, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (59, 'IMPRESION_CANVAS', 26000.00, 18, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (59, 'DIGITAL', 11000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (60, 'ORIGINAL', 280000.00, 2, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (60, 'DIGITAL', 14000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (61, 'ORIGINAL', 650000.00, 1, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (61, 'IMPRESION_CANVAS', 65000.00, 8, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (61, 'DIGITAL', 25000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (62, 'ORIGINAL', 580000.00, 1, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (62, 'DIGITAL', 23000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (63, 'ORIGINAL', 190000.00, 4, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (63, 'IMPRESION_CANVAS', 22000.00, 20, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (63, 'DIGITAL', 9500.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (64, 'ORIGINAL', 220000.00, 3, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (64, 'DIGITAL', 11000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (65, 'ORIGINAL', 420000.00, 1, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (65, 'IMPRESION_CANVAS', 42000.00, 10, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (65, 'IMPRESION_PREMIUM', 58000.00, 6, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (65, 'DIGITAL', 18000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (66, 'ORIGINAL', 380000.00, 1, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (66, 'DIGITAL', 16000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (67, 'ORIGINAL', 220000.00, 2, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (67, 'IMPRESION_CANVAS', 26000.00, 15, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (67, 'DIGITAL', 11000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (68, 'ORIGINAL', 290000.00, 1, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (68, 'DIGITAL', 14000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (69, 'ORIGINAL', 180000.00, 3, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (69, 'IMPRESION_CANVAS', 22000.00, 18, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (69, 'DIGITAL', 9000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (70, 'ORIGINAL', 240000.00, 2, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (70, 'DIGITAL', 12000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (71, 'ORIGINAL', 780000.00, 1, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (71, 'IMPRESION_CANVAS', 75000.00, 6, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (71, 'IMPRESION_PREMIUM', 95000.00, 3, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (71, 'DIGITAL', 32000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (72, 'ORIGINAL', 540000.00, 2, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (72, 'DIGITAL', 22000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (73, 'ORIGINAL', 75000.00, 8, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (73, 'IMPRESION_CANVAS', 10000.00, 40, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (73, 'DIGITAL', 5000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (75, 'ORIGINAL', 110000.00, 9, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (75, 'IMPRESION_CANVAS', 14000.00, 35, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (75, 'DIGITAL', 7000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (76, 'ORIGINAL', 125000.00, 7, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (76, 'DIGITAL', 8000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (77, 'ORIGINAL', 920000.00, 1, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (77, 'IMPRESION_CANVAS', 88000.00, 5, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (77, 'DIGITAL', 38000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (78, 'ORIGINAL', 1100000.00, 1, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (78, 'DIGITAL', 45000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (79, 'ORIGINAL', 180000.00, 3, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (79, 'IMPRESION_CANVAS', 22000.00, 20, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (79, 'DIGITAL', 9000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (80, 'ORIGINAL', 160000.00, 4, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (80, 'DIGITAL', 8500.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (81, 'ORIGINAL', 340000.00, 2, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (81, 'IMPRESION_CANVAS', 35000.00, 12, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (81, 'IMPRESION_PREMIUM', 48000.00, 8, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (81, 'DIGITAL', 15000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (82, 'ORIGINAL', 290000.00, 3, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (82, 'DIGITAL', 14000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (83, 'ORIGINAL', 680000.00, 1, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (83, 'IMPRESION_CANVAS', 65000.00, 8, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (83, 'DIGITAL', 28000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (84, 'ORIGINAL', 450000.00, 2, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (84, 'DIGITAL', 18000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (85, 'ORIGINAL', 85000.00, 10, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (85, 'IMPRESION_CANVAS', 12000.00, 40, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (85, 'DIGITAL', 5500.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (86, 'ORIGINAL', 95000.00, 8, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (86, 'DIGITAL', 6000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (87, 'ORIGINAL', 280000.00, 4, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (87, 'IMPRESION_CANVAS', 32000.00, 16, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (87, 'DIGITAL', 14000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (88, 'ORIGINAL', 190000.00, 3, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (88, 'DIGITAL', 9500.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (89, 'ORIGINAL', 95000.00, 8, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (89, 'IMPRESION_CANVAS', 13000.00, 35, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (89, 'DIGITAL', 6000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (90, 'ORIGINAL', 180000.00, 5, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (90, 'DIGITAL', 9000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (91, 'ORIGINAL', 88000.00, 10, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (91, 'IMPRESION_CANVAS', 12000.00, 38, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (91, 'DIGITAL', 5800.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (92, 'ORIGINAL', 65000.00, 12, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (92, 'DIGITAL', 4500.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (93, 'ORIGINAL', 890000.00, 1, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (93, 'IMPRESION_CANVAS', 85000.00, 6, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (93, 'IMPRESION_PREMIUM', 115000.00, 3, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (93, 'DIGITAL', 35000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (95, 'ORIGINAL', 210000.00, 3, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (95, 'IMPRESION_CANVAS', 26000.00, 18, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (95, 'DIGITAL', 11000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (96, 'ORIGINAL', 280000.00, 2, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (96, 'DIGITAL', 14000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (97, 'ORIGINAL', 140000.00, 8, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (97, 'IMPRESION_CANVAS', 18000.00, 32, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (97, 'DIGITAL', 8000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (98, 'ORIGINAL', 165000.00, 6, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (98, 'DIGITAL', 9500.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (99, 'ORIGINAL', 420000.00, 1, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (99, 'IMPRESION_CANVAS', 42000.00, 10, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (99, 'DIGITAL', 18000.00, 999, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (100, 'ORIGINAL', 380000.00, 1, true);
+INSERT INTO formato_obra(obra_id, formato, precio, stock, disponible) VALUES (100, 'DIGITAL', 16000.00, 999, true);
