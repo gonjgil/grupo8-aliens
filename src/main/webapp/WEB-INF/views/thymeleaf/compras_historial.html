@@ -36,8 +36,11 @@
                 <i class="bi bi-person-plus"></i>
             </a>
             <a th:href="@{/carrito}"
-               class="bg-blue-600 hover:bg-blue-700 fas fa-shopping-cart mr-2 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg"
-               title="Ver carrito">
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg relative"
+                    title="Ver carrito">
+                <i class="fas fa-shopping-cart"></i>
+                <span data-carrito-count class="hidden absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">0
+            </span>
             </a>
             <a th:href="@{/compras/historial}"
                class="bg-yellow-700 hover:bg-yellow-800 text-white font-bold py-2 px-3 rounded-full transition duration-300 shadow-lg"
