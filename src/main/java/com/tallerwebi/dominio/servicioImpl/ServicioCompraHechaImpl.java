@@ -67,7 +67,7 @@ public class ServicioCompraHechaImpl implements ServicioCompraHecha {
 
             CompraHecha guardada = repositorioCompraHecha.guardar(resumenCreado);
 
-            servicioCarrito.vaciarCarrito(carrito.getUsuario());
+            servicioCarrito.finalizarCompra(carrito.getUsuario());
             return  guardada;
         }
 

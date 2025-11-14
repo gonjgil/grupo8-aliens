@@ -173,11 +173,9 @@ public class ServicioCarritoImpl implements ServicioCarrito {
     public Carrito obtenerCarritoConItems(Usuario usuario) throws CarritoVacioException, CarritoNoEncontradoException {
         Carrito carrito = repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId());
         if (carrito == null) {
-            System.err.println("Carrito no encontrado");
             throw new CarritoNoEncontradoException("Carrito no encontrado para el usuario");
         }
         if (carrito.getItems() == null || carrito.getItems().isEmpty()) {
-            System.out.println("Items del carrito: " + carrito.getItems());
 
             throw new CarritoVacioException("El carrito no puede ser vacio");
         }
