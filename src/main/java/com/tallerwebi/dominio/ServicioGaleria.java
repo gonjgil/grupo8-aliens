@@ -12,7 +12,7 @@ import com.tallerwebi.presentacion.dto.ObraDto;
 public interface ServicioGaleria {
     List<Obra> obtener();
     List<Obra> ordenarRandom();
-    List<Obra> obtenerPorAutor(String autor);
+    List<Obra> obtenerPorAutor(Artista artista);
     List<Obra> obtenerPorCategoria(Categoria categoria);
     Obra obtenerPorId(Long id);
     List<Obra> obtenerObrasParaUsuario(Usuario usuario);

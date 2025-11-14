@@ -49,8 +49,8 @@ public class ServicioGaleriaImpl implements ServicioGaleria {
     }
 
     @Override
-    public List<Obra> obtenerPorAutor(String autor) {
-        return convertirYValidar((repositorioObra.obtenerPorAutor(autor)));
+    public List<Obra> obtenerPorAutor(Artista artista) {
+        return convertirYValidar((repositorioObra.obtenerPorArtista(artista)));
     }
 
     @Override

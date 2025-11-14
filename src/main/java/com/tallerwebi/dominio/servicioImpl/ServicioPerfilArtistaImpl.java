@@ -116,7 +116,7 @@ public class ServicioPerfilArtistaImpl implements ServicioPerfilArtista {
     @Override
     public List<ObraDto> obtenerObrasPorArtista(Long idArtista) {
         Artista artista = repositorioArtista.buscarArtistaPorId(idArtista);
-        List<Obra> obtenerObras =repositorioObra.obtenerPorAutor(artista.getNombre());
+        List<Obra> obtenerObras =repositorioObra.obtenerPorArtista(artista);
         List<ObraDto> obrasDto =new ArrayList<>();
         for (Obra obra : obtenerObras) {
             obrasDto.add(new ObraDto(obra));

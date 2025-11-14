@@ -156,7 +156,7 @@ public class ServicioPerfilArtistaImplTest {
         List<Obra> obras = List.of(obra1, obra2);
 
         when(repositorioArtistaMock.buscarArtistaPorId(idArtista)).thenReturn(artista);
-        when(repositorioObraMock.obtenerPorAutor("Juan Perez")).thenReturn(obras);
+        when(repositorioObraMock.obtenerPorArtista(artista)).thenReturn(obras);
 
         List<ObraDto> dtos = servicioPerfilArtistaImpl.obtenerObrasPorArtista(idArtista);
 
@@ -169,6 +169,6 @@ public class ServicioPerfilArtistaImplTest {
                 ))));
 
         verify(repositorioArtistaMock, times(1)).buscarArtistaPorId(idArtista);
-        verify(repositorioObraMock, times(1)).obtenerPorAutor("Juan Perez");
+        verify(repositorioObraMock, times(1)).obtenerPorArtista(artista);
     }
 }
