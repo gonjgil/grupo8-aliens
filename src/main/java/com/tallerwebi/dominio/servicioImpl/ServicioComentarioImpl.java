@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -26,7 +26,7 @@ public class ServicioComentarioImpl implements ServicioComentario {
         comentario.setUsuario(usuario);
         comentario.setObra(obra);
         comentario.setContenido(contenido);
-        comentario.setFecha(LocalDateTime.now());
+        comentario.setFecha(LocalDate.now());
         repositorioComentario.guardar(comentario);
 
     }

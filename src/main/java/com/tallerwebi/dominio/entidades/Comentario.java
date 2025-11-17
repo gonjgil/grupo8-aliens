@@ -1,7 +1,9 @@
 package com.tallerwebi.dominio.entidades;
 
+import org.springframework.format.datetime.DateFormatter;
+
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 @Entity
@@ -16,7 +18,7 @@ public class Comentario {
     @ManyToOne
     private Usuario usuario;
     private String contenido;
-    private LocalDateTime fecha = LocalDateTime.now();
+    private LocalDate fecha = LocalDate.now();
 
     public Comentario() {}
 
@@ -53,16 +55,18 @@ public class Comentario {
         this.contenido = contenido;
     }
 
-    public LocalDateTime getFecha() {
+    public LocalDate getFecha() {
         return fecha;
     }
 
-    public void setFecha(LocalDateTime fecha) {
+    public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
 
     public String getFechaFormateada() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         return fecha.format(formatter);
     }
+
+
 }

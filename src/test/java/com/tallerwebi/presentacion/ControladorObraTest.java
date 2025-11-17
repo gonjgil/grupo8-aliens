@@ -582,7 +582,7 @@ public class ControladorObraTest {
 
         // Verificación
         assertEquals("obra", mav.getViewName());
-        assertTrue(((List<?>) mav.getModel().get("comentarios")).size() > 0);
+        assertFalse(((List<?>) mav.getModel().get("comentarios")).isEmpty());
         verify(servicioComentario, times(1)).obtenerComentariosDeObra(idObra);
     }
 
