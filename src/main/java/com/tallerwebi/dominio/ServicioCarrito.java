@@ -5,6 +5,8 @@ import java.util.List;
 import com.tallerwebi.dominio.entidades.Carrito;
 import com.tallerwebi.dominio.entidades.Obra;
 import com.tallerwebi.dominio.entidades.Usuario;
+import com.tallerwebi.dominio.excepcion.CarritoNoEncontradoException;
+import com.tallerwebi.dominio.excepcion.CarritoVacioException;
 import com.tallerwebi.dominio.enums.Formato;
 import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
 import com.tallerwebi.dominio.excepcion.NoHayStockSuficiente;
@@ -20,7 +22,7 @@ public interface ServicioCarrito {
     List<Obra> obtenerObras(Usuario usuario);
     List<ItemCarritoDto> obtenerItems(Usuario usuario);
     Integer obtenerCantidadDeItemPorId(Usuario usuario, Obra obra);
-    Carrito obtenerCarritoConItems(Usuario usuario); //testeado
+    Carrito obtenerCarritoConItems(Usuario usuario) throws CarritoVacioException, CarritoNoEncontradoException; //testeado
     Double calcularPrecioTotalCarrito(Usuario usuario); //testeado
     Integer contarItemsEnCarrito(Usuario usuario); //testeado
     List<FormatoObraDto> obtenerFormatosDisponibles(Long obraId);

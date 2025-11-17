@@ -8,16 +8,22 @@ import com.tallerwebi.dominio.entidades.Carrito;
 import com.tallerwebi.dominio.entidades.FormatoObra;
 import com.tallerwebi.dominio.entidades.Obra;
 import com.tallerwebi.dominio.entidades.Usuario;
+import com.tallerwebi.dominio.excepcion.CarritoNoEncontradoException;
+import com.tallerwebi.dominio.excepcion.CarritoVacioException;
 import com.tallerwebi.dominio.enums.Formato;
 import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
 import com.tallerwebi.dominio.excepcion.NoHayStockSuficiente;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -30,7 +36,7 @@ public class ServicioCarritoImplTest {
 
     @Mock
     private RepositorioCarrito repositorioCarrito;
-    
+
     @Mock
     private RepositorioFormatoObra repositorioFormatoObra;
 
@@ -38,9 +44,7 @@ public class ServicioCarritoImplTest {
 
     @BeforeEach
     public void init(){
-        this.repositorioObra = mock(RepositorioObra.class);
-        this.repositorioCarrito = mock(RepositorioCarrito.class);
-        this.repositorioFormatoObra = mock(RepositorioFormatoObra.class);
+        MockitoAnnotations.openMocks(this);
         this.servicioCarritoImpl = new ServicioCarritoImpl(repositorioCarrito,repositorioObra,repositorioFormatoObra);
     }
 
@@ -54,6 +58,7 @@ public class ServicioCarritoImplTest {
         Carrito resultado = servicioCarritoImpl.obtenerOCrearCarritoParaUsuario(usuario);
 
         assertThat(resultado, is(equalTo(carritoExistente)));
+        assertThat(resultado.getUsuario(), is(equalTo(usuario)));
     }
 
     @Test
@@ -70,7 +75,7 @@ public class ServicioCarritoImplTest {
     }
 
     @Test
-    public void dadoQueExisteUnCarritoDeberiaAgregarObraCorrectamente() throws NoExisteLaObra, NoHayStockSuficiente {
+    public void dadoQueExisteUnCarritoDeberiaAgregarObraCorrectamente() throws NoExisteLaObra, NoHayStockSuficiente, CarritoNoEncontradoException, CarritoVacioException {
         Usuario usuario = new Usuario();
         Obra obra1 = new Obra();
         Long obraId = 1L;
@@ -79,13 +84,14 @@ public class ServicioCarritoImplTest {
         obra1.setStock(2);
 
         Carrito carrito = new Carrito(usuario);
-        
+
         FormatoObra formatoObra = new FormatoObra();
         formatoObra.setStock(10);
         formatoObra.setFormato(formato);
 
         when(repositorioObra.obtenerPorId(obra1.getId())).thenReturn(obra1);
         when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId())).thenReturn(carrito);
+        when(repositorioCarrito.obtenerUltimoCarritoPorUsuario(usuario.getId())).thenReturn(carrito);
         when(repositorioFormatoObra.obtenerFormatoPorObraYFormato(obraId, formato)).thenReturn(formatoObra);
 
         servicioCarritoImpl.agregarObraAlCarrito(usuario, obraId, formato);
@@ -97,7 +103,7 @@ public class ServicioCarritoImplTest {
     }
 
     @Test
-    public void debeVerificarQueNoSeAgregueObraACarritoSiNoHayStock() throws NoHayStockSuficiente {
+    public void debeVerificarQueNoSeAgregueObraACarritoSiNoHayStockLanzaLaExcepcionNoHayStockSuficiente() throws NoHayStockSuficiente {
         Obra obra1 = new Obra();
         Formato formato = Formato.ORIGINAL;
         obra1.setId(1L);
@@ -110,27 +116,29 @@ public class ServicioCarritoImplTest {
 
         Usuario usuario = new Usuario();
         Carrito carrito = new Carrito(usuario);
-        
+
         FormatoObra formatoObra1 = new FormatoObra();
         formatoObra1.setStock(10);
         formatoObra1.setFormato(formato);
-        
+
         FormatoObra formatoObra2 = new FormatoObra();
         formatoObra2.setStock(0); // Sin stock para obra2
         formatoObra2.setFormato(formato);
-        
+
         when(this.repositorioObra.obtenerPorId(1L)).thenReturn(obra1);
         when(this.repositorioObra.obtenerPorId(2L)).thenReturn(obra2);
-        
+
         when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId())).thenReturn(carrito);
         when(repositorioFormatoObra.obtenerFormatoPorObraYFormato(obra1.getId(), formato)).thenReturn(formatoObra1);
         when(repositorioFormatoObra.obtenerFormatoPorObraYFormato(obra2.getId(), formato)).thenReturn(formatoObra2);
         when(repositorioFormatoObra.obtenerFormatoPorObraYFormato(obra2.getId(), formato2)).thenReturn(formatoObra2);
-        
+
         servicioCarritoImpl.agregarObraAlCarrito(usuario, obra1.getId(), formato);
 
         try {
             servicioCarritoImpl.agregarObraAlCarrito(usuario, obra2.getId(), formato2);
+            fail("Se esperaba NoHayStockSuficiente, pero no fue lanzada");
+
         } catch (NoHayStockSuficiente e) {
         }
 
@@ -157,7 +165,7 @@ public class ServicioCarritoImplTest {
         FormatoObra formatoObra = new FormatoObra();
         formatoObra.setStock(10);
         formatoObra.setFormato(formato);
-        
+
         when(repositorioObra.obtenerPorId(obra1Id)).thenReturn(obra1);
         when(repositorioObra.obtenerPorId(obra2Id)).thenReturn(obra2);
         when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId())).thenReturn(carrito);
@@ -215,11 +223,11 @@ public class ServicioCarritoImplTest {
         FormatoObra formatoObra1 = new FormatoObra();
         formatoObra1.setStock(10);
         formatoObra1.setFormato(formato);
-        
+
         FormatoObra formatoObra2 = new FormatoObra();
         formatoObra2.setStock(10);
         formatoObra2.setFormato(formato);
-        
+
         FormatoObra formatoObra3 = new FormatoObra();
         formatoObra3.setStock(10);
         formatoObra3.setFormato(formato);
@@ -298,9 +306,9 @@ public class ServicioCarritoImplTest {
         servicioCarritoImpl.agregarObraAlCarrito(usuario, obra1.getId(), formato);
 
         assertThat(carrito.getItems().get(0).getCantidad(), is(2));
-        
+
         servicioCarritoImpl.disminuirCantidadDeObraDelCarrito(usuario, obra1.getId(), formato);
-        
+
         List<Obra> resultado = servicioCarritoImpl.obtenerObras(usuario);
         assertThat(resultado.size(), is(1));
         assertThat(servicioCarritoImpl.contarItemsEnCarrito(usuario), is(1));
@@ -325,7 +333,7 @@ public class ServicioCarritoImplTest {
         FormatoObra formatoObra1 = new FormatoObra();
         formatoObra1.setStock(10);
         formatoObra1.setFormato(formato);
-        
+
         FormatoObra formatoObra2 = new FormatoObra();
         formatoObra2.setStock(10);
         formatoObra2.setFormato(formato);
@@ -345,7 +353,7 @@ public class ServicioCarritoImplTest {
     }
 
     @Test
-    public void obtenerCarritoConItems_debeObtenerCarritoConItemsDeUsuarioEspecifico() throws NoHayStockSuficiente {
+    public void obtenerCarritoConItems_debeObtenerCarritoConItemsDeUsuarioEspecifico() throws NoHayStockSuficiente, CarritoNoEncontradoException, CarritoVacioException {
         Obra obra1 = new Obra();
         obra1.setId(1L);
         obra1.setStock(2);
@@ -370,7 +378,7 @@ public class ServicioCarritoImplTest {
         FormatoObra formatoObra1 = new FormatoObra();
         formatoObra1.setStock(10);
         formatoObra1.setFormato(formato);
-        
+
         FormatoObra formatoObra2 = new FormatoObra();
         formatoObra2.setStock(10);
         formatoObra2.setFormato(formato);
@@ -382,6 +390,9 @@ public class ServicioCarritoImplTest {
         when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario2.getId())).thenReturn(carrito2);
         when(repositorioFormatoObra.obtenerFormatoPorObraYFormato(obra1.getId(), formato)).thenReturn(formatoObra1);
         when(repositorioFormatoObra.obtenerFormatoPorObraYFormato(obra2.getId(), formato)).thenReturn(formatoObra2);
+        when(repositorioCarrito.obtenerUltimoCarritoPorUsuario(usuario1.getId())).thenReturn(carrito1);
+        when(repositorioCarrito.obtenerUltimoCarritoPorUsuario(usuario2.getId())).thenReturn(carrito2);
+
 
         servicioCarritoImpl.agregarObraAlCarrito(usuario1, obra1.getId(), formato);
         servicioCarritoImpl.agregarObraAlCarrito(usuario1, obra1.getId(), formato);
@@ -414,20 +425,20 @@ public class ServicioCarritoImplTest {
         formatoObra1.setStock(10);
         formatoObra1.setFormato(formato);
         formatoObra1.setPrecio(3500.0);
-        
+
         FormatoObra formatoObra2 = new FormatoObra();
         formatoObra2.setStock(10);
         formatoObra2.setFormato(formato);
         formatoObra2.setPrecio(3500.0);
-        
+
         FormatoObra formatoObra3 = new FormatoObra();
         formatoObra3.setStock(10);
         formatoObra3.setFormato(formato);
         formatoObra3.setPrecio(5200.0);
-        
+
         Usuario usuario = new Usuario();
         Carrito carrito = new Carrito(usuario);
-        
+
         when(repositorioObra.obtenerPorId(1L)).thenReturn(obra1);
         when(repositorioObra.obtenerPorId(2L)).thenReturn(obra2);
         when(repositorioObra.obtenerPorId(3L)).thenReturn(obra3);
@@ -473,11 +484,11 @@ public class ServicioCarritoImplTest {
         when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId())).thenReturn(carrito);
 
         Formato formato = Formato.ORIGINAL;
-        
+
         FormatoObra formatoObra1 = new FormatoObra();
         formatoObra1.setStock(10);
         formatoObra1.setFormato(formato);
-        
+
         FormatoObra formatoObra2 = new FormatoObra();
         formatoObra2.setStock(10);
         formatoObra2.setFormato(formato);

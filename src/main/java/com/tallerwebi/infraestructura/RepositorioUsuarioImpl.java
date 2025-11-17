@@ -1,12 +1,15 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.repositorios.RepositorioUsuario;
+import com.tallerwebi.dominio.entidades.Obra;
 import com.tallerwebi.dominio.entidades.Usuario;
+import com.tallerwebi.dominio.repositorios.RepositorioUsuario;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository("repositorioUsuario")
 public class RepositorioUsuarioImpl implements RepositorioUsuario {
@@ -35,6 +38,14 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
     @Override
     public void guardar(Usuario usuario) {
         sessionFactory.getCurrentSession().saveOrUpdate(usuario);
+    }
+
+
+    @Override
+    public List<Usuario> obtenerTodos() {
+        return this.sessionFactory.getCurrentSession()
+                .createQuery("FROM Usuario", Usuario.class)
+                .getResultList();
     }
 
     @Override

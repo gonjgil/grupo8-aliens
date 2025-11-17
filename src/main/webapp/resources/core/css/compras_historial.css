@@ -1,0 +1,168 @@
+:root {
+    --accent: #0d6efd;
+    --muted: #6c757d;
+}
+
+body {
+    background: #f8f9fa;
+}
+
+.card-order {
+    border-radius: .75rem;
+}
+
+.table-products td,
+.table-products th {
+    vertical-align: middle;
+}
+
+.small-muted {
+    color: var(--muted);
+    font-size: .9rem;
+}
+
+.small-muted strong,
+.small-muted span,
+.small-muted div {
+    color: var(--muted);
+    font-size: .9rem;
+}
+
+.actions .btn + .btn {
+    margin-left: .5rem;
+}
+
+.summary-box {
+    background: linear-gradient(90deg, rgba(13, 110, 253, 0.05), transparent);
+    border-radius: .5rem;
+    padding: 1rem;
+}
+
+/* Update order card styles */
+.order-card {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.order-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+}
+
+/* Update container and alignment styles */
+.container {
+    max-width: calc(100% - 600px);
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    min-width: 768px;
+}
+
+.order-cards-container {
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* Align heading with cards */
+.order-cards-container .h3 {
+    margin-left: 0;
+    padding-left: 0;
+}
+
+@media (min-width: 992px) {
+    .col-lg-left {
+        max-width: 800px;
+    }
+}
+
+/* Modal customization */
+.modal-body {
+    max-height: calc(100vh - 210px);
+    overflow-y: auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .modal-dialog {
+        margin: 0.5rem;
+    }
+}
+
+@media (max-width: 1366px) {
+    .container {
+        max-width: calc(100% - 300px);
+    }
+}
+
+@media (max-width: 992px) {
+    .container {
+        max-width: calc(100% - 100px);
+        min-width: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        max-width: 100%;
+        padding: 1rem;
+    }
+}
+
+/* Container styles */
+.container {
+    max-width: calc(100% - 600px);
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    min-width: 768px;
+}
+
+.order-cards-container {
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* Card styles */
+.order-card {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.order-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+}
+
+/* Modal styles */
+.modal-xl {
+    max-width: 1140px;
+}
+
+/* Alignment styles */
+.order-cards-container .h3 {
+    margin-left: 0;
+    padding-left: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1366px) {
+    .container {
+        max-width: calc(100% - 300px);
+    }
+}
+
+@media (max-width: 992px) {
+    .container {
+        max-width: calc(100% - 100px);
+        min-width: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        max-width: 100%;
+        padding: 1rem;
+    }
+}

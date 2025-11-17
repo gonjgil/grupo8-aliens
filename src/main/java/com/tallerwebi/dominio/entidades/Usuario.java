@@ -17,6 +17,8 @@ public class Usuario {
     private Long id;
     private String email;
     private String password;
+    private String nombre;
+    private Long telefono;
     private String rol;
     private Boolean activo = false;
     @ManyToMany(mappedBy = "usuariosQueDieronLike", fetch = FetchType.LAZY)
@@ -52,6 +54,22 @@ public class Usuario {
     public void setActivo(Boolean activo) {
         this.activo = activo;
     }
+
+    public Long getTelefono() {
+        return telefono;
+    }
+    public void setTelefono(Long telefono) {
+        this.telefono = telefono;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
     public Set<Obra>
     getObrasLikeadas() { return obrasLikeadas; }
     public void setObrasLikeadas(Set<Obra> obrasLikeadas) { this.obrasLikeadas = obrasLikeadas; }

@@ -1,6 +1,6 @@
 -- Inserta password (test) hasheado
-INSERT INTO Usuario (email, password, rol, activo)
-SELECT 'test@unlam.edu.ar', '$2b$10$MOxaUF/Xx7Hqf7i62GHfquTdl0vHtHDh5ZeXeRmFFa5PmTDcvbcR.', 'ADMIN', true
+INSERT INTO Usuario (email, password, nombre,rol, activo)
+SELECT 'test@unlam.edu.ar', '$2b$10$MOxaUF/Xx7Hqf7i62GHfquTdl0vHtHDh5ZeXeRmFFa5PmTDcvbcR.', 'Test','ADMIN', true
 WHERE NOT EXISTS (
     SELECT 1 FROM Usuario WHERE email = 'test@unlam.edu.ar'
 );

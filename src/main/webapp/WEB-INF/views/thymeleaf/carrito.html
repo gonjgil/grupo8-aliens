@@ -131,6 +131,7 @@
     document
       .getElementById('finalizarCompraBtn')
       .addEventListener('click', async () => {
+
         // Crear array de items basado en las obras del carrito
         const items = [];
 
@@ -144,6 +145,10 @@
         /*[/]*/
 
         try {
+            // const finalizarResponse = await fetch('/spring/carrito/finalizar', { method: 'POST', credentials: 'include'});
+            // if (!finalizarResponse.ok) {
+            //     throw new Error('No se pudo finalizar el carrito');
+            // }
           // Usar la URL correcta de tu aplicación Spring
           const response = await fetch('/spring/api/pagos', {
             method: 'POST',

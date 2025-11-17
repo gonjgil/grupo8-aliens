@@ -11,8 +11,10 @@ public class UsuarioDto {
     private Long id;
     private String email;
     private String password;
+    private String nombres;
     private String rol;
     private Boolean activo = false;
+    private Long telefono;
     private Set<Categoria> categoriasFavoritas = new HashSet<>();
 
     public UsuarioDto() {}
@@ -23,6 +25,8 @@ public class UsuarioDto {
         this.password = usuario.getPassword();
         this.rol = usuario.getRol();
         this.activo = getActivo();
+        this.telefono = usuario.getTelefono();
+        this.nombres = usuario.getNombre();
         this.categoriasFavoritas = usuario.getCategoriasFavoritas();
     }
 
@@ -55,6 +59,20 @@ public class UsuarioDto {
     }
     public void setActivo(Boolean activo) {
         this.activo = activo;
+    }
+    public Long getTelefono() {
+        return telefono;
+    }
+    public void setTelefono(Long telefono) {
+        this.telefono = telefono;
+    }
+
+    public String getNombres() {
+        return nombres;
+    }
+
+    public void setNombres(String nombres) {
+        this.nombres = nombres;
     }
     public Set<Categoria> getCategoriasFavoritas() { return categoriasFavoritas; }
     public void setCategoriasFavoritas(Set<Categoria> categoriasFavoritas) {
