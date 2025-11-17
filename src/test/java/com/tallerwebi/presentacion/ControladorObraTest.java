@@ -1,10 +1,7 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.*;
-import com.tallerwebi.dominio.entidades.Artista;
-import com.tallerwebi.dominio.entidades.FormatoObra;
-import com.tallerwebi.dominio.entidades.Obra;
-import com.tallerwebi.dominio.entidades.Usuario;
+import com.tallerwebi.dominio.entidades.*;
 import com.tallerwebi.dominio.enums.Categoria;
 import com.tallerwebi.dominio.enums.Formato;
 import com.tallerwebi.dominio.enums.TipoImagen;
@@ -17,7 +14,7 @@ import com.tallerwebi.presentacion.dto.ObraDto;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -56,6 +53,7 @@ public class ControladorObraTest {
         ServicioPerfilArtista servicioPerfilArtista = mock(ServicioPerfilArtista.class);
         ServicioCloudinary servicioCloudinary = mock(ServicioCloudinary.class);
         ServicioFormatoObra servicioFormatoObra = mock(ServicioFormatoObra.class);
+        ServicioComentario servicioComentario = mock(ServicioComentario.class);
 
         Artista artista = new Artista("Autor A", "Biografia", "http://example.com/autorA.jpg");
         Obra obra = mock(Obra.class);
@@ -67,7 +65,7 @@ public class ControladorObraTest {
         ObraDto obraDto = new ObraDto(obra);
         when(servicioGaleria.obtenerPorId(1L)).thenReturn(obra);
 
-        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioCarrito, servicioPerfilArtista, servicioCloudinary, servicioFormatoObra);
+        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioCarrito, servicioPerfilArtista, servicioCloudinary, servicioFormatoObra, servicioComentario);
 
         ModelAndView modelAndView = controladorObra.verObra(1L, request);
 
@@ -82,10 +80,12 @@ public class ControladorObraTest {
         ServicioPerfilArtista servicioPerfilArtista = mock(ServicioPerfilArtista.class);
         ServicioCloudinary servicioCloudinary = mock(ServicioCloudinary.class);
         ServicioFormatoObra servicioFormatoObra = mock(ServicioFormatoObra.class);
+        ServicioComentario servicioComentario = mock(ServicioComentario.class);
+
 
         when(servicioGaleria.obtenerPorId(999L)).thenThrow(new NoExisteLaObra());
 
-        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioCarrito, servicioPerfilArtista, servicioCloudinary, servicioFormatoObra);
+        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioCarrito, servicioPerfilArtista, servicioCloudinary, servicioFormatoObra, servicioComentario);
         ModelAndView modelAndView = controladorObra.verObra(999L, request);
 
         assertThat(modelAndView.getViewName(), is(equalTo("redirect:/galeria")));
@@ -98,14 +98,10 @@ public class ControladorObraTest {
         ServicioPerfilArtista servicioPerfilArtista = mock(ServicioPerfilArtista.class);
         ServicioCloudinary servicioCloudinary = mock(ServicioCloudinary.class);
         ServicioFormatoObra servicioFormatoObra = mock(ServicioFormatoObra.class);
+        ServicioComentario servicioComentario = mock(ServicioComentario.class);
 
-        ControladorObra controladorObra = new ControladorObra(
-                servicioGaleria,
-                servicioCarrito,
-                servicioPerfilArtista,
-                servicioCloudinary,
-                servicioFormatoObra
-        );
+        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioCarrito,
+                servicioPerfilArtista, servicioCloudinary, servicioFormatoObra, servicioComentario);
 
         Artista artista = new Artista("Frida Kahlo", "Pintora mexicana", "http://example.com/frida.jpg");
         when(servicioPerfilArtista.obtenerArtistaPorUsuario(usuario)).thenReturn(artista);
@@ -124,13 +120,15 @@ public class ControladorObraTest {
         ServicioPerfilArtista servicioPerfilArtista = mock(ServicioPerfilArtista.class);
         ServicioCloudinary servicioCloudinary = mock(ServicioCloudinary.class);
         ServicioFormatoObra servicioFormatoObra = mock(ServicioFormatoObra.class);
+        ServicioComentario servicioComentario = mock(ServicioComentario.class);
+
 
         Usuario usuarioNoArtista = mock(Usuario.class);
 
         when(servicioPerfilArtista.obtenerArtistaPorUsuario(usuarioNoArtista)).thenThrow(new NoExisteArtista());
         when(request.getSession().getAttribute("usuarioLogueado")).thenReturn(usuarioNoArtista);
 
-        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioCarrito, servicioPerfilArtista, servicioCloudinary, servicioFormatoObra);
+        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioCarrito, servicioPerfilArtista, servicioCloudinary, servicioFormatoObra, servicioComentario);
 
         ModelAndView modelAndView = controladorObra.nuevaObra(request);
 
@@ -144,14 +142,10 @@ public class ControladorObraTest {
         ServicioPerfilArtista servicioPerfilArtista = mock(ServicioPerfilArtista.class);
         ServicioCloudinary servicioCloudinary = mock(ServicioCloudinary.class);
         ServicioFormatoObra servicioFormatoObra = mock(ServicioFormatoObra.class);
+        ServicioComentario servicioComentario = mock(ServicioComentario.class);
 
-        ControladorObra controladorObra = new ControladorObra(
-                servicioGaleria,
-                servicioCarrito,
-                servicioPerfilArtista,
-                servicioCloudinary,
-                servicioFormatoObra
-        );
+        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioCarrito,
+                servicioPerfilArtista, servicioCloudinary, servicioFormatoObra, servicioComentario);
 
         ObraDto obraDto = mock(ObraDto.class);
         when(obraDto.toObra()).thenReturn(new Obra());
@@ -177,9 +171,10 @@ public class ControladorObraTest {
         ServicioPerfilArtista servicioPerfilArtista = mock(ServicioPerfilArtista.class);
         ServicioCloudinary servicioCloudinary = mock(ServicioCloudinary.class);
         ServicioFormatoObra servicioFormatoObra = mock(ServicioFormatoObra.class);
+        ServicioComentario servicioComentario = mock(ServicioComentario.class);
 
         ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioCarrito,
-                servicioPerfilArtista, servicioCloudinary, servicioFormatoObra);
+                servicioPerfilArtista, servicioCloudinary, servicioFormatoObra, servicioComentario);
 
         Long idObra = 1L;
 
@@ -216,9 +211,10 @@ public class ControladorObraTest {
         ServicioPerfilArtista servicioPerfilArtista = mock(ServicioPerfilArtista.class);
         ServicioCloudinary servicioCloudinary = mock(ServicioCloudinary.class);
         ServicioFormatoObra servicioFormatoObra = mock(ServicioFormatoObra.class);
+        ServicioComentario servicioComentario = mock(ServicioComentario.class);
 
         ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioCarrito,
-                servicioPerfilArtista, servicioCloudinary, servicioFormatoObra);
+                servicioPerfilArtista, servicioCloudinary, servicioFormatoObra, servicioComentario);
 
         Long idObra = 1L;
 
@@ -321,14 +317,10 @@ public class ControladorObraTest {
         ServicioPerfilArtista servicioPerfilArtista = mock(ServicioPerfilArtista.class);
         ServicioCloudinary servicioCloudinary = mock(ServicioCloudinary.class);
         ServicioFormatoObra servicioFormatoObra = mock(ServicioFormatoObra.class);
+        ServicioComentario servicioComentario = mock(ServicioComentario.class);
 
-        ControladorObra controladorObra = new ControladorObra(
-                servicioGaleria,
-                servicioCarrito,
-                servicioPerfilArtista,
-                servicioCloudinary,
-                servicioFormatoObra
-        );
+        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioCarrito,
+                servicioPerfilArtista, servicioCloudinary, servicioFormatoObra, servicioComentario);
 
         Long obraId = 1L;
         Formato formato = Formato.DIGITAL;
@@ -360,14 +352,10 @@ public class ControladorObraTest {
         ServicioPerfilArtista servicioPerfilArtista = mock(ServicioPerfilArtista.class);
         ServicioCloudinary servicioCloudinary = mock(ServicioCloudinary.class);
         ServicioFormatoObra servicioFormatoObra = mock(ServicioFormatoObra.class);
+        ServicioComentario servicioComentario = mock(ServicioComentario.class);
 
-        ControladorObra controladorObra = new ControladorObra(
-                servicioGaleria,
-                servicioCarrito,
-                servicioPerfilArtista,
-                servicioCloudinary,
-                servicioFormatoObra
-        );
+        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioCarrito,
+                servicioPerfilArtista, servicioCloudinary, servicioFormatoObra, servicioComentario);
 
         Long obraId = 99L;
         Formato formato = Formato.ORIGINAL;
@@ -391,14 +379,10 @@ public class ControladorObraTest {
         ServicioPerfilArtista servicioPerfilArtista = mock(ServicioPerfilArtista.class);
         ServicioCloudinary servicioCloudinary = mock(ServicioCloudinary.class);
         ServicioFormatoObra servicioFormatoObra = mock(ServicioFormatoObra.class);
+        ServicioComentario servicioComentario = mock(ServicioComentario.class);
 
-        ControladorObra controladorObra = new ControladorObra(
-                servicioGaleria,
-                servicioCarrito,
-                servicioPerfilArtista,
-                servicioCloudinary,
-                servicioFormatoObra
-        );
+        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioCarrito,
+                servicioPerfilArtista, servicioCloudinary, servicioFormatoObra, servicioComentario);
 
         Long formatoId = 1L;
         Long obraId = 1L;
@@ -416,14 +400,10 @@ public class ControladorObraTest {
         ServicioPerfilArtista servicioPerfilArtista = mock(ServicioPerfilArtista.class);
         ServicioCloudinary servicioCloudinary = mock(ServicioCloudinary.class);
         ServicioFormatoObra servicioFormatoObra = mock(ServicioFormatoObra.class);
+        ServicioComentario servicioComentario = mock(ServicioComentario.class);
 
-        ControladorObra controladorObra = new ControladorObra(
-                servicioGaleria,
-                servicioCarrito,
-                servicioPerfilArtista,
-                servicioCloudinary,
-                servicioFormatoObra
-        );
+        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioCarrito,
+                servicioPerfilArtista, servicioCloudinary, servicioFormatoObra, servicioComentario);
 
         Long formatoId = 99L;
         Long obraId = 1L;
@@ -442,14 +422,10 @@ public class ControladorObraTest {
         ServicioPerfilArtista servicioPerfilArtista = mock(ServicioPerfilArtista.class);
         ServicioCloudinary servicioCloudinary = mock(ServicioCloudinary.class);
         ServicioFormatoObra servicioFormatoObra = mock(ServicioFormatoObra.class);
+        ServicioComentario servicioComentario = mock(ServicioComentario.class);
 
-        ControladorObra controladorObra = new ControladorObra(
-                servicioGaleria,
-                servicioCarrito,
-                servicioPerfilArtista,
-                servicioCloudinary,
-                servicioFormatoObra
-        );
+        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioCarrito,
+                servicioPerfilArtista, servicioCloudinary, servicioFormatoObra, servicioComentario);
 
         Long obraId = 1L;
         Long formatoId = 10L;
@@ -474,14 +450,10 @@ public class ControladorObraTest {
         ServicioPerfilArtista servicioPerfilArtista = mock(ServicioPerfilArtista.class);
         ServicioCloudinary servicioCloudinary = mock(ServicioCloudinary.class);
         ServicioFormatoObra servicioFormatoObra = mock(ServicioFormatoObra.class);
+        ServicioComentario servicioComentario = mock(ServicioComentario.class);
 
-        ControladorObra controladorObra = new ControladorObra(
-                servicioGaleria,
-                servicioCarrito,
-                servicioPerfilArtista,
-                servicioCloudinary,
-                servicioFormatoObra
-        );
+        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioCarrito,
+                servicioPerfilArtista, servicioCloudinary, servicioFormatoObra, servicioComentario);
 
         Long obraId = 1L;
         Long formatoId = 99L;
@@ -508,9 +480,10 @@ public class ControladorObraTest {
         ServicioPerfilArtista servicioPerfilArtista = mock(ServicioPerfilArtista.class);
         ServicioCloudinary servicioCloudinary = mock(ServicioCloudinary.class);
         ServicioFormatoObra servicioFormatoObra = mock(ServicioFormatoObra.class);
+        ServicioComentario servicioComentario = mock(ServicioComentario.class);
 
         ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioCarrito,
-                servicioPerfilArtista, servicioCloudinary, servicioFormatoObra);
+                servicioPerfilArtista, servicioCloudinary, servicioFormatoObra, servicioComentario);
 
         Usuario usuario = new Usuario();
         usuario.setId(1L);
@@ -540,9 +513,10 @@ public class ControladorObraTest {
         ServicioPerfilArtista servicioPerfilArtista = mock(ServicioPerfilArtista.class);
         ServicioCloudinary servicioCloudinary = mock(ServicioCloudinary.class);
         ServicioFormatoObra servicioFormatoObra = mock(ServicioFormatoObra.class);
+        ServicioComentario servicioComentario = mock(ServicioComentario.class);
 
         ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioCarrito,
-                servicioPerfilArtista, servicioCloudinary, servicioFormatoObra);
+                servicioPerfilArtista, servicioCloudinary, servicioFormatoObra, servicioComentario);
 
         Usuario usuario = new Usuario();
         usuario.setId(1L);
@@ -573,4 +547,44 @@ public class ControladorObraTest {
         verify(servicioGaleria, never()).eliminarObra(any());
         assertThat(resultado, equalTo("redirect:/galeria"));
     }
+
+    @Test
+    public void deberiaCargarComentariosAlVerObra() {
+        ServicioGaleria servicioGaleria = mock(ServicioGaleria.class);
+        ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
+        ServicioPerfilArtista servicioPerfilArtista = mock(ServicioPerfilArtista.class);
+        ServicioCloudinary servicioCloudinary = mock(ServicioCloudinary.class);
+        ServicioFormatoObra servicioFormatoObra = mock(ServicioFormatoObra.class);
+        ServicioComentario servicioComentario = mock(ServicioComentario.class);
+
+        ControladorObra controladorObra = new ControladorObra(servicioGaleria, servicioCarrito,
+                servicioPerfilArtista, servicioCloudinary, servicioFormatoObra, servicioComentario);
+
+
+        usuario.setEmail("test@correo.com");
+
+        // Datos
+        Long idObra = 1L;
+        Obra obra = new Obra();
+        obra.setId(idObra);
+
+        Comentario comentario = new Comentario();
+        comentario.setUsuario(usuario);
+        comentario.setContenido("Hermosa obra");
+
+        List<Comentario> comentarios = List.of(comentario);
+        // Stubs
+        when(servicioGaleria.obtenerPorId(idObra)).thenReturn(obra);
+        when(servicioComentario.obtenerComentariosDeObra(idObra)).thenReturn(comentarios);
+
+        // Ejecución
+        ModelAndView mav = controladorObra.verObra(idObra, request);
+
+        // Verificación
+        assertEquals("obra", mav.getViewName());
+        assertFalse(((List<?>) mav.getModel().get("comentarios")).isEmpty());
+        verify(servicioComentario, times(1)).obtenerComentariosDeObra(idObra);
+    }
+
+
 }

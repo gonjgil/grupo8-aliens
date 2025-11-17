@@ -11,21 +11,21 @@
     <link rel="stylesheet" th:href="@{/css/obra.css}"/>
     <link rel="stylesheet" th:href="@{/css/header.css}"/>
     <style>
-      .formato-option {
-        transition: all 0.3s ease;
-      }
-      .formato-option:hover:not(.opacity-50) {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      }
-      .formato-option.selected {
-        border-color: #3B82F6;
-        background-color: #EBF8FF;
-      }
-      .formato-option.disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-      }
+        .formato-option {
+          transition: all 0.3s ease;
+        }
+        .formato-option:hover:not(.opacity-50) {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        .formato-option.selected {
+          border-color: #3B82F6;
+          background-color: #EBF8FF;
+        }
+        .formato-option.disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800">
@@ -58,7 +58,7 @@
             <a th:href="@{/carrito}"
                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg relative">
                 <i class="fas fa-shopping-cart"></i>
-                <span data-carrito-count 
+                <span data-carrito-count
                       class="hidden absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
                     0
                 </span>
@@ -69,7 +69,8 @@
             </a>
         </div>
         <div th:unless="${usuario != null}" class="flex items-center space-x-4">
-            <a th:href="@{/login}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg">
+            <a th:href="@{/login}"
+               class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg">
                 Iniciar Sesión
             </a>
         </div>
@@ -80,7 +81,7 @@
 
 <main class="obra-page flex flex-col md:flex-row w-full min-h-screen">
     <div class="obra-left">
-      <!-- encerrando la variable de la url en @{ } la construye en el contexto de la aplicacion (spring) -->
+        <!-- encerrando la variable de la url en @{ } la construye en el contexto de la aplicacion (spring) -->
         <img
                 th:src="@{${obra.imagenUrl}}"
                 alt="Imagen de la obra"
@@ -94,6 +95,53 @@
                   th:text="${categoria.categoria}"
                   class="categoria-tag px-3 py-1 bg-gray-200 text-gray-700 rounded-full text-sm hover:bg-gray-300 transition"
           ></span>
+        </div>
+
+        <div class="comentarios-wrapper mt-6">
+            <div th:if="${usuario != null}">
+                <form th:action="@{'/obra/' + ${obra.id} + '/comentar'}"
+                      method="post"
+                      class="bg-white p-4 border rounded mb-4 shadow-sm">
+
+                    <h3 class="text-lg font-semibold mb-2">Comentar</h3>
+
+                    <textarea id="comentario"
+                              name="contenido"
+                              class="form-control w-full p-2 border rounded mb-3"
+                              placeholder="Escribí tu comentario..."
+                              rows="3"
+                              required></textarea>
+
+                    <button type="submit"
+                            class="btn btn-primary w-full py-2 rounded-lg flex items-center justify-center gap-2">
+                        Comentar
+                    </button>
+                </form>
+            </div>
+            <div class="bg-white p-4 border rounded shadow-sm">
+                <h3 class="text-lg font-semibold mb-3">Comentarios</h3>
+
+                <div th:if="${#lists.isEmpty(comentarios)}" class="text-gray-500">
+                    Aún no hay comentarios.
+                </div>
+
+                <div th:each="comentario : ${comentarios}"
+                     class="commented-section py-3 border-b">
+
+                    <div class="flex justify-between">
+                        <h6 class="font-bold"
+                            th:text="${comentario.usuario.email}"></h6>
+
+                        <span class="text-sm text-gray-500"
+                              th:text="${comentario.fechaFormateada}"></span>
+                    </div>
+
+                    <p class="comment-text-sm mt-1"
+                       th:text="${comentario.contenido}"></p>
+
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -110,7 +158,7 @@
 
         <div class="obra-body flex-grow mb-8">
             <p class="obra-descripcion text-lg" th:text="${obra.descripcion}"></p>
-            
+
             <!-- Sección de Likes -->
             <div class="likes flex items-center gap-2 mt-6 mb-6">
                 <div th:if="${usuario != null}">
@@ -123,7 +171,7 @@
                 <span id="like-count" th:text="${obra.getCantidadLikes()}"></span>
                 <span class="likes-label text-gray-500 text-sm">personas dieron like</span>
             </div>
-            
+
             <!-- Selector de Formatos -->
             <div class="formato-selector" th:if="${obra.formatos != null and not #lists.isEmpty(obra.formatos)}">
                 <h3 class="text-lg font-semibold mb-3 text-gray-800">Formatos Disponibles:</h3>
@@ -163,7 +211,7 @@
                             <!-- Botón Eliminar -->
                             <form th:action="@{/obra/{obraId}/eliminar-formato(obraId=${obra.id})}" method="post"
                                   onsubmit="return confirm('¿Estás seguro de eliminar este formato?');">
-                                <input type="hidden" name="formatoId" th:value="${formato.id}" />
+                                <input type="hidden" name="formatoId" th:value="${formato.id}"/>
                                 <button type="submit"
                                         class="bg-red-600 hover:bg-red-700 text-white font-semibold px-3 py-1 rounded-md transition">
                                     Eliminar
@@ -174,23 +222,25 @@
                 </div>
             </div>
 
-            <div id="modalEditarFormato" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div id="modalEditarFormato"
+                 class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                 <div class="bg-white rounded-xl p-6 shadow-xl w-96">
                     <h2 class="text-xl font-bold mb-4">Editar Formato</h2>
 
                     <form th:action="@{/obra/{obraId}/actualizar-formato(obraId=${obra.id})}" method="post">
-                        <input type="hidden" id="formatoId" name="formatoId" />
+                        <input type="hidden" id="formatoId" name="formatoId"/>
 
                         <div class="mb-3">
-                            <label for="nuevoPrecio" class="block text-sm font-medium text-gray-700">Nuevo Precio</label>
+                            <label for="nuevoPrecio" class="block text-sm font-medium text-gray-700">Nuevo
+                                Precio</label>
                             <input type="number" step="0.01" id="nuevoPrecio" name="nuevoPrecio"
-                                   class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required />
+                                   class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required/>
                         </div>
 
                         <div class="mb-3">
                             <label for="nuevoStock" class="block text-sm font-medium text-gray-700">Nuevo Stock</label>
                             <input type="number" id="nuevoStock" name="nuevoStock"
-                                   class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required />
+                                   class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required/>
                         </div>
 
                         <div class="flex justify-end gap-2 mt-4">
@@ -206,9 +256,9 @@
                     </form>
                 </div>
             </div>
-            
+
             <!-- Mensaje si no hay formatos -->
-            <div th:if="${obra.formatos == null or #lists.isEmpty(obra.formatos)}" 
+            <div th:if="${obra.formatos == null or #lists.isEmpty(obra.formatos)}"
                  class="formato-selector p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
                 <p class="text-yellow-800">No hay formatos disponibles para esta obra en este momento.</p>
             </div>
@@ -260,13 +310,13 @@
                     <input type="hidden" name="id" th:value="${obra.id}"/>
                     <input type="hidden" name="formato" id="formato-seleccionado" value=""/>
 
-                    <button id="btn-agregar-carrito" type="submit" 
+                    <button id="btn-agregar-carrito" type="submit"
                             class="btn bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full transition duration-300">
                         <i class="fas fa-shopping-cart mr-2"></i>
                         Agregar al Carrito
                     </button>
                 </form>
-                
+
                 <button
                         class="btn btn-primary bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300"
                         id="comprarBtn">
@@ -274,10 +324,11 @@
                 </button>
             </div>
         </div>
+
     </div>
 </main>
 
-  <script th:inline="javascript">
+<script th:inline="javascript">
     // Variables globales
     let formatoSeleccionado = null;
     let precioActual = 0;

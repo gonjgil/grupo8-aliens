@@ -18,8 +18,8 @@ body {
 @media(min-width: 768px) {
     .obra-page {
         flex-direction: row;
-        align-items: center; /* centra contenido verticalmente */
-        max-height: 80vh; /* limita altura total */
+      /*  align-items: center;  centra contenido verticalmente */
+      /*  max-height: 80vh;  limita altura total */
         padding-left: 40px; /* padding lateral en desktop */
         padding-right: 40px;
     }
@@ -159,4 +159,39 @@ body {
     .obra-visual { height: 280px; }
     .obra-titulo { font-size: 2rem; }
     .obra-autor { font-size: 1rem; }
+}
+
+.comment-text-sm {
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.comented-section {
+  border-bottom: 1px solid #e9ecef;
+}
+
+.bg-white {
+  background-color: #fff !important;
+}
+
+textarea.form-control {
+  resize: none;
+}
+
+/* 🟦 Contenedor de comentarios debajo de la imagen */
+.obra-comments {
+    width: 100%;
+}
+
+/* En desktop, igual ancho que la columna izquierda (45%) */
+@media(min-width: 768px) {
+    .obra-comments {
+        width: 45%;
+        margin-left: 0; /* queda alineado a la izquierda */
+    }
+}
+
+/* Un poco de espacio entre imagen y comentarios */
+.obra-comments .card {
+    border-radius: 12px;
 }
