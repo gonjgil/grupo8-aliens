@@ -1,6 +1,7 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.*;
+import com.tallerwebi.dominio.entidades.Direccion;
 import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
 import com.tallerwebi.dominio.excepcion.NoHayStockSuficiente;
@@ -39,12 +40,22 @@ public class ControladorCarrito {
             return new ModelAndView("redirect:/login");
         }
 
+        Direccion direccion = usuario.getDireccionPredeterminada();
+        Double costoEnvio = 0.0;
+        if (direccion != null) {
+            costoEnvio = direccion.getCostoEnvio();
+        }
+
         List<ItemCarritoDto> items = servicioCarrito.obtenerItems(usuario);
         Double total = servicioCarrito.calcularPrecioTotalCarrito(usuario);
+        Double totalFinal = total + costoEnvio;
 
-        modelo.put("items", items);
-        modelo.put("total", total);
         modelo.put("usuario", usuario);
+        modelo.put("items", items);
+        modelo.put("direccion", direccion);
+        modelo.put("total", total);
+        modelo.put("costoEnvio", costoEnvio);
+        modelo.put("totalFinal", totalFinal);
 
         return new ModelAndView("carrito", modelo);
     }
@@ -176,10 +187,15 @@ public class ControladorCarrito {
             return "redirect:/login";
         }
 
+        if (usuario.getDireccionPredeterminada() == null) {
+            redirectAttributes.addFlashAttribute("error", "Debes seleccionar una dirección antes de finalizar la compra.");
+            return "redirect:/carrito";
+        }
+
         try {
             // Lógica de finalización de compra
-            servicioCarrito.finalizarCompra(usuario);
-            
+//            servicioCarrito.finalizarCompra(usuario);
+
 
             // Envia correo de confirmación
             String asunto = "Confirmación de compra - ArtRoom";

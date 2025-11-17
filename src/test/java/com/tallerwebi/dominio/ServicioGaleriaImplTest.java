@@ -70,11 +70,11 @@ class ServicioGaleriaImplTest {
         obra2.setTitulo("Obra B");
         obra2.setArtista(artistaB);
 
-        when(repositorioObra.obtenerPorAutor("Autor A")).thenReturn(List.of(obra1));
+        when(repositorioObra.obtenerPorArtista(artistaA)).thenReturn(List.of(obra1));
 
         ServicioGaleriaImpl servicio = new ServicioGaleriaImpl(repositorioObra);
 
-        List<Obra> _resultado = servicio.obtenerPorAutor("Autor A");
+        List<Obra> _resultado = servicio.obtenerPorAutor(artistaA);
         List<ObraDto> resultado = new ArrayList<>();
         for (Obra obra : _resultado) {
             resultado.add(new ObraDto(obra));

@@ -1,5 +1,7 @@
 package com.tallerwebi.infraestructura;
 
+import com.tallerwebi.dominio.entidades.CompraHecha;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import com.tallerwebi.dominio.entidades.Carrito;
@@ -21,8 +23,11 @@ public class RepositorioCarritoImpl implements RepositorioCarrito {
     }
 
     @Override
-    public void guardar(Carrito carrito) {
-        this.sessionFactory.getCurrentSession().saveOrUpdate(carrito);
+    public Carrito guardar(Carrito carrito) {
+        Session session = sessionFactory.getCurrentSession();
+        session.saveOrUpdate(carrito);
+
+        return carrito;
     }
 
     @Override
@@ -61,5 +66,15 @@ public class RepositorioCarritoImpl implements RepositorioCarrito {
                 .setParameter("estado", estado)
                 .setParameter("id", carritoId)
                 .executeUpdate();
+        Carrito carritoAct = sessionFactory.getCurrentSession().get(Carrito.class, carritoId);
+        sessionFactory.getCurrentSession().refresh(carritoAct);
+    }
+    @Override
+    public Carrito obtenerUltimoCarritoPorUsuario(Long usuarioId) {
+        return (Carrito) sessionFactory.getCurrentSession()
+                .createQuery("FROM Carrito c WHERE c.usuario.id = :usuarioId ORDER BY c.fecha DESC")
+                .setParameter("usuarioId", usuarioId)
+                .setMaxResults(1)
+                .uniqueResult();
     }
 }

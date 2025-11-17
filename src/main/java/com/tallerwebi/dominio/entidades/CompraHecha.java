@@ -1,6 +1,6 @@
 package com.tallerwebi.dominio.entidades;
 
-import com.tallerwebi.dominio.enums.EstadoOrdenCompra;
+import com.tallerwebi.dominio.enums.EstadoPago;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -9,17 +9,15 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "OrdenCompra")
-public class OrdenCompra {
+@Table(name = "CompraHecha")
+public class CompraHecha {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private EstadoOrdenCompra estado;
-
-    @OneToMany(mappedBy = "orden")
-    private List<ItemOrden> items;
+    @OneToMany(mappedBy = "compra", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ItemCompra> items;
 
     @OneToOne
     @JoinColumn(name = "carrito_id")
@@ -27,15 +25,17 @@ public class OrdenCompra {
 
     private Double precioFinal;
 
+    private Long pagoId;
+
+    private EstadoPago estadoPago;
+
     @ManyToOne
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
     private LocalDateTime fechaYHora;
 
 
-    public OrdenCompra(Long id, Carrito carrito, Double precioFinal, Usuario usuario) {
-        this.id = id;
-        this.estado = EstadoOrdenCompra.PENDIENTE;
+    public CompraHecha(Carrito carrito, Double precioFinal, Usuario usuario) {
         this.items = new ArrayList<>();
         this.carrito = carrito;
         this.precioFinal = precioFinal;
@@ -43,7 +43,26 @@ public class OrdenCompra {
         this.usuario = usuario;
     }
 
-    public OrdenCompra() {}
+    public CompraHecha(List<ItemCompra> items, Carrito carrito, Double precioFinal, Long pagoId, EstadoPago estadoPago, Usuario usuario) {
+        this.items = items;
+        this.carrito = carrito;
+        this.precioFinal = precioFinal;
+        this.pagoId = pagoId;
+        this.estadoPago = estadoPago;
+        this.usuario = usuario;
+        this.fechaYHora = LocalDateTime.now();
+    }
+
+    public CompraHecha() {}
+
+
+    public EstadoPago getEstadoPago() {
+        return estadoPago;
+    }
+
+    public void setEstadoPago(EstadoPago estadoPago) {
+        this.estadoPago = estadoPago;
+    }
 
     public Carrito getCarrito() {
         return carrito;
@@ -60,19 +79,11 @@ public class OrdenCompra {
         this.id = id;
     }
 
-    public EstadoOrdenCompra getEstado() {
-        return estado;
-    }
-
-    public void setEstado(EstadoOrdenCompra estado) {
-        this.estado = estado;
-    }
-
-    public List<ItemOrden> getItems() {
+    public List<ItemCompra> getItems() {
         return items;
     }
 
-    public void setItems(List<ItemOrden> items) {
+    public void setItems(List<ItemCompra> items) {
         this.items = items;
     }
 
@@ -100,10 +111,18 @@ public class OrdenCompra {
         this.precioFinal = precioTotal;
     }
 
+    public Long getPagoId() {
+        return pagoId;
+    }
+
+    public void setPagoId(Long pagoId) {
+        this.pagoId = pagoId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        OrdenCompra that = (OrdenCompra) o;
+        CompraHecha that = (CompraHecha) o;
         return Objects.equals(id, that.id);
     }
 

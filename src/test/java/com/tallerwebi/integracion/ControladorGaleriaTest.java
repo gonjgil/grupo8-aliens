@@ -11,6 +11,7 @@ import com.tallerwebi.dominio.excepcion.NoHayObrasExistentes;
 import com.tallerwebi.dominio.ServicioGaleria;
 import com.tallerwebi.dominio.ServicioPerfilArtista;
 
+import com.tallerwebi.integracion.config.TestConfigPaymentClient;
 import com.tallerwebi.presentacion.ControladorGaleria;
 import com.tallerwebi.presentacion.dto.ObraDto;
 import org.hibernate.SessionFactory;
@@ -47,7 +48,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @WebAppConfiguration
-@ContextConfiguration(classes = {SpringWebTestConfig.class, HibernateTestConfig.class, CloudinaryTestConfig.class})
+@ContextConfiguration(classes = {SpringWebTestConfig.class, HibernateTestConfig.class, CloudinaryTestConfig.class, TestConfigPaymentClient.class})
 public class ControladorGaleriaTest {
 
     @Autowired

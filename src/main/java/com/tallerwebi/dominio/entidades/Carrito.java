@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio.entidades;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -38,6 +39,8 @@ public class Carrito {
 
     @Enumerated(EnumType.STRING)
     private EstadoCarrito estado;
+
+    private LocalDateTime fecha = LocalDateTime.now();
 
     public Carrito() {
         this.estado = EstadoCarrito.ACTIVO;
@@ -138,6 +141,14 @@ public class Carrito {
 
     public void setEstado(EstadoCarrito estado) {
         this.estado = estado;
+    }
+
+    public LocalDateTime getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDateTime fecha) {
+        this.fecha = fecha;
     }
 
     @Override

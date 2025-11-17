@@ -43,6 +43,7 @@
           <a
             th:href="@{/carrito}"
             class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg relative"
+            title="Ver carrito"
           >
             <i class="fas fa-shopping-cart"></i>
             <span
@@ -52,9 +53,15 @@
               0
             </span>
           </a>
+            <a th:href="@{/compras/historial}"
+               class="bg-yellow-700 hover:bg-yellow-800 text-white font-bold py-2 px-3 rounded-full transition duration-300 shadow-lg"
+               title="Ver mis compras">
+                <i class="bi bi-bag-check"></i>
+            </a>
           <a
             th:href="@{/logout}"
             class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg"
+            title="Cerrar sesion"
           >
             <i class="bi bi-box-arrow-right"></i>
           </a>

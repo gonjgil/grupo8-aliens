@@ -1,101 +1,117 @@
-INSERT INTO obra_categorias (obra_id, categoria) VALUES
-(1, 'PINTURA'), (1, 'ABSTRACTO'),
-(2, 'FOTOGRAFIA'),
-(3, 'ESCULTURA'),
-(4, 'FOTOGRAFIA'),
-(5, 'FOTOGRAFIA'),
-(6, 'FOTOGRAFIA'),
-(7, 'FOTOGRAFIA'),
-(8, 'FOTOGRAFIA'),
-(9, 'FOTOGRAFIA'),
-(10, 'FOTOGRAFIA'),
-(11, 'FOTOGRAFIA'),
-(12, 'FOTOGRAFIA'),
-(13, 'FOTOGRAFIA'),
-(14, 'FOTOGRAFIA'),
-(15, 'FOTOGRAFIA'),
-(16, 'PINTURA'), (16, 'ABSTRACTO'),
-(17, 'PINTURA'), (17, 'ABSTRACTO'),
-(18, 'ARTE_MIXTO'), (18, 'MODERNO'),
-(19, 'ARTE_MIXTO'), (19, 'MODERNO'),
-(20, 'PINTURA'), (20, 'ABSTRACTO'),
-(21, 'PINTURA'), (21, 'ABSTRACTO'),
-(22, 'PINTURA'), (22, 'ABSTRACTO'), (22, 'COSMICO'),
-(23, 'PINTURA'), (23, 'ABSTRACTO'), (23, 'COSMICO'),
-(24, 'PINTURA'), (24, 'ARTE_MIXTO'),
-(25, 'PINTURA'), (25, 'ARTE_MIXTO'),
-(26, 'FOTOGRAFIA'),
-(27, 'FOTOGRAFIA'),
-(28, 'ARTE_DIGITAL'),
-(29, 'ARTE_DIGITAL'),
-(30, 'ESCULTURA'),
-(31, 'ARTE_MIXTO'),
-(32, 'ARTE_MIXTO'),
-(33, 'ARTE_MIXTO'),
-(34, 'PINTURA'),
-(35, 'PINTURA'),
-(36, 'ARTE_MIXTO'),
-(37, 'ARTE_MIXTO'),
-(38, 'PINTURA'), (38, 'MODERNO'),
-(39, 'PINTURA'), (39, 'MODERNO'),
-(40, 'ARTE_MIXTO'),
-(41, 'ARTE_MIXTO'),
-(42, 'ESCULTURA'),
-(43, 'ESCULTURA'),
-(44, 'FOTOGRAFIA'),
-(45, 'FOTOGRAFIA'),
-(46, 'ARTE_TEXTIL'),
-(47, 'ARTE_TEXTIL'),
-(48, 'ARTE_CERAMICO'),
-(49, 'ARTE_CERAMICO'),
-(50, 'ARTE_MIXTO'),
-(51, 'ARTE_MIXTO'),
-(52, 'PINTURA'),
-(53, 'PINTURA'),
-(54, 'ARTE_MIXTO'),
-(55, 'ARTE_MIXTO'),
-(56, 'PINTURA'),
-(57, 'PINTURA'),
-(58, 'ESCULTURA'),
-(59, 'ESCULTURA'),
-(60, 'ARTE_MIXTO'),
-(61, 'ARTE_MIXTO'),
-(62, 'DIBUJO'),
-(63, 'DIBUJO'),
-(64, 'FOTOGRAFIA'),
-(65, 'FOTOGRAFIA'),
-(66, 'ESCULTURA'),
-(67, 'ESCULTURA'),
-(68, 'PINTURA'),
-(69, 'PINTURA'),
-(70, 'PINTURA'), (70, 'ABSTRACTO'),
-(71, 'PINTURA'), (71, 'ABSTRACTO'),
-(72, 'ARTE_MIXTO'),
-(73, 'ARTE_MIXTO'),
-(74, 'DIBUJO'),
-(75, 'DIBUJO'),
-(76, 'ARTE_TEXTIL'),
-(77, 'ARTE_TEXTIL'),
-(78, 'FOTOGRAFIA'),
-(79, 'FOTOGRAFIA'),
-(80, 'PINTURA'),
-(81, 'PINTURA'),
-(82, 'ARTE_MIXTO'),
-(83, 'ARTE_MIXTO'),
-(84, 'ESCULTURA'),
-(85, 'ESCULTURA'),
-(86, 'PINTURA'),
-(87, 'PINTURA'),
-(88, 'ESCULTURA'),
-(89, 'ESCULTURA'),
-(90, 'ESCULTURA'),
-(91, 'ESCULTURA'),
-(92, 'PINTURA'),
-(93, 'PINTURA'),
-(94, 'PINTURA'),
-(95, 'PINTURA'),
-(96, 'DIBUJO'),
-(97, 'DIBUJO'),
-(98, 'ESCULTURA'),
-(99, 'ARTE_MIXTO'),
-(100, 'ARTE_TEXTIL');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (1, 'PINTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (1, 'ABSTRACTO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (2, 'FOTOGRAFIA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (3, 'ESCULTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (4, 'FOTOGRAFIA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (5, 'FOTOGRAFIA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (6, 'FOTOGRAFIA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (7, 'FOTOGRAFIA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (8, 'FOTOGRAFIA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (9, 'FOTOGRAFIA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (10, 'FOTOGRAFIA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (11, 'FOTOGRAFIA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (12, 'FOTOGRAFIA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (13, 'FOTOGRAFIA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (14, 'FOTOGRAFIA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (15, 'FOTOGRAFIA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (16, 'PINTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (16, 'ABSTRACTO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (17, 'PINTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (17, 'ABSTRACTO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (18, 'ARTE_MIXTO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (18, 'MODERNO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (19, 'ARTE_MIXTO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (19, 'MODERNO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (20, 'PINTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (20, 'ABSTRACTO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (21, 'PINTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (21, 'ABSTRACTO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (22, 'PINTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (22, 'ABSTRACTO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (22, 'COSMICO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (23, 'PINTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (23, 'ABSTRACTO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (23, 'COSMICO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (24, 'PINTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (24, 'ARTE_MIXTO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (25, 'PINTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (25, 'ARTE_MIXTO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (26, 'FOTOGRAFIA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (27, 'FOTOGRAFIA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (28, 'ARTE_DIGITAL');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (29, 'ARTE_DIGITAL');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (30, 'ESCULTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (31, 'ARTE_MIXTO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (32, 'ARTE_MIXTO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (33, 'ARTE_MIXTO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (34, 'PINTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (35, 'PINTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (36, 'ARTE_MIXTO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (37, 'ARTE_MIXTO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (38, 'PINTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (38, 'MODERNO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (39, 'PINTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (39, 'MODERNO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (40, 'ARTE_MIXTO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (41, 'ARTE_MIXTO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (42, 'ESCULTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (43, 'ESCULTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (44, 'FOTOGRAFIA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (45, 'FOTOGRAFIA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (46, 'ARTE_TEXTIL');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (47, 'ARTE_TEXTIL');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (48, 'ARTE_CERAMICO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (49, 'ARTE_CERAMICO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (50, 'ARTE_MIXTO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (51, 'ARTE_MIXTO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (52, 'PINTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (53, 'PINTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (54, 'ARTE_MIXTO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (55, 'ARTE_MIXTO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (56, 'PINTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (57, 'PINTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (58, 'ESCULTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (59, 'ESCULTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (60, 'ARTE_MIXTO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (61, 'ARTE_MIXTO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (62, 'DIBUJO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (63, 'DIBUJO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (64, 'FOTOGRAFIA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (65, 'FOTOGRAFIA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (66, 'ESCULTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (67, 'ESCULTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (68, 'PINTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (69, 'PINTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (70, 'PINTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (70, 'ABSTRACTO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (71, 'PINTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (71, 'ABSTRACTO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (72, 'ARTE_MIXTO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (73, 'ARTE_MIXTO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (74, 'DIBUJO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (75, 'DIBUJO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (76, 'ARTE_TEXTIL');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (77, 'ARTE_TEXTIL');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (78, 'FOTOGRAFIA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (79, 'FOTOGRAFIA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (80, 'PINTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (81, 'PINTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (82, 'ARTE_MIXTO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (83, 'ARTE_MIXTO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (84, 'ESCULTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (85, 'ESCULTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (86, 'PINTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (87, 'PINTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (88, 'ESCULTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (89, 'ESCULTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (90, 'ESCULTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (91, 'ESCULTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (92, 'PINTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (93, 'PINTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (94, 'PINTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (95, 'PINTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (96, 'DIBUJO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (97, 'DIBUJO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (98, 'ESCULTURA');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (99, 'ARTE_MIXTO');
+INSERT INTO obra_categorias (obra_id, categoria) VALUES (100, 'ARTE_TEXTIL');

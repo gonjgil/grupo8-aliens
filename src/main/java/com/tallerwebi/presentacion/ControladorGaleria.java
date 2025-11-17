@@ -51,6 +51,7 @@ public class ControladorGaleria {
             } else {
                 model.put("obrasSpotlight", this.servicioGaleria.ordenarRandom());
                 model.put("exito", "Hay obras.");
+                return new  ModelAndView("galeria", model);
             }
 
             List<Obra> obrasSpotlight = this.servicioGaleria.obtenerObrasParaUsuario(usuario);

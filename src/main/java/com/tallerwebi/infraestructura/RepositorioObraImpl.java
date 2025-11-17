@@ -1,5 +1,6 @@
 package com.tallerwebi.infraestructura;
 
+import com.tallerwebi.dominio.entidades.Artista;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -40,11 +41,11 @@ public class RepositorioObraImpl implements RepositorioObra {
     }
 
     @Override // testeado
-    public List<Obra> obtenerPorAutor(String autor) {
+    public List<Obra> obtenerPorArtista(Artista artista) {
         try {
             return this.sessionFactory.getCurrentSession()
-                    .createQuery("SELECT o FROM Obra o LEFT JOIN o.artista a WHERE lower(a.nombre) LIKE :autor", Obra.class)
-                    .setParameter("autor", "%" + autor.toLowerCase() + "%")
+                    .createQuery("SELECT o FROM Obra o LEFT JOIN o.artista a WHERE a.id = :idArtista", Obra.class)
+                    .setParameter("idArtista", (artista.getId()))
                     .getResultList();
         } catch (IllegalArgumentException e) {
             return new ArrayList<>();
