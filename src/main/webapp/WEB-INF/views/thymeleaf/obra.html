@@ -11,77 +11,68 @@
     <link rel="stylesheet" th:href="@{/css/obra.css}"/>
     <link rel="stylesheet" th:href="@{/css/header.css}"/>
     <style>
-        .formato-option {
-          transition: all 0.3s ease;
-        }
-        .formato-option:hover:not(.opacity-50) {
-          transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-        .formato-option.selected {
-          border-color: #3B82F6;
-          background-color: #EBF8FF;
-        }
-        .formato-option.disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
-        }
+      .formato-option {
+        transition: all 0.3s ease;
+      }
+      .formato-option:hover:not(.opacity-50) {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+      .formato-option.selected {
+        border-color: #3B82F6;
+        background-color: #EBF8FF;
+      }
+      .formato-option.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
     </style>
 </head>
-<body class="bg-gray-100 text-gray-800">
-<!-- Header -->
-<header class="bg-white p-6 flex justify-between items-center shadow-md">
-    <h1 class="text-4xl font-extrabold text-gray-900 tracking-wider">
-        <a th:href="@{/galeria}" class="hover:text-blue-600 transition-colors">
-            ArtRoom
-        </a>
-    </h1>
+<body class="bg-gray-100 text-gray-800 flex flex-col min-h-screen">
 
-    <div class="flex items-center space-x-4">
-        <div th:if="${usuario != null}" class="flex items-center space-x-4">
-            <div th:text=" 'Hola, ' + ${usuario.email}"></div>
+<header class="bg-gray-900 text-white shadow-md">
+    <div class="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center">
+        <h1 class="text-4xl font-bold tracking-wide">
+            <a th:href="@{/galeria}" class="hover:text-blue-500 transition">ArtRoom</a>
+        </h1>
 
-            <a th:if="${artistaUsuario != null}"
-               th:href="@{'/perfilArtista/ver/' + ${artistaUsuario.id}}"
-               class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg"
-               title="Ver mi perfil de artista">
-                <i class="bi bi-palette-fill"></i>
-            </a>
+        <div class="flex items-center space-x-6">
+            <div th:if="${usuario != null}" class="flex items-center space-x-3 text-gray-200 px-2">
+                <span th:text="'Hola, ' + ${usuario.nombre}"></span>
 
-            <a th:if="${artistaUsuario == null}"
-               th:href="@{/perfilArtista/nuevo}"
-               class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg"
-               title="Crear nuevo artista">
-                <i class="bi bi-person-plus"></i>
-            </a>
+                <a th:href="@{/usuario}" class="bg-gray-200 text-gray-700 hover:bg-green-600 hover:text-white py-2 px-6 rounded-md shadow transition"
+                   title="Perfil de usuario">
+                    <i class="fa-solid fa-user"></i>
+                </a>
 
-            <a th:href="@{/carrito}"
-               class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg relative">
-                <i class="fas fa-shopping-cart"></i>
-                <span data-carrito-count
-                      class="hidden absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
-                    0
-                </span>
-            </a>
-            <a th:href="@{/logout}"
-               class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg">
-                <i class="bi bi-box-arrow-right"></i>
-            </a>
-        </div>
-        <div th:unless="${usuario != null}" class="flex items-center space-x-4">
-            <a th:href="@{/login}"
-               class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg">
-                Iniciar Sesión
-            </a>
+                <a th:href="@{/carrito}"
+                   class="bg-gray-200 text-gray-700 hover:bg-blue-600 hover:text-white py-2 px-6 rounded-md shadow transition relative">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span data-carrito-count
+                          class="hidden absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
+                        0
+                    </span>
+                </a>
+
+                <a th:href="@{/logout}"
+                   class="bg-gray-200 text-gray-700 hover:bg-red-600 hover:text-white py-2 px-6 rounded-md shadow transition">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </a>
+            </div>
+
+            <div th:unless="${usuario != null}">
+                <button th:onclick="|location.href='@{/login}'|"
+                        class="bg-gray-200 text-gray-700 hover:bg-blue-600 hover:text-white font-semibold py-2 px-6 rounded-md shadow transition">
+                    Iniciar Sesión
+                </button>
+            </div>
         </div>
     </div>
-
-
 </header>
 
-<main class="obra-page flex flex-col md:flex-row w-full min-h-screen">
+<main class="obra-page mx-auto max-w-7xl flex flex-col justify-center md:flex-row w-full min-h-screen">
     <div class="obra-left">
-        <!-- encerrando la variable de la url en @{ } la construye en el contexto de la aplicacion (spring) -->
+      <!-- encerrando la variable de la url en @{ } la construye en el contexto de la aplicacion (spring) -->
         <img
                 th:src="@{${obra.imagenUrl}}"
                 alt="Imagen de la obra"
@@ -158,7 +149,7 @@
 
         <div class="obra-body flex-grow mb-8">
             <p class="obra-descripcion text-lg" th:text="${obra.descripcion}"></p>
-
+            
             <!-- Sección de Likes -->
             <div class="likes flex items-center gap-2 mt-6 mb-6">
                 <div th:if="${usuario != null}">
@@ -171,7 +162,7 @@
                 <span id="like-count" th:text="${obra.getCantidadLikes()}"></span>
                 <span class="likes-label text-gray-500 text-sm">personas dieron like</span>
             </div>
-
+            
             <!-- Selector de Formatos -->
             <div class="formato-selector" th:if="${obra.formatos != null and not #lists.isEmpty(obra.formatos)}">
                 <h3 class="text-lg font-semibold mb-3 text-gray-800">Formatos Disponibles:</h3>
@@ -211,7 +202,7 @@
                             <!-- Botón Eliminar -->
                             <form th:action="@{/obra/{obraId}/eliminar-formato(obraId=${obra.id})}" method="post"
                                   onsubmit="return confirm('¿Estás seguro de eliminar este formato?');">
-                                <input type="hidden" name="formatoId" th:value="${formato.id}"/>
+                                <input type="hidden" name="formatoId" th:value="${formato.id}" />
                                 <button type="submit"
                                         class="bg-red-600 hover:bg-red-700 text-white font-semibold px-3 py-1 rounded-md transition">
                                     Eliminar
@@ -222,25 +213,23 @@
                 </div>
             </div>
 
-            <div id="modalEditarFormato"
-                 class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div id="modalEditarFormato" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                 <div class="bg-white rounded-xl p-6 shadow-xl w-96">
                     <h2 class="text-xl font-bold mb-4">Editar Formato</h2>
 
                     <form th:action="@{/obra/{obraId}/actualizar-formato(obraId=${obra.id})}" method="post">
-                        <input type="hidden" id="formatoId" name="formatoId"/>
+                        <input type="hidden" id="formatoId" name="formatoId" />
 
                         <div class="mb-3">
-                            <label for="nuevoPrecio" class="block text-sm font-medium text-gray-700">Nuevo
-                                Precio</label>
+                            <label for="nuevoPrecio" class="block text-sm font-medium text-gray-700">Nuevo Precio</label>
                             <input type="number" step="0.01" id="nuevoPrecio" name="nuevoPrecio"
-                                   class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required/>
+                                   class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required />
                         </div>
 
                         <div class="mb-3">
                             <label for="nuevoStock" class="block text-sm font-medium text-gray-700">Nuevo Stock</label>
                             <input type="number" id="nuevoStock" name="nuevoStock"
-                                   class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required/>
+                                   class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required />
                         </div>
 
                         <div class="flex justify-end gap-2 mt-4">
@@ -256,9 +245,9 @@
                     </form>
                 </div>
             </div>
-
+            
             <!-- Mensaje si no hay formatos -->
-            <div th:if="${obra.formatos == null or #lists.isEmpty(obra.formatos)}"
+            <div th:if="${obra.formatos == null or #lists.isEmpty(obra.formatos)}" 
                  class="formato-selector p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
                 <p class="text-yellow-800">No hay formatos disponibles para esta obra en este momento.</p>
             </div>
@@ -310,13 +299,13 @@
                     <input type="hidden" name="id" th:value="${obra.id}"/>
                     <input type="hidden" name="formato" id="formato-seleccionado" value=""/>
 
-                    <button id="btn-agregar-carrito" type="submit"
+                    <button id="btn-agregar-carrito" type="submit" 
                             class="btn bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full transition duration-300">
                         <i class="fas fa-shopping-cart mr-2"></i>
                         Agregar al Carrito
                     </button>
                 </form>
-
+                
                 <button
                         class="btn btn-primary bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300"
                         id="comprarBtn">
@@ -324,11 +313,15 @@
                 </button>
             </div>
         </div>
-
     </div>
 </main>
 
-<script th:inline="javascript">
+<footer class="bg-gray-500 text-gray-200 py-6 mt-12 text-center shadow-inner">
+    <p>&copy; 2025 Grupo 8</p>
+    <p class="text-gray-900 text-sm">Gil - Solodujin - Landín - Santillan - Torrico</p>
+</footer>
+
+  <script th:inline="javascript">
     // Variables globales
     let formatoSeleccionado = null;
     let precioActual = 0;

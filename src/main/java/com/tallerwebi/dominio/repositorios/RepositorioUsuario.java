@@ -10,5 +10,6 @@ public interface RepositorioUsuario {
     void guardar(Usuario usuario);
     List<Usuario> obtenerTodos();
     void modificar(Usuario usuario);
+    void eliminar(Usuario usuario);
 }
 

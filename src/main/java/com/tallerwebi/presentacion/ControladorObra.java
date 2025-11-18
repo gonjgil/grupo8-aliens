@@ -93,6 +93,9 @@ public class ControladorObra {
         ModelMap model = new ModelMap();
 
         Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
+        if (usuario == null)
+            return new ModelAndView("redirect:/login");
+
         model.put("usuario", usuario);
 
         try {
@@ -126,6 +129,9 @@ public class ControladorObra {
     public ModelAndView editarObra(@PathVariable("id") Long idObra, HttpServletRequest request) {
         ModelMap model = new ModelMap();
         Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
+        if (usuario == null)
+            return new ModelAndView("redirect:/login");
+
         model.put("usuario", usuario);
 
         try {

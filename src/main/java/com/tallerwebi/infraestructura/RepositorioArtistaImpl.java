@@ -54,4 +54,9 @@ public class RepositorioArtistaImpl implements RepositorioArtista {
                 .getResultList();
     }
 
+    @Override
+    public void eliminar(Artista artista) {
+        sessionFactory.getCurrentSession().delete(artista);
+    }
+
 }
