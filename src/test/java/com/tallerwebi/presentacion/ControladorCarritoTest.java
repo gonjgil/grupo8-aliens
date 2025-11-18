@@ -2,10 +2,7 @@ package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.ServicioCarrito;
 import com.tallerwebi.dominio.ServicioMail;
-import com.tallerwebi.dominio.entidades.Carrito;
-import com.tallerwebi.dominio.entidades.FormatoObra;
-import com.tallerwebi.dominio.entidades.Obra;
-import com.tallerwebi.dominio.entidades.Usuario;
+import com.tallerwebi.dominio.entidades.*;
 import com.tallerwebi.dominio.enums.Formato;
 import com.tallerwebi.dominio.excepcion.NoExisteLaObra;
 import com.tallerwebi.dominio.excepcion.NoHayStockSuficiente;
@@ -86,6 +83,9 @@ public class ControladorCarritoTest {
     public void queAlFinalizarLaCompraSeEnvíeUnCorreoDeConfirmación(){
         Usuario usuario= new Usuario();
         usuario.setEmail("cliente@ejemplo.com");
+        Long id=1L;
+        Direccion direccion = new Direccion(id);
+        usuario.agregarDireccion(direccion);
 
         HttpSession session = mock(HttpSession.class);
         when(session.getAttribute("usuarioLogueado")).thenReturn(usuario);

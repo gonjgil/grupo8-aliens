@@ -3,11 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <title>Nuevo Artista | ArtRoom</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/nuevo_artista.css}"/>
 </head>
-<body>
+<body class="bg-gray-100 text-gray-800 flex flex-col min-h-screen">
+
+<header class="bg-gray-900 text-white shadow-md">
+    <div class="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center">
+        <h1 class="text-4xl font-bold tracking-wide">
+            <a th:href="@{/galeria}" class="hover:text-blue-500 transition">ArtRoom</a>
+        </h1>
+    </div>
+</header>
+
+<main class="obra-page flex-grow mt-10 mx-auto max-w-2xl flex w-full min-h-screen justify-center">
 <div class="container">
-    <h2> Crear nuevo artista</h2>
+    <h2 class="text-3xl font-bold text-gray-900 mb-6"> Crear nuevo artista</h2>
 
     <form th:action="@{/perfilArtista/crear}" method="post" class="formulario-artista" enctype="multipart/form-data">
 
@@ -30,7 +43,7 @@
 
         <div class="campo">
             <label>Biografía:</label>
-            <textarea name="biografia" required></textarea>
+            <textarea name="biografia"></textarea>
         </div>
 
         <div class="campo">
@@ -54,6 +67,12 @@
         </div>
     </form>
 </div>
+</main>
+
+<footer class="bg-gray-500 text-gray-200 py-6 mt-12 text-center shadow-inner">
+    <p>&copy; 2025 Grupo 8</p>
+    <p class="text-gray-900 text-sm">Gil - Solodujin - Landín - Santillan - Torrico</p>
+</footer>
 
 <script type="module" th:src="@{/js/nuevo_artista.js}"></script>
 </body>

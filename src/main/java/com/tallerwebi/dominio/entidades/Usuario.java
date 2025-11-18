@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.tallerwebi.dominio.enums.Categoria;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @JsonIgnoreProperties({"obrasLikeadas"})
@@ -17,10 +15,15 @@ public class Usuario {
     private Long id;
     private String email;
     private String password;
-    private String nombre;
-    private Long telefono;
     private String rol;
     private Boolean activo = false;
+    private Long telefono;
+    private String nombre;
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Direccion> direcciones = new ArrayList<>();
+
+
     @ManyToMany(mappedBy = "usuariosQueDieronLike", fetch = FetchType.LAZY)
     private Set<Obra> obrasLikeadas = new HashSet<>();
 
@@ -91,6 +94,32 @@ public class Usuario {
 
     public void setCategoriasFavoritas(Set<Categoria> categoriasFavoritas) {
         this.categoriasFavoritas = categoriasFavoritas;
+    }
+
+    public List<Direccion> getDirecciones() {
+        return this.direcciones;
+    }
+
+    public void agregarDireccion(Direccion direccion) {
+        if (this.direcciones.isEmpty())
+            direccion.setPredeterminada(true);
+        direccion.setUsuario(this);
+        this.direcciones.add(direccion);
+    }
+
+    public void eliminarDireccion(Direccion direccion) {
+        direccion.setUsuario(null);
+        this.direcciones.remove(direccion);
+    }
+
+    public Direccion getDireccionPredeterminada() {
+        if (direcciones == null || direcciones.isEmpty()) return null;
+        Direccion predeterminada = null;
+        for (Direccion direccion : direcciones) {
+            if (direccion.getPredeterminada())
+                predeterminada = direccion;
+        }
+        return predeterminada;
     }
 
     @Override

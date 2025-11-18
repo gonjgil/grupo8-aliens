@@ -63,7 +63,6 @@ public class ControladorObraTest {
 
     private Usuario usuarioMock;
 
-
     @BeforeEach
     public void setup() {
         servicioGaleriaMock = mock(ServicioGaleria.class);
