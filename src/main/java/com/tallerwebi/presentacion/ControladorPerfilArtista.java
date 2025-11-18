@@ -1,5 +1,6 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.ServicioEstadistica;
 import com.tallerwebi.dominio.entidades.Artista;
 import com.tallerwebi.dominio.ServicioCloudinary;
 import com.tallerwebi.dominio.ServicioPerfilArtista;
@@ -25,11 +26,13 @@ public class ControladorPerfilArtista {
 
     private ServicioPerfilArtista servicioPerfilArtista;
     private ServicioCloudinary servicioCloudinary;
+    private ServicioEstadistica servicioEstadistica;
 
     @Autowired
-    public ControladorPerfilArtista(ServicioPerfilArtista servicioPerfilArtista, ServicioCloudinary servicioCloudinary) {
+    public ControladorPerfilArtista(ServicioPerfilArtista servicioPerfilArtista, ServicioCloudinary servicioCloudinary, ServicioEstadistica servicioEstadistica) {
         this.servicioPerfilArtista = servicioPerfilArtista;
         this.servicioCloudinary = servicioCloudinary;
+        this.servicioEstadistica = servicioEstadistica;
     }
 
     // Muestra el perfil de un artista
@@ -126,6 +129,37 @@ public class ControladorPerfilArtista {
         servicioPerfilArtista.actualizarPerfilArtista(dto);
 
         return "redirect:/perfilArtista/ver/" + idArtista;
+    }
+
+    @RequestMapping(path = "ver/{id}/estadisticas", method = RequestMethod.GET)
+    public ModelAndView mostrarEstadisticas(@PathVariable("id") Long idArtista, HttpServletRequest request) {
+        ModelMap model = new ModelMap();
+
+        Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
+        model.put("usuario", usuario);
+
+        try{
+            PerfilArtistaDTO artista = this.servicioPerfilArtista.obtenerPerfilArtista(idArtista);
+
+            if(usuario == null || !usuario.getId().equals(artista.getUsuarioId())){
+                model.put("error", "No tienes permiso para ver estadísticas de este artista.");
+                return new ModelAndView("redirect:/galeria", model);
+            }
+
+            model.put("artista", artista);
+
+            model.put("masVendidas", servicioEstadistica.obtenerMasVendidasArtista(artista.toArtista()));
+            model.put("masLikeadas", servicioEstadistica.obtenerMasLikeadasArtista(artista.toArtista()));
+            model.put("cat_masVendidas", servicioEstadistica.obtenerTresCategoriasMasVendidasArtista(artista.toArtista()));
+            model.put("cat_masLikeadas", servicioEstadistica.obtenerTresCategoriasMasLikeadasArtista(artista.toArtista()));
+            model.put("trendVendidas", servicioEstadistica.obtenerTrendingVentasArtista(artista.toArtista()));
+            model.put("trendLikeadas", servicioEstadistica.obtenerTrendingLikesArtista(artista.toArtista()));
+
+            return new ModelAndView("estadisticas_artista", model);
+        } catch (NoExisteArtista e) {
+            model.put("error", "perfil no encontrado"); //si la clave es error se envia el mensaje el artista no existe
+            return new ModelAndView("redirect:/galeria", model);
+        }
     }
 }
 

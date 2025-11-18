@@ -10,8 +10,7 @@ import com.tallerwebi.dominio.repositorios.RepositorioObra;
 import com.tallerwebi.dominio.enums.Categoria;
 
 import java.text.Normalizer;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Repository
 public class RepositorioObraImpl implements RepositorioObra {
@@ -178,4 +177,153 @@ public class RepositorioObraImpl implements RepositorioObra {
     public void eliminar(Obra obra) {
         sessionFactory.getCurrentSession().delete(obra);
     }
+
+    @Override
+    public Map<Obra, Long> obtenerMasVendidasPorArtista(Artista artista) {
+        try {
+            List<Object[]> resultados = this.sessionFactory.getCurrentSession()
+                    .createQuery(
+                            "SELECT o, COUNT(ic.id) " +
+                                    "FROM ItemCompra ic " +
+                                    "JOIN ic.obra o " +
+                                    "JOIN o.artista a " +
+                                    "WHERE a.id = :idArtista " +
+                                    "GROUP BY o.id " +
+                                    "ORDER BY COUNT(ic.id) DESC",
+                            Object[].class
+                    )
+                    .setParameter("idArtista", artista.getId())
+                    .setMaxResults(10)
+                    .getResultList();
+
+            Map<Obra, Long> ventasPorObra = new LinkedHashMap<>();
+
+            for (Object[] fila : resultados) {
+                Obra obra = (Obra) fila[0];
+                Long cantidadVentas = (Long) fila[1];
+                ventasPorObra.put(obra, cantidadVentas);
+            }
+
+            return ventasPorObra;
+        } catch (IllegalArgumentException e) {
+            return Collections.emptyMap();
+        }
+    }
+
+    @Override
+    public List<Obra> obtenerMasLikeadasPorArtista(Artista artista) {
+        try {
+            return this.sessionFactory.getCurrentSession()
+                    .createQuery("SELECT o FROM Obra o LEFT JOIN o.usuariosQueDieronLike u WHERE o.artista.id = :idArtista GROUP BY o.id ORDER BY COUNT(u.id) DESC", Obra.class)
+                    .setParameter("idArtista", artista.getId())
+                    .setMaxResults(10)
+                    .getResultList();
+        } catch (IllegalArgumentException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public Map<Categoria, Long> obtenerTresCategoriasMasVendidasArtista(Artista artista) {
+        try {
+            List<Object[]> resultados = this.sessionFactory.getCurrentSession()
+                    .createQuery("SELECT c, COUNT(ic.id) " +
+                                    "FROM ItemCompra ic " +
+                                    "JOIN ic.obra o " +
+                                    "JOIN o.artista a " +
+                                    "JOIN o.categorias c " +
+                                    "WHERE a.id = :idArtista " +
+                                    "GROUP BY c " +
+                                    "ORDER BY COUNT(ic.id) DESC",
+                            Object[].class
+                    )
+                    .setParameter("idArtista", artista.getId())
+                    .setMaxResults(3)
+                    .getResultList();
+
+            return getCategoriaLongMap(resultados);
+        } catch (IllegalArgumentException e) {
+            return Collections.emptyMap();
+        }
+    }
+
+    @Override
+    public Map<Categoria, Long> obtenerTresCategoriasMasLikeadasArtista(Artista artista) {
+        try {
+            List<Object[]> resultados = this.sessionFactory.getCurrentSession()
+                    .createQuery("SELECT c, COUNT(u.id) " +
+                                    "FROM Obra o " +
+                                    "JOIN o.artista a " +
+                                    "JOIN o.categorias c " +
+                                    "JOIN o.usuariosQueDieronLike u " +
+                                    "WHERE a.id = :idArtista " +
+                                    "GROUP BY c " +
+                                    "ORDER BY COUNT(u.id) DESC",
+                            Object[].class
+                    )
+                    .setParameter("idArtista", artista.getId())
+                    .setMaxResults(3)
+                    .getResultList();
+
+            return getCategoriaLongMap(resultados);
+        } catch (IllegalArgumentException e) {
+            return Collections.emptyMap();
+        }
+    }
+
+    private Map<Categoria, Long> getCategoriaLongMap(List<Object[]> resultados) {
+        Map<Categoria, Long> cantidadPorCategoria = new LinkedHashMap<>();
+
+        for (Object[] fila : resultados) {
+            Categoria categoria = (Categoria) fila[0];
+            Long cantidad = (Long) fila[1];
+            cantidadPorCategoria.put(categoria, cantidad);
+        }
+
+        return cantidadPorCategoria;
+    }
+
+    @Override
+    public List<Obra> obtenerTrendingVentasArtista(Artista artista) {
+        try {
+            return this.sessionFactory.getCurrentSession()
+                    .createQuery("SELECT o " +
+                                    "FROM ItemCompra ic " +
+                                    "JOIN ic.obra o " +
+                                    "JOIN o.artista a " +
+                                    "WHERE a.id = :idArtista " +
+                                    "GROUP BY o " +
+                                    "ORDER BY COUNT(ic.id) DESC",
+                            Obra.class
+                    )
+                    .setParameter("idArtista", artista.getId())
+                    .setMaxResults(10)
+                    .getResultList();
+        } catch (IllegalArgumentException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public List<Obra> obtenerTrendingLikesArtista(Artista artista) {
+        try {
+            return this.sessionFactory.getCurrentSession()
+                    .createQuery("SELECT o " +
+                                    "FROM Obra o " +
+                                    "JOIN o.artista a " +
+                                    "JOIN o.usuariosQueDieronLike u " +
+                                    "WHERE a.id = :idArtista " +
+                                    "GROUP BY o " +
+                                    "ORDER BY COUNT(u.id) DESC",
+                            Obra.class
+                    )
+                    .setParameter("idArtista", artista.getId())
+                    .setMaxResults(10)
+                    .getResultList();
+        } catch (IllegalArgumentException e) {
+            return new ArrayList<>();
+        }
+    }
+
+
 }

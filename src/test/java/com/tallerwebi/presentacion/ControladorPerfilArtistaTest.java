@@ -1,9 +1,12 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.ServicioEstadistica;
 import com.tallerwebi.dominio.entidades.Artista;
 import com.tallerwebi.dominio.ServicioCloudinary;
 import com.tallerwebi.dominio.ServicioPerfilArtista;
+import com.tallerwebi.dominio.entidades.Obra;
 import com.tallerwebi.dominio.entidades.Usuario;
+import com.tallerwebi.dominio.enums.Categoria;
 import com.tallerwebi.dominio.enums.TipoImagen;
 import com.tallerwebi.dominio.excepcion.NoExisteArtista;
 import com.tallerwebi.presentacion.dto.PerfilArtistaDTO;
@@ -14,6 +17,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import java.util.List;
+import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -26,6 +32,7 @@ public class ControladorPerfilArtistaTest {
     private ControladorPerfilArtista controladorPerfilArtista;
     private ServicioPerfilArtista servicioPerfilArtistaMock;
     private ServicioCloudinary servicioCloudinaryMock;
+    private ServicioEstadistica servicioEstadisticaMock;
     private HttpServletRequest requestMock;
     private HttpSession sessionMock;
 
@@ -33,7 +40,8 @@ public class ControladorPerfilArtistaTest {
     public void init() {
         servicioPerfilArtistaMock = mock(ServicioPerfilArtista.class);
         servicioCloudinaryMock = mock(ServicioCloudinary.class);
-        controladorPerfilArtista = new ControladorPerfilArtista(servicioPerfilArtistaMock, servicioCloudinaryMock);
+        servicioEstadisticaMock = mock(ServicioEstadistica.class);
+        controladorPerfilArtista = new ControladorPerfilArtista(servicioPerfilArtistaMock, servicioCloudinaryMock, servicioEstadisticaMock);
         requestMock = mock(HttpServletRequest.class);
         sessionMock = mock(HttpSession.class);
         when(requestMock.getSession()).thenReturn(sessionMock);
@@ -124,6 +132,84 @@ public class ControladorPerfilArtistaTest {
         // Validación
         assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/galeria"));
         assertThat(modelAndView.getModel().get("error").toString(), equalToIgnoringCase("No tienes permiso para editar este perfil."));
+    }
+
+    @Test
+    public void deberiaRedirigirAGaleriaCuandoElArtistaNoExisteEnEstadisticas() {
+        Long idArtista = 1L;
+        when(servicioPerfilArtistaMock.obtenerPerfilArtista(idArtista))
+                .thenThrow(new NoExisteArtista());
+
+        ModelAndView modelAndView = controladorPerfilArtista.mostrarEstadisticas(idArtista, requestMock);
+
+        assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/galeria"));
+        assertThat(modelAndView.getModel().get("error").toString(), equalToIgnoringCase("perfil no encontrado"));
+    }
+
+    @Test
+    public void deberiaDenegarAccesoASiElUsuarioNoEsElDuenoDelPerfilEnEstadisticas() {
+        Long idArtista = 1L;
+
+        PerfilArtistaDTO artistaMock = new PerfilArtistaDTO();
+        artistaMock.setUsuarioId(50L);
+        when(servicioPerfilArtistaMock.obtenerPerfilArtista(idArtista)).thenReturn(artistaMock);
+
+        Usuario usuarioMock = new Usuario();
+        usuarioMock.setId(20L);
+        when(sessionMock.getAttribute("usuarioLogueado")).thenReturn(usuarioMock);
+
+        ModelAndView modelAndView = controladorPerfilArtista.mostrarEstadisticas(idArtista, requestMock);
+
+        assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/galeria"));
+        assertThat(modelAndView.getModel().get("error").toString(),
+                equalToIgnoringCase("No tienes permiso para ver estadísticas de este artista."));
+    }
+
+    @Test
+    public void deberiaMostrarEstadisticasCuandoElUsuarioCoincideConElDuenoDelPerfil() {
+        // Preparación
+        Long idArtista = 1L;
+
+        PerfilArtistaDTO artistaMock = mock(PerfilArtistaDTO.class);
+        when(artistaMock.getUsuarioId()).thenReturn(10L);
+        when(artistaMock.toArtista()).thenReturn(new Artista());
+
+        when(servicioPerfilArtistaMock.obtenerPerfilArtista(idArtista))
+                .thenReturn(artistaMock);
+
+        Usuario usuarioMock = new Usuario();
+        usuarioMock.setId(10L);
+        when(sessionMock.getAttribute("usuarioLogueado")).thenReturn(usuarioMock);
+
+        // Mocks de resultados de estadísticas
+        Map<Obra, Long> masVendidas = Map.of(new Obra(), 6L);
+        Map<Obra, Long> masLikeadas = Map.of(new Obra(), 17L);
+        Map<Categoria, Long> categoriasVendidas = Map.of(Categoria.ABSTRACTO, 5L);
+        Map<Categoria, Long> categoriasLikeadas = Map.of(Categoria.ABSTRACTO, 10L);
+        List<Obra> trendVentas = List.of(new Obra());
+        List<Obra> trendLikes = List.of(new Obra());
+
+        when(servicioEstadisticaMock.obtenerMasVendidasArtista(any())).thenReturn(masVendidas);
+        when(servicioEstadisticaMock.obtenerMasLikeadasArtista(any())).thenReturn(masLikeadas);
+        when(servicioEstadisticaMock.obtenerTresCategoriasMasVendidasArtista(any())).thenReturn(categoriasVendidas);
+        when(servicioEstadisticaMock.obtenerTresCategoriasMasLikeadasArtista(any())).thenReturn(categoriasLikeadas);
+        when(servicioEstadisticaMock.obtenerTrendingVentasArtista(any())).thenReturn(trendVentas);
+        when(servicioEstadisticaMock.obtenerTrendingLikesArtista(any())).thenReturn(trendLikes);
+
+        // Ejecución
+        ModelAndView mv = controladorPerfilArtista.mostrarEstadisticas(idArtista, requestMock);
+
+        // Validación vista
+        assertThat(mv.getViewName(), equalToIgnoringCase("estadisticas_artista"));
+
+        // Validación modelo
+        assertThat(mv.getModel().get("artista"), equalTo(artistaMock));
+        assertThat(mv.getModel().get("masVendidas"), equalTo(masVendidas));
+        assertThat(mv.getModel().get("masLikeadas"), equalTo(masLikeadas));
+        assertThat(mv.getModel().get("cat_masVendidas"), equalTo(categoriasVendidas));
+        assertThat(mv.getModel().get("cat_masLikeadas"), equalTo(categoriasLikeadas));
+        assertThat(mv.getModel().get("trendVendidas"), equalTo(trendVentas));
+        assertThat(mv.getModel().get("trendLikeadas"), equalTo(trendLikes));
     }
 
 }
