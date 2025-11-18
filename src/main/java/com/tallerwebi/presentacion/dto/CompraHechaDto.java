@@ -35,6 +35,8 @@ public class CompraHechaDto {
         this.precioFinal = compra.getPrecioFinal();
     }
 
+    public CompraHechaDto() {}
+
     public Long getId() {
         return id;
     }

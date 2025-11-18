@@ -8,7 +8,7 @@ public interface RepositorioCarrito {
     Carrito guardar(Carrito carrito);
     Carrito obtenerPorId(Long id);
     Carrito obtenerCarritoActivoPorUsuario(Long usuarioId);
-    Carrito obtenerUltimoCarritoPorUsuario(Long usuarioId);
+    Carrito obtenerUltimoCarritoFinalizadoPorUsuario(Long usuarioId);
     Carrito crearCarritoParaUsuario(Usuario usuario);
     void eliminar(Carrito carrito);
     void actualizarEstado(Long carritoId, EstadoCarrito estado);
