@@ -72,7 +72,7 @@ public class ServicioGaleriaImpl implements ServicioGaleria {
     public List<Obra> obtenerObrasParaUsuario(Usuario usuario) {
         List<Obra> todasLasObras = convertirYValidar(repositorioObra.obtenerTodas());
         Set<Obra> obrasLikeadas = usuario.getObrasLikeadas();
-        Set<Categoria> categoriasFavoritas = usuario.getCategoriasFavoritas(); // 👈 NUEVO
+        Set<Categoria> categoriasFavoritas = usuario.getCategoriasFavoritas();
 
         if ((obrasLikeadas == null || obrasLikeadas.isEmpty()) &&
                 (categoriasFavoritas == null || categoriasFavoritas.isEmpty())) {

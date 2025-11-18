@@ -28,57 +28,49 @@
       }
     </style>
 </head>
-<body class="bg-gray-100 text-gray-800">
-<!-- Header -->
-<header class="bg-white p-6 flex justify-between items-center shadow-md">
-    <h1 class="text-4xl font-extrabold text-gray-900 tracking-wider">
-        <a th:href="@{/galeria}" class="hover:text-blue-600 transition-colors">
-            ArtRoom
-        </a>
-    </h1>
+<body class="bg-gray-100 text-gray-800 flex flex-col min-h-screen">
 
-    <div class="flex items-center space-x-4">
-        <div th:if="${usuario != null}" class="flex items-center space-x-4">
-            <div th:text=" 'Hola, ' + ${usuario.email}"></div>
+<header class="bg-gray-900 text-white shadow-md">
+    <div class="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center">
+        <h1 class="text-4xl font-bold tracking-wide">
+            <a th:href="@{/galeria}" class="hover:text-blue-500 transition">ArtRoom</a>
+        </h1>
 
-            <a th:if="${artistaUsuario != null}"
-               th:href="@{'/perfilArtista/ver/' + ${artistaUsuario.id}}"
-               class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg"
-               title="Ver mi perfil de artista">
-                <i class="bi bi-palette-fill"></i>
-            </a>
+        <div class="flex items-center space-x-6">
+            <div th:if="${usuario != null}" class="flex items-center space-x-3 text-gray-200 px-2">
+                <span th:text="'Hola, ' + ${usuario.nombre}"></span>
 
-            <a th:if="${artistaUsuario == null}"
-               th:href="@{/perfilArtista/nuevo}"
-               class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg"
-               title="Crear nuevo artista">
-                <i class="bi bi-person-plus"></i>
-            </a>
+                <a th:href="@{/usuario}" class="bg-gray-200 text-gray-700 hover:bg-green-600 hover:text-white py-2 px-6 rounded-md shadow transition"
+                   title="Perfil de usuario">
+                    <i class="fa-solid fa-user"></i>
+                </a>
 
-            <a th:href="@{/carrito}"
-               class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg relative">
-                <i class="fas fa-shopping-cart"></i>
-                <span data-carrito-count 
-                      class="hidden absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
-                    0
-                </span>
-            </a>
-            <a th:href="@{/logout}"
-               class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg">
-                <i class="bi bi-box-arrow-right"></i>
-            </a>
-        </div>
-        <div th:unless="${usuario != null}" class="flex items-center space-x-4">
-            <a th:href="@{/login}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg">
-                Iniciar Sesión
-            </a>
+                <a th:href="@{/carrito}"
+                   class="bg-gray-200 text-gray-700 hover:bg-blue-600 hover:text-white py-2 px-6 rounded-md shadow transition relative">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span data-carrito-count
+                          class="hidden absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
+                        0
+                    </span>
+                </a>
+
+                <a th:href="@{/logout}"
+                   class="bg-gray-200 text-gray-700 hover:bg-red-600 hover:text-white py-2 px-6 rounded-md shadow transition">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </a>
+            </div>
+
+            <div th:unless="${usuario != null}">
+                <button th:onclick="|location.href='@{/login}'|"
+                        class="bg-gray-200 text-gray-700 hover:bg-blue-600 hover:text-white font-semibold py-2 px-6 rounded-md shadow transition">
+                    Iniciar Sesión
+                </button>
+            </div>
         </div>
     </div>
-
-
 </header>
 
-<main class="obra-page flex flex-col md:flex-row w-full min-h-screen">
+<main class="obra-page mx-auto max-w-7xl flex flex-col justify-center md:flex-row w-full min-h-screen">
     <div class="obra-left">
       <!-- encerrando la variable de la url en @{ } la construye en el contexto de la aplicacion (spring) -->
         <img
@@ -94,6 +86,53 @@
                   th:text="${categoria.categoria}"
                   class="categoria-tag px-3 py-1 bg-gray-200 text-gray-700 rounded-full text-sm hover:bg-gray-300 transition"
           ></span>
+        </div>
+
+        <div class="comentarios-wrapper mt-6">
+            <div th:if="${usuario != null}">
+                <form th:action="@{'/obra/' + ${obra.id} + '/comentar'}"
+                      method="post"
+                      class="bg-white p-4 border rounded mb-4 shadow-sm">
+
+                    <h3 class="text-lg font-semibold mb-2">Comentar</h3>
+
+                    <textarea id="comentario"
+                              name="contenido"
+                              class="form-control w-full p-2 border rounded mb-3"
+                              placeholder="Escribí tu comentario..."
+                              rows="3"
+                              required></textarea>
+
+                    <button type="submit"
+                            class="btn btn-primary w-full py-2 rounded-lg flex items-center justify-center gap-2">
+                        Comentar
+                    </button>
+                </form>
+            </div>
+            <div class="bg-white p-4 border rounded shadow-sm">
+                <h3 class="text-lg font-semibold mb-3">Comentarios</h3>
+
+                <div th:if="${#lists.isEmpty(comentarios)}" class="text-gray-500">
+                    Aún no hay comentarios.
+                </div>
+
+                <div th:each="comentario : ${comentarios}"
+                     class="commented-section py-3 border-b">
+
+                    <div class="flex justify-between">
+                        <h6 class="font-bold"
+                            th:text="${comentario.usuario.email}"></h6>
+
+                        <span class="text-sm text-gray-500"
+                              th:text="${comentario.fechaFormateada}"></span>
+                    </div>
+
+                    <p class="comment-text-sm mt-1"
+                       th:text="${comentario.contenido}"></p>
+
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -276,6 +315,11 @@
         </div>
     </div>
 </main>
+
+<footer class="bg-gray-500 text-gray-200 py-6 mt-12 text-center shadow-inner">
+    <p>&copy; 2025 Grupo 8</p>
+    <p class="text-gray-900 text-sm">Gil - Solodujin - Landín - Santillan - Torrico</p>
+</footer>
 
   <script th:inline="javascript">
     // Variables globales

@@ -5,91 +5,121 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title th:text="${direccion.id != null} ? 'Editar Dirección' : 'Nueva Dirección'">Dirección | ArtRoom</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
 </head>
-<body class="bg-gray-100 text-gray-800">
+<body class="bg-gray-100 text-gray-800 flex flex-col min-h-screen">
 
-<main class="flex justify-center items-center min-h-screen">
-    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h2 class="text-3xl font-bold mb-6 text-center" th:text="${direccion.id != null} ? 'Editar Dirección' : 'Nueva Dirección'">Nueva Dirección</h2>
+<header class="bg-gray-900 text-white shadow-md">
+    <div class="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center">
+        <h1 class="text-4xl font-bold tracking-wide">
+            <a th:href="@{/galeria}" class="hover:text-blue-500 transition">ArtRoom</a>
+        </h1>
+    </div>
+</header>
 
-        <!-- FORMULARIO UNIFICADO -->
-        <form th:action="@{/usuario/direccion}" method="post" class="space-y-4">
-            <input type="hidden" name="id" th:value="${direccion.id}" />
+<main class="flex justify-center items-center my-12 px-4">
+    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-4xl">
+        <h2 class="text-3xl font-bold mb-8 text-center"
+            th:text="${direccion.id != null} ? 'Editar Dirección' : 'Nueva Dirección'">
+            Nueva Dirección
+        </h2>
 
-            <div>
-                <label for="tipoDomicilio" class="block font-semibold mb-1">Tipo de domicilio</label>
-                <input type="text" id="tipoDomicilio" name="tipoDomicilio" th:value="${direccion.tipoDomicilio}"
-                       class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+        <form th:object="${direccion}" th:action="@{/usuario/direccion}" method="post" class="space-y-6">
+
+            <input type="hidden" th:field="*{id}" />
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+                <div>
+                    <label for="tipoDomicilio" class="block font-semibold mb-1">Tipo de domicilio</label>
+                    <input type="text" id="tipoDomicilio" name="tipoDomicilio" th:value="${direccion.tipoDomicilio}"
+                           class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+                </div>
+
+                <div>
+                    <label for="nombreCalle" class="block font-semibold mb-1">Calle</label>
+                    <input type="text" id="nombreCalle" name="nombreCalle" th:value="${direccion.nombreCalle}" required
+                           class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+                </div>
+
+                <div>
+                    <label for="altura" class="block font-semibold mb-1">Número</label>
+                    <input type="number" id="altura" name="altura" th:value="${direccion.altura}" required
+                           class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+                </div>
+
+                <div>
+                    <label for="piso" class="block font-semibold mb-1">Piso</label>
+                    <input type="text" id="piso" name="piso" th:value="${direccion.piso}"
+                           class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+                </div>
+
+                <div>
+                    <label for="departamento" class="block font-semibold mb-1">Departamento</label>
+                    <input type="text" id="departamento" name="departamento" th:value="${direccion.departamento}"
+                           class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+                </div>
+
+                <div>
+                    <label for="codigoPostal" class="block font-semibold mb-1">Código Postal</label>
+                    <input type="text" id="codigoPostal" name="codigoPostal" th:value="${direccion.codigoPostal}" required
+                           class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+                </div>
+
+                <div>
+                    <label for="ciudadBarrio" class="block font-semibold mb-1">Ciudad / Barrio</label>
+                    <input type="text" id="ciudadBarrio" name="ciudadBarrio" th:value="${direccion.ciudadBarrio}" required
+                           class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+                </div>
+
+                <div>
+                    <label for="provincia" class="block font-semibold mb-1">Provincia</label>
+                    <select id="provincia" name="provincia"
+                            class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option th:each="prov : ${T(com.tallerwebi.dominio.enums.Provincia).values()}"
+                                th:value="${prov}"
+                                th:text="${prov}"
+                                th:selected="${prov == direccion.provincia}">
+                        </option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="nombreContacto" class="block font-semibold mb-1">Nombre de contacto</label>
+                    <input type="text" id="nombreContacto" name="nombreContacto" th:value="${direccion.nombreContacto}"
+                           class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+                </div>
+
+                <div>
+                    <label for="telefonoContacto" class="block font-semibold mb-1">Teléfono de contacto</label>
+                    <input type="number" id="telefonoContacto" name="telefonoContacto" th:value="${direccion.telefonoContacto}"
+                           class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+                </div>
+
             </div>
 
-            <div>
-                <label for="nombreCalle" class="block font-semibold mb-1">Calle</label>
-                <input type="text" id="nombreCalle" name="nombreCalle" th:value="${direccion.nombreCalle}" required
-                       class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-            </div>
+            <div class="flex justify-between items-center pt-6">
+                <a th:href="@{/usuario/direcciones}"
+                   class="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded-md font-semibold">
+                    Cancelar
+                </a>
 
-            <div>
-                <label for="altura" class="block font-semibold mb-1">Número</label>
-                <input type="number" id="altura" name="altura" th:value="${direccion.altura}" required
-                       class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-            </div>
-
-            <div>
-                <label for="piso" class="block font-semibold mb-1">Piso</label>
-                <input type="text" id="piso" name="piso" th:value="${direccion.piso}"
-                       class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-            </div>
-
-            <div>
-                <label for="departamento" class="block font-semibold mb-1">Departamento</label>
-                <input type="text" id="departamento" name="departamento" th:value="${direccion.departamento}"
-                       class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-            </div>
-
-            <div>
-                <label for="codigoPostal" class="block font-semibold mb-1">Código Postal</label>
-                <input type="text" id="codigoPostal" name="codigoPostal" th:value="${direccion.codigoPostal}" required
-                       class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-            </div>
-
-            <div>
-                <label for="ciudadBarrio" class="block font-semibold mb-1">Ciudad / Barrio</label>
-                <input type="text" id="ciudadBarrio" name="ciudadBarrio" th:value="${direccion.ciudadBarrio}" required
-                       class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-            </div>
-
-            <div>
-                <label for="provincia" class="block font-semibold mb-1">Provincia</label>
-                <select id="provincia" name="provincia" class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option th:each="prov : ${T(com.tallerwebi.dominio.enums.Provincia).values()}"
-                            th:value="${prov}"
-                            th:text="${prov}"
-                            th:selected="${prov == direccion.provincia}">
-                    </option>
-                </select>
-            </div>
-
-            <div>
-                <label for="nombreContacto" class="block font-semibold mb-1">Nombre de contacto</label>
-                <input type="text" id="nombreContacto" name="nombreContacto" th:value="${direccion.nombreContacto}"
-                       class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-            </div>
-
-            <div>
-                <label for="telefonoContacto" class="block font-semibold mb-1">Teléfono de contacto</label>
-                <input type="number" id="telefonoContacto" name="telefonoContacto" th:value="${direccion.telefonoContacto}"
-                       class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-            </div>
-
-            <!-- Botones -->
-            <div class="flex justify-between items-center mt-6">
-                <a th:href="@{/usuario/direcciones}" class="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded-md font-semibold">Cancelar</a>
-                <button type="submit" class="px-6 py-2 bg-green-600 hover:bg-green-700 text-white font-bold rounded-md"
-                        th:text="${direccion.id != null} ? 'Guardar Cambios' : 'Crear Dirección'">Crear Dirección</button>
+                <button type="submit"
+                        class="px-6 py-2 bg-green-600 hover:bg-green-700 text-white font-bold rounded-md"
+                        th:text="${direccion.id != null} ? 'Guardar Cambios' : 'Crear Dirección'">
+                    Crear Dirección
+                </button>
             </div>
         </form>
     </div>
 </main>
+
+
+<footer class="bg-gray-500 text-gray-200 py-6 mt-12 text-center shadow-inner">
+    <p>&copy; 2025 Grupo 8</p>
+    <p class="text-gray-900 text-sm">Gil - Solodujin - Landín - Santillan - Torrico</p>
+</footer>
 
 </body>
 </html>

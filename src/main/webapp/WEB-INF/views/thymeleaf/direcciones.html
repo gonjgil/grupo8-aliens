@@ -4,123 +4,135 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Direcciones | ArtRoom</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
-    <link rel="stylesheet" th:href="@{/css/galeria.css}"/>
-
 </head>
+
 <body class="bg-gray-100 text-gray-800 flex flex-col min-h-screen">
-<!-- Header -->
-<header class="bg-white p-6 flex justify-between items-center shadow-md">
-    <h1 class="text-4xl font-extrabold text-gray-900 tracking-wider">
-        <a th:href="@{/galeria}" class="hover:text-blue-600 transition-colors">
-            ArtRoom
-        </a>
-    </h1>
 
-    <div class="flex items-center space-x-4">
-        <div th:if="${usuario != null}" class="flex items-center space-x-4">
-            <div th:text=" 'Hola, ' + ${usuario.email}"></div>
+<header class="bg-gray-900 text-white shadow-md">
+    <div class="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center">
+        <h1 class="text-4xl font-bold tracking-wide">
+            <a th:href="@{/galeria}" class="hover:text-blue-500 transition">ArtRoom</a>
+        </h1>
 
-            <a th:if="${artistaUsuario != null}"
-               th:href="@{'/perfilArtista/ver/' + ${artistaUsuario.id}}"
-               class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg"
-               title="Ver mi perfil de artista">
-                <i class="bi bi-palette-fill"></i>
-            </a>
+        <div class="flex items-center space-x-6">
+            <div th:if="${usuario != null}" class="flex items-center space-x-3 text-gray-200 px-2">
+                    <span th:text="'Hola, ' + ${usuario.nombre}"></span>
 
-            <a th:if="${artistaUsuario == null}"
-               th:href="@{/perfilArtista/nuevo}"
-               class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg"
-               title="Crear nuevo artista">
-                <i class="bi bi-person-plus"></i>
-            </a>
+                <a th:href="@{/usuario}" class="bg-gray-200 text-gray-700 hover:bg-green-600 hover:text-white py-2 px-6 rounded-md shadow transition"
+                        title="Perfil de usuario">
+                    <i class="fa-solid fa-user"></i>
+                </a>
 
-            <a th:href="@{/carrito}"
-               class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg relative">
-                <i class="fas fa-shopping-cart"></i>
-                <span data-carrito-count
-                      class="hidden absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
-                    0
-                </span>
-            </a>
-            <a th:href="@{/logout}"
-               class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg">
-                <i class="bi bi-box-arrow-right"></i>
-            </a>
-        </div>
-        <div th:unless="${usuario != null}" class="flex items-center space-x-4">
-            <a th:href="@{/login}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg">
-                Iniciar Sesión
-            </a>
+                <a th:href="@{/carrito}"
+                   class="bg-gray-200 text-gray-700 hover:bg-blue-600 hover:text-white py-2 px-6 rounded-md shadow transition relative">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span data-carrito-count
+                          class="hidden absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
+                        0
+                    </span>
+                </a>
+
+                <a th:href="@{/logout}"
+                   class="bg-gray-200 text-gray-700 hover:bg-red-600 hover:text-white py-2 px-6 rounded-md shadow transition">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </a>
+            </div>
+
+            <div th:unless="${usuario != null}">
+                <button th:onclick="|location.href='@{/login}'|"
+                        class="bg-gray-200 text-gray-700 hover:bg-blue-600 hover:text-white font-semibold py-2 px-6 rounded-md shadow transition">
+                    Iniciar Sesión
+                </button>
+            </div>
         </div>
     </div>
-
-
 </header>
 
-<main class="flex flex-col flex-grow w-full px-4 py-8">
-    <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
-        <h2 class="text-2xl font-bold mb-6">Mis Direcciones</h2>
+<main class="flex flex-col flex-grow w-full px-4 py-10 max-w-5xl mx-auto">
 
-        <div th:if="${direcciones != null and !#lists.isEmpty(direcciones)}" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div th:each="direccion : ${direcciones}" class="p-4 border rounded-lg bg-gray-50 relative">
-                <p><strong th:text="${direccion.nombreCalle} + ' ' + ${direccion.altura}"></strong></p>
-                <p th:text="${direccion.ciudadBarrio} + ', ' + ${direccion.provincia} + ' - CP ' + ${direccion.codigoPostal}"></p>
+    <h2 class="text-3xl font-semibold mb-8 text-gray-700">Mis Direcciones</h2>
 
-                <!-- Badge de dirección predeterminada -->
-                <p th:if="${direccion.predeterminada}" class="text-green-600 font-bold mt-2">
+    <div class="bg-white p-6 rounded-xl shadow border border-gray-200">
+
+        <div th:if="${direcciones != null and !#lists.isEmpty(direcciones)}"
+             class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <div th:each="direccion : ${direcciones}"
+                 class="p-5 border border-gray-200 rounded-xl bg-gray-50 shadow-sm">
+
+                <p class="text-lg font-semibold text-gray-800"
+                   th:text="${direccion.nombreCalle} + ' ' + ${direccion.altura}"></p>
+
+                <p class="text-gray-600"
+                   th:text="${direccion.ciudadBarrio} + ', ' + ${direccion.provincia} + ' - CP ' + ${direccion.codigoPostal}"></p>
+
+                <p th:if="${direccion.predeterminada}"
+                   class="text-green-600 font-semibold mt-2">
                     Predeterminada
                 </p>
 
-                <!-- Botón para marcar como predeterminada -->
                 <form th:if="${!direccion.predeterminada}"
                       th:action="@{'/usuario/direccion/' + ${direccion.id} + '/predeterminada'}"
-                      method="post" class="mt-2">
-                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-md">
+                      method="post" class="mt-3">
+                    <button type="submit"
+                            class="bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-md shadow
+                                   hover:bg-blue-600 hover:text-white transition w-full">
                         Seleccionar como predeterminada
                     </button>
                 </form>
 
-                <div class="mt-3 flex gap-2">
-                    <form th:action="@{/usuario/direccion/{id}(id=${direccion.id})}" method="get">
-                        <button type="submit" class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded-md">
+                <div class="mt-4 flex gap-3">
+
+                    <form th:action="@{/usuario/direccion/{id}(id=${direccion.id})}" method="get" class="flex-grow">
+                        <button type="submit"
+                                class="w-full bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-md shadow
+                                       hover:bg-yellow-500 hover:text-white transition">
                             Editar
                         </button>
                     </form>
 
-                    <form th:action="@{/usuario/direccion/eliminar/{id}(id=${direccion.id})}" method="post" onsubmit="return confirm('¿Deseas eliminar esta dirección?');">
-                        <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md">
+                    <form th:action="@{/usuario/direccion/eliminar/{id}(id=${direccion.id})}"
+                          method="post"
+                          onsubmit="return confirm('¿Deseas eliminar esta dirección?');"
+                          class="flex-grow">
+                        <button type="submit"
+                                class="w-full bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-md shadow
+                                       hover:bg-red-600 hover:text-white transition">
                             Eliminar
                         </button>
                     </form>
+
                 </div>
             </div>
         </div>
 
-        <div th:if="${direcciones == null or #lists.isEmpty(direcciones)}" class="p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-yellow-800">
+        <div th:if="${direcciones == null or #lists.isEmpty(direcciones)}"
+             class="p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-yellow-800">
             No tienes direcciones registradas.
         </div>
 
+        <!-- AGREGAR -->
         <div class="mt-6">
             <a th:href="@{/usuario/direccion/}"
-               class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md font-bold transition">
+               class="inline-block bg-gray-200 text-gray-700 font-semibold py-2 px-6 rounded-md shadow
+                      hover:bg-green-600 hover:text-white transition">
                 Agregar Nueva Dirección
             </a>
         </div>
     </div>
+
 </main>
-<!-- Footer -->
-<footer
-        class="bg-gray-300 p-6 text-center text-gray-700 mt-12 shadow-inner">
+
+<footer class="bg-gray-500 text-gray-200 py-6 mt-12 text-center shadow-inner">
     <p>&copy; 2025 Grupo 8</p>
-    <p class="integrantes">Gil - Solodujin - Landín - Santillan - Torrico</p>
+    <p class="text-gray-900 text-sm">Gil - Solodujin - Landín - Santillan - Torrico</p>
 </footer>
 
 </body>
+
 <script>
     // Actualizar contador del carrito
     function actualizarContadorCarrito() {

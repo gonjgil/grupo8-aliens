@@ -8,7 +8,6 @@ body {
 /* Layout principal */
 .obra-page {
     width: 100%;
-    min-height: 80vh;
     display: flex;
     flex-direction: column; /* mobile */
     padding: 16px; /* padding lateral en móvil */
@@ -19,7 +18,6 @@ body {
     .obra-page {
         flex-direction: row;
         align-items: center; /* centra contenido verticalmente */
-        max-height: 80vh; /* limita altura total */
         padding-left: 40px; /* padding lateral en desktop */
         padding-right: 40px;
     }
@@ -60,6 +58,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center; /* centra verticalmente */
+    align-items: center;
     max-height: 500px; /* opcional */
 }
 

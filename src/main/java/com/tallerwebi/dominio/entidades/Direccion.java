@@ -50,7 +50,10 @@ public class Direccion {
     }
 
     public Direccion() {
+    }
 
+    public Direccion(Long id) {
+    this.id = id;
     }
 
     // getters y setters

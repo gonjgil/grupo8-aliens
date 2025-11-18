@@ -1,9 +1,14 @@
 package com.tallerwebi.dominio.servicioImpl;
 
+import com.tallerwebi.dominio.ServicioPassword;
+import com.tallerwebi.dominio.entidades.Artista;
 import com.tallerwebi.dominio.entidades.Direccion;
 import com.tallerwebi.dominio.entidades.Usuario;
+import com.tallerwebi.dominio.repositorios.RepositorioArtista;
+import com.tallerwebi.dominio.repositorios.RepositorioCarrito;
 import com.tallerwebi.dominio.repositorios.RepositorioUsuario;
 import com.tallerwebi.dominio.ServicioUsuario;
+import com.tallerwebi.infraestructura.RepositorioArtistaImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,10 +18,16 @@ import org.springframework.transaction.annotation.Transactional;
 public class ServicioUsuarioImpl implements ServicioUsuario {
 
     private final RepositorioUsuario repositorioUsuario;
+    private final RepositorioArtista repositorioArtista;
+    private final ServicioPassword servicioPassword;
+    private final RepositorioCarrito repositorioCarrito;
 
     @Autowired
-    public ServicioUsuarioImpl(RepositorioUsuario repositorioUsuario) {
+    public ServicioUsuarioImpl(RepositorioUsuario repositorioUsuario, RepositorioArtistaImpl repositorioArtista, ServicioPassword servicioPassword, RepositorioCarrito repositorioCarrito) {
         this.repositorioUsuario = repositorioUsuario;
+        this.repositorioArtista = repositorioArtista;
+        this.servicioPassword = servicioPassword;
+        this.repositorioCarrito = repositorioCarrito;
     }
 
     @Override
@@ -50,7 +61,7 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
             }
         }
 
-        repositorioUsuario.guardar(usuario);
+        repositorioUsuario.modificar(usuario);
     }
 
     @Override
@@ -74,4 +85,50 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
 
         repositorioUsuario.modificar(usuario);
     }
+
+    @Override
+    public void cambiarPassword(Usuario usuario, String passwordActual, String nuevoPassword) {
+
+        if (!servicioPassword.verificarPassword(passwordActual, usuario.getPassword())) {
+            throw new RuntimeException("La contraseña actual es incorrecta.");
+        }
+
+        if (servicioPassword.verificarPassword(nuevoPassword, usuario.getPassword())) {
+            throw new RuntimeException("La nueva contraseña debe ser diferente a la actual.");
+        }
+
+        String passwordHasheado = servicioPassword.hashearPassword(nuevoPassword);
+        usuario.setPassword(passwordHasheado);
+
+        repositorioUsuario.guardar(usuario);
+    }
+
+
+    @Override
+    @Transactional
+    public void eliminarCuenta(Usuario usuario) {
+        Artista artista = repositorioArtista.buscarArtistaPorUsuario(usuario);
+        if (artista != null) {
+            repositorioArtista.eliminar(artista);
+        }
+        repositorioCarrito.eliminarPorUsuario(usuario);
+        repositorioUsuario.eliminar(usuario);
+    }
+
+    @Override
+    public void actualizarUsuario(Usuario usuario) {
+        repositorioUsuario.modificar(usuario);
+    }
+
+    @Override
+    public Usuario actualizarDatosUsuario(Usuario usuarioExistente, Usuario datosFormulario) {
+        usuarioExistente.setNombre(datosFormulario.getNombre());
+        usuarioExistente.setEmail(datosFormulario.getEmail());
+        usuarioExistente.setTelefono(datosFormulario.getTelefono());
+
+        repositorioUsuario.guardar(usuarioExistente);
+
+        return usuarioExistente;
+    }
+
 }

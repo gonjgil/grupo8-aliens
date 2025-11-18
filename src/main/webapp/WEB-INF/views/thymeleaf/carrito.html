@@ -4,149 +4,201 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Carrito de Compras | ArtRoom</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <!-- Boostrap core css -->
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
-    <link rel="stylesheet" th:href="@{/css/galeria.css}"/>
 </head>
 
 <body class="bg-gray-100 text-gray-800 flex flex-col min-h-screen">
-<!-- Header -->
-<header class="bg-white p-6 flex justify-between items-center shadow-md">
-    <h1 class="text-4xl font-extrabold text-gray-900 tracking-wider">
-        <a th:href="@{/galeria}" class="hover:text-blue-600 transition-colors">
-            ArtRoom
-        </a>
-    </h1>
 
-    <div class="flex items-center space-x-4">
-        <div th:if="${usuario != null}" class="flex items-center space-x-4">
-            <div th:text=" 'Hola, ' + ${usuario.email}"></div>
-            <a th:href="@{/logout}"
-               class="bg-red-600 hover:bg-red-700 fa-solid fa-right-from-bracket text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg">
-            </a>
-        </div>
-        <div th:unless="${usuario != null}">
-            <button
-                    th:onclick="|location.href='@{/login}'|"
-                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg"
-            >
-                Iniciar Sesión
-            </button>
+<header class="bg-gray-900 text-white shadow-md">
+    <div class="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center">
+        <h1 class="text-4xl font-bold tracking-wide">
+            <a th:href="@{/galeria}" class="hover:text-blue-500 transition">ArtRoom</a>
+        </h1>
+
+        <div class="flex items-center space-x-6">
+            <div th:if="${usuario != null}" class="flex items-center space-x-3 text-gray-200 px-2">
+                <span th:text="'Hola, ' + ${usuario.nombre}"></span>
+
+                <a th:href="@{/usuario}" class="bg-gray-200 text-gray-700 hover:bg-green-600 hover:text-white py-2 px-6 rounded-md shadow transition"
+                   title="Perfil de usuario">
+                    <i class="fa-solid fa-user"></i>
+                </a>
+
+                <a th:href="@{/logout}"
+                   class="bg-gray-200 text-gray-700 hover:bg-red-600 hover:text-white py-2 px-6 rounded-md shadow transition">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </a>
+            </div>
+
+            <div th:unless="${usuario != null}">
+                <button th:onclick="|location.href='@{/login}'|"
+                        class="bg-gray-200 text-gray-700 hover:bg-blue-600 hover:text-white font-semibold py-2 px-6 rounded-md shadow transition">
+                    Iniciar Sesión
+                </button>
+            </div>
         </div>
     </div>
-
-
 </header>
 
-<main class="flex flex-col flex-grow w-full px-4 py-8">
-    <div class="container carrito-container">
-        <h2 class="text-2xl font-semibold mb-6 text-center">Carrito de Compras</h2>
+<main class="flex flex-col flex-grow w-full px-4 py-10 max-w-7xl mx-auto">
 
-        <!-- Tabla de productos -->
-        <table class="table align-middle">
-            <thead class="table-light">
-            <tr>
-                <th>Obra</th>
-                <th>Formato</th>
-                <th>Precio</th>
-                <th>Cantidad</th>
-                <th>Subtotal</th>
-                <th></th>
-            </tr>
-            </thead>
+    <h2 class="text-4xl font-semibold mb-10 text-gray-800 text-center">Carrito de Compras</h2>
 
-            <tbody>
-            <tr th:each="item : ${items}">
-                <td th:text="${item.obraTitulo}"></td>
-                <td>
-                    <span class="badge bg-secondary" th:text="${item.formatoNombre}"></span>
-                </td>
-                <td th:text="'$' + ${#numbers.formatDecimal(item.obraPrecio, 1, 2)}"></td>
-                <td>
-                    <div class="flex items-center justify-start space-x-2">
-                        <form th:action="@{/carrito/disminuir/{id}(id=${item.obraId})}" method="post" style="display:inline">
+    <div class="bg-white shadow-xl rounded-lg p-6">
+
+        <div class="overflow-x-auto">
+            <table class="table table-borderless align-middle">
+                <thead class="bg-gray-100 border-b">
+                <tr class="text-gray-600 uppercase text-sm tracking-wider">
+                    <th>Obra</th>
+                    <th>Formato</th>
+                    <th>Precio</th>
+                    <th class="text-center">Cantidad</th>
+                    <th>Subtotal</th>
+                    <th></th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="item : ${items}" class="border-b hover:bg-gray-50 transition">
+
+                    <td class="font-medium" th:text="${item.obraTitulo}"></td>
+
+                    <td>
+                        <span class="badge bg-secondary px-3 py-2" th:text="${item.formatoNombre}"></span>
+                    </td>
+
+                    <td class="font-semibold text-gray-700"
+                        th:text="'$' + ${#numbers.formatDecimal(item.obraPrecio,1,2)}"></td>
+
+                    <td>
+                        <div class="flex justify-center items-center space-x-3">
+
+                            <form th:action="@{/carrito/disminuir/{id}(id=${item.obraId})}" method="post">
+                                <input type="hidden" name="formato" th:value="${item.formato}" />
+                                <button class="w-8 h-8 bg-gray-200 hover:bg-gray-300 rounded-full text-lg font-bold flex items-center justify-center">-</button>
+                            </form>
+
+                            <span class="text-lg font-semibold" th:text="${item.cantidad}">1</span>
+
+                            <form th:action="@{/carrito/aumentar/{id}(id=${item.obraId})}" method="post">
+                                <input type="hidden" name="formato" th:value="${item.formato}" />
+                                <button class="w-8 h-8 bg-gray-200 hover:bg-gray-300 rounded-full text-lg font-bold flex items-center justify-center">+</button>
+                            </form>
+
+                        </div>
+                    </td>
+
+                    <td class="font-semibold text-gray-700"
+                        th:text="'$' + ${#numbers.formatDecimal(item.subtotal,1,2)}"></td>
+
+                    <td>
+                        <form th:action="@{/carrito/eliminar/{obraId}(obraId=${item.obraId})}" method="post">
                             <input type="hidden" name="formato" th:value="${item.formato}" />
-                            <button type="submit" class="w-8 h-8 flex items-center justify-center
-                            bg-gray-200 hover:bg-gray-300 rounded-full text-lg font-bold">-</button>
+                            <button class="text-red-600 hover:text-red-800 transition">
+                                <i class="fas fa-trash text-xl"></i>
+                            </button>
                         </form>
+                    </td>
 
-                        <span class="w-10 text-center font-semibold"><span th:text="${item.cantidad}">1</span></span>
+                </tr>
+                </tbody>
+            </table>
+        </div>
 
-                        <form th:action="@{/carrito/aumentar/{id}(id=${item.obraId})}" method="post" style="display:inline">
-                            <input type="hidden" name="formato" th:value="${item.formato}" />
-                            <button type="submit" class="w-8 h-8 flex items-center justify-center
-                            bg-gray-200 hover:bg-gray-300 rounded-full text-lg font-bold">+</button>
-                        </form>
+        <p th:if="${#lists.isEmpty(items)}" class="text-center text-gray-500 py-4">
+            Tu carrito está vacío.
+        </p>
+
+        <div th:if="${!#lists.isEmpty(items)}" class="mt-8">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+                <div class="bg-gray-50 rounded-lg p-6 shadow-inner">
+
+                    <h3 class="font-semibold text-lg mb-3">Dirección de envío</h3>
+
+                    <div th:if="${direccion != null}">
+                        <p class="text-gray-700" th:text="${direccion.nombreCalle} + ' ' + ${direccion.altura}"></p>
+                        <p class="text-gray-700" th:text="${direccion.codigoPostal} + ', ' + ${direccion.ciudadBarrio}"></p>
+
+                        <a th:href="@{/usuario/direcciones}"
+                           class="text-blue-600 hover:underline mt-2 inline-block">
+                            Cambiar dirección
+                        </a>
                     </div>
-                </td>
-                <td th:text="'$' + ${#numbers.formatDecimal(item.subtotal, 1, 2)}"></td>
-                <td>
-                    <form th:action="@{/carrito/eliminar/{obraId}(obraId=${item.obraId})}" method="post">
-                        <input type="hidden" name="formato" th:value="${item.formato}" />
-                        <button type="submit" class="text-red-600 hover:text-red-800 font-semibold">
-                            <i class="fas fa-trash mr-2"></i>
+
+                    <div th:if="${direccion == null}">
+                        <p class="text-red-600">Debes agregar una dirección para calcular el envío.</p>
+                        <a th:href="@{/usuario/direcciones}"
+                           class="text-blue-600 hover:underline">
+                            Agregar dirección
+                        </a>
+                    </div>
+
+                </div>
+                <div class="bg-gray-50 rounded-lg p-6 shadow-inner text-right">
+
+                    <p class="text-lg font-semibold mb-2">
+                        Productos: $<span th:text="${#numbers.formatDecimal(total,1,2)}"></span>
+                    </p>
+
+                    <p class="text-lg font-semibold mb-2">
+                        Envío: $<span th:text="${#numbers.formatDecimal(costoEnvio,1,2)}"></span>
+                    </p>
+
+                    <p class="text-2xl font-bold mt-4">
+                        Total: $<span th:text="${#numbers.formatDecimal(totalFinal,1,2)}"></span>
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="flex justify-between mt-8">
+                <form th:action="@{/carrito/vaciar}" method="post">
+                    <button class="bg-gray-200 text-gray-700 border border-gray-300
+                                   hover:bg-red-600 hover:text-white
+                                   font-semibold py-2 px-5 rounded-md shadow transition">
+                        Vaciar carrito
+                    </button>
+                </form>
+
+                <div class="space-x-3">
+                    <a th:href="@{/galeria}"
+                       class="bg-gray-200 border border-gray-300 text-gray-700
+                              hover:bg-gray-900 hover:text-white
+                              font-semibold py-2 px-5 rounded-md transition">
+                        Seguir comprando
+                    </a>
+                    <form th:action="@{/carrito/finalizar}" method="post" class="inline">
+                        <button id="finalizarCompraBtn"
+                                class="bg-gray-200 text-gray-700 border border-gray-300
+                                       hover:bg-blue-600 hover:text-white
+                                       font-semibold py-2 px-5 rounded-md shadow transition">
+                            Finalizar compra
                         </button>
                     </form>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <p th:if="${#lists.isEmpty(items)}">Tu carrito esta vacio.</p>
 
-        <div th:if="${!#lists.isEmpty(items)}">
-            <!-- Total y botones -->
-            <div class="flex justify-between items-center mt-4">
-                <div class="envio w-1/2">
-                    <div th:if="${direccion != null}">
-                        <p th:text="${direccion.nombreCalle} + ' ' + ${direccion.altura}"></p>
-                        <p th:text="${direccion.codigoPostal} + ', ' + ${direccion.ciudadBarrio}"></p>
-                        <a th:href="@{/usuario/direcciones}" class="text-blue-600 hover:underline">Cambiar dirección</a>
-                    </div>
-                    <div th:if="${direccion == null}">
-                        <p>Debes agregar una dirección para calcular el costo de envío.</p>
-                        <a th:href="@{/usuario/direcciones}" class="text-blue-600 hover:underline">Agregar dirección</a>
-                    </div>
                 </div>
 
-                <div class="total w-1/2 text-right">
-                    <p class="fw-bold text-end fs-5">
-                        Productos: $<span th:text="${#numbers.formatDecimal(total, 1, 2)}"></span>
-                    </p>
-                    <p class="fw-bold text-end fs-5">
-                        Envio: $<span th:text="${#numbers.formatDecimal(costoEnvio, 1, 2)}"></span>
-                    </p>
-                    <p class="fw-bold text-end fs-5">
-                        Total: $<span th:text="${#numbers.formatDecimal(totalFinal, 1, 2)}"></span>
-                    </p>
-                </div>
             </div>
 
-            <div class="d-flex justify-content-between align-items-center mt-4">
-                <form th:action="@{/carrito/vaciar}" method="post">
-                    <button class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-200" type="submit">Vaciar carrito</button>
-                </form>
-                <div>
-                    <form th:action="@{/carrito/finalizar}" method="post">
-                        <a th:href="@{/galeria}" class="border border-gray-900  text-gray-400 hover:bg-gray-400 hover:text-white font-semibold py-2 px-4
-                    rounded transition duration-200">Seguir comprando</a>
-                        <button id="finalizarCompraBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                                type="submit">Finalizar compra</button>
-                    </form>
-                </div>
-            </div>
         </div>
-        <p th:if="${mensaje}" class="alert alert-success mt-3" th:text="${mensaje}">
-        <p th:if="${error != null}" class="alert alert-danger mt-3" th:text="${error}">
+
+        <p th:if="${mensaje}" class="alert alert-success mt-4" th:text="${mensaje}"></p>
+        <p th:if="${error}" class="alert alert-danger mt-4" th:text="${error}"></p>
 
     </div>
+
 </main>
-<!-- Footer -->
-<footer
-        class="bg-gray-300 p-6 text-center text-gray-700 mt-12 shadow-inner">
+
+<footer class="bg-gray-500 text-gray-200 py-6 mt-12 text-center shadow-inner">
     <p>&copy; 2025 Grupo 8</p>
-    <p class="integrantes">Gil - Solodujin - Landín - Santillan - Torrico</p>
+    <p class="text-gray-900 text-sm">Gil - Solodujin - Landín - Santillan - Torrico</p>
 </footer>
 
 </body>
@@ -168,22 +220,15 @@
                     return;
                 }
 
-                // Mostrar costo envío
                 document.getElementById("envioMonto").textContent = data;
-
-                // Mostrar mensaje opcional
                 document.getElementById("resultadoEnvio").textContent =
                     "Costo de envío: $" + data;
 
-                // Obtener total de productos (ya renderizado por Thymeleaf)
                 const totalProductos = parseFloat(
                     document.getElementById("totalProductos").textContent
                 );
 
-                // Calcular total final
                 const totalFinal = totalProductos + data;
-
-                // Actualizar DOM
                 document.getElementById("totalFinal").textContent = totalFinal.toFixed(2);
             })
             .catch(err => console.error(err));
@@ -192,13 +237,11 @@
 
 
 <script th:inline="javascript">
-    // Solo ejecutar el script si hay items en el carrito
     /*[# th:if="${!#lists.isEmpty(items)}"]*/
     document
       .getElementById('finalizarCompraBtn')
       .addEventListener('click', async () => {
 
-        // Crear array de items basado en las obras del carrito
         const items = [];
 
         /*[# th:each="item : ${items}"]*/
@@ -220,10 +263,6 @@
           });
 
         try {
-            // const finalizarResponse = await fetch('/spring/carrito/finalizar', { method: 'POST', credentials: 'include'});
-            // if (!finalizarResponse.ok) {
-            //     throw new Error('No se pudo finalizar el carrito');
-            // }
           // Usar la URL correcta de tu aplicación Spring
           const response = await fetch('/spring/api/pagos', {
             method: 'POST',

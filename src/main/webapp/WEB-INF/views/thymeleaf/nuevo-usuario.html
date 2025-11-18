@@ -2,62 +2,69 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Registrate | ArtRoom</title>
-
     <script src="https://cdn.tailwindcss.com"></script>
-
 </head>
 
-<body class="h-full">
+<body class="flex flex-col min-h-screen text-gray-800 bg-gray-100">
 
-<div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-    <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-        <h1 class="mt-10 text-center text-4xl font-bold tracking-tight text-indigo-600">ArtRoom</h1>
-        <h2 class="mt-5 text-center text-2xl/9 font-bold tracking-tight text-gray-900">Registrate</h2>
+<header class="bg-gray-900 text-white shadow-md">
+    <div class="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center">
+        <h1 class="text-4xl font-bold tracking-wide">
+            <a th:href="@{/galeria}" class="hover:text-blue-500 transition">ArtRoom</a>
+        </h1>
     </div>
-    <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form action="#" th:action="@{/registrarme}" method="POST" th:object="${usuario}" class="space-y-6">
+</header>
+
+<main class="flex flex-col flex-grow w-full px-4 py-10">
+    <div class="max-w-md m-auto bg-white p-8 rounded-xl shadow border border-gray-200">
+
+        <h2 class="text-center text-2xl font-bold text-gray-900 mb-6">Registrate</h2>
+
+        <form th:action="@{/registrarme}" method="POST" th:object="${usuario}" class="space-y-6">
+
             <div>
-                <label for="email" class="block text-sm/6 font-medium text-gray-900">Dirección de Correo
-                    Electrónico</label>
-                <div class="mt-2">
-                    <input
-                            th:field="*{email}"
-                            id="email"
-                            type="email"
-                            name="email"
-                            required
-                            autocomplete="email"
-                            class="block w-full rounded-md border border-gray-300 bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                    />
-                </div>
+                <label for="email" class="block text-sm font-medium text-gray-900">
+                    Dirección de Correo Electrónico
+                </label>
+                <input
+                        th:field="*{email}"
+                        id="email"
+                        type="email"
+                        name="email"
+                        required
+                        autocomplete="email"
+                        class="mt-2 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900
+                           focus:outline-none focus:ring-2 focus:ring-blue-600"
+                />
             </div>
 
             <div>
-                <div class="flex items-center justify-between">
-                    <label for="password" class="block text-sm/6 font-medium text-gray-900">Contraseña</label>
-                </div>
-                <div class="mt-2">
-                    <input
-                            th:field="*{password}"
-                            id="password"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password"
-                            class="block w-full rounded-md border border-gray-300 bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"/>
-                </div>
+                <label for="password" class="block text-sm font-medium text-gray-900">
+                    Contraseña
+                </label>
+                <input
+                        th:field="*{password}"
+                        id="password"
+                        type="password"
+                        name="password"
+                        required autocomplete="current-password"
+                        class="mt-2 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900
+                           focus:outline-none focus:ring-2 focus:ring-blue-600"
+                />
             </div>
 
-            <!-- categorías -->
             <div class="mt-4">
-                <label class="block text-sm font-medium text-gray-700">
+                <label class="block text-sm font-medium text-gray-800">
                     Elegí tus categorías favoritas (máximo 3):
                 </label>
 
                 <div class="obra-categorias flex flex-wrap gap-2 mt-3">
-                    <div th:each="cat : ${T(com.tallerwebi.dominio.enums.Categoria).values()}" th:if="${cat.name() != 'TEST'}" class="relative">
+                    <div th:each="cat : ${T(com.tallerwebi.dominio.enums.Categoria).values()}"
+                         th:if="${cat.name() != 'TEST'}" class="relative">
+
                         <input
                                 type="checkbox"
                                 th:id="'cat-' + ${cat.name()}"
@@ -66,14 +73,16 @@
                                 th:field="*{categoriasFavoritas}"
                                 class="hidden peer"
                         />
+
                         <label
                                 th:for="'cat-' + ${cat.name()}"
                                 th:text="${cat.categoria}"
                                 class="px-3 py-1 rounded-full text-sm cursor-pointer border transition
-               bg-gray-200 text-gray-700 border-gray-300
-               peer-checked:bg-indigo-400 peer-checked:text-white peer-checked:border-indigo-400
-               hover:bg-gray-300"
+                                   bg-gray-200 text-gray-700 border-gray-300
+                                   peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600
+                                   hover:bg-gray-300"
                         ></label>
+
                     </div>
                 </div>
 
@@ -83,30 +92,37 @@
             </div>
 
             <div>
-                <button type="submit" id="btn-registrarme"
-                        class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                <button type="submit"
+                        id="btn-registrarme"
+                        class="w-full rounded-md bg-indigo-600 text-white font-semibold py-2 px-4 shadow
+                               hover:bg-indigo-500 transition">
                     Registrarme
                 </button>
             </div>
 
-
-            <p th:if="${error != null}" class="alert alert-danger mt-2" th:text="'Error ' + ${error}"></p>
+            <p th:if="${error != null}" class="mt-2 text-center text-red-600 font-medium" th:text="'Error: ' + ${error}"></p>
         </form>
+
     </div>
-</div>
+</main>
+
+<footer class="bg-gray-500 text-gray-200 py-6 mt-12 text-center shadow-inner">
+    <p>&copy; 2025 Grupo 8</p>
+    <p class="text-gray-900 text-sm">Gil - Solodujin - Landín - Santillan - Torrico</p>
+</footer>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-      const checkboxes = document.querySelectorAll('input[type="checkbox"][name="categoriasFavoritas"]');
-      checkboxes.forEach(cb => {
-        cb.addEventListener('change', () => {
-          const seleccionados = Array.from(checkboxes).filter(c => c.checked);
-          if (seleccionados.length > 3) {
-            cb.checked = false;
-            alert("Solo podés elegir hasta 3 categorías.");
-          }
+        const checkboxes = document.querySelectorAll('input[type="checkbox"][name="categoriasFavoritas"]');
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', () => {
+                const seleccionados = Array.from(checkboxes).filter(c => c.checked);
+                if (seleccionados.length > 3) {
+                    cb.checked = false;
+                    alert("Solo podés elegir hasta 3 categorías.");
+                }
+            });
         });
-      });
     });
 </script>
 
