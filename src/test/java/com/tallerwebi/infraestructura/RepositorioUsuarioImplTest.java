@@ -7,6 +7,8 @@ import org.hibernate.query.Query;
 
 import com.tallerwebi.dominio.entidades.Usuario;
 
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertNull;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
@@ -90,4 +92,16 @@ public class RepositorioUsuarioImplTest {
 
         verify(session, times(1)).update(usuario);
     }
+
+    @Test
+    public void queElimineUnUsuarioExistente() {
+        Usuario usuario = new Usuario();
+        usuario.setId(1L);
+
+        repositorioUsuario.eliminar(usuario);
+
+        verify(sessionFactory, times(1)).getCurrentSession();
+        verify(session, times(1)).delete(usuario);
+    }
+
 }
