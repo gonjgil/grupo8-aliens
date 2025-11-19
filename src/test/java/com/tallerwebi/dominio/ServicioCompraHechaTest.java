@@ -1,7 +1,5 @@
 package com.tallerwebi.dominio;
 
-import com.mercadopago.client.payment.PaymentClient;
-import com.mercadopago.resources.payment.Payment;
 import com.tallerwebi.dominio.entidades.*;
 import com.tallerwebi.dominio.enums.EstadoCarrito;
 import com.tallerwebi.dominio.enums.EstadoPago;
@@ -14,6 +12,8 @@ import com.tallerwebi.dominio.repositorios.RepositorioCompraHecha;
 import com.tallerwebi.dominio.servicioImpl.ServicioCompraHechaImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,6 +31,7 @@ public class ServicioCompraHechaTest {
     private RepositorioCarrito repositorioCarrito;
     private ServicioPago servicioPago;
     private ServicioCarrito servicioCarrito;
+    private ServicioMail servicioMail;
     private ServicioCompraHechaImpl servicioOrdenCompra;
 
     @BeforeEach
@@ -39,7 +40,8 @@ public class ServicioCompraHechaTest {
         this.repositorioCarrito = mock(RepositorioCarrito.class);
         this.servicioPago = mock(ServicioPago.class);
         this.servicioCarrito = mock(ServicioCarrito.class);
-        this.servicioOrdenCompra = new ServicioCompraHechaImpl(repositorioCompraHecha, repositorioCarrito,  servicioPago, servicioCarrito);
+        this.servicioMail = mock(ServicioMail.class);
+        this.servicioOrdenCompra = new ServicioCompraHechaImpl(repositorioCompraHecha, repositorioCarrito,  servicioPago, servicioCarrito, servicioMail);
     }
 
     @Test
@@ -82,6 +84,12 @@ public class ServicioCompraHechaTest {
         assertThat(ordenCreada.getUsuario().getEmail(), is(compraEsperada.getUsuario().getEmail()));
         assertThat(ordenCreada.getPrecioFinal(), is(compraEsperada.getPrecioFinal()));
         assertThat(ordenCreada.getPagoId(), is(compraEsperada.getPagoId()));
+        verify(servicioMail, times(1))
+                .enviarMailConfirmacionCompra(
+                        ArgumentMatchers.any(Usuario.class),
+                        ArgumentMatchers.any(CompraHecha.class),
+                        anyList()
+                );
     }
 
     @Test

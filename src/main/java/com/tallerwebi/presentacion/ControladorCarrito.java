@@ -193,17 +193,6 @@ public class ControladorCarrito {
         }
 
         try {
-            // Lógica de finalización de compra
-//            servicioCarrito.finalizarCompra(usuario);
-
-
-            // Envia correo de confirmación
-            String asunto = "Confirmación de compra - ArtRoom";
-            String cuerpo = "¡Hola " + usuario.getEmail() + "!\n\n" +
-                    "Tu compra fue realizada con éxito.\n" +
-                    "Gracias por confiar en nosotros";
-
-            servicioMail.enviarMail(usuario.getEmail(), asunto, cuerpo);
 
             // Mensaje de éxito y redirección
             redirectAttributes.addFlashAttribute("mensaje", "Compra finalizada con éxito. Se envió un correo de confirmación.");
