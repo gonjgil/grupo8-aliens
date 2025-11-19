@@ -12,6 +12,8 @@ import com.tallerwebi.dominio.enums.EstadoCarrito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.Query;
+
 @Repository
 public class RepositorioCarritoImpl implements RepositorioCarrito {
 
@@ -57,6 +59,16 @@ public class RepositorioCarritoImpl implements RepositorioCarrito {
     @Override
     public void eliminar(Carrito carrito) {
         this.sessionFactory.getCurrentSession().delete(carrito);
+    }
+
+    @Override
+    public void eliminarPorUsuario(Usuario usuario) {
+        Query query = sessionFactory.getCurrentSession()
+                .createQuery("DELETE FROM Carrito c WHERE c.usuario = :usuario");
+        query.setParameter("usuario", usuario);
+
+        int eliminados = query.executeUpdate();
+        System.out.println("Carritos eliminados: " + eliminados);
     }
 
     @Override

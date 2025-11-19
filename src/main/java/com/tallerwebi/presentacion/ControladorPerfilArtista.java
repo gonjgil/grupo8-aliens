@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 
@@ -66,8 +67,14 @@ public class ControladorPerfilArtista {
 
     //GET para mostrar el formulario
     @GetMapping("/nuevo")
-    public String mostrarFormularioNuevoArtista() {
-        return "nuevo_artista";
+    public ModelAndView mostrarFormularioNuevoArtista(HttpSession  session) {
+        ModelAndView mav = new ModelAndView("nuevo_artista");
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+        if (usuario == null)
+            return new ModelAndView("redirect:/login");
+
+        mav.addObject("usuario", usuario);
+        return mav;
     }
 
     //POST para recibir los datos y guardar

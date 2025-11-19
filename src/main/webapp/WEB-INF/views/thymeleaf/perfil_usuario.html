@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Perfil de Usuario | ArtRoom</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+</head>
+
+<body class="bg-gray-100 text-gray-800 flex flex-col min-h-screen">
+
+<header class="bg-gray-900 text-white shadow-md">
+    <div class="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center">
+        <h1 class="text-4xl font-bold tracking-wide">
+            <a th:href="@{/galeria}" class="hover:text-blue-500 transition">ArtRoom</a>
+        </h1>
+
+        <div class="flex items-center space-x-6">
+            <div th:if="${usuario != null}" class="flex items-center space-x-3 text-gray-200 px-2">
+                <span th:text="'Hola, ' + ${usuario.nombre}"></span>
+
+                <a th:href="@{/usuario}" class="bg-gray-200 text-gray-700 hover:bg-green-600 hover:text-white py-2 px-6 rounded-md shadow transition"
+                   title="Perfil de usuario">
+                    <i class="fa-solid fa-user"></i>
+                </a>
+
+                <a th:href="@{/carrito}"
+                   class="bg-gray-200 text-gray-700 hover:bg-blue-600 hover:text-white py-2 px-6 rounded-md shadow transition relative">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span data-carrito-count
+                          class="hidden absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
+                        0
+                    </span>
+                </a>
+
+                <a th:href="@{/logout}"
+                   class="bg-gray-200 text-gray-700 hover:bg-red-600 hover:text-white py-2 px-6 rounded-md shadow transition">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </a>
+            </div>
+
+            <div th:unless="${usuario != null}">
+                <button th:onclick="|location.href='@{/login}'|"
+                        class="bg-gray-200 text-gray-700 hover:bg-blue-600 hover:text-white font-semibold py-2 px-6 rounded-md shadow transition">
+                    Iniciar Sesión
+                </button>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="flex flex-col flex-grow w-full px-4 py-10 max-w-5xl mx-auto">
+
+    <h2 class="text-3xl font-semibold mb-8 text-gray-700">Mi Perfil</h2>
+
+    <div class="space-y-4">
+
+        <a th:href="@{/usuario/info}"
+           class="flex items-center justify-between bg-white p-5 rounded-xl shadow
+                  hover:bg-gray-50 transition border border-gray-200">
+            <div class="flex items-center space-x-4">
+                <i class="fa-solid fa-user text-xl text-gray-600"></i>
+                <span class="text-lg font-medium">Información personal</span>
+            </div>
+            <i class="fa-solid fa-chevron-right text-gray-400"></i>
+        </a>
+
+        <a th:if="${artistaUsuario == null}" th:href="@{/perfilArtista/nuevo}"
+           class="flex items-center justify-between bg-white p-5 rounded-xl shadow
+                  hover:bg-gray-50 transition border border-gray-200">
+            <div class="flex items-center space-x-4">
+                <i class="fa-solid fa-user text-xl text-gray-600"></i>
+                <span class="text-lg font-medium">Artista nuevo</span>
+            </div>
+            <i class="fa-solid fa-chevron-right text-gray-400"></i>
+        </a>
+
+        <a th:if="${artistaUsuario != null}" th:href="@{'/perfilArtista/ver/' + ${artistaUsuario.id}}"
+           class="flex items-center justify-between bg-white p-5 rounded-xl shadow
+                  hover:bg-gray-50 transition border border-gray-200">
+            <div class="flex items-center space-x-4">
+                <i class="fa-solid fa-user text-xl text-gray-600"></i>
+                <span class="text-lg font-medium">Perfil de artista</span>
+            </div>
+            <i class="fa-solid fa-chevron-right text-gray-400"></i>
+        </a>
+
+        <a th:href="@{/usuario/direcciones}"
+           class="flex items-center justify-between bg-white p-5 rounded-xl shadow
+                  hover:bg-gray-50 transition border border-gray-200">
+            <div class="flex items-center space-x-4">
+                <i class="fa-solid fa-location-dot text-xl text-gray-600"></i>
+                <span class="text-lg font-medium">Mis direcciones</span>
+            </div>
+            <i class="fa-solid fa-chevron-right text-gray-400"></i>
+        </a>
+
+        <a th:href="@{/compras/historial}"
+           class="flex items-center justify-between bg-white p-5 rounded-xl shadow
+                  hover:bg-gray-50 transition border border-gray-200">
+            <div class="flex items-center space-x-4">
+                <i class="fa-solid fa-bag-shopping text-xl text-gray-600"></i>
+                <span class="text-lg font-medium">Historial de compras</span>
+            </div>
+            <i class="fa-solid fa-chevron-right text-gray-400"></i>
+        </a>
+
+        <a th:href="@{/usuario/configuracion}"
+           class="flex items-center justify-between bg-white p-5 rounded-xl shadow
+                  hover:bg-gray-50 transition border border-gray-200">
+            <div class="flex items-center space-x-4">
+                <i class="fa-solid fa-gear text-xl text-gray-600"></i>
+                <span class="text-lg font-medium">Administrar cuenta</span>
+            </div>
+            <i class="fa-solid fa-chevron-right text-gray-400"></i>
+        </a>
+
+    </div>
+
+</main>
+
+<footer class="bg-gray-500 text-gray-200 py-6 mt-12 text-center shadow-inner">
+    <p>&copy; 2025 Grupo 8</p>
+    <p class="text-gray-900 text-sm">Gil - Solodujin - Landín - Santillan - Torrico</p>
+</footer>
+
+<script>
+    // Actualizar contador del carrito
+    function actualizarContadorCarrito() {
+        fetch('/spring/carrito/contador')
+            .then(response => response.json())
+            .then(data => {
+                const contador = document.querySelector('[data-carrito-count]');
+                if(contador) {
+                    if(data.count > 0) {
+                        contador.textContent = data.count;
+                        contador.classList.remove('hidden');
+                    } else {
+                        contador.classList.add('hidden');
+                    }
+                }
+            })
+            .catch(error => console.error('Error actualizando contador:', error));
+    }
+    document.addEventListener('DOMContentLoaded', actualizarContadorCarrito);
+</script>
+</body>
+</html>

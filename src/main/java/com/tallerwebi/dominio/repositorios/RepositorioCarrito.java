@@ -11,5 +11,6 @@ public interface RepositorioCarrito {
     Carrito obtenerUltimoCarritoPorUsuario(Long usuarioId);
     Carrito crearCarritoParaUsuario(Usuario usuario);
     void eliminar(Carrito carrito);
+    void eliminarPorUsuario(Usuario usuario);
     void actualizarEstado(Long carritoId, EstadoCarrito estado);
 }

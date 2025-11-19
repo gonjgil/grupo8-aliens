@@ -13,12 +13,12 @@
 </head>
 <body class="bg-gray-100 text-gray-800">
 
-<header class="bg-white p-6 flex justify-between items-center shadow-md">
-    <h1 class="text-4xl font-extrabold text-gray-900 tracking-wider">
-        <a th:href="@{/galeria}" class="hover:text-blue-600 transition-colors">
-            ArtRoom
-        </a>
-    </h1>
+<header class="bg-gray-900 text-white shadow-md">
+    <div class="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center">
+        <h1 class="text-4xl font-bold tracking-wide">
+            <a th:href="@{/galeria}" class="hover:text-blue-500 transition">ArtRoom</a>
+        </h1>
+    </div>
 </header>
 
 <main class="obra-page flex flex-col md:flex-row w-full min-h-screen">
@@ -70,18 +70,16 @@
                 </div>
             </div>
         </div>
-
+        <button type="button" id="btn-cancelar" class="btn btn-cancelar mx-4">Cancelar</button>
         <button type="submit" id="btn-guardar" class="btn btn-guardar">Guardar cambios</button>
     </form>
 
 </main>
 
 <!-- Footer -->
-<footer
-        class="bg-gray-300 p-6 text-center text-gray-700 mt-12 shadow-inner"
->
+<footer class="bg-gray-500 text-gray-200 py-6 mt-12 text-center shadow-inner">
     <p>&copy; 2025 Grupo 8</p>
-    <p class="integrantes">Gil - Solodujin - Landín - Santillan - Torrico</p>
+    <p class="text-gray-900 text-sm">Gil - Solodujin - Landín - Santillan - Torrico</p>
 </footer>
 
 <script th:inline="javascript">
@@ -95,6 +93,18 @@
                 img.style.display = '';
             }
             reader.readAsDataURL(file);
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const btnCancelar = document.getElementById("btn-cancelar");
+        if (btnCancelar) {
+            btnCancelar.addEventListener("click", function() {
+                const confirmar = confirm("¿Seguro que querés cancelar? Se perderán los datos no guardados.");
+                if (confirmar) {
+                    window.history.back();
+                }
+            });
         }
     });
 </script>
