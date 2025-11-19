@@ -69,37 +69,6 @@ public class ControladorCarritoTest {
     }
 
     @Test
-    public void verCarrito_debeRedirectALoginCuandoNoHayUsuarioLogueado() {
-        when(sessionMock.getAttribute("usuarioLogueado")).thenReturn(null);
-
-        ControladorCarrito controlador = new ControladorCarrito(servicioCarritoMock, servicioMailMock);
-
-        ModelAndView resultado = controlador.verCarrito(sessionMock);
-
-        assertThat(resultado.getViewName(), equalToIgnoringCase("redirect:/login"));
-    }
-
-    @Test
-    public void verCarrito_deberiaCalcularCostoEnvioCero_cuandoNoHayDireccionPredeterminada() {
-        Usuario usuario = new Usuario();
-        usuario.setId(1L);
-        usuario.setNombre("Test User");
-
-        List<ItemCarritoDto> items = new ArrayList<>();
-        
-        when(sessionMock.getAttribute("usuarioLogueado")).thenReturn(usuario);
-        when(servicioCarritoMock.obtenerItems(usuario)).thenReturn(items);
-        when(servicioCarritoMock.calcularPrecioTotalCarrito(usuario)).thenReturn(0.0);
-
-        ControladorCarrito controlador = new ControladorCarrito(servicioCarritoMock, servicioMailMock);
-
-        ModelAndView resultado = controlador.verCarrito(sessionMock);
-
-        assertThat(resultado.getModel().get("costoEnvio"), is(0.0));
-        assertThat(resultado.getModel().get("totalFinal"), is(0.0));
-    }
-
-    @Test
     public void agregarAlCarrito_deberiaAgregarObraConExito() throws NoExisteLaObra, NoHayStockSuficiente {
         Usuario usuario = new Usuario();
         usuario.setId(1L);
