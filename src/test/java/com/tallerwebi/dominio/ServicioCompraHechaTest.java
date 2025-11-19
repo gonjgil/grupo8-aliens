@@ -31,6 +31,7 @@ public class ServicioCompraHechaTest {
     private RepositorioCarrito repositorioCarrito;
     private ServicioPago servicioPago;
     private ServicioCarrito servicioCarrito;
+    private ServicioMail servicioMail;
     private ServicioCompraHechaImpl servicioOrdenCompra;
 
     @BeforeEach
@@ -39,7 +40,8 @@ public class ServicioCompraHechaTest {
         this.repositorioCarrito = mock(RepositorioCarrito.class);
         this.servicioPago = mock(ServicioPago.class);
         this.servicioCarrito = mock(ServicioCarrito.class);
-        this.servicioOrdenCompra = new ServicioCompraHechaImpl(repositorioCompraHecha, repositorioCarrito,  servicioPago, servicioCarrito);
+        this.servicioMail = mock(ServicioMail.class);
+        this.servicioOrdenCompra = new ServicioCompraHechaImpl(repositorioCompraHecha, repositorioCarrito,  servicioPago, servicioCarrito, servicioMail);
     }
 
     @Test
