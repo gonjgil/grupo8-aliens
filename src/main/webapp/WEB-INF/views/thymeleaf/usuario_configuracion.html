@@ -106,10 +106,11 @@
     <p class="text-gray-900 text-sm">Gil - Solodujin - Landín - Santillan - Torrico</p>
 </footer>
 </body>
+
 <script>
     // Actualizar contador del carrito
     function actualizarContadorCarrito() {
-        fetch('/carrito/contador')
+        fetch('/spring/carrito/contador')
             .then(response => response.json())
             .then(data => {
                 const contador = document.querySelector('[data-carrito-count]');
@@ -126,4 +127,5 @@
     }
     document.addEventListener('DOMContentLoaded', actualizarContadorCarrito);
 </script>
+
 </html>
