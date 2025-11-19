@@ -46,7 +46,7 @@ public class ServicioPerfilArtistaImpl implements ServicioPerfilArtista {
         dto.setUrlTwitter(artista.getUrlTwitter());
 
         dto.setUsuarioId(artista.getUsuario() != null ? artista.getUsuario().getId() : null);
-
+        dto.setAceptaComisiones(artista.getAceptaComisiones());
         // Servicio devuelve el dto al Controlador.
         return dto;
     }
@@ -70,6 +70,11 @@ public class ServicioPerfilArtistaImpl implements ServicioPerfilArtista {
             artistaExistente.setUrlFacebook(datos.getUrlFacebook());
             artistaExistente.setUrlInstagram(datos.getUrlInstagram());
             artistaExistente.setUrlTwitter(datos.getUrlTwitter());
+            Boolean acepta = datos.getAceptaComisiones();
+            if (acepta == null) {
+                acepta = false; // checkbox destildado
+            }
+            artistaExistente.setAceptaComisiones(acepta);
             repositorioArtista.modificar(artistaExistente);
         }
     }

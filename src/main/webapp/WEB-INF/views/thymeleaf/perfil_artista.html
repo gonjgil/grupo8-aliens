@@ -9,6 +9,140 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" th:href="@{/css/perfil_artista.css}"/>
+    <style>
+
+    label {
+        font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    textarea,
+    select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+    }
+
+    input[type="submit"],
+    button {
+        background-color: #053c7a;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 0.25rem;
+        cursor: pointer;
+    }
+
+    input[type="submit"]:hover,
+    button:hover {
+        background-color: #b9041c;
+        color: white !important;
+    }
+
+    /* small responsive tweaks */
+    @media (max-width: 576px) {
+        .container { padding-left: 1rem; padding-right: 1rem; }
+    }
+
+    .obp-modal-body { max-height: 70vh; overflow-y: auto; }
+
+    /* Thumbnails */
+    #obp-thumbs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 6px;
+    }
+
+    .obp-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    /* Floating action button (FAB) - obp namespace */
+    .obp-fab {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        line-height: 1;
+        padding: 0;
+        z-index: 1200;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.18);
+        transition: transform .12s ease, box-shadow .12s ease;
+        background: linear-gradient(135deg, #8378b4, #3d1e77);
+        border: none;
+        color: #fff;
+    }
+
+    .obp-fab:hover {
+        transform: translateY(-4px) scale(1.03);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.22);
+        cursor: pointer;
+    }
+    .obp-fab:focus {
+        outline: 3px solid rgba(108,99,255,0.18);
+        outline-offset: 4px;
+    }
+
+    /* Smaller on very small screens */
+    @media (max-width: 420px) {
+        .obp-fab { width:50px; height:50px; font-size:20px; right:12px; bottom:12px; }
+    }
+
+    .obp-fab .bi { font-size: 22px; line-height: 1; }
+    .btn .bi { vertical-align: -0.125em; } /* pequeña corrección vertical */
+
+
+    .obp-modal.hidden { display: none !important; }
+    .obp-modal.flex { display: flex !important; align-items: center; justify-content: center; }
+
+    .container { max-width: 800px; margin-left: auto; margin-right: auto; }
+
+    /* Modal interno */
+    .obp-modal .obp-card { border-radius: 10px; background: #fff; }
+
+    /* Errores y estados */
+    p.text-red-600 { color: #dc2626; }
+    p.text-red-600.hidden{ display: none; }
+
+    #obp-next {
+        transition: transform .15s ease, background-color .15s ease;
+        background-color: #6b21a8;
+        color: #fff;
+    }
+    #obp-next:hover { background-color: #5b1890; transform: scale(1.02); }
+
+    #obp-prev:hover { background-color: #919396 !important; color: #111827; }
+
+    #obp-submit {
+        transition: background-color .15s ease;
+        background-color: #16a34a;
+        color: #fff;
+    }
+    #obp-submit:hover { background-color: #15803d; }
+
+    #obp-cancel:hover { color: #374151; padding: 2px 4px; background-color: #9b81ba !important; border-radius: 4px; }
+
+    #obp-fab {
+        transition: transform .12s ease, box-shadow .12s ease, background-color .12s ease;
+        background: linear-gradient(90deg,#4c1d95,#997ecc);
+    }
+    #obp-fab:hover {
+        background: linear-gradient(90deg,#bd71fb,#843ff4);
+        transform: translateY(-4px) scale(1.03);
+    }</style>
 </head>
 <body class="bg-gray-100 text-gray-800 flex flex-col min-h-screen">
 
@@ -63,6 +197,17 @@
 
                 <h3 class="nombre-artista" th:text="${mostrarArtista.nombre}">Nombre del artista</h3>
                 <p class="bio-artista" th:text="${mostrarArtista.biografia}"></p>
+                <div th:if="${esDuenio and mostrarArtista.aceptaComisiones == false}"
+                     class="alerta alerta-amarilla">
+                    <i class="bi bi-info-circle"></i>
+                    <p>No estás aceptando encargos personalizados.</p>
+
+                    <a th:href="@{'/perfilArtista/ver/' + ${mostrarArtista.id} + '/editar'}"
+                       class="btn-editar-comisiones">
+                        Activar Comisiones
+                    </a>
+
+                </div>
 
                 <div class="redes mt-3">
                     <a th:href="${mostrarArtista.urlFacebook}" target="_blank" class="link-red">Facebook</a>
@@ -71,10 +216,15 @@
                 </div>
 
                 <div class="mt-4" th:if="${esDuenio}">
-                    <button id="btn-editar-perfil" class="btn-editar" th:attr="data-artista-id=${mostrarArtista.id}">
-                        Editar Perfil
-                    </button>
-                    <a type="button" th:href="@{/obra/nueva}" id="btn-nueva-obra" class="btn-nueva-obra mt-3">Nueva Obra</a>
+                    <div>
+                        <a type="button" th:href="@{{id}/estadisticas (id=${artistaUsuario.id})}" id="btn-estadisticas" class="btn-nueva-obra mt-3">Ver estadísticas</a>
+                    </div>
+                    <div>
+                        <button id="btn-editar-perfil" class="btn-editar" th:attr="data-artista-id=${mostrarArtista.id}">
+                            Editar Perfil
+                        </button>
+                        <a type="button" th:href="@{/obra/nueva}" id="btn-nueva-obra" class="btn-nueva-obra mt-3">Nueva Obra</a>
+                    </div>
                 </div>
 
 
@@ -123,15 +273,178 @@
             </div>
         </div>
     </section>
-
 </main>
+
+<!--abre modal de solicitud de obra personalizada -->
+
+<div th:if="${usuario != null  and mostrarArtista.aceptaComisiones}">
+    <button id="obp-fab"
+            aria-label="Solicitar comisión"
+            title="Solicitar comisión"
+            class="obp-fab fixed right-6 bottom-6 w-14 h-14 rounded-full flex items-center justify-center text-white shadow-lg transform transition hover:-translate-y-1">
+        <i class="bi bi-palette-fill text-xl" aria-hidden="true"></i>
+    </button></div>
+
+<!-- Mostrar mensaje si NO acepta comisiones -->
+<!--<div th:if="${!mostrarArtista.aceptaComisiones and !esDuenio}"-->
+<!--     class="mt-6 p-4 bg-red-100 border border-red-300 text-red-700 rounded-lg text-center shadow-sm max-w-xl mx-auto">-->
+<!--    <i class="bi bi-x-circle text-2xl"></i>-->
+<!--    <p class="mt-2 text-base font-semibold">-->
+<!--        Este artista no está aceptando encargos personalizados actualmente.-->
+<!--    </p>-->
+<!--</div>-->
+
+<!-- Modal (Tailwind) -->
+<div id="obp-modal" class="obp-modal fixed inset-0 z-50 hidden items-center justify-center" aria-hidden="true">
+    <!-- backdrop -->
+    <div id="obp-backdrop" class="absolute inset-0 bg-black/50" data-close></div>
+
+    <div class="relative w-full max-w-3xl mx-4">
+        <div class="bg-white rounded-lg shadow-xl overflow-hidden">
+            <div class="flex items-center justify-between px-6 py-4 border-b">
+                <h3 id="obp-modal-label" class="text-lg font-medium">Encargá tu obra personalizada</h3>
+                <button id="obp-close" class="text-gray-500 hover:text-gray-800" aria-label="Cerrar modal">
+                    <i class="bi bi-x-lg text-2xl" aria-hidden="true"></i>
+                </button>
+            </div>
+
+            <div class="obp-modal-body max-h-[70vh] overflow-y-auto p-6">
+                <!-- Progress -->
+                <div class="mb-4">
+                    <div class="h-2 bg-gray-200 rounded-full">
+                        <div id="obp-progress" class="h-2 rounded-full bg-gradient-to-r from-purple-800 to-pink-400" style="width:33%"></div>
+                    </div>
+                    <div class="mt-2 text-xs text-gray-500 flex justify-between">
+                        <span>1. Datos</span><span>2. Detalles</span><span>3. Adjuntos/Envío</span>
+                    </div>
+                </div>
+
+                <form id="obp-form" class="space-y-4" novalidate>
+                    <!-- Paso 1 -->
+                    <div class="form-step obp-step" data-step="0">
+                        <h6 class="font-medium mb-3">Datos del Cliente</h6>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="obp-nombre" class="block text-sm font-medium text-gray-700">Nombre completo *</label>
+                                <input id="obp-nombre" type="text" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-2 focus:ring-purple-200" />
+                                <p class="text-sm text-red-600 hidden">El nombre es obligatorio.</p>
+                            </div>
+
+                            <div>
+                                <label for="obp-email" class="block text-sm font-medium text-gray-700">Email *</label>
+                                <input id="obp-email" type="email" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-2 focus:ring-purple-200" />
+                                <p class="text-sm text-red-600 hidden">Ingrese un email válido.</p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="obp-telefono" class="block text-sm font-medium text-gray-700 mt-3">Teléfono</label>
+                            <input id="obp-telefono" type="tel" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-2 focus:ring-purple-200" placeholder="Opcional" />
+                        </div>
+                    </div>
+
+                    <!-- Paso 2 -->
+                    <div class="form-step obp-step hidden" data-step="1">
+                        <h6 class="font-medium mb-3">Detalles de la obra</h6>
+
+                        <div>
+                            <label for="obp-tipo-obra" class="block text-sm font-medium text-gray-700">Tipo de obra *</label>
+                            <select id="obp-tipo-obra" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm py-2">
+                                <option value="">Seleccione...</option>
+                                <option value="Fisica">Fisica</option>
+                                <option value="IlustracionDigital">Digital</option>
+<!--                                <option value="Otro">Otro</option>-->
+                            </select>
+                            <p class="text-sm text-red-600 hidden">Seleccione un tipo de obra.</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="obp-tamano" class="block text-sm font-medium text-gray-700 mt-3">Tamaño (ej: 100cm x 70cm)</label>
+                                <input id="obp-tamano" type="text" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" placeholder="Opcional" />
+                            </div>
+<!--                            <div>-->
+<!--                                <label for="obp-estilo" class="block text-sm font-medium text-gray-700 mt-3">Estilo deseado</label>-->
+<!--                                <select id="obp-estilo" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm py-2">-->
+<!--                                    <option value="">Seleccione...</option>-->
+<!--                                    <option>Realista</option><option>Caricatura</option><option>Abstracto</option><option>Fantasía</option><option>Otro</option>-->
+<!--                                </select>-->
+<!--                            </div>-->
+                        </div>
+
+                        <div>
+                            <label for="obp-colores" class="block text-sm font-medium text-gray-700 mt-3">Colores predominantes</label>
+                            <input id="obp-colores" type="text" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" placeholder="Opcional" />
+                        </div>
+
+                        <div>
+                            <label for="obp-descripcion" class="block text-sm font-medium text-gray-700 mt-3">Descripción del pedido *</label>
+                            <textarea id="obp-descripcion" rows="4" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"></textarea>
+                            <p class="text-sm text-red-600 hidden">La descripción es obligatoria.</p>
+                        </div>
+                    </div>
+
+                    <!-- Paso 3 -->
+                    <div class="form-step obp-step hidden" data-step="2">
+                        <h6 class="font-medium mb-3">Referencias y envío</h6>
+
+                        <div>
+                            <label for="obp-files" class="block text-sm font-medium text-gray-700">Subir referencias (máx. 3 imágenes, PNG/JPG)</label>
+                            <input id="obp-files" type="file" accept="image/png, image/jpeg" multiple class="mt-1 block w-full text-sm text-gray-600" />
+                            <p class="text-xs text-gray-500 mt-1">Puedes subir hasta 3 imágenes.</p>
+                            <p id="obp-files-error" class="text-sm text-red-600 mt-1 hidden"></p>
+                            <div id="obp-thumbs" class="mt-3 flex flex-wrap gap-2"></div>
+                        </div>
+
+                        <div class="mt-3">
+                            <label for="obp-delivery-method" class="block text-sm font-medium text-gray-700">Método de entrega *</label>
+                            <p class="text-sm font-medium text-gray-600">En caso de haber elegido tipo de obra Digital, seleccione Retiro.</p>
+                            <select id="obp-delivery-method" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm py-2">
+                                <option value="">Seleccione...</option>
+                                <option value="Retiro">Retiro</option>
+                                <option value="Envio">Envío</option>
+                            </select>
+                            <p class="text-sm text-red-600 hidden">Seleccione un método de entrega.</p>
+                        </div>
+
+                        <div id="obp-address-field" class="mt-3 hidden">
+                            <label for="obp-address" class="block text-sm font-medium text-gray-700">Dirección</label>
+                            <input id="obp-address" type="text" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" placeholder="Dirección de envío" />
+                        </div>
+                    </div>
+
+                    <!-- Acciones -->
+                    <div class="flex justify-between items-center mt-4">
+                        <div>
+                            <button type="button" id="obp-prev" class="inline-flex items-center px-4 py-2 border rounded-md text-sm font-medium text-gray-700 bg-white shadow-sm " disabled>
+                                <i class="bi bi-arrow-left mr-2"></i>Volver
+                            </button>
+                        </div>
+
+                        <div class="space-x-2">
+                            <button type="button" id="obp-cancel" class="text-sm text-gray-500">Cancelar</button>
+                            <button type="button" id="obp-next" class="inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-md text-sm font-medium">
+                                Siguiente <i class="bi bi-arrow-right ml-2"></i>
+                            </button>
+                            <button type="submit" id="obp-submit" class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-md text-sm font-medium hidden">
+                                <i class="bi bi-check-lg mr-2"></i>Enviar solicitud
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <div id="obp-form-alert" class="mt-4"></div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <footer class="bg-gray-500 text-gray-200 py-6 mt-12 text-center shadow-inner">
     <p>&copy; 2025 Grupo 8</p>
     <p class="text-gray-900 text-sm">Gil - Solodujin - Landín - Santillan - Torrico</p>
 </footer>
 
-<script type="text/javascript" th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.bundle.min.js}"></script>
 <script type="module" th:src="@{/js/artista.js}"></script>
 <script>
     // Actualizar contador del carrito

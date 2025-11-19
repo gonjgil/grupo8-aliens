@@ -1,13 +1,18 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.ServicioEstadistica;
 import com.tallerwebi.dominio.entidades.Artista;
 import com.tallerwebi.dominio.ServicioCloudinary;
 import com.tallerwebi.dominio.ServicioPerfilArtista;
+import com.tallerwebi.dominio.entidades.Obra;
 import com.tallerwebi.dominio.entidades.Usuario;
+import com.tallerwebi.dominio.enums.Categoria;
 import com.tallerwebi.dominio.enums.TipoImagen;
 import com.tallerwebi.dominio.excepcion.NoExisteArtista;
+import com.tallerwebi.presentacion.dto.CategoriaEstadisticaDto;
 import com.tallerwebi.presentacion.dto.ObraDto;
 import com.tallerwebi.presentacion.dto.PerfilArtistaDTO;
+import com.tallerwebi.presentacion.dto.ObraDtoWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -17,7 +22,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -26,11 +34,13 @@ public class ControladorPerfilArtista {
 
     private ServicioPerfilArtista servicioPerfilArtista;
     private ServicioCloudinary servicioCloudinary;
+    private ServicioEstadistica servicioEstadistica;
 
     @Autowired
-    public ControladorPerfilArtista(ServicioPerfilArtista servicioPerfilArtista, ServicioCloudinary servicioCloudinary) {
+    public ControladorPerfilArtista(ServicioPerfilArtista servicioPerfilArtista, ServicioCloudinary servicioCloudinary, ServicioEstadistica servicioEstadistica) {
         this.servicioPerfilArtista = servicioPerfilArtista;
         this.servicioCloudinary = servicioCloudinary;
+        this.servicioEstadistica = servicioEstadistica;
     }
 
     // Muestra el perfil de un artista
@@ -128,11 +138,91 @@ public class ControladorPerfilArtista {
             PerfilArtistaDTO artistaActual = this.servicioPerfilArtista.obtenerPerfilArtista(idArtista);
             dto.setUrlFotoPerfil(artistaActual.getUrlFotoPerfil());
         }
+        Boolean acepta = dto.getAceptaComisiones();
+        if (acepta == null) {
+            acepta = false;
+        }
+        dto.setAceptaComisiones(acepta);
 
         dto.setId(idArtista);
         servicioPerfilArtista.actualizarPerfilArtista(dto);
 
         return "redirect:/perfilArtista/ver/" + idArtista;
+    }
+
+    @RequestMapping(path = "ver/{id}/estadisticas", method = RequestMethod.GET)
+    public ModelAndView mostrarEstadisticas(@PathVariable("id") Long idArtista, HttpServletRequest request) {
+        ModelMap model = new ModelMap();
+
+        Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
+        model.put("usuario", usuario);
+
+        try{
+            PerfilArtistaDTO artista = this.servicioPerfilArtista.obtenerPerfilArtista(idArtista);
+
+            if(usuario == null || !usuario.getId().equals(artista.getUsuarioId())){
+                model.put("error", "Acceso denegado");
+                return new ModelAndView("redirect:/galeria", model);
+            }
+
+            model.put("artista", artista);
+
+            List<ObraDtoWrapper> obrasMasVendidas = parseObraDtoWrapper(servicioEstadistica.obtenerMasVendidasArtista(artista.toArtista()));
+            List<ObraDtoWrapper> obrasMasLikeadas = parseObraDtoWrapper(servicioEstadistica.obtenerMasLikeadasArtista(artista.toArtista()));
+            List<CategoriaEstadisticaDto> categoriasMasVendidas = parseCategoriaEstadisticaDto(servicioEstadistica.obtenerTresCategoriasMasVendidasArtista(artista.toArtista()));
+            List<CategoriaEstadisticaDto> categoriasMasLikeadas = parseCategoriaEstadisticaDto(servicioEstadistica.obtenerTresCategoriasMasLikeadasArtista(artista.toArtista()));
+            List<ObraDto> trendingVendidas = parseObraDto(servicioEstadistica.obtenerTrendingVentasArtista(artista.toArtista()));
+            List<ObraDto> trendingLikeadas = parseObraDto(servicioEstadistica.obtenerTrendingLikesArtista(artista.toArtista()));
+
+            model.put("masVendidas", obrasMasVendidas);
+            model.put("masLikeadas", obrasMasLikeadas);
+            model.put("cat_masVendidas", categoriasMasVendidas);
+            model.put("cat_masLikeadas", categoriasMasLikeadas);
+            model.put("trendVendidas", trendingVendidas);
+            model.put("trendLikeadas", trendingLikeadas);
+            model.put("categoriaNombres", getCategoriaNombres());
+
+            return new ModelAndView("estadisticas_artista", model);
+        } catch (NoExisteArtista e) {
+            model.put("error", "perfil no encontrado"); //si la clave es error se envia el mensaje el artista no existe
+            return new ModelAndView("redirect:/galeria", model);
+        }
+    }
+
+    private List<ObraDtoWrapper> parseObraDtoWrapper (Map<Obra, Long> map) {
+        List<ObraDtoWrapper> list = new ArrayList<>();
+        for (Map.Entry<Obra, Long> entry : map.entrySet()) {
+            Obra obra = entry.getKey();
+            Long cantidad = entry.getValue();
+            list.add(new ObraDtoWrapper(obra, cantidad));
+        }
+        return list;
+    }
+
+    private List<CategoriaEstadisticaDto> parseCategoriaEstadisticaDto (Map<Categoria, Long> map) {
+        List<CategoriaEstadisticaDto> list = new ArrayList<>();
+        for (Map.Entry<Categoria, Long> entry : map.entrySet()) {
+            Categoria categoria = entry.getKey();
+            Long cantidad = entry.getValue();
+            list.add(new CategoriaEstadisticaDto(categoria, cantidad));
+        }
+        return list;
+    }
+
+    private List<ObraDto> parseObraDto (List<Obra> list) {
+        List<ObraDto> lista = new ArrayList<>();
+        for (Obra obra : list) {
+            lista.add(new ObraDto(obra));
+        }
+        return lista;
+    }
+
+    private Map<String, String> getCategoriaNombres() {
+        Map<String, String> map = new HashMap<>();
+        for (Categoria c : Categoria.values()) {
+            map.put(c.name(), c.getCategoria());
+        }
+        return map;
     }
 }
 
