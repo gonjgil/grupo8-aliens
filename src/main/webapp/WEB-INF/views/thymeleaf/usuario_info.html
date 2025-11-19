@@ -95,4 +95,26 @@
 </footer>
 
 </body>
+
+<script>
+    // Actualizar contador del carrito
+    function actualizarContadorCarrito() {
+        fetch('/spring/carrito/contador')
+            .then(response => response.json())
+            .then(data => {
+                const contador = document.querySelector('[data-carrito-count]');
+                if(contador) {
+                    if(data.count > 0) {
+                        contador.textContent = data.count;
+                        contador.classList.remove('hidden');
+                    } else {
+                        contador.classList.add('hidden');
+                    }
+                }
+            })
+            .catch(error => console.error('Error actualizando contador:', error));
+    }
+    document.addEventListener('DOMContentLoaded', actualizarContadorCarrito);
+</script>
+
 </html>

@@ -4,6 +4,8 @@ import com.tallerwebi.dominio.ServicioPassword;
 import com.tallerwebi.dominio.entidades.Artista;
 import com.tallerwebi.dominio.entidades.Direccion;
 import com.tallerwebi.dominio.entidades.Usuario;
+import com.tallerwebi.dominio.excepcion.PasswordActualIncorrectoException;
+import com.tallerwebi.dominio.excepcion.PasswordIdenticoException;
 import com.tallerwebi.dominio.repositorios.RepositorioArtista;
 import com.tallerwebi.dominio.repositorios.RepositorioCarrito;
 import com.tallerwebi.dominio.repositorios.RepositorioUsuario;
@@ -23,7 +25,7 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
     private final RepositorioCarrito repositorioCarrito;
 
     @Autowired
-    public ServicioUsuarioImpl(RepositorioUsuario repositorioUsuario, RepositorioArtistaImpl repositorioArtista, ServicioPassword servicioPassword, RepositorioCarrito repositorioCarrito) {
+    public ServicioUsuarioImpl(RepositorioUsuario repositorioUsuario, RepositorioArtista repositorioArtista, ServicioPassword servicioPassword, RepositorioCarrito repositorioCarrito) {
         this.repositorioUsuario = repositorioUsuario;
         this.repositorioArtista = repositorioArtista;
         this.servicioPassword = servicioPassword;
@@ -87,14 +89,14 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
     }
 
     @Override
-    public void cambiarPassword(Usuario usuario, String passwordActual, String nuevoPassword) {
+    public void cambiarPassword(Usuario usuario, String passwordActual, String nuevoPassword) throws PasswordActualIncorrectoException, PasswordIdenticoException {
 
         if (!servicioPassword.verificarPassword(passwordActual, usuario.getPassword())) {
-            throw new RuntimeException("La contraseña actual es incorrecta.");
+            throw new PasswordActualIncorrectoException("La contraseña actual es incorrecta.");
         }
 
         if (servicioPassword.verificarPassword(nuevoPassword, usuario.getPassword())) {
-            throw new RuntimeException("La nueva contraseña debe ser diferente a la actual.");
+            throw new PasswordIdenticoException("La nueva contraseña debe ser diferente a la actual.");
         }
 
         String passwordHasheado = servicioPassword.hashearPassword(nuevoPassword);
@@ -129,6 +131,11 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
         repositorioUsuario.guardar(usuarioExistente);
 
         return usuarioExistente;
+    }
+
+    @Override
+    public Object obtenerDireccionesDeUsuario(String email) {
+        return null;
     }
 
 }

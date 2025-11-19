@@ -100,6 +100,10 @@ public class Usuario {
         return this.direcciones;
     }
 
+    public void setDirecciones(List<Direccion> direcciones) {
+        this.direcciones = direcciones;
+    }
+
     public void agregarDireccion(Direccion direccion) {
         if (this.direcciones.isEmpty())
             direccion.setPredeterminada(true);
