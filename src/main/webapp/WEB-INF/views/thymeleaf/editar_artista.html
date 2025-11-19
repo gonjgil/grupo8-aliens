@@ -46,6 +46,20 @@
             <label>Twitter:</label>
             <input type="text" name="urlTwitter" th:value="${artista.urlTwitter}" required>
         </div>
+        <div class="campo">
+
+            <label>
+                <input type="checkbox"
+                       id="aceptaComisiones"
+                       name="aceptaComisiones"
+                       value="true"
+                       th:field="*{artista.aceptaComisiones}"
+                       >
+                Acepto encargos personalizados
+            </label>
+        </div>
+        <input type="hidden" name="aceptaComisiones" value="false">
+
 
         <div class="acciones">
             <button type="button" id="btn-cancelar" class="btn btn-cancelar" th:attr="data-id=${artista.id}">Cancelar

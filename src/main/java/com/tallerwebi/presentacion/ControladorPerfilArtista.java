@@ -121,6 +121,11 @@ public class ControladorPerfilArtista {
             PerfilArtistaDTO artistaActual = this.servicioPerfilArtista.obtenerPerfilArtista(idArtista);
             dto.setUrlFotoPerfil(artistaActual.getUrlFotoPerfil());
         }
+        Boolean acepta = dto.getAceptaComisiones();
+        if (acepta == null) {
+            acepta = false;
+        }
+        dto.setAceptaComisiones(acepta);
 
         dto.setId(idArtista);
         servicioPerfilArtista.actualizarPerfilArtista(dto);
