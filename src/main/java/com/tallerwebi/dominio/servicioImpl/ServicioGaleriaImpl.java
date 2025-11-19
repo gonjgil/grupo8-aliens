@@ -72,7 +72,7 @@ public class ServicioGaleriaImpl implements ServicioGaleria {
     public List<Obra> obtenerObrasParaUsuario(Usuario usuario) {
         List<Obra> todasLasObras = convertirYValidar(repositorioObra.obtenerTodas());
         Set<Obra> obrasLikeadas = usuario.getObrasLikeadas();
-        Set<Categoria> categoriasFavoritas = usuario.getCategoriasFavoritas(); // 👈 NUEVO
+        Set<Categoria> categoriasFavoritas = usuario.getCategoriasFavoritas();
 
         if ((obrasLikeadas == null || obrasLikeadas.isEmpty()) &&
                 (categoriasFavoritas == null || categoriasFavoritas.isEmpty())) {
@@ -177,5 +177,14 @@ public class ServicioGaleriaImpl implements ServicioGaleria {
             throw new IllegalArgumentException("La obra no puede ser nula");
         }
         repositorioObra.eliminar(obra);
+    }
+
+    @Override
+    public Integer obtenerLikesObra(Obra obra) {
+        if (obra.getId() == null) {
+            throw new IllegalArgumentException("La obra debe tener ID para consultar likes");
+        }
+        Integer resultado = repositorioObra.contarLikesDeObra(obra.getId());
+        return resultado != null ? resultado : 0;
     }
 }

@@ -1,3 +1,5 @@
+ALTER TABLE Obra AUTO_INCREMENT = 1;
+
 INSERT INTO Obra(titulo, imagenUrl, descripcion, stock, artista) VALUES ('Instante 001', 'https://res.cloudinary.com/dby2iubyy/image/upload/v1762546005/obras/mv69uztezdo6mfg0sh0r.jpg', 'Fotografía contemporánea que explora la poética de los espacios urbanos cotidianos con sensibilidad documental', 1, 1);
 INSERT INTO Obra(titulo, imagenUrl, descripcion, stock, artista) VALUES ('Perspectiva Urbana', 'https://res.cloudinary.com/dby2iubyy/image/upload/v1762545952/obras/kwxbxkoby33slz2nbjaq.jpg', 'Captura que investiga la relación entre luz natural y arquitectura moderna mediante composición cuidadosa', 2, 1);
 INSERT INTO Obra(titulo, imagenUrl, descripcion, stock, artista) VALUES ('Luz Fragmentada', 'https://res.cloudinary.com/dby2iubyy/image/upload/v1762545882/obras/xjvtcpdgnrke7tauqyqm.jpg', 'Imagen que documenta la vida urbana desde una perspectiva contemplativa y técnicamente precisa', 3, 2);

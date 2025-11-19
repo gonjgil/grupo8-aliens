@@ -1,10 +1,7 @@
 package com.tallerwebi.integracion;
 
 import com.tallerwebi.dominio.*;
-import com.tallerwebi.dominio.entidades.Artista;
-import com.tallerwebi.dominio.entidades.FormatoObra;
-import com.tallerwebi.dominio.entidades.Obra;
-import com.tallerwebi.dominio.entidades.Usuario;
+import com.tallerwebi.dominio.entidades.*;
 import com.tallerwebi.dominio.enums.Formato;
 import com.tallerwebi.dominio.excepcion.NoExisteArtista;
 import com.tallerwebi.dominio.excepcion.NoExisteFormatoObra;
@@ -35,6 +32,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 
 import java.util.Collections;
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -61,6 +59,7 @@ public class ControladorObraTest {
     private ServicioPerfilArtista servicioPerfilArtistaMock;
     private ServicioCloudinary servicioCloudinaryMock;
     private ServicioFormatoObra servicioFormatoObraMock;
+    private ServicioComentario servicioComentarioMock;
 
     private Usuario usuarioMock;
 
@@ -71,13 +70,15 @@ public class ControladorObraTest {
         servicioPerfilArtistaMock = mock(ServicioPerfilArtista.class);
         servicioCloudinaryMock = mock(ServicioCloudinary.class);
         servicioFormatoObraMock = mock(ServicioFormatoObra.class);
+        servicioComentarioMock = mock(ServicioComentario.class);
 
         controladorObra = new ControladorObra(
                 servicioGaleriaMock,
                 servicioCarritoMock,
                 servicioPerfilArtistaMock,
                 servicioCloudinaryMock,
-                servicioFormatoObraMock
+                servicioFormatoObraMock,
+                servicioComentarioMock
         );
 
         InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
@@ -91,6 +92,10 @@ public class ControladorObraTest {
         usuarioMock = new Usuario();
         usuarioMock.setId(1L);
         usuarioMock.setEmail("test@correo.com");
+
+
+
+        when(servicioComentarioMock.obtenerComentariosDeObra(anyLong())).thenReturn(Collections.emptyList());
     }
 
     // ====================== GET /obra/{id} ======================
@@ -424,4 +429,26 @@ public class ControladorObraTest {
 
         assertThat(result.getResponse().getRedirectedUrl(), equalTo("/galeria"));
     }
+
+    @Test
+    public void queCargueLosComentariosDeLaObra() throws Exception {
+        Obra obra = new Obra();
+        obra.setId(1L);
+
+        Comentario comentario = new Comentario();
+        comentario.setContenido("Muy buena obra");
+        List<Comentario> comentarios = List.of(comentario);
+
+        when(servicioGaleriaMock.obtenerPorId(1L)).thenReturn(obra);
+        when(servicioComentarioMock.obtenerComentariosDeObra(1L)).thenReturn(comentarios);
+
+        MvcResult result = mockMvc.perform(get("/obra/1"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        ModelAndView mv = result.getModelAndView();
+        assertThat(mv.getModel().get("comentarios"), notNullValue());
+        assertThat(((List<?>) mv.getModel().get("comentarios")).size(), equalTo(1));
+    }
+
 }

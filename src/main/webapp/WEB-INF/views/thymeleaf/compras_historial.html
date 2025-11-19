@@ -10,59 +10,50 @@
   <link rel="stylesheet" th:href="@{/css/compras_historial.css}"/>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.4/font/bootstrap-icons.css" rel="stylesheet">
 </head>
-<body class="bg-light">
-<header class="bg-white p-6 flex justify-between items-center shadow-md">
-    <h1 class="text-4xl font-extrabold text-gray-900 tracking-wider">
-        <a th:href="@{/galeria}" class="hover:text-blue-600 transition-colors">
-            ArtRoom
-        </a>
-    </h1>
+<body class="bg-gray-100 text-gray-800 flex flex-col min-h-screen">
 
-    <div class="flex items-center space-x-4">
-        <div th:if="${usuario != null}" class="flex items-center space-x-4">
-            <div th:text=" 'Hola, ' + ${usuario.email}"></div>
+<header class="bg-gray-900 text-white shadow-md">
+    <div class="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center">
+        <h1 class="text-4xl font-bold tracking-wide">
+            <a th:href="@{/galeria}" class="hover:text-blue-500 transition">ArtRoom</a>
+        </h1>
 
-            <a th:if="${artistaUsuario != null}"
-               th:href="@{'/perfilArtista/ver/' + ${artistaUsuario.id}}"
-               class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg"
-               title="Ver mi perfil de artista">
-                <i class="bi bi-palette-fill"></i>
-            </a>
+        <div class="flex items-center space-x-6">
+            <div th:if="${usuario != null}" class="flex items-center space-x-3 text-gray-200 px-2">
+                <span th:text="'Hola, ' + ${usuario.nombre}"></span>
 
-            <a th:if="${artistaUsuario == null}"
-               th:href="@{/perfilArtista/nuevo}"
-               class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg"
-               title="Crear nuevo artista">
-                <i class="bi bi-person-plus"></i>
-            </a>
-            <a th:href="@{/carrito}"
-                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg relative"
-                    title="Ver carrito">
-                <i class="fas fa-shopping-cart"></i>
-                <span data-carrito-count class="hidden absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">0
-            </span>
-            </a>
-            <a th:href="@{/compras/historial}"
-               class="bg-yellow-700 hover:bg-yellow-800 text-white font-bold py-2 px-3 rounded-full transition duration-300 shadow-lg"
-               title="Ver mis compras">
-                <i class="bi bi-bag-check"></i>
-            </a>
-            <a th:href="@{/logout}"
-               class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 shadow-lg" title="Cerrar sesion">
-                <i class="bi bi-box-arrow-right"></i>
-            </a>
-        </div>
-        <div th:unless="${usuario != null}">
-            <button
-                    th:onclick="|location.href='@{/login}'|"
-                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg"
-            >
-                Iniciar Sesión
-            </button>
+                <a th:href="@{/usuario}" class="bg-gray-200 text-gray-700 hover:bg-green-600 hover:text-white py-2 px-6 rounded-md shadow transition"
+                   title="Perfil de usuario">
+                    <i class="fa-solid fa-user"></i>
+                </a>
+
+                <a th:href="@{/carrito}"
+                   class="bg-gray-200 text-gray-700 hover:bg-blue-600 hover:text-white py-2 px-6 rounded-md shadow transition relative">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span data-carrito-count
+                          class="hidden absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
+                        0
+                    </span>
+                </a>
+
+                <a th:href="@{/logout}"
+                   class="bg-gray-200 text-gray-700 hover:bg-red-600 hover:text-white py-2 px-6 rounded-md shadow transition">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </a>
+            </div>
+
+            <div th:unless="${usuario != null}">
+                <button th:onclick="|location.href='@{/login}'|"
+                        class="bg-gray-200 text-gray-700 hover:bg-blue-600 hover:text-white font-semibold py-2 px-6 rounded-md shadow transition">
+                    Iniciar Sesión
+                </button>
+            </div>
         </div>
     </div>
 </header>
-<div class="container">
+
+<main class="flex-grow">
+<div class="container max-w-7xl mx-auto">
     <!-- Envolver el contenido en un div centrado -->
     <div class="order-cards-container">
         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -160,10 +151,36 @@
         </div>
     </div>
 </div>
+</main>
+
+<footer class="bg-gray-500 text-gray-200 py-6 mt-12 text-center shadow-inner">
+    <p>&copy; 2025 Grupo 8</p>
+    <p class="text-gray-900 text-sm">Gil - Solodujin - Landín - Santillan - Torrico</p>
+</footer>
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Custom JS -->
   <script th:src="@{/js/compras_historial.js}"></script>
+<script>
+    // Actualizar contador del carrito
+    function actualizarContadorCarrito() {
+        fetch('/spring/carrito/contador')
+            .then(response => response.json())
+            .then(data => {
+                const contador = document.querySelector('[data-carrito-count]');
+                if(contador) {
+                    if(data.count > 0) {
+                        contador.textContent = data.count;
+                        contador.classList.remove('hidden');
+                    } else {
+                        contador.classList.add('hidden');
+                    }
+                }
+            })
+            .catch(error => console.error('Error actualizando contador:', error));
+    }
+    document.addEventListener('DOMContentLoaded', actualizarContadorCarrito);
+</script>
 </body>
 </html>

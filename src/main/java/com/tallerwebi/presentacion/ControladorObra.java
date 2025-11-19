@@ -2,6 +2,7 @@ package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.*;
 import com.tallerwebi.dominio.entidades.Artista;
+import com.tallerwebi.dominio.entidades.Comentario;
 import com.tallerwebi.dominio.entidades.Obra;
 import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.enums.Categoria;
@@ -33,14 +34,17 @@ public class ControladorObra {
     private ServicioPerfilArtista servicioPerfilArtista;
     private ServicioCloudinary servicioCloudinary;
     private ServicioFormatoObra servicioFormatoObra;
+    private ServicioComentario servicioComentario;
+
 
     @Autowired
-    public ControladorObra(ServicioGaleria servicioGaleria, ServicioCarrito servicioCarrito, ServicioPerfilArtista servicioPerfilArtista, ServicioCloudinary servicioCloudinary, ServicioFormatoObra servicioFormatoObra) {
+    public ControladorObra(ServicioGaleria servicioGaleria, ServicioCarrito servicioCarrito, ServicioPerfilArtista servicioPerfilArtista, ServicioCloudinary servicioCloudinary, ServicioFormatoObra servicioFormatoObra, ServicioComentario servicioComentario) {
         this.servicioGaleria = servicioGaleria;
         this.servicioCarrito = servicioCarrito;
         this.servicioPerfilArtista = servicioPerfilArtista;
         this.servicioCloudinary = servicioCloudinary;
         this.servicioFormatoObra = servicioFormatoObra;
+        this.servicioComentario = servicioComentario;
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
@@ -70,7 +74,12 @@ public class ControladorObra {
             model.put("cantidad", cantidad);
 
             ObraDto obraDto = new ObraDto(obra);
+            obraDto.setCantidadLikes(servicioGaleria.obtenerLikesObra(obra));
             model.put("obra", obraDto);
+
+            //carga comentarios asociados a la obra
+            List<Comentario> comentarios = servicioComentario.obtenerComentariosDeObra(id);
+            model.put("comentarios", comentarios);
 
             return new ModelAndView("obra", model);
         } catch (Exception e) {
@@ -84,6 +93,9 @@ public class ControladorObra {
         ModelMap model = new ModelMap();
 
         Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
+        if (usuario == null)
+            return new ModelAndView("redirect:/login");
+
         model.put("usuario", usuario);
 
         try {
@@ -117,6 +129,9 @@ public class ControladorObra {
     public ModelAndView editarObra(@PathVariable("id") Long idObra, HttpServletRequest request) {
         ModelMap model = new ModelMap();
         Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
+        if (usuario == null)
+            return new ModelAndView("redirect:/login");
+
         model.put("usuario", usuario);
 
         try {
@@ -217,6 +232,16 @@ public class ControladorObra {
             e.printStackTrace();
             return "redirect:/galeria";
         }
+    }
+
+    @PostMapping("/{id}/comentar")
+    public String comentarObra(@PathVariable Long id, @RequestParam String contenido, HttpServletRequest request) {
+        Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
+        if (usuario != null && !contenido.isBlank()) {
+            Obra obra = servicioGaleria.obtenerPorId(id);
+            servicioComentario.guardarComentario(usuario, obra, contenido);
+        }
+        return "redirect:/obra/" + id;
     }
 
 }
