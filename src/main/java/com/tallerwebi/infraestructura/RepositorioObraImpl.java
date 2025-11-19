@@ -325,5 +325,14 @@ public class RepositorioObraImpl implements RepositorioObra {
         }
     }
 
+    @Override
+    public Integer contarLikesDeObra(Long obraId) {
+        String hql = "select size(o.usuariosQueDieronLike) from Obra o where o.id = :id";
+        return (int) sessionFactory.getCurrentSession()
+                .createQuery(hql)
+                .setParameter("id", obraId)
+                .uniqueResult();
+    }
+
 
 }

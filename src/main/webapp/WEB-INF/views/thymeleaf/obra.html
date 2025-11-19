@@ -254,42 +254,93 @@
 
             <div th:if="${esArtistaDuenio == true}" class="mt-8 border-t pt-6">
 
-                <!-- Botón para mostrar/ocultar el formulario -->
-                <button id="toggle-formato-form"
+<!--                <button id="toggle-formato-form"-->
+<!--                        class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-md transition">-->
+<!--                    Agregar Formato-->
+<!--                </button>-->
+<!--                &lt;!&ndash; Formulario oculto inicialmente &ndash;&gt;-->
+<!--                <form th:action="@{/obra/{id}/agregar-formato(id=${obra.id})}"-->
+<!--                      method="post"-->
+<!--                      id="formato-form"-->
+<!--                      class="mt-4 p-4 border border-gray-300 rounded-md bg-gray-50 hidden">-->
+
+<!--                    &lt;!&ndash; Select de Formatos &ndash;&gt;-->
+<!--                    <label class="block mb-2 font-medium text-gray-800">Formato</label>-->
+<!--                    <select name="formato" class="w-full p-2 border rounded-md mb-4">-->
+<!--                        <option th:each="f : ${formatosFaltantes}"-->
+<!--                                th:value="${f}"-->
+<!--                                th:text="${f.descripcion}">-->
+<!--                        </option>-->
+<!--                    </select>-->
+
+<!--                    &lt;!&ndash; Precio &ndash;&gt;-->
+<!--                    <label class="block mb-2 font-medium text-gray-800">Precio</label>-->
+<!--                    <input type="number" step="0.01" name="precio" required-->
+<!--                           class="w-full p-2 border rounded-md mb-4"/>-->
+
+<!--                    &lt;!&ndash; Stock &ndash;&gt;-->
+<!--                    <label class="block mb-2 font-medium text-gray-800">Stock</label>-->
+<!--                    <input type="number" name="stock" min="0" required-->
+<!--                           class="w-full p-2 border rounded-md mb-6"/>-->
+
+<!--                    <button type="submit"-->
+<!--                            class="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded-md transition w-full">-->
+<!--                        Guardar Formato-->
+<!--                    </button>-->
+<!--                </form>-->
+
+                <button type="button"
+                        onclick="abrirModalAgregarFormato()"
                         class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-md transition">
                     Agregar Formato
                 </button>
 
-                <!-- Formulario oculto inicialmente -->
-                <form th:action="@{/obra/{id}/agregar-formato(id=${obra.id})}"
-                      method="post"
-                      id="formato-form"
-                      class="mt-4 p-4 border border-gray-300 rounded-md bg-gray-50 hidden">
+                <div id="modalAgregarFormato" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div class="bg-white rounded-xl p-6 shadow-xl w-96">
+                        <h2 class="text-xl font-bold mb-4">Agregar Formato</h2>
 
-                    <!-- Select de Formatos -->
-                    <label class="block mb-2 font-medium text-gray-800">Formato</label>
-                    <select name="formato" class="w-full p-2 border rounded-md mb-4">
-                        <option th:each="f : ${formatosFaltantes}"
-                                th:value="${f}"
-                                th:text="${f.descripcion}">
-                        </option>
-                    </select>
+                        <form th:action="@{/obra/{id}/agregar-formato(id=${obra.id})}" method="post">
 
-                    <!-- Precio -->
-                    <label class="block mb-2 font-medium text-gray-800">Precio</label>
-                    <input type="number" step="0.01" name="precio" required
-                           class="w-full p-2 border rounded-md mb-4"/>
+                            <!-- Select de Formatos -->
+                            <div class="mb-3">
+                                <label class="block text-sm font-medium text-gray-700">Formato</label>
+                                <select name="formato" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-2">
+                                    <option th:each="f : ${formatosFaltantes}"
+                                            th:value="${f}"
+                                            th:text="${f.descripcion}">
+                                    </option>
+                                </select>
+                            </div>
 
-                    <!-- Stock -->
-                    <label class="block mb-2 font-medium text-gray-800">Stock</label>
-                    <input type="number" name="stock" min="0" required
-                           class="w-full p-2 border rounded-md mb-6"/>
+                            <!-- Precio -->
+                            <div class="mb-3">
+                                <label class="block text-sm font-medium text-gray-700">Precio</label>
+                                <input type="number" step="0.01" name="precio" required
+                                       class="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-2"/>
+                            </div>
 
-                    <button type="submit"
-                            class="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded-md transition w-full">
-                        Guardar Formato
-                    </button>
-                </form>
+                            <!-- Stock -->
+                            <div class="mb-3">
+                                <label class="block text-sm font-medium text-gray-700">Stock</label>
+                                <input type="number" min="0" name="stock" required
+                                       class="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-2"/>
+                            </div>
+
+                            <div class="flex justify-end gap-2 mt-4">
+                                <button type="button"
+                                        onclick="cerrarModalAgregarFormato()"
+                                        class="bg-gray-400 hover:bg-gray-500 text-white font-semibold px-3 py-1 rounded-md transition">
+                                    Cancelar
+                                </button>
+
+                                <button type="submit"
+                                        class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-3 py-1 rounded-md transition">
+                                    Guardar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -578,6 +629,14 @@
 
     function cerrarModal() {
         document.getElementById("modalEditarFormato").classList.add("hidden");
+    }
+
+    function abrirModalAgregarFormato() {
+        document.getElementById("modalAgregarFormato").classList.remove("hidden");
+    }
+
+    function cerrarModalAgregarFormato() {
+        document.getElementById("modalAgregarFormato").classList.add("hidden");
     }
 
 </script>

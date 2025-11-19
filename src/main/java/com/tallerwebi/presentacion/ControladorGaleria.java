@@ -44,24 +44,18 @@ public class ControladorGaleria {
             Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogueado");
             model.put("usuario", usuario);
 
-            //buscar el artista del usuario logueado (si tiene)
-            if (usuario != null) {
-                Artista artistaUsuario = servicioPerfilArtista.obtenerArtistaPorUsuario(usuario);
-                model.put("artistaUsuario", artistaUsuario);
-            } else {
-                model.put("obrasSpotlight", this.servicioGaleria.ordenarRandom());
-                model.put("exito", "Hay obras.");
+            if (usuario == null) {
+                List<Obra> obrasSpotlight = this.servicioGaleria.ordenarRandom();
+                parseListObraDto(model, obrasSpotlight);
                 return new  ModelAndView("galeria", model);
             }
 
-            List<Obra> obrasSpotlight = this.servicioGaleria.obtenerObrasParaUsuario(usuario);
-            List<ObraDto> obrasDto = new ArrayList<>();
-            for (Obra obra : obrasSpotlight) {
-                obrasDto.add(new ObraDto(obra));
-            }
+            //buscar el artista del usuario logueado (si tiene)
+            Artista artistaUsuario = servicioPerfilArtista.obtenerArtistaPorUsuario(usuario);
+            model.put("artistaUsuario", artistaUsuario);
 
-            model.put("obrasSpotlight", obrasDto);
-            model.put("exito", "Hay obras.");
+            List<Obra> obrasSpotlight = this.servicioGaleria.obtenerObrasParaUsuario(usuario);
+            parseListObraDto(model, obrasSpotlight);
         } catch (NoHayObrasExistentes e) {
             model.put("obrasSpotlight", new ArrayList<>());
             model.put("error", "No hay obras.");
@@ -69,6 +63,17 @@ public class ControladorGaleria {
         }
 
         return new ModelAndView("galeria", model);
+    }
+
+    private void parseListObraDto(ModelMap model, List<Obra> obrasSpotlight) {
+        List<ObraDto> obrasDto = new ArrayList<>();
+        for (Obra obra : obrasSpotlight) {
+            ObraDto obraDto = new ObraDto(obra);
+            obraDto.setCantidadLikes(servicioGaleria.obtenerLikesObra(obra));
+            obrasDto.add(obraDto);
+        }
+        model.put("obrasSpotlight", obrasDto);
+        model.put("exito", "Hay obras.");
     }
 
 }

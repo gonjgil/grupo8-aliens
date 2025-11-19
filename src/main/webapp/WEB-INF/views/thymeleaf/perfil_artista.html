@@ -71,10 +71,15 @@
                 </div>
 
                 <div class="mt-4" th:if="${esDuenio}">
-                    <button id="btn-editar-perfil" class="btn-editar" th:attr="data-artista-id=${mostrarArtista.id}">
-                        Editar Perfil
-                    </button>
-                    <a type="button" th:href="@{/obra/nueva}" id="btn-nueva-obra" class="btn-nueva-obra mt-3">Nueva Obra</a>
+                    <div>
+                        <a type="button" th:href="@{{id}/estadisticas (id=${artistaUsuario.id})}" id="btn-estadisticas" class="btn-nueva-obra mt-3">Ver estadísticas</a>
+                    </div>
+                    <div>
+                        <button id="btn-editar-perfil" class="btn-editar" th:attr="data-artista-id=${mostrarArtista.id}">
+                            Editar Perfil
+                        </button>
+                        <a type="button" th:href="@{/obra/nueva}" id="btn-nueva-obra" class="btn-nueva-obra mt-3">Nueva Obra</a>
+                    </div>
                 </div>
 
 

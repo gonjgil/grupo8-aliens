@@ -25,4 +25,5 @@ public interface RepositorioObra {
     Map<Categoria, Long> obtenerTresCategoriasMasLikeadasArtista(Artista artista);
     List<Obra> obtenerTrendingVentasArtista(Artista artista);
     List<Obra> obtenerTrendingLikesArtista(Artista artista);
+    Integer contarLikesDeObra(Long obraId);
 }

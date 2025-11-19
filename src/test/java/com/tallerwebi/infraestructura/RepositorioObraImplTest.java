@@ -820,4 +820,39 @@ public class RepositorioObraImplTest {
         assertThat(resultado.isEmpty(), is(true));
     }
 
+    @Test
+    @Transactional
+    @Rollback
+    public void queCuenteCorrectamenteLosLikesDeUnaObra() {
+        Artista artista = new Artista();
+        artista.setNombre("Artista Test");
+        sessionFactory.getCurrentSession().save(artista);
+
+        Obra obra = new Obra();
+        obra.setTitulo("Obra con likes");
+        obra.setDescripcion("Descripción");
+        obra.setImagenUrl("img.jpg");
+        obra.setArtista(artista);
+        sessionFactory.getCurrentSession().save(obra);
+
+        Usuario u1 = new Usuario();
+        u1.setEmail("u1@mail.com");
+        u1.setPassword("123");
+        sessionFactory.getCurrentSession().save(u1);
+
+        Usuario u2 = new Usuario();
+        u2.setEmail("u2@mail.com");
+        u2.setPassword("123");
+        sessionFactory.getCurrentSession().save(u2);
+
+        obra.getUsuariosQueDieronLike().add(u1);
+        obra.getUsuariosQueDieronLike().add(u2);
+        sessionFactory.getCurrentSession().saveOrUpdate(obra);
+
+        Integer cantidadLikes = repositorioObra.contarLikesDeObra(obra.getId());
+
+        assertThat(cantidadLikes, is(2));
+    }
+
+
 }

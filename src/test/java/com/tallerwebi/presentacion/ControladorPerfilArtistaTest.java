@@ -9,7 +9,10 @@ import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.enums.Categoria;
 import com.tallerwebi.dominio.enums.TipoImagen;
 import com.tallerwebi.dominio.excepcion.NoExisteArtista;
+import com.tallerwebi.presentacion.dto.CategoriaEstadisticaDto;
+import com.tallerwebi.presentacion.dto.ObraDto;
 import com.tallerwebi.presentacion.dto.PerfilArtistaDTO;
+import com.tallerwebi.presentacion.dto.ObraDtoWrapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.multipart.MultipartFile;
@@ -162,7 +165,7 @@ public class ControladorPerfilArtistaTest {
 
         assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/galeria"));
         assertThat(modelAndView.getModel().get("error").toString(),
-                equalToIgnoringCase("No tienes permiso para ver estadísticas de este artista."));
+                equalToIgnoringCase("Acceso denegado"));
     }
 
     @Test
@@ -181,13 +184,18 @@ public class ControladorPerfilArtistaTest {
         usuarioMock.setId(10L);
         when(sessionMock.getAttribute("usuarioLogueado")).thenReturn(usuarioMock);
 
-        // Mocks de resultados de estadísticas
-        Map<Obra, Long> masVendidas = Map.of(new Obra(), 6L);
-        Map<Obra, Long> masLikeadas = Map.of(new Obra(), 17L);
-        Map<Categoria, Long> categoriasVendidas = Map.of(Categoria.ABSTRACTO, 5L);
-        Map<Categoria, Long> categoriasLikeadas = Map.of(Categoria.ABSTRACTO, 10L);
-        List<Obra> trendVentas = List.of(new Obra());
-        List<Obra> trendLikes = List.of(new Obra());
+        // Datos mock de estadísticas
+        Obra obra1 = new Obra();
+        Obra obra2 = new Obra();
+        Categoria categoria = Categoria.ABSTRACTO;
+
+        Map<Obra, Long> masVendidas = Map.of(obra1, 6L);
+        Map<Obra, Long> masLikeadas = Map.of(obra2, 17L);
+        Map<Categoria, Long> categoriasVendidas = Map.of(categoria, 5L);
+        Map<Categoria, Long> categoriasLikeadas = Map.of(categoria, 10L);
+
+        List<Obra> trendVentas = List.of(obra1);
+        List<Obra> trendLikes = List.of(obra2);
 
         when(servicioEstadisticaMock.obtenerMasVendidasArtista(any())).thenReturn(masVendidas);
         when(servicioEstadisticaMock.obtenerMasLikeadasArtista(any())).thenReturn(masLikeadas);
@@ -204,12 +212,32 @@ public class ControladorPerfilArtistaTest {
 
         // Validación modelo
         assertThat(mv.getModel().get("artista"), equalTo(artistaMock));
-        assertThat(mv.getModel().get("masVendidas"), equalTo(masVendidas));
-        assertThat(mv.getModel().get("masLikeadas"), equalTo(masLikeadas));
-        assertThat(mv.getModel().get("cat_masVendidas"), equalTo(categoriasVendidas));
-        assertThat(mv.getModel().get("cat_masLikeadas"), equalTo(categoriasLikeadas));
-        assertThat(mv.getModel().get("trendVendidas"), equalTo(trendVentas));
-        assertThat(mv.getModel().get("trendLikeadas"), equalTo(trendLikes));
+
+        // --- VALIDACIÓN DE ESTRUCTURA DE LOS DTOS ---
+
+        List<?> masVendidasResult = (List<?>) mv.getModel().get("masVendidas");
+        assertThat(masVendidasResult.size(), equalTo(1));
+        assertThat(masVendidasResult.get(0), instanceOf(ObraDtoWrapper.class));
+
+        List<?> masLikeadasResult = (List<?>) mv.getModel().get("masLikeadas");
+        assertThat(masLikeadasResult.size(), equalTo(1));
+        assertThat(masLikeadasResult.get(0), instanceOf(ObraDtoWrapper.class));
+
+        List<?> catMasVendidasResult = (List<?>) mv.getModel().get("cat_masVendidas");
+        assertThat(catMasVendidasResult.size(), equalTo(1));
+        assertThat(catMasVendidasResult.get(0), instanceOf(CategoriaEstadisticaDto.class));
+
+        List<?> catMasLikeadasResult = (List<?>) mv.getModel().get("cat_masLikeadas");
+        assertThat(catMasLikeadasResult.size(), equalTo(1));
+        assertThat(catMasLikeadasResult.get(0), instanceOf(CategoriaEstadisticaDto.class));
+
+        List<?> trendVendidasResult = (List<?>) mv.getModel().get("trendVendidas");
+        assertThat(trendVendidasResult.size(), equalTo(1));
+        assertThat(trendVendidasResult.get(0), instanceOf(ObraDto.class));
+
+        List<?> trendLikeadasResult = (List<?>) mv.getModel().get("trendLikeadas");
+        assertThat(trendLikeadasResult.size(), equalTo(1));
+        assertThat(trendLikeadasResult.get(0), instanceOf(ObraDto.class));
     }
 
 }
