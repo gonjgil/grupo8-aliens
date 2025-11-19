@@ -330,4 +330,48 @@ class ServicioGaleriaImplTest {
         verify(repositorioObra, never()).eliminar(obra);
     }
 
+    @Test
+    public void obtenerLikesObra_deberiaRetornarLaCantidadDeLikesDesdeElRepositorio() {
+        RepositorioObra repositorioObra = mock(RepositorioObra.class);
+        ServicioGaleriaImpl servicio = new ServicioGaleriaImpl(repositorioObra);
+
+        Obra obra = new Obra();
+        obra.setId(10L);
+
+        when(repositorioObra.contarLikesDeObra(10L)).thenReturn(5);
+
+        Integer likes = servicio.obtenerLikesObra(obra);
+
+        assertThat(likes, is(5));
+        verify(repositorioObra, times(1)).contarLikesDeObra(10L);
+    }
+
+    @Test()
+    public void obtenerLikesObra_conObraSinId_deberiaLanzarExcepcion() {
+        RepositorioObra repositorioObra = mock(RepositorioObra.class);
+        ServicioGaleriaImpl servicio = new ServicioGaleriaImpl(repositorioObra);
+
+        Obra obra = new Obra();
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            servicio.obtenerLikesObra(obra);
+        });
+    }
+
+    @Test
+    public void obtenerLikesObra_siRepositorioDevuelveNull_deberiaRetornarCero() {
+        RepositorioObra repositorioObra = mock(RepositorioObra.class);
+        ServicioGaleriaImpl servicio = new ServicioGaleriaImpl(repositorioObra);
+
+        Obra obra = new Obra();
+        obra.setId(10L);
+
+        when(repositorioObra.contarLikesDeObra(10L)).thenReturn(null);
+
+        Integer likes = servicio.obtenerLikesObra(obra);
+
+        assertThat(likes, is(0));
+    }
+
+
 }

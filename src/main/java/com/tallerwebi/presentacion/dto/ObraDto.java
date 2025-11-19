@@ -16,10 +16,13 @@ public class ObraDto {
     private String imagenUrl;
     private String descripcion;
     private Integer stock;
-    private Set<Usuario> usuariosQueDieronLike;
+//    private Set<Usuario> usuariosQueDieronLike;
     private Set<Categoria> categorias = new HashSet<>();
     private List<FormatoObraDto> formatos;
     private PerfilArtistaDTO artista;
+
+    private Integer cantidadLikes;
+    private Set<Long> idsUsuariosQueDieronLike;
 
     public ObraDto() {}
 
@@ -29,8 +32,19 @@ public class ObraDto {
         this.imagenUrl = obra.getImagenUrl();
         this.descripcion = obra.getDescripcion();
         this.stock = obra.getStock();
-        this.usuariosQueDieronLike = obra.getUsuariosQueDieronLike() != null ? obra.getUsuariosQueDieronLike() : new HashSet<>();
+//        this.usuariosQueDieronLike = obra.getUsuariosQueDieronLike() != null ? obra.getUsuariosQueDieronLike() : new HashSet<>();
         this.categorias = obra.getCategorias();
+
+//        if (obra.getUsuariosQueDieronLike() != null) {
+//            this.idsUsuariosQueDieronLike = obra.getUsuariosQueDieronLike().stream()
+//                    .map(Usuario::getId)
+//                    .collect(Collectors.toSet());
+//        } else {
+//            this.idsUsuariosQueDieronLike = new HashSet<>();
+//        }
+//        this.cantidadLikes = idsUsuariosQueDieronLike.size();
+        this.idsUsuariosQueDieronLike = new HashSet<>();
+
         if (obra.getFormatos() != null) {
             this.formatos = obra.getFormatos().stream()
                 .map(FormatoObraDto::new)
@@ -52,10 +66,27 @@ public class ObraDto {
     public String getDescripcion() { return descripcion; }
     public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
 
-    public Set<Usuario> getUsuariosQueDieronLike() { return this.usuariosQueDieronLike; }
-    public void setUsuariosQueDieronLike(Set<Usuario> usuariosQueDieronLike) { this.usuariosQueDieronLike = usuariosQueDieronLike; }
-    public int getCantidadLikes() {
-        return this.usuariosQueDieronLike != null ? this.usuariosQueDieronLike.size() : 0;
+//    public Set<Usuario> getUsuariosQueDieronLike() { return this.usuariosQueDieronLike; }
+//    public void setUsuariosQueDieronLike(Set<Usuario> usuariosQueDieronLike) { this.usuariosQueDieronLike = usuariosQueDieronLike; }
+//    public int getCantidadLikes() {
+//        return this.usuariosQueDieronLike != null ? this.usuariosQueDieronLike.size() : 0;
+//    }
+
+
+    public Integer getCantidadLikes() {
+        return cantidadLikes;
+    }
+
+    public void setCantidadLikes(Integer cantidadLikes) {
+        this.cantidadLikes = cantidadLikes;
+    }
+
+    public Set<Long> getIdsUsuariosQueDieronLike() {
+        return idsUsuariosQueDieronLike;
+    }
+
+    public void setIdsUsuariosQueDieronLike(Set<Long> idsUsuariosQueDieronLike) {
+        this.idsUsuariosQueDieronLike = idsUsuariosQueDieronLike;
     }
 
     public Set<Categoria> getCategorias() { return categorias; }
@@ -83,9 +114,9 @@ public class ObraDto {
         if(this.artista != null) {
             obra.setArtista(artista.toArtista());
         }
-        if (this.usuariosQueDieronLike != null && !this.usuariosQueDieronLike.isEmpty()) {
-            obra.setUsuariosQueDieronLike(new HashSet<>(this.usuariosQueDieronLike));
-        }
+//        if (this.usuariosQueDieronLike != null && !this.usuariosQueDieronLike.isEmpty()) {
+//            obra.setUsuariosQueDieronLike(new HashSet<>(this.usuariosQueDieronLike));
+//        }
         obra.setFormatos(new HashSet<>());
         if (this.formatos != null && !this.formatos.isEmpty()) {
             for (FormatoObraDto formatoDto : this.formatos) {

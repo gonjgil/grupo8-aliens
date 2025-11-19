@@ -178,4 +178,13 @@ public class ServicioGaleriaImpl implements ServicioGaleria {
         }
         repositorioObra.eliminar(obra);
     }
+
+    @Override
+    public Integer obtenerLikesObra(Obra obra) {
+        if (obra.getId() == null) {
+            throw new IllegalArgumentException("La obra debe tener ID para consultar likes");
+        }
+        Integer resultado = repositorioObra.contarLikesDeObra(obra.getId());
+        return resultado != null ? resultado : 0;
+    }
 }

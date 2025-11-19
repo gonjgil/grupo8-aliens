@@ -2,14 +2,15 @@ package com.tallerwebi.infraestructura;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.mockito.Mockito.when;
 
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
-import java.util.List;
+import java.util.*;
 
-import com.tallerwebi.dominio.entidades.Artista;
+import com.tallerwebi.dominio.entidades.*;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,8 +20,6 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.tallerwebi.dominio.entidades.FormatoObra;
-import com.tallerwebi.dominio.entidades.Obra;
 import com.tallerwebi.dominio.repositorios.RepositorioObra;
 import com.tallerwebi.dominio.enums.Categoria;
 import com.tallerwebi.dominio.enums.Formato;
@@ -232,8 +231,7 @@ public class RepositorioObraImplTest {
         Obra obra1 = generarObra1();
         Obra obra2 = generarObra2();
         Obra obra3 = generarObra3();
-        
-        // Agregar formatos con precios específicos para el test
+
         FormatoObra formato1 = new FormatoObra(obra1, Formato.ORIGINAL, 1500.0, 5);
         FormatoObra formato2 = new FormatoObra(obra2, Formato.ORIGINAL, 2500.0, 5);
         FormatoObra formato3 = new FormatoObra(obra3, Formato.ORIGINAL, 3500.0, 5);
@@ -319,8 +317,7 @@ public class RepositorioObraImplTest {
         Obra obra1 = generarObra1();
         Obra obra2 = generarObra2();
         Obra obra3 = generarObra3();
-        
-        // Agregar formatos con precios fuera del rango de búsqueda (4000-5000)
+
         FormatoObra formato1 = new FormatoObra(obra1, Formato.ORIGINAL, 1500.0, 5);
         FormatoObra formato2 = new FormatoObra(obra2, Formato.ORIGINAL, 2500.0, 5);
         FormatoObra formato3 = new FormatoObra(obra3, Formato.ORIGINAL, 3500.0, 5);
@@ -425,4 +422,437 @@ public class RepositorioObraImplTest {
         Obra obraEliminada = sessionFactory.getCurrentSession().get(Obra.class, obra.getId());
         assertThat(obraEliminada, is(nullValue()));
     }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queObtengaLasObrasMasVendidasConSusCantidades() {
+        Artista artista = persistirArtista("Artista Ventas");
+
+        Obra obra1 = generarObra1();
+        Obra obra2 = generarObra2();
+        obra1.setArtista(artista);
+        obra2.setArtista(artista);
+
+        sessionFactory.getCurrentSession().save(obra1);
+        sessionFactory.getCurrentSession().save(obra2);
+
+        for (int i = 0; i < 3; i++) {
+            ItemCompra ic = new ItemCompra();
+            ic.setObra(obra1);
+            ic.setFormato(Formato.ORIGINAL);
+            sessionFactory.getCurrentSession().save(ic);
+        }
+
+        ItemCompra ic2 = new ItemCompra();
+        ic2.setObra(obra2);
+        ic2.setFormato(Formato.DIGITAL);
+        sessionFactory.getCurrentSession().save(ic2);
+
+        Map<Obra, Long> resultado = repositorioObra.obtenerMasVendidasPorArtista(artista);
+
+        assertThat(resultado.size(), is(equalTo(2)));
+
+        Iterator<Map.Entry<Obra, Long>> it = resultado.entrySet().iterator();
+
+        Map.Entry<Obra, Long> primero = it.next();
+        assertThat(primero.getKey(), is(equalTo(obra1)));
+        assertThat(primero.getValue(), is(3L));
+
+        Map.Entry<Obra, Long> segundo = it.next();
+        assertThat(segundo.getKey(), is(equalTo(obra2)));
+        assertThat(segundo.getValue(), is(1L));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queDevuelvaUnMapVacioCuandoElArtistaNoTieneVentas() {
+        Artista artista = persistirArtista("Artista Sin Ventas");
+
+        Obra obra1 = generarObra1();
+        obra1.setArtista(artista);
+        sessionFactory.getCurrentSession().save(obra1);
+
+        Map<Obra, Long> resultado = repositorioObra.obtenerMasVendidasPorArtista(artista);
+
+        assertThat(resultado.isEmpty(), is(true));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queDevuelvaMapVacioCuandoOcurreUnaIllegalArgumentException() {
+        Artista artista = new Artista();
+
+        Map<Obra, Long> resultado = repositorioObra.obtenerMasVendidasPorArtista(artista);
+
+        assertThat(resultado.isEmpty(), is(true));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queObtengaLasObrasMasLikeadasYSuCantidadDeLikes() {
+        Artista artista = persistirArtista("Artista");
+
+        Obra obra1 = generarObra1();
+        Obra obra2 = generarObra2();
+        obra1.setArtista(artista);
+        obra2.setArtista(artista);
+        obra1.setUsuariosQueDieronLike(new HashSet<>(generarUsuarios().subList(0, 2)));
+        obra2.setUsuariosQueDieronLike(new HashSet<>(generarUsuarios().subList(1, 6)));
+
+        sessionFactory.getCurrentSession().save(obra1);
+        sessionFactory.getCurrentSession().save(obra2);
+
+        List<Obra> resultado = repositorioObra.obtenerMasLikeadasPorArtista(artista);
+
+        assertThat(resultado.size(), is(2));
+        assertThat(resultado.get(0), is(equalTo(obra2)));
+        assertThat(resultado.get(1), is(equalTo(obra1)));
+        assertThat(resultado.get(0).getUsuariosQueDieronLike().size(), is(equalTo(5)));
+        assertThat(resultado.get(1).getUsuariosQueDieronLike().size(), is(equalTo(2)));
+    }
+
+    private List<Usuario> generarUsuarios() {
+        List<Usuario> usuarios = new ArrayList<>();
+
+        for (int i = 0; i < 8; i++) {
+            Usuario usuario = new Usuario();
+            usuario.setId((long) (i + 1));
+            usuario.setEmail((i+1)+"_asd@qwe.com");
+            sessionFactory.getCurrentSession().save(usuario);
+            usuarios.add(usuario);
+        }
+
+        return usuarios;
+    }
+
+    private void crearItemsCompras(Obra obra, int cantidad) {
+        for (int i = 0; i < cantidad; i++) {
+            Formato formato = Formato.ORIGINAL;
+            ItemCompra ic = new ItemCompra();
+            ic.setFormato(formato);
+            ic.setObra(obra);
+            sessionFactory.getCurrentSession().save(ic);
+        }
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queObtengaLasTresCategoriasMasVendidasParaUnArtista() {
+        Artista artista = persistirArtista("Artista Top3");
+
+        Obra obra1 = generarObra1(); // ABSTRACTO
+        Obra obra2 = generarObra2(); // SURREALISMO
+        Obra obra3 = generarObra3(); // ABSTRACTO
+        Obra obra4 = new Obra();     // MODERNO, SURREALISMO
+        obra4.setTitulo("obra4");
+        obra4.setCategorias(new HashSet<>(List.of(Categoria.MODERNO, Categoria.SURREALISMO)));
+        obra1.setArtista(artista);
+        obra2.setArtista(artista);
+        obra3.setArtista(artista);
+        obra4.setArtista(artista);
+
+        sessionFactory.getCurrentSession().save(obra1);
+        sessionFactory.getCurrentSession().save(obra2);
+        sessionFactory.getCurrentSession().save(obra3);
+        sessionFactory.getCurrentSession().save(obra4);
+
+        crearItemsCompras(obra1, 4);
+        crearItemsCompras(obra2, 1);
+        crearItemsCompras(obra3, 3);
+        crearItemsCompras(obra4, 2);
+
+        Map<Categoria, Long> resultado = repositorioObra.obtenerTresCategoriasMasVendidasArtista(artista);
+
+        assertThat(resultado.size(), is(3));
+        Iterator<Map.Entry<Categoria, Long>> it = resultado.entrySet().iterator();
+
+        Map.Entry<Categoria, Long> first = it.next();
+        assertThat(first.getKey(), is(equalTo(Categoria.ABSTRACTO)));
+        assertThat(first.getValue(), is(7L));
+
+        Map.Entry<Categoria, Long> second = it.next();
+        assertThat(second.getKey(), is(equalTo(Categoria.SURREALISMO)));
+        assertThat(second.getValue(), is(3L));
+
+        Map.Entry<Categoria, Long> third = it.next();
+        assertThat(third.getKey(), is(equalTo(Categoria.MODERNO)));
+        assertThat(third.getValue(), is(2L));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queDevuelvaMenosDeTresCuandoHayMenosCategoriasVendidas() {
+        Artista artista = persistirArtista("Artista 2 categorias");
+
+        Obra obra1 = generarObra1(); // ABSTRACTO
+        Obra obra2 = generarObra2(); // SURREALISMO
+        obra1.setArtista(artista);
+        obra2.setArtista(artista);
+        sessionFactory.getCurrentSession().save(obra1);
+        sessionFactory.getCurrentSession().save(obra2);
+
+        crearItemsCompras(obra1, 2);
+        crearItemsCompras(obra2, 1);
+
+        Map<Categoria, Long> resultado = repositorioObra.obtenerTresCategoriasMasVendidasArtista(artista);
+
+        assertThat(resultado.size(), is(2));
+        assertThat(resultado.containsKey(Categoria.ABSTRACTO), is(true));
+        assertThat(resultado.containsKey(Categoria.SURREALISMO), is(true));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queDevuelvaMapaVacioCuandoNoHayVentasParaElArtista() {
+        Artista artista = persistirArtista("Artista sin ventas");
+
+        Obra obra1 = generarObra1();
+        Obra obra2 = generarObra2();
+        obra1.setArtista(artista);
+        obra2.setArtista(artista);
+        sessionFactory.getCurrentSession().save(obra1);
+        sessionFactory.getCurrentSession().save(obra2);
+
+        Map<Categoria, Long> resultado = repositorioObra.obtenerTresCategoriasMasVendidasArtista(artista);
+
+        assertThat(resultado.isEmpty(), is(true));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queObtengaLasTresCategoriasMasLikeadasParaUnArtista() {
+        Artista artista = persistirArtista("Artista Likes");
+
+        // Obra1 -> ABSTRACTO (3 likes)
+        Obra obra1 = generarObra1();
+        obra1.setArtista(artista);
+        obra1.setUsuariosQueDieronLike(
+                new HashSet<>(generarUsuarios().subList(0, 3))
+        );
+
+        // Obra2 -> SURREALISMO (6 likes)
+        Obra obra2 = generarObra2();
+        obra2.setArtista(artista);
+        obra2.setUsuariosQueDieronLike(
+                new HashSet<>(generarUsuarios().subList(1, 7))
+        );
+
+        // Obra3 -> ABSTRACTO (2 likes)
+        Obra obra3 = generarObra3();
+        obra3.setArtista(artista);
+        obra3.setUsuariosQueDieronLike(
+                new HashSet<>(generarUsuarios().subList(0, 2))
+        );
+
+        sessionFactory.getCurrentSession().save(obra1);
+        sessionFactory.getCurrentSession().save(obra2);
+        sessionFactory.getCurrentSession().save(obra3);
+
+        Map<Categoria, Long> resultado =
+                repositorioObra.obtenerTresCategoriasMasLikeadasArtista(artista);
+
+        assertThat(resultado.size(), is(2));
+
+        Iterator<Map.Entry<Categoria, Long>> it = resultado.entrySet().iterator();
+
+        Map.Entry<Categoria, Long> first = it.next();
+        assertThat(first.getKey(), is(equalTo(Categoria.SURREALISMO)));
+        assertThat(first.getValue(), is(6L));
+
+        Map.Entry<Categoria, Long> second = it.next();
+        assertThat(second.getKey(), is(equalTo(Categoria.ABSTRACTO)));
+        assertThat(second.getValue(), is(5L));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queDevuelvaMapaVacioCuandoOcurreUnaIllegalArgumentExceptionEnLikes() {
+        Artista artista = new Artista();
+
+        Map<Categoria, Long> resultado =
+                repositorioObra.obtenerTresCategoriasMasLikeadasArtista(artista);
+
+        assertThat(resultado.isEmpty(), is(true));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queObtengaLasObrasTrendingPorVentasEnOrdenDescendiente() {
+        // given
+        Artista artista = persistirArtista("Artista Trending Ventas");
+
+        Obra obra1 = generarObra1();
+        obra1.setArtista(artista);
+
+        Obra obra2 = generarObra2();
+        obra2.setArtista(artista);
+
+        Obra obra3 = generarObra3();
+        obra3.setArtista(artista);
+
+        sessionFactory.getCurrentSession().save(obra1);
+        sessionFactory.getCurrentSession().save(obra2);
+        sessionFactory.getCurrentSession().save(obra3);
+
+        crearItemsCompras(obra1, 5); // más vendida
+        crearItemsCompras(obra2, 3);
+        crearItemsCompras(obra3, 1);
+
+        // when
+        List<Obra> resultado = repositorioObra.obtenerTrendingVentasArtista(artista);
+
+        // then
+        assertThat(resultado.size(), is(3));
+        assertThat(resultado.get(0), is(obra1));
+        assertThat(resultado.get(1), is(obra2));
+        assertThat(resultado.get(2), is(obra3));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queDevuelvaListaVaciaSiElArtistaNoTieneVentas() {
+        Artista artista = persistirArtista("Artista Sin Ventas");
+
+        Obra obra = generarObra1();
+        obra.setArtista(artista);
+        sessionFactory.getCurrentSession().save(obra);
+
+        List<Obra> resultado = repositorioObra.obtenerTrendingVentasArtista(artista);
+
+        assertThat(resultado.isEmpty(), is(true));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queDevuelvaListaVaciaCuandoOcurreUnaIllegalArgumentExceptionEnTrendingVentas() {
+        Artista artistaNoPersistido = new Artista();
+
+        List<Obra> resultado = repositorioObra.obtenerTrendingVentasArtista(artistaNoPersistido);
+
+        assertThat(resultado.isEmpty(), is(true));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queObtengaLasObrasTrendingPorLikesEnOrdenDescendiente() {
+        // given
+        Artista artista = persistirArtista("Artista Trending Likes");
+
+        Usuario u1 = persistirUsuario("user1@mail.com");
+        Usuario u2 = persistirUsuario("user2@mail.com");
+        Usuario u3 = persistirUsuario("user3@mail.com");
+
+        Obra obra1 = generarObra1();
+        obra1.setArtista(artista);
+
+        Obra obra2 = generarObra2();
+        obra2.setArtista(artista);
+
+        Obra obra3 = generarObra3();
+        obra3.setArtista(artista);
+
+        sessionFactory.getCurrentSession().save(obra1);
+        sessionFactory.getCurrentSession().save(obra2);
+        sessionFactory.getCurrentSession().save(obra3);
+
+        obra1.getUsuariosQueDieronLike().add(u1); // 3 likes
+        obra1.getUsuariosQueDieronLike().add(u2);
+        obra1.getUsuariosQueDieronLike().add(u3);
+
+        obra2.getUsuariosQueDieronLike().add(u1); // 1 like
+
+        obra3.getUsuariosQueDieronLike().add(u1); // 2 likes
+        obra3.getUsuariosQueDieronLike().add(u2);
+
+        // when
+        List<Obra> resultado = repositorioObra.obtenerTrendingLikesArtista(artista);
+
+        // then
+        assertThat(resultado.size(), is(3));
+        assertThat(resultado.get(0), is(obra1));
+        assertThat(resultado.get(1), is(obra3));
+        assertThat(resultado.get(2), is(obra2));
+    }
+
+    private Usuario persistirUsuario(String mail) {
+        Usuario u = new Usuario();
+        u.setEmail(mail);
+        this.sessionFactory.getCurrentSession().save(u);
+        return u;
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queDevuelvaListaVaciaSiElArtistaNoTieneLikes() {
+        Artista artista = persistirArtista("Artista Sin Likes");
+
+        Obra obra = generarObra1();
+        obra.setArtista(artista);
+        sessionFactory.getCurrentSession().save(obra);
+
+        List<Obra> resultado = repositorioObra.obtenerTrendingLikesArtista(artista);
+
+        assertThat(resultado.size(), is(0));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queDevuelvaListaVaciaCuandoOcurreUnaIllegalArgumentExceptionEnTrendingLikes() {
+        Artista artistaNoPersistido = new Artista();
+
+        List<Obra> resultado = repositorioObra.obtenerTrendingLikesArtista(artistaNoPersistido);
+
+        assertThat(resultado.isEmpty(), is(true));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queCuenteCorrectamenteLosLikesDeUnaObra() {
+        Artista artista = new Artista();
+        artista.setNombre("Artista Test");
+        sessionFactory.getCurrentSession().save(artista);
+
+        Obra obra = new Obra();
+        obra.setTitulo("Obra con likes");
+        obra.setDescripcion("Descripción");
+        obra.setImagenUrl("img.jpg");
+        obra.setArtista(artista);
+        sessionFactory.getCurrentSession().save(obra);
+
+        Usuario u1 = new Usuario();
+        u1.setEmail("u1@mail.com");
+        u1.setPassword("123");
+        sessionFactory.getCurrentSession().save(u1);
+
+        Usuario u2 = new Usuario();
+        u2.setEmail("u2@mail.com");
+        u2.setPassword("123");
+        sessionFactory.getCurrentSession().save(u2);
+
+        obra.getUsuariosQueDieronLike().add(u1);
+        obra.getUsuariosQueDieronLike().add(u2);
+        sessionFactory.getCurrentSession().saveOrUpdate(obra);
+
+        Integer cantidadLikes = repositorioObra.contarLikesDeObra(obra.getId());
+
+        assertThat(cantidadLikes, is(2));
+    }
+
+
 }
