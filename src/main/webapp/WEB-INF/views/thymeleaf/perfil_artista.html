@@ -243,18 +243,21 @@
         <h2 class="text-3xl font-bold mb-6 text-gray-900 text-center">Obras</h2>
 
         <div class="flex flex-wrap justify-center gap-6">
-            <div th:each="obra : ${obras}" class="relative perfil-card bg-white rounded-lg shadow-md overflow-hidden w-96">
+            <div th:each="obra : ${obras}" class="relative rounded-lg shadow-md overflow-hidden w-96">
 
-                <!-- Imagen de la obra -->
-                <a th:href="@{/obra/{id}(id=${obra.id})}">
-                    <div class="w-full h-64 overflow-hidden">
-                        <img th:src="${obra.imagenUrl}" alt="Imagen de obra"
-                             class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
+                <!-- Imagen de la obra con overlay permanente -->
+                <a th:href="@{/obra/{id}(id=${obra.id})}" class="obra-card-link block relative h-64 overflow-hidden group">
+                    <img th:src="${obra.imagenUrl}" alt="Imagen de obra"
+                         class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+                    
+                    <!-- Overlay permanente en la parte inferior -->
+                    <div class="obra-overlay absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent p-4 flex flex-col justify-end">
+                        <h3 class="text-sm font-semibold text-white" th:text="${obra.titulo}">Título de la obra</h3>
                     </div>
                 </a>
 
-                <!-- Botones flotantes -->
-                <div th:if="${esDuenio}" class="absolute top-2 right-2 flex gap-2">
+                <!-- Botones flotantes (solo para dueño) -->
+                <div th:if="${esDuenio}" class="absolute top-2 right-2 flex gap-2 z-10">
                     <!-- Editar -->
                     <a th:href="@{'/obra/' + ${obra.id} + '/editar'}"
                        class="bg-yellow-500 hover:bg-yellow-600 text-white p-2 rounded shadow-lg transition"
@@ -263,18 +266,14 @@
                     </a>
                     <!-- Eliminar -->
                     <form th:action="@{'/obra/' + ${obra.id} + '/eliminar'}" method="post"
-                          onsubmit="return confirm('¿Seguro que querés eliminar esta obra?');">
+                          onsubmit="return confirm('¿Seguro que querés eliminar esta obra?');"
+                          class="inline">
                         <button type="submit"
                                 class="bg-red-600 hover:bg-red-700 text-white p-2 rounded shadow-lg transition"
                                 title="Eliminar obra">
                             <i class="bi bi-trash"></i>
                         </button>
                     </form>
-                </div>
-
-                <!-- Título -->
-                <div class="p-2 text-center">
-                    <h3 class="text-lg font-semibold text-black" th:text="${obra.titulo}">Título de la obra</h3>
                 </div>
             </div>
         </div>
