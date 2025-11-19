@@ -1,7 +1,5 @@
 package com.tallerwebi.dominio;
 
-import com.mercadopago.client.payment.PaymentClient;
-import com.mercadopago.resources.payment.Payment;
 import com.tallerwebi.dominio.entidades.*;
 import com.tallerwebi.dominio.enums.EstadoCarrito;
 import com.tallerwebi.dominio.enums.EstadoPago;
@@ -14,8 +12,9 @@ import com.tallerwebi.dominio.repositorios.RepositorioCompraHecha;
 import com.tallerwebi.dominio.servicioImpl.ServicioCompraHechaImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 
-import java.util.ArrayList;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -84,6 +83,12 @@ public class ServicioCompraHechaTest {
         assertThat(ordenCreada.getUsuario().getEmail(), is(compraEsperada.getUsuario().getEmail()));
         assertThat(ordenCreada.getPrecioFinal(), is(compraEsperada.getPrecioFinal()));
         assertThat(ordenCreada.getPagoId(), is(compraEsperada.getPagoId()));
+        verify(servicioMail, times(1))
+                .enviarMailConfirmacionCompra(
+                        ArgumentMatchers.any(Usuario.class),
+                        ArgumentMatchers.any(CompraHecha.class),
+                        anyList()
+                );
     }
 
 

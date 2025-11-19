@@ -79,32 +79,4 @@ public class ControladorCarritoTest {
         assertThat(servicioCarrito.contarItemsEnCarrito(usuario), is(equalTo(0)));
     }
 
-    @Test
-    public void queAlFinalizarLaCompraSeEnvíeUnCorreoDeConfirmación(){
-        Usuario usuario= new Usuario();
-        usuario.setEmail("cliente@ejemplo.com");
-        Long id=1L;
-        Direccion direccion = new Direccion(id);
-        usuario.agregarDireccion(direccion);
-
-        HttpSession session = mock(HttpSession.class);
-        when(session.getAttribute("usuarioLogueado")).thenReturn(usuario);
-
-        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
-        ServicioCarrito servicioCarrito = mock(ServicioCarrito.class);
-        ServicioMail servicioMail = mock(ServicioMail.class);
-
-        ControladorCarrito controladorCarrito = new ControladorCarrito(servicioCarrito, servicioMail);
-
-
-        String resultado = controladorCarrito.finalizarCompra(session, redirectAttributes);
-
-//        verify(servicioCarrito, times(1)).finalizarCompra(usuario);
-        verify(servicioMail, times(1)).enviarMail(
-                eq("cliente@ejemplo.com"),
-                contains("Confirmación de compra"),
-                contains("Tu compra fue realizada")
-        );
-        assertThat(resultado, is(equalTo("redirect:/galeria")));
-    }
 }

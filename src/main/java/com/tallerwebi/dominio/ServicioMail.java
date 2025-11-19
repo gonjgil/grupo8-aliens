@@ -1,6 +1,7 @@
 package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.entidades.CompraHecha;
+import com.tallerwebi.dominio.entidades.ItemCarrito;
 import com.tallerwebi.dominio.entidades.ItemCompra;
 import com.tallerwebi.dominio.entidades.Usuario;
 

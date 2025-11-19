@@ -9,8 +9,10 @@ import com.mercadopago.exceptions.MPException;
 import com.mercadopago.exceptions.MPApiException;
 import com.tallerwebi.dominio.ServicioCarrito;
 import com.tallerwebi.dominio.ServicioCompraHecha;
+import com.tallerwebi.dominio.ServicioMail;
 import com.tallerwebi.dominio.entidades.Carrito;
 import com.tallerwebi.dominio.entidades.CompraHecha;
+import com.tallerwebi.dominio.entidades.ItemCompra;
 import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.CarritoNoEncontradoException;
 import com.tallerwebi.dominio.excepcion.CarritoVacioException;
@@ -40,6 +42,9 @@ public class ControladorPagos {
 
     @Autowired
     private ServicioCarrito servicioCarrito;
+
+    @Autowired
+    private ServicioMail servicioMail;
 
 
     @PostConstruct
@@ -224,12 +229,11 @@ public class ControladorPagos {
             if (compra == null || compra.getId() == null) {
                 return new ModelAndView("redirect:/compras/error");
             }
+
             return new ModelAndView("redirect:/compras/historial");
 
-        } catch (CarritoVacioException | CarritoNoEncontradoException | PagoNoAprobadoException e) {
-            return new ModelAndView("redirect:/compras/error");
         } catch (Exception e) {
-//            e.printStackTrace(); // para ver el stack completo
+            e.printStackTrace();
             return new ModelAndView("redirect:/compras/error");
         }
     }
