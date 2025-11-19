@@ -91,7 +91,6 @@ public class ServicioCarritoImplTest {
 
         when(repositorioObra.obtenerPorId(obra1.getId())).thenReturn(obra1);
         when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario.getId())).thenReturn(carrito);
-        when(repositorioCarrito.obtenerUltimoCarritoPorUsuario(usuario.getId())).thenReturn(carrito);
         when(repositorioFormatoObra.obtenerFormatoPorObraYFormato(obraId, formato)).thenReturn(formatoObra);
 
         servicioCarritoImpl.agregarObraAlCarrito(usuario, obraId, formato);
@@ -390,9 +389,6 @@ public class ServicioCarritoImplTest {
         when(repositorioCarrito.obtenerCarritoActivoPorUsuario(usuario2.getId())).thenReturn(carrito2);
         when(repositorioFormatoObra.obtenerFormatoPorObraYFormato(obra1.getId(), formato)).thenReturn(formatoObra1);
         when(repositorioFormatoObra.obtenerFormatoPorObraYFormato(obra2.getId(), formato)).thenReturn(formatoObra2);
-        when(repositorioCarrito.obtenerUltimoCarritoPorUsuario(usuario1.getId())).thenReturn(carrito1);
-        when(repositorioCarrito.obtenerUltimoCarritoPorUsuario(usuario2.getId())).thenReturn(carrito2);
-
 
         servicioCarritoImpl.agregarObraAlCarrito(usuario1, obra1.getId(), formato);
         servicioCarritoImpl.agregarObraAlCarrito(usuario1, obra1.getId(), formato);

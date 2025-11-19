@@ -71,7 +71,7 @@ public class ServicioCompraHechaImpl implements ServicioCompraHecha {
             return  guardada;
         }
 
-        throw new IllegalStateException("No se pudo crear la compra: el carrito no está finalizado o no existe.");
+        throw new IllegalStateException("No se pudo crear la compra: el carrito no está activo o no existe.");
     }
 
     private void validarCarrito(Carrito carrito) throws CarritoVacioException, CarritoNoEncontradoException {
@@ -83,7 +83,7 @@ public class ServicioCompraHechaImpl implements ServicioCompraHecha {
         }
     }
 
-    private List<ItemCompra> convertirItemCarritoAItemOrden(List<ItemCarrito> itemsCarrito) {
+    public List<ItemCompra> convertirItemCarritoAItemOrden(List<ItemCarrito> itemsCarrito) {
         List<ItemCompra> itemsOrden = new ArrayList<>();
         for (ItemCarrito itemCarrito : itemsCarrito) {
             ItemCompra itemCompra = new ItemCompra(itemCarrito);

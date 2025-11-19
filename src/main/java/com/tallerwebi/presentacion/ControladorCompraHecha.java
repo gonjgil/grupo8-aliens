@@ -65,28 +65,28 @@ public class ControladorCompraHecha {
 
 
     @GetMapping("/historial")
-    public ModelAndView verMisCompras(HttpSession session, @RequestParam(defaultValue = "0") int pagina) {
+    public ModelAndView verMisCompras(HttpSession session) {
         ModelMap modelo = new ModelMap();
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
 
         if (usuario == null) {
             return new ModelAndView("redirect:/login");
         }
-//        int tamanioPorPagina = 9;
+
         List<CompraHecha> compras = servicioCompraHecha.obtenerComprasPorUsuario(usuario);
         List<CompraHechaDto> comprasDto = new ArrayList<>();
+
         for (CompraHecha compra : compras) {
-            compra.getItems().size();
-            comprasDto.add(new CompraHechaDto(compra));
+            List<ItemCompraDto> itemsDto = new ArrayList<>();
+            for (ItemCompra item : compra.getItems()) {
+                itemsDto.add(new ItemCompraDto(item));
+            }
+            comprasDto.add(new CompraHechaDto(compra, itemsDto));
         }
 
-        if (comprasDto.isEmpty()) {
-            modelo.put("compras", Collections.emptyList());
-        } else {
-            modelo.put("compras", comprasDto);
-        }
-
+        modelo.put("compras", comprasDto.isEmpty() ? Collections.emptyList() : comprasDto);
         modelo.put("usuario", usuario);
+
         return new ModelAndView("compras_historial", modelo);
     }
 
