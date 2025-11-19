@@ -210,9 +210,15 @@
                 </div>
 
                 <div class="redes mt-3">
-                    <a th:href="${mostrarArtista.urlFacebook}" target="_blank" class="link-red">Facebook</a>
-                    <a th:href="${mostrarArtista.urlInstagram}" target="_blank" class="link-red">Instagram</a>
-                    <a th:href="${mostrarArtista.urlTwitter}" target="_blank" class="link-red">Twitter</a>
+                    <a th:href="${mostrarArtista.urlFacebook}" target="_blank" class="link-red" title="Facebook">
+                        <i class="fab fa-facebook fa-lg"></i>
+                    </a>
+                    <a th:href="${mostrarArtista.urlInstagram}" target="_blank" class="link-red" title="Instagram">
+                        <i class="fab fa-instagram fa-lg"></i>
+                    </a>
+                    <a th:href="${mostrarArtista.urlTwitter}" target="_blank" class="link-red" title="Twitter">
+                        <i class="fab fa-twitter fa-lg"></i>
+                    </a>
                 </div>
 
                 <div class="mt-4" th:if="${esDuenio}">
