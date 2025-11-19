@@ -66,7 +66,6 @@ public class ServicioMailImpl implements ServicioMail {
 
         for (ItemCompra item : items) {
 
-            // 🔹 Formateo del subtotal sin decimales
             String subtotalFormateado = "$" + formatoMoneda.format(item.getSubtotal());
 
             tablaItems.append(
@@ -76,9 +75,9 @@ public class ServicioMailImpl implements ServicioMail {
                             "<span style='font-size:15px;color:#333;'>" + item.getObra().getTitulo() + "</span>" +
                             "</td>" +
 
-                            // 🔹 Nueva columna FORMATO
+
                             "<td style='padding:12px;border-bottom:1px solid #eee;font-size:15px;color:#333;'>" +
-                            item.getFormato() +
+                            item.getFormato().getFormato() +
                             "</td>" +
 
                             "<td style='padding:12px;border-bottom:1px solid #eee;font-size:15px;color:#333;'>" +
@@ -92,7 +91,7 @@ public class ServicioMailImpl implements ServicioMail {
             );
         }
 
-        // 🔹 Formateo precio final
+
         String totalFormateado = "$" + formatoMoneda.format(compra.getPrecioFinal());
 
         String cuerpoHtml =
