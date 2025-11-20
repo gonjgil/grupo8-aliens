@@ -102,6 +102,7 @@
         <div class="obra-right w-full md:w-1/2 pt-4 px-8 flex flex-col justify-between">
             <div class="obra-header mb-8 text-center md:text-left">
                 <h1
+                        id="obra-titulo"
                         class="obra-titulo text-4xl font-bold mb-2"
                         th:text="${obra.titulo}"
                 ></h1>
@@ -111,7 +112,7 @@
             </div>
 
             <div class="obra-body flex flex-col flex-grow justify-start items-center mb-8">
-                <p class="obra-descripcion text-lg text-center py-4" th:text="${obra.descripcion}"></p>
+                <p class="obra-descripcion text-lg text-center py-4" id="obra-descripcion" th:text="${obra.descripcion}"></p>
 
                 <!-- Sección de Likes -->
                 <div class="likes flex items-center gap-2 mt-6 mb-6">

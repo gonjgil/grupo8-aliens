@@ -17,11 +17,11 @@ import static org.hamcrest.text.IsEqualIgnoringCase.equalToIgnoringCase;
 
 public class VistaLoginE2E {
 
-    static Playwright playwright;
-    static Browser browser;
-    BrowserContext context;
-    VistaLogin vistaLogin;
-
+//    static Playwright playwright;
+//    static Browser browser;
+//    BrowserContext context;
+//    VistaLogin vistaLogin;
+//
 //    @BeforeAll
 //    static void abrirNavegador() {
 //        playwright = Playwright.create();
