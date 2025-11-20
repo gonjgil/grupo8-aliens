@@ -7,56 +7,83 @@ import com.tallerwebi.dominio.repositorios.RepositorioComentario;
 import com.tallerwebi.dominio.servicioImpl.ServicioComentarioImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.argThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 
 public class ServicioComentarioImplTest {
 
-
     private RepositorioComentario repositorioComentario;
-    private ServicioComentario servicioComentario;
+    private ServicioComentarioImpl servicioComentario;
 
     @BeforeEach
     public void setUp() {
-        repositorioComentario = mock(RepositorioComentario.class);
-        servicioComentario = new ServicioComentarioImpl(repositorioComentario);
+        this.repositorioComentario = mock(RepositorioComentario.class);
+        this.servicioComentario = new ServicioComentarioImpl(repositorioComentario);
     }
 
     @Test
-    public void queSeGuardeUnComentarioConLosDatosCorrectos() {
+    public void deberiaGuardarComentarioCorrectamente() {
+        // Arrange
         Usuario usuario = new Usuario();
-        Obra obra = new Obra();
-        String contenido = "Excelente obra!";
+        usuario.setId(1L);
 
+        Obra obra = new Obra();
+        obra.setId(10L);
+
+        String contenido = "Muy buena obra";
+
+        ArgumentCaptor<Comentario> captor = ArgumentCaptor.forClass(Comentario.class);
+
+        // Act
         servicioComentario.guardarComentario(usuario, obra, contenido);
 
-        verify(repositorioComentario).guardar(argThat(comentario ->
-                comentario.getUsuario().equals(usuario) &&
-                        comentario.getObra().equals(obra) &&
-                        comentario.getContenido().equals(contenido) &&
-                        comentario.getFecha().equals(LocalDate.now())
-        ));
+        // Assert
+        verify(repositorioComentario, times(1)).guardar(captor.capture());
+
+        Comentario guardado = captor.getValue();
+
+        assertThat(guardado.getUsuario(), equalTo(usuario));
+        assertThat(guardado.getObra(), equalTo(obra));
+        assertThat(guardado.getContenido(), equalTo(contenido));
+        assertThat(guardado.getFecha(), equalTo(LocalDate.now()));
     }
 
     @Test
-    public void queSeObtenganLosComentariosDeUnaObra() {
-        Long obraId = 10L;
+    public void queSePuedanObtenerComentariosPorObra() {
+        Long idObra = 1L;
 
-        Comentario comentario1 = new Comentario();
-        Comentario comentario2 = new Comentario();
-        List<Comentario> lista = List.of(comentario1, comentario2);
+        Comentario c1 = new Comentario();
+        c1.setContenido("Buenísimo");
+        Comentario c2 = new Comentario();
+        c2.setContenido("Excelente obra");
 
-        when(repositorioComentario.obtenerPorObra(obraId)).thenReturn(lista);
+        when(repositorioComentario.obtenerPorObra(idObra))
+                .thenReturn(List.of(c1, c2));
 
-        List<Comentario> resultado = servicioComentario.obtenerComentariosDeObra(obraId);
+        List<Comentario> comentarios = servicioComentario.obtenerComentariosDeObra(idObra);
 
-        assertEquals(2, resultado.size());
-        verify(repositorioComentario).obtenerPorObra(obraId);
+        assertThat(comentarios.size(), is(equalTo(2)));
+        assertThat(comentarios.get(0).getContenido(), is(equalTo("Buenísimo")));
     }
 
+    @Test
+    public void queSiNoHayComentariosSeDevuelvaListaVacia() {
+        Long idObra = 9L;
+
+        when(repositorioComentario.obtenerPorObra(idObra))
+                .thenReturn(List.of());
+
+        List<Comentario> comentarios = servicioComentario.obtenerComentariosDeObra(idObra);
+
+        assertThat(comentarios.isEmpty(), is(true));
+    }
 }

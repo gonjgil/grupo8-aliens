@@ -11,12 +11,13 @@ import java.util.List;
 @Repository
 public class RepositorioComentarioImpl implements RepositorioComentario {
 
+    @Autowired
     private SessionFactory sessionFactory;
 
     @Autowired
-    public RepositorioComentarioImpl(SessionFactory sessionFactory) {this.sessionFactory = sessionFactory;}
-
-    public RepositorioComentarioImpl() {}
+    public RepositorioComentarioImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     @Override
     public void guardar(Comentario comentario) {

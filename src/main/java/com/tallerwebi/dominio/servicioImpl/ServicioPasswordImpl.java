@@ -16,11 +16,4 @@ public class ServicioPasswordImpl implements ServicioPassword {
         return Password.check(passwordIngresado, hashGuardado).withBcrypt();
     }
 
-//    public static class HashGenerator {
-//        public static void main(String[] args) {
-//            String hash = Password.hash("test").withBcrypt().getResult();
-//            System.out.println(hash);
-//        }
-//    }
-
 }
