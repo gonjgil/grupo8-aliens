@@ -9,35 +9,47 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 import java.util.Properties;
-
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 @Configuration
 @EnableTransactionManagement
 public class HibernateConfig {
 
+
+
     @Bean
     public DataSource dataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        
         String dbHost = System.getenv("DB_HOST");
         String dbPort = System.getenv("DB_PORT");
         String dbName = System.getenv("DB_NAME");
         String dbUser = System.getenv("DB_USER");
         String dbPassword = System.getenv("DB_PASSWORD");
-        
+
         if (dbHost == null) dbHost = "localhost";
         if (dbPort == null) dbPort = "3306";
         if (dbName == null) dbName = "tallerwebi";
         if (dbUser == null) dbUser = "user";
         if (dbPassword == null) dbPassword = "user";
-        
-        String url = String.format("jdbc:mysql://%s:%s/%s?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true", 
-                                 dbHost, dbPort, dbName);
-        
-        dataSource.setUrl(url);
-        dataSource.setUsername(dbUser);
-        dataSource.setPassword(dbPassword);
-        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        return dataSource;
+
+        String url = String.format(
+                "jdbc:mysql://%s:%s/%s?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true",
+                dbHost, dbPort, dbName
+        );
+
+        HikariConfig config = new HikariConfig();
+        config.setJdbcUrl(url);
+        config.setUsername(dbUser);
+        config.setPassword(dbPassword);
+        config.setDriverClassName("com.mysql.cj.jdbc.Driver");
+
+        // Pool settings (ajustados para Jetty)
+        config.setMaximumPoolSize(10);
+        config.setMinimumIdle(2);
+        config.setIdleTimeout(30000);
+        config.setConnectionTimeout(20000);
+        config.setLeakDetectionThreshold(15000); // Para detectar fugas de conexiones
+
+        return new HikariDataSource(config);
     }
 
     @Bean
