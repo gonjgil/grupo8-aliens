@@ -1,16 +1,13 @@
 package com.tallerwebi.dominio;
 
-import com.mercadopago.client.payment.PaymentClient;
-import com.mercadopago.resources.payment.Payment;
 import com.tallerwebi.dominio.entidades.*;
 import com.tallerwebi.dominio.enums.EstadoCarrito;
 import com.tallerwebi.dominio.enums.EstadoPago;
 import com.tallerwebi.dominio.enums.Formato;
-import com.tallerwebi.dominio.excepcion.CarritoNoEncontradoException;
-import com.tallerwebi.dominio.excepcion.CarritoVacioException;
-import com.tallerwebi.dominio.excepcion.PagoNoAprobadoException;
+import com.tallerwebi.dominio.excepcion.*;
 import com.tallerwebi.dominio.repositorios.RepositorioCarrito;
 import com.tallerwebi.dominio.repositorios.RepositorioCompraHecha;
+import com.tallerwebi.dominio.repositorios.RepositorioObra;
 import com.tallerwebi.dominio.servicioImpl.ServicioCompraHechaImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,6 +26,7 @@ public class ServicioCompraHechaTest {
 
     private RepositorioCompraHecha repositorioCompraHecha;
     private RepositorioCarrito repositorioCarrito;
+    private RepositorioObra repositorioObra;
     private ServicioPago servicioPago;
     private ServicioCarrito servicioCarrito;
     private ServicioCompraHechaImpl servicioOrdenCompra;
@@ -39,7 +37,8 @@ public class ServicioCompraHechaTest {
         this.repositorioCarrito = mock(RepositorioCarrito.class);
         this.servicioPago = mock(ServicioPago.class);
         this.servicioCarrito = mock(ServicioCarrito.class);
-        this.servicioOrdenCompra = new ServicioCompraHechaImpl(repositorioCompraHecha, repositorioCarrito,  servicioPago, servicioCarrito);
+        this.repositorioObra = mock(RepositorioObra.class);
+        this.servicioOrdenCompra = new ServicioCompraHechaImpl(repositorioCompraHecha, repositorioCarrito,  servicioPago, servicioCarrito, repositorioObra);
     }
 
     @Test
@@ -118,7 +117,6 @@ public class ServicioCompraHechaTest {
         Carrito carrito = new Carrito();
         carrito.setId(1L);
         carrito.setEstado(EstadoCarrito.ACTIVO);
-        carrito.setItems(Collections.emptyList());
 
         Pago pago = new Pago(true, 1L,EstadoPago.APROBADO, "MercadoPago");
         when(servicioPago.consultarEstadoDePago(1L)).thenReturn(pago);
@@ -199,10 +197,51 @@ public class ServicioCompraHechaTest {
         when(servicioPago.consultarEstadoDePago(1L)).thenReturn(pago);
         when(repositorioCarrito.obtenerPorId(1L)).thenReturn(carrito);
 
-        IllegalStateException expected = assertThrows(IllegalStateException.class,
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
                 () -> servicioOrdenCompra.crearResumenCompraAPartirDeCarrito(carrito, pago.getIdTransaccion())
         );
-        assertThat(expected.getMessage(), is("No se pudo crear la compra: el carrito no está activo o no existe."));
+        assertThat(exception.getMessage(), is("No se pudo crear la compra: el carrito no está activo o no existe."));
+    }
+
+    @Test
+    public void deberiaCrearResumenCompraDirectaCorrectamente() throws PagoNoAprobadoException, NoHayStockSuficiente {
+        Usuario usuario = new Usuario();
+
+        Obra obra = new Obra();
+        obra.setId(1L);
+        obra.setStock(5);
+        FormatoObra formatoObra = new FormatoObra(obra, Formato.ORIGINAL, 1000.0, 5);
+        obra.agregarFormato(formatoObra);
+
+        Pago pago = new Pago(true, 1L,EstadoPago.APROBADO, "MercadoPago");
+        when(servicioPago.consultarEstadoDePago(1L)).thenReturn(pago);
+        when(repositorioObra.obtenerPorId(1L)).thenReturn(obra);
+
+        CompraHecha compraEsperada = new CompraHecha();
+        compraEsperada.setUsuario(usuario);
+        compraEsperada.setPrecioFinal(1000.0);
+        compraEsperada.setPagoId(pago.getIdTransaccion());
+
+        when(repositorioCompraHecha.guardar(compraEsperada)).thenReturn(compraEsperada);
+
+        CompraHecha ordenCreada = this.servicioOrdenCompra.crearResumenCompraDirecta(1L, Formato.ORIGINAL, usuario, pago.getIdTransaccion());
+
+        assertThat(ordenCreada.getUsuario(), is(compraEsperada.getUsuario()));
+        assertThat(ordenCreada.getPrecioFinal(), is(compraEsperada.getPrecioFinal()));
+        assertThat(ordenCreada.getPagoId(), is(compraEsperada.getPagoId()));
+    }
+
+    @Test
+    public void deberiaLanzarNoExisteLaObraSiLaObraNoExisteEnCompraDirecta() throws PagoNoAprobadoException, NoHayStockSuficiente {
+        Usuario usuario = new Usuario();
+
+        Pago pago = new Pago(true, 1L,EstadoPago.APROBADO, "MercadoPago");
+        when(servicioPago.consultarEstadoDePago(1L)).thenReturn(pago);
+        when(repositorioObra.obtenerPorId(1L)).thenReturn(null);
+
+        assertThrows(NoExisteLaObra.class, () ->
+                servicioOrdenCompra.crearResumenCompraDirecta(1L, Formato.ORIGINAL, usuario, pago.getIdTransaccion()));
+
     }
 
     @Test
@@ -238,18 +277,16 @@ public class ServicioCompraHechaTest {
         compra2.setUsuario(usuario);
         compra2.setPrecioFinal(300.0);
 
-
         when(repositorioCompraHecha.obtenerTodasPorUsuario(usuario)).thenReturn(Arrays.asList(compra1, compra2));
 
         List<CompraHecha> resultado = servicioOrdenCompra.obtenerComprasPorUsuario(usuario);
 
         assertThat(resultado.size(), is(2));
         assertThat(resultado, contains(compra1, compra2));
-
     }
 
     @Test
-    public void deberiaObtenerItemsDeCompraCorrectamente() throws CarritoNoEncontradoException, CarritoVacioException {
+    public void deberiaObtenerItemsDeCompraCorrectamente() {
         Carrito carrito = new Carrito();
 
         CompraHecha compra1 = new CompraHecha();
@@ -281,11 +318,5 @@ public class ServicioCompraHechaTest {
 
         assertThat(resultado.size(), is(2));
         assertThat(resultado, contains(item1, item2));
-
     }
-
-
-
-
-
 }

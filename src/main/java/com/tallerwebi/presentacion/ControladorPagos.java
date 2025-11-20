@@ -10,15 +10,11 @@ import com.mercadopago.exceptions.MPApiException;
 import com.tallerwebi.dominio.ServicioCarrito;
 import com.tallerwebi.dominio.ServicioCompraHecha;
 import com.tallerwebi.dominio.entidades.Carrito;
-import com.tallerwebi.dominio.entidades.CompraHecha;
 import com.tallerwebi.dominio.entidades.Usuario;
-import com.tallerwebi.dominio.excepcion.CarritoNoEncontradoException;
-import com.tallerwebi.dominio.excepcion.CarritoVacioException;
-import com.tallerwebi.dominio.excepcion.PagoNoAprobadoException;
+import com.tallerwebi.dominio.enums.Formato;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -156,7 +152,7 @@ public class ControladorPagos {
 
             // Para testing local, comentamos las URLs de callback que causan problemas con localhost
              PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder()
-                 .success(com.tallerwebi.config.MercadoPagoConfig.getSuccessUrl())
+                 .success(com.tallerwebi.config.MercadoPagoConfig.getSuccessUrl() + "?tipo=directa")
                  .failure(com.tallerwebi.config.MercadoPagoConfig.getFailureUrl())
                  .pending(com.tallerwebi.config.MercadoPagoConfig.getPendingUrl())
                  .build();
@@ -210,7 +206,9 @@ public class ControladorPagos {
     }
 
     @GetMapping("/pagos/success")
-    public ModelAndView pagoExitoso(@RequestParam("payment_id") Long paymentId, HttpSession session) {
+    public ModelAndView pagoExitoso(@RequestParam("payment_id") Long paymentId,
+                                    @RequestParam(value = "tipo", defaultValue = "carrito") String tipo,
+                                    HttpSession session) {
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
 
         if (usuario == null) {
@@ -218,18 +216,24 @@ public class ControladorPagos {
         }
 
         try {
-            Carrito carrito = servicioCarrito.obtenerCarritoConItems(usuario);
-            CompraHecha compra = servicioCompraHecha.crearResumenCompraAPartirDeCarrito(carrito, paymentId);
+            if ("directa".equalsIgnoreCase(tipo)) {
+                Long obraId = (Long) session.getAttribute("obraSeleccionadaId");
+                Formato formato = (Formato) session.getAttribute("formatoSeleccionado");
 
-            if (compra == null || compra.getId() == null) {
-                return new ModelAndView("redirect:/compras/error");
+                servicioCompraHecha.crearResumenCompraDirecta(obraId, formato, usuario, paymentId);
+
+                session.removeAttribute("obraSeleccionadaId");
+                session.removeAttribute("formatoSeleccionado");
+
+            } else {
+                Carrito carrito = servicioCarrito.obtenerCarritoConItems(usuario);
+                servicioCompraHecha.crearResumenCompraAPartirDeCarrito(carrito, paymentId);
             }
+
             return new ModelAndView("redirect:/compras/historial");
 
-        } catch (CarritoVacioException | CarritoNoEncontradoException | PagoNoAprobadoException e) {
-            return new ModelAndView("redirect:/compras/error");
         } catch (Exception e) {
-//            e.printStackTrace(); // para ver el stack completo
+            e.printStackTrace();
             return new ModelAndView("redirect:/compras/error");
         }
     }

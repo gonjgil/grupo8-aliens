@@ -11,11 +11,12 @@ import com.tallerwebi.dominio.ServicioPago;
 import com.tallerwebi.dominio.entidades.*;
 import com.tallerwebi.dominio.enums.EstadoCarrito;
 import com.tallerwebi.dominio.enums.EstadoPago;
-import com.tallerwebi.dominio.excepcion.CarritoNoEncontradoException;
-import com.tallerwebi.dominio.excepcion.CarritoVacioException;
-import com.tallerwebi.dominio.excepcion.PagoNoAprobadoException;
+import com.tallerwebi.dominio.enums.Formato;
+import com.tallerwebi.dominio.excepcion.*;
 import com.tallerwebi.dominio.repositorios.RepositorioCarrito;
 import com.tallerwebi.dominio.repositorios.RepositorioCompraHecha;
+import com.tallerwebi.dominio.repositorios.RepositorioObra;
+import com.tallerwebi.infraestructura.RepositorioObraImpl;
 import com.tallerwebi.presentacion.dto.ItemCompraDto;
 import com.tallerwebi.presentacion.dto.CompraHechaDto;
 import org.hibernate.Hibernate;
@@ -33,17 +34,19 @@ import java.util.List;
 public class ServicioCompraHechaImpl implements ServicioCompraHecha {
 
 
+    private RepositorioObra repositorioObra;
     private RepositorioCompraHecha repositorioCompraHecha;
     private RepositorioCarrito repositorioCarrito;
     private ServicioCarrito servicioCarrito;
     private ServicioPago servicioPago;
 
     @Autowired
-    public ServicioCompraHechaImpl(RepositorioCompraHecha repositorioOrden, RepositorioCarrito repositorioCarrito, ServicioPago servicioPago, ServicioCarrito servicioCarrito) {
+    public ServicioCompraHechaImpl(RepositorioCompraHecha repositorioOrden, RepositorioCarrito repositorioCarrito, ServicioPago servicioPago, ServicioCarrito servicioCarrito, RepositorioObra repositorioObra) {
         this.repositorioCompraHecha = repositorioOrden;
         this.repositorioCarrito = repositorioCarrito;
         this.servicioPago = servicioPago;
         this.servicioCarrito = servicioCarrito;
+        this.repositorioObra = repositorioObra;
     }
 
     @Override
@@ -57,7 +60,7 @@ public class ServicioCompraHechaImpl implements ServicioCompraHecha {
 
         this.validarCarrito(carrito);
 
-        if (repositorioCarrito.obtenerPorId(carrito.getId()) != null && carrito.getEstado() == EstadoCarrito.ACTIVO) {
+        if (carrito.getEstado() == EstadoCarrito.ACTIVO) {
             List<ItemCompra> itemsConvertidos = this.convertirItemCarritoAItemOrden(carrito.getItems());
 
             resumenCreado =  new CompraHecha(itemsConvertidos, carrito, carrito.getTotal(), resultadoPago.getIdTransaccion(), resultadoPago.getEstado(), carrito.getUsuario());
@@ -72,6 +75,41 @@ public class ServicioCompraHechaImpl implements ServicioCompraHecha {
         }
 
         throw new IllegalStateException("No se pudo crear la compra: el carrito no está activo o no existe.");
+    }
+
+    @Override
+    public CompraHecha crearResumenCompraDirecta(Long obraId, Formato formato, Usuario usuario, Long pagoId) throws PagoNoAprobadoException, NoHayStockSuficiente {
+
+        Pago resultadoPago = servicioPago.consultarEstadoDePago(pagoId);
+        Obra obra = repositorioObra.obtenerPorId(obraId);
+        int cantidad = 1;
+
+        if(obra == null){
+            throw new NoExisteLaObra("La obra no existe");
+        }
+
+        if (!resultadoPago.getExitoso() || resultadoPago.getEstado() != EstadoPago.APROBADO) {
+            throw new PagoNoAprobadoException("El pago no fue aprobado");
+        }
+
+        ItemCompra itemCompra = new ItemCompra();
+        itemCompra.setObra(obra);
+        itemCompra.setFormato(formato);
+        itemCompra.setCantidad(cantidad);
+        for(FormatoObra formatoObra : obra.getFormatos()) {
+            if (formatoObra.getFormato() == formato) {
+                itemCompra.setPrecioUnitario(formatoObra.getPrecio());
+                break;
+            }
+        }
+        List<ItemCompra> items = new ArrayList<>();
+        items.add(itemCompra);
+
+        CompraHecha resumenCreado =  new CompraHecha(items, null, itemCompra.getSubtotal(), resultadoPago.getIdTransaccion(), resultadoPago.getEstado(), usuario);
+        itemCompra.setCompra(resumenCreado);
+
+
+        return repositorioCompraHecha.guardar(resumenCreado);
     }
 
     private void validarCarrito(Carrito carrito) throws CarritoVacioException, CarritoNoEncontradoException {
@@ -91,6 +129,7 @@ public class ServicioCompraHechaImpl implements ServicioCompraHecha {
         }
         return itemsOrden;
     }
+
 
     @Override
     public CompraHecha obtenerCompraPorId(Long compraId)  {
