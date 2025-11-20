@@ -15,7 +15,10 @@ import com.tallerwebi.presentacion.dto.ObraDto;
 import com.tallerwebi.presentacion.dto.PerfilArtistaDTO;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -242,6 +245,18 @@ public class ControladorObra {
             servicioComentario.guardarComentario(usuario, obra, contenido);
         }
         return "redirect:/obra/" + id;
+    }
+
+    @PostMapping("/{id}/compra-directa")
+    public ResponseEntity<?> compraDirecta(@PathVariable Long id,
+                                           @RequestParam Formato formato,
+                                           HttpSession session) {
+
+        session.setAttribute("obraSeleccionadaId", id);
+        session.setAttribute("formatoSeleccionado", formato);
+        session.setAttribute("tipoCompra", "directa");
+
+        return ResponseEntity.ok().build();
     }
 
 }
