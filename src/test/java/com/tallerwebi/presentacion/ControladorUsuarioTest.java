@@ -2,6 +2,7 @@ package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.ServicioPerfilArtista;
 import com.tallerwebi.dominio.ServicioUsuario;
+import com.tallerwebi.dominio.entidades.Artista;
 import com.tallerwebi.dominio.entidades.Direccion;
 import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.PasswordActualIncorrectoException;
@@ -325,4 +326,66 @@ public class ControladorUsuarioTest {
         assertEquals("redirect:/", mav.getViewName());
     }
 
+    @Test
+    public void verPerfilDeUsuarioRedirigeALoginSiUsuarioEsNull() {
+        when(session.getAttribute("usuarioLogueado")).thenReturn(null);
+
+        ModelAndView mav = controladorUsuario.verPerfilDeUsuario(session);
+
+        assertEquals("redirect:/login", mav.getViewName());
+    }
+
+    @Test
+    public void verPerfilDeUsuarioMuestraPerfilSiUsuarioLogueado() {
+        Usuario usuario = new Usuario();
+        when(session.getAttribute("usuarioLogueado")).thenReturn(usuario);
+        Artista artista = new Artista();
+        when(servicioPerfilArtista.obtenerArtistaPorUsuario(usuario)).thenReturn(artista);
+
+        ModelAndView mav = controladorUsuario.verPerfilDeUsuario(session);
+
+        assertEquals("perfil_usuario", mav.getViewName());
+        assertEquals(usuario, mav.getModel().get("usuario"));
+        assertEquals(artista, mav.getModel().get("artistaUsuario"));
+    }
+
+    @Test
+    public void verInformacionPersonalRedirigeALoginSiUsuarioEsNull() {
+        when(session.getAttribute("usuarioLogueado")).thenReturn(null);
+
+        ModelAndView mav = controladorUsuario.verInformacionPersonal(session);
+
+        assertEquals("redirect:/login", mav.getViewName());
+    }
+
+    @Test
+    public void verInformacionPersonalMuestraVistaSiUsuarioLogueado() {
+        Usuario usuario = new Usuario();
+        when(session.getAttribute("usuarioLogueado")).thenReturn(usuario);
+
+        ModelAndView mav = controladorUsuario.verInformacionPersonal(session);
+
+        assertEquals("usuario_info", mav.getViewName());
+        assertEquals(usuario, mav.getModel().get("usuario"));
+    }
+
+    @Test
+    public void configurarCuentaRedirigeALoginSiUsuarioEsNull() {
+        when(session.getAttribute("usuarioLogueado")).thenReturn(null);
+
+        ModelAndView mav = controladorUsuario.configurarCuenta(session);
+
+        assertEquals("redirect:/login", mav.getViewName());
+    }
+
+    @Test
+    public void configurarCuentaMuestraVistaSiUsuarioLogueado() {
+        Usuario usuario = new Usuario();
+        when(session.getAttribute("usuarioLogueado")).thenReturn(usuario);
+
+        ModelAndView mav = controladorUsuario.configurarCuenta(session);
+
+        assertEquals("usuario_configuracion", mav.getViewName());
+        assertEquals(usuario, mav.getModel().get("usuario"));
+    }
 }

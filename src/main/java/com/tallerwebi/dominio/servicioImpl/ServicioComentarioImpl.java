@@ -16,10 +16,6 @@ import java.util.List;
 @Transactional
 public class ServicioComentarioImpl implements ServicioComentario {
 
-    public ServicioComentarioImpl(RepositorioComentario repositorioComentario) {
-        this.repositorioComentario = repositorioComentario;
-    }
-
     @Autowired
     private RepositorioComentario repositorioComentario;
 
