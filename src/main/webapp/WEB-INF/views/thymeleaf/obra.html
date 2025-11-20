@@ -149,7 +149,7 @@
                             </div>
 
                             <div class="text-sm text-gray-600 mb-2">
-                                <span th:text="'Stock: ' + ${formato.stock}"></span>
+                                <span th:if="${esArtistaDuenio == true}" th:text="'Stock: ' + ${formato.stock}"></span>
                                 <span th:if="${!formato.disponible}" class="ml-2 text-red-500">(No disponible)</span>
                             </div>
 
