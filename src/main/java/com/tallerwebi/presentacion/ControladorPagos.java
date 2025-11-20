@@ -66,7 +66,7 @@ public class ControladorPagos {
         }
     }
 
-    @PostMapping(value = "/pagos/carrito", consumes = "application/json", produces = "application/json")
+    @PostMapping(value = "/pagos-carrito", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> crearPagoCarrito(@RequestBody Map<String, Object> requestBody) {
         try {
             // Obtener los items del carrito del request
@@ -88,19 +88,28 @@ public class ControladorPagos {
                 BigDecimal unitPrice = new BigDecimal(item.get("unit_price").toString());
 
                 PreferenceItemRequest mpItem = PreferenceItemRequest.builder()
-                    .title(title)
-                    .quantity(quantity)
-                    .unitPrice(unitPrice)
-                    .currencyId("ARS")
-                    .build();
+                        .title(title)
+                        .quantity(quantity)
+                        .unitPrice(unitPrice)
+                        .currencyId("ARS")
+                        .build();
                 mpItems.add(mpItem);
             }
 
-            // Crear la preferencia para carrito
+            // Para testing local, comentamos las URLs de callback que causan problemas con localhost
+            PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder()
+                    .success(com.tallerwebi.config.MercadoPagoConfig.getSuccessUrl())
+                    .failure(com.tallerwebi.config.MercadoPagoConfig.getFailureUrl())
+                    .pending(com.tallerwebi.config.MercadoPagoConfig.getPendingUrl())
+                    .build();
+
+            // Crear la preferencia (sin autoReturn para evitar problemas con URLs localhost)
             PreferenceRequest preferenceRequest = PreferenceRequest.builder()
-                .items(mpItems)
-                .externalReference("CARRITO-" + System.currentTimeMillis())
-                .build();
+                    .items(mpItems)
+                    .backUrls(backUrls)
+                    .autoReturn("approved")
+                    .externalReference("GALERIA-" + System.currentTimeMillis())
+                    .build();
 
             // Crear la preferencia usando el SDK real de MercadoPago
             PreferenceClient client = new PreferenceClient();
@@ -117,19 +126,23 @@ public class ControladorPagos {
             return ResponseEntity.ok(response);
 
         } catch (MPApiException e) {
+
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("error", "Error al crear la preferencia del carrito: " + e.getMessage());
             errorResponse.put("statusCode", e.getStatusCode());
+            errorResponse.put("apiResponse", e.getApiResponse());
             errorResponse.put("details", "MPApiException");
 
             return ResponseEntity.badRequest().body(errorResponse);
         } catch (MPException e) {
+
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("error", "Error al crear la preferencia del carrito: " + e.getMessage());
             errorResponse.put("details", "MPException");
 
             return ResponseEntity.badRequest().body(errorResponse);
         } catch (Exception e) {
+
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("error", "Error al crear la preferencia del carrito: " + e.getMessage());
             errorResponse.put("details", e.getClass().getSimpleName());
