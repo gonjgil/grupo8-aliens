@@ -1,7 +1,5 @@
 package com.tallerwebi.dominio;
 
-import com.mercadopago.client.payment.PaymentClient;
-import com.mercadopago.resources.payment.Payment;
 import com.tallerwebi.dominio.entidades.*;
 import com.tallerwebi.dominio.enums.EstadoCarrito;
 import com.tallerwebi.dominio.enums.EstadoPago;
@@ -14,6 +12,8 @@ import com.tallerwebi.dominio.repositorios.RepositorioCompraHecha;
 import com.tallerwebi.dominio.servicioImpl.ServicioCompraHechaImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,6 +31,7 @@ public class ServicioCompraHechaTest {
     private RepositorioCarrito repositorioCarrito;
     private ServicioPago servicioPago;
     private ServicioCarrito servicioCarrito;
+    private ServicioMail servicioMail;
     private ServicioCompraHechaImpl servicioOrdenCompra;
 
     @BeforeEach
@@ -39,14 +40,15 @@ public class ServicioCompraHechaTest {
         this.repositorioCarrito = mock(RepositorioCarrito.class);
         this.servicioPago = mock(ServicioPago.class);
         this.servicioCarrito = mock(ServicioCarrito.class);
-        this.servicioOrdenCompra = new ServicioCompraHechaImpl(repositorioCompraHecha, repositorioCarrito,  servicioPago, servicioCarrito);
+        this.servicioMail = mock(ServicioMail.class);
+        this.servicioOrdenCompra = new ServicioCompraHechaImpl(repositorioCompraHecha, repositorioCarrito,  servicioPago, servicioCarrito, servicioMail);
     }
 
     @Test
     public void deberiaCrearResumenCompraAPartirDeCarritoCorrectamente() throws CarritoVacioException, CarritoNoEncontradoException, PagoNoAprobadoException {
         Usuario usuario = new Usuario();
         usuario.setId(1L);
-        usuario.setEmail("sol@example.com");
+        usuario.setEmail("test@ejemplo.com");
         Carrito carrito = new Carrito(usuario);
         carrito.setId(1L);
         Obra obra1 = new Obra();
@@ -82,43 +84,42 @@ public class ServicioCompraHechaTest {
         assertThat(ordenCreada.getUsuario().getEmail(), is(compraEsperada.getUsuario().getEmail()));
         assertThat(ordenCreada.getPrecioFinal(), is(compraEsperada.getPrecioFinal()));
         assertThat(ordenCreada.getPagoId(), is(compraEsperada.getPagoId()));
+        verify(servicioMail, times(1))
+                .enviarMailConfirmacionCompra(
+                        ArgumentMatchers.any(Usuario.class),
+                        ArgumentMatchers.any(CompraHecha.class),
+                        anyList()
+                );
     }
 
+    @Test
+    public void deberiaConvertirItemCarritoEnItemCompraCorrectamente() {
+        Usuario usuario = new Usuario();
+        Carrito carrito = new Carrito(usuario);
 
-//    @Test
-//    public void deberiaCrearOrdenDeCompraAPartirDeCarritoCorrectamenteItemCarritoDebeConvertirseEnItemOrdenCorrectamente() throws CarritoVacioException, CarritoNoEncontradoException, PagoNoAprobadoException {
-//        Usuario usuario = new Usuario();
-//        Carrito carrito = new Carrito(usuario);
-//
-//        Obra obra1 = new Obra();
-//        Obra obra2 = new Obra();
-//
-//        obra1.setId(1L);
-//        obra2.setId(1L);
-//        carrito.setId(1L);
-//        FormatoObra formatoObra1 = new FormatoObra(obra1, Formato.ORIGINAL, 2001.0, 5);
-//        obra1.agregarFormato(formatoObra1);
-//
-//        FormatoObra formatoObra2 = new FormatoObra(obra2, Formato.ORIGINAL, 2001.0, 5);
-//        obra2.agregarFormato(formatoObra2);
-//
-//        carrito.agregarItem(obra1, Formato.ORIGINAL, 2001.0);
-//        carrito.agregarItem(obra2, Formato.ORIGINAL, 2001.0);
-//
-//        carrito.setEstado(EstadoCarrito.FINALIZADO);
-//
-//        Pago pago = new Pago(true, 1L,EstadoPago.APROBADO, "MercadoPago");
-//
-//        when(servicioPago.consultarEstadoDePago(1L)).thenReturn(pago);
-//        when(repositorioCarrito.obtenerPorId(1L)).thenReturn(carrito);
-//
-//        CompraHecha ordenCreada = this.servicioOrdenCompra.crearResumenCompraAPartirDeCarrito(carrito, pago.getIdTransaccion());
-//
-//        assertThat(ordenCreada.getItems().size(), is(carrito.getItems().size()));
-//        assertThat(ordenCreada.getCarrito().buscarItemPorObra(obra1), is(carrito.buscarItemPorObra(obra1)));
-//        assertThat(ordenCreada.getCarrito().buscarItemPorObra(obra2), is(carrito.buscarItemPorObra(obra2)));
-//
-//    }
+        Obra obra = new Obra();
+        obra.setId(1L);
+        FormatoObra formatoObra = new FormatoObra(obra, Formato.ORIGINAL, 1000.0, 5);
+        obra.agregarFormato(formatoObra);
+
+        ItemCarrito itemCarrito = new ItemCarrito(carrito, obra, Formato.ORIGINAL, 1000.0);
+        itemCarrito.setCantidad(2);
+
+        List<ItemCarrito> itemsCarrito = new ArrayList<>();
+        itemsCarrito.add(itemCarrito);
+
+        List<ItemCompra> itemsCompra = servicioOrdenCompra.convertirItemCarritoAItemOrden(itemsCarrito);
+
+        // Asserts
+        assertThat(itemsCompra.size(), is(1));
+        ItemCompra itemCompra = itemsCompra.get(0);
+        assertThat(itemCompra.getObra().getId(), is(obra.getId()));
+        assertThat(itemCompra.getFormato(), is(Formato.ORIGINAL));
+        assertThat(itemCompra.getCantidad(), is(2));
+        assertThat(itemCompra.getPrecioUnitario(), is(1000.0));
+        assertThat(itemCompra.getSubtotal(), is(2000.0));
+    }
+
 
     @Test
     public void enCasoDeQueElCarritoConElQueQuieroHacerLaOrdenDeCompraEsteSinItemsDebeDarCarritoVacioException() throws CarritoVacioException {
@@ -158,14 +159,8 @@ public class ServicioCompraHechaTest {
         when(servicioPago.consultarEstadoDePago(1L)).thenReturn(pago);
         when(repositorioCarrito.obtenerPorId(1L)).thenReturn(null);
 
-        try {
-            this.servicioOrdenCompra.crearResumenCompraAPartirDeCarrito(carrito,pago.getIdTransaccion());
-            fail("Se esperaba CarritoNoEncontradoException pero no fue lanzada");
-        } catch (CarritoNoEncontradoException | CarritoVacioException e) {
-
-        } catch (PagoNoAprobadoException e) {
-            throw new RuntimeException(e);
-        }
+        assertThrows(CarritoNoEncontradoException.class, () ->
+                servicioOrdenCompra.crearResumenCompraAPartirDeCarrito(carrito, pago.getIdTransaccion()));
 
     }
 
@@ -192,11 +187,34 @@ public class ServicioCompraHechaTest {
         } catch (CarritoNoEncontradoException | CarritoVacioException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     @Test
-    public void deberiaObtenerPorIdCorrectamente() throws CarritoNoEncontradoException, CarritoVacioException {
+    public void deberiaLanzarIllegalStateExceptionSiCarritoNoEstaActivo() {
+        Usuario usuario = new Usuario();
+        Carrito carrito = new Carrito(usuario);
+        carrito.setId(1L);
+        carrito.setEstado(EstadoCarrito.FINALIZADO);
+
+        Obra obra1 = new Obra();
+        obra1.setId(1L);
+        FormatoObra formatoObra1 = new FormatoObra(obra1, Formato.ORIGINAL, 2001.0, 5);
+        obra1.agregarFormato(formatoObra1);
+        carrito.agregarItem(obra1, Formato.ORIGINAL, 2001.0);
+
+        Pago pago = new Pago(true, 1L, EstadoPago.APROBADO, "MercadoPago");
+
+        when(servicioPago.consultarEstadoDePago(1L)).thenReturn(pago);
+        when(repositorioCarrito.obtenerPorId(1L)).thenReturn(carrito);
+
+        IllegalStateException expected = assertThrows(IllegalStateException.class,
+                () -> servicioOrdenCompra.crearResumenCompraAPartirDeCarrito(carrito, pago.getIdTransaccion())
+        );
+        assertThat(expected.getMessage(), is("No se pudo crear la compra: el carrito no está activo o no existe."));
+    }
+
+    @Test
+    public void deberiaObtenerPorIdCorrectamente(){
         Usuario usuario = new Usuario();
         usuario.setId(1L);
 
@@ -214,7 +232,7 @@ public class ServicioCompraHechaTest {
     }
 
     @Test
-    public void deberiaObtenerComprasPorUsuarioCorrectamente() throws CarritoNoEncontradoException, CarritoVacioException {
+    public void deberiaObtenerComprasPorUsuarioCorrectamente() {
         Usuario usuario = new Usuario();
         usuario.setId(1L);
 

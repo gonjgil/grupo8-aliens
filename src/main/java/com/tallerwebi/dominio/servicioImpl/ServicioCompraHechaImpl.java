@@ -1,8 +1,6 @@
 package com.tallerwebi.dominio.servicioImpl;
 
-import com.tallerwebi.dominio.ServicioCarrito;
-import com.tallerwebi.dominio.ServicioCompraHecha;
-import com.tallerwebi.dominio.ServicioPago;
+import com.tallerwebi.dominio.*;
 import com.tallerwebi.dominio.entidades.*;
 import com.tallerwebi.dominio.enums.EstadoCarrito;
 import com.tallerwebi.dominio.enums.EstadoPago;
@@ -29,13 +27,15 @@ public class ServicioCompraHechaImpl implements ServicioCompraHecha {
     private RepositorioCarrito repositorioCarrito;
     private ServicioCarrito servicioCarrito;
     private ServicioPago servicioPago;
+    private ServicioMail servicioMail;
 
     @Autowired
-    public ServicioCompraHechaImpl(RepositorioCompraHecha repositorioOrden, RepositorioCarrito repositorioCarrito, ServicioPago servicioPago, ServicioCarrito servicioCarrito) {
+    public ServicioCompraHechaImpl(RepositorioCompraHecha repositorioOrden, RepositorioCarrito repositorioCarrito, ServicioPago servicioPago, ServicioCarrito servicioCarrito, ServicioMail servicioMail) {
         this.repositorioCompraHecha = repositorioOrden;
         this.repositorioCarrito = repositorioCarrito;
         this.servicioPago = servicioPago;
         this.servicioCarrito = servicioCarrito;
+        this.servicioMail = servicioMail;
     }
 
     @Override
@@ -59,11 +59,18 @@ public class ServicioCompraHechaImpl implements ServicioCompraHecha {
 
             CompraHecha guardada = repositorioCompraHecha.guardar(resumenCreado);
 
+            try {
+                servicioMail.enviarMailConfirmacionCompra(carrito.getUsuario(), guardada, itemsConvertidos);
+            } catch (Exception emailException) {
+                System.err.println("Error enviando email de confirmación: " + emailException.getMessage());
+            }
+
             servicioCarrito.finalizarCompra(carrito.getUsuario());
+
             return  guardada;
         }
 
-        throw new IllegalStateException("No se pudo crear la compra: el carrito no está finalizado o no existe.");
+        throw new IllegalStateException("No se pudo crear la compra: el carrito no está activo o no existe.");
     }
 
     private void validarCarrito(Carrito carrito) throws CarritoVacioException, CarritoNoEncontradoException {
@@ -75,7 +82,7 @@ public class ServicioCompraHechaImpl implements ServicioCompraHecha {
         }
     }
 
-    private List<ItemCompra> convertirItemCarritoAItemOrden(List<ItemCarrito> itemsCarrito) {
+    public List<ItemCompra> convertirItemCarritoAItemOrden(List<ItemCarrito> itemsCarrito) {
         List<ItemCompra> itemsOrden = new ArrayList<>();
         for (ItemCarrito itemCarrito : itemsCarrito) {
             ItemCompra itemCompra = new ItemCompra(itemCarrito);

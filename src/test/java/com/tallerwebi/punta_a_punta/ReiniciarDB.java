@@ -20,7 +20,24 @@ public class ReiniciarDB {
                 dbHost, dbPort, dbUser, dbPassword, dbName, sqlCommands
             );
 
-            Process process = Runtime.getRuntime().exec(new String[]{"/bin/bash", "-c", comando});
+//            Process process = Runtime.getRuntime().exec(new String[]{"/bin/bash", "-c", comando});
+            Process process;
+
+            // Detectar sistema operativo
+            String so = System.getProperty("os.name").toLowerCase();
+
+            if (so.contains("win")) {
+                // WINDOWS
+                process = Runtime.getRuntime().exec(
+                        new String[]{"cmd.exe", "/c", comando}
+                );
+            } else {
+                // LINUX / MAC
+                process = Runtime.getRuntime().exec(
+                        new String[]{"/bin/bash", "-c", comando}
+                );
+            }
+
             int exitCode = process.waitFor();
 
             if (exitCode == 0) {
