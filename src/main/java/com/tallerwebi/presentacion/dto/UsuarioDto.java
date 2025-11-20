@@ -89,6 +89,7 @@ public class UsuarioDto {
         usuario.setNombre(this.nombres);
         usuario.setEmail(this.email);
         usuario.setPassword(this.password);
+        usuario.setNombre(nombres);
         usuario.setRol(this.rol);
         usuario.setActivo(this.activo);
         usuario.setCategoriasFavoritas(this.categoriasFavoritas);
