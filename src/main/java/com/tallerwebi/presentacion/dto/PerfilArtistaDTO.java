@@ -14,8 +14,9 @@ public class PerfilArtistaDTO {
         private String urlInstagram;
         private String urlTwitter;
         private Long usuarioId;
+        private Boolean aceptaComisiones;
 
-    public PerfilArtistaDTO(Long id, String nombre, String biografia, String urlFotoPerfil, String urlFacebook, String urlInstagram, String urlTwitter, Long usuarioId) {
+    public PerfilArtistaDTO(Long id, String nombre, String biografia, String urlFotoPerfil, String urlFacebook, String urlInstagram, String urlTwitter, Long usuarioId, Boolean aceptaComisiones) {
         this.id = id;
         this.nombre = nombre;
         this.biografia = biografia;
@@ -24,6 +25,7 @@ public class PerfilArtistaDTO {
         this.urlInstagram = urlInstagram;
         this.urlTwitter = urlTwitter;
         this.usuarioId = usuarioId;
+        this.aceptaComisiones = aceptaComisiones;
     }
 
     public PerfilArtistaDTO(Artista artista) {
@@ -34,6 +36,7 @@ public class PerfilArtistaDTO {
         this.urlFacebook = artista.getUrlFacebook();
         this.urlInstagram = artista.getUrlInstagram();
         this.urlTwitter = artista.getUrlTwitter();
+        this.aceptaComisiones = artista.getAceptaComisiones();
     }
 
     public PerfilArtistaDTO() {
@@ -96,6 +99,14 @@ public class PerfilArtistaDTO {
         this.urlTwitter = urlTwitter;
     }
 
+    public Boolean getAceptaComisiones() {
+        return aceptaComisiones;
+    }
+
+    public void setAceptaComisiones(Boolean aceptaComisiones) {
+        this.aceptaComisiones = aceptaComisiones;
+    }
+
     public Artista toArtista() {
         Artista artista = new Artista();
         artista.setId(this.id);
@@ -105,6 +116,7 @@ public class PerfilArtistaDTO {
         artista.setUrlFacebook(this.urlFacebook);
         artista.setUrlInstagram(this.urlInstagram);
         artista.setUrlTwitter(this.urlTwitter);
+        artista.setAceptaComisiones(this.aceptaComisiones);
         return artista;
     }
 
@@ -114,6 +126,3 @@ public class PerfilArtistaDTO {
     public void setUsuarioId(Long usuarioId) { this.usuarioId = usuarioId;
     }
 }
-
-
-

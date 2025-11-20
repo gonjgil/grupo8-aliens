@@ -74,8 +74,8 @@ public class ControladorObra {
             model.put("cantidad", cantidad);
 
             ObraDto obraDto = new ObraDto(obra);
+            obraDto.setCantidadLikes(servicioGaleria.obtenerLikesObra(obra));
             model.put("obra", obraDto);
-
 
             //carga comentarios asociados a la obra
             List<Comentario> comentarios = servicioComentario.obtenerComentariosDeObra(id);

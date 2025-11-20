@@ -17,7 +17,7 @@ public class Direccion {
 
     private String tipoDomicilio; // Casa, trabajo, vecino, etc
     private String nombreCalle;
-    private Integer altura;
+    private String altura;
     private String piso;
     private String departamento;
     private String codigoPostal;
@@ -31,7 +31,7 @@ public class Direccion {
     private String nombreContacto;
     private Integer telefonoContacto;
 
-    public Direccion(Long id, Usuario usuario, String tipoDomicilio, String nombreCalle, Integer altura,
+    public Direccion(Long id, Usuario usuario, String tipoDomicilio, String nombreCalle, String altura,
                      String piso, String departamento, String codigoPostal, String ciudadBarrio,
                      Provincia provincia, String nombreContacto, Integer telefonoContacto) {
         this.id = id;
@@ -69,8 +69,8 @@ public class Direccion {
     public String getNombreCalle() { return nombreCalle; }
     public void setNombreCalle(String nombreCalle) { this.nombreCalle = nombreCalle; }
 
-    public Integer getAltura() { return altura; }
-    public void setAltura(Integer altura) { this.altura = altura; }
+    public String getAltura() { return this.altura; }
+    public void setAltura(String altura) { this.altura = altura; }
 
     public String getPiso() { return piso; }
     public void setPiso(String piso) { this.piso = piso; }

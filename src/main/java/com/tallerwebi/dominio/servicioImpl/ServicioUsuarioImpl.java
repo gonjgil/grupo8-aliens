@@ -10,7 +10,6 @@ import com.tallerwebi.dominio.repositorios.RepositorioArtista;
 import com.tallerwebi.dominio.repositorios.RepositorioCarrito;
 import com.tallerwebi.dominio.repositorios.RepositorioUsuario;
 import com.tallerwebi.dominio.ServicioUsuario;
-import com.tallerwebi.infraestructura.RepositorioArtistaImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

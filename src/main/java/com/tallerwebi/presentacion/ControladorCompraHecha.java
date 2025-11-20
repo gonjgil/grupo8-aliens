@@ -1,31 +1,29 @@
 package com.tallerwebi.presentacion;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.exceptions.MPException;
-import com.tallerwebi.dominio.ServicioCarrito;
 import com.tallerwebi.dominio.ServicioCompraHecha;
-import com.tallerwebi.dominio.entidades.Carrito;
 import com.tallerwebi.dominio.entidades.CompraHecha;
 import com.tallerwebi.dominio.entidades.ItemCompra;
 import com.tallerwebi.dominio.entidades.Usuario;
-import com.tallerwebi.dominio.excepcion.CarritoNoEncontradoException;
-import com.tallerwebi.dominio.excepcion.CarritoVacioException;
-import com.tallerwebi.dominio.excepcion.PagoNoAprobadoException;
-import com.tallerwebi.presentacion.dto.ItemCompraDto;
 import com.tallerwebi.presentacion.dto.CompraHechaDto;
-import org.hibernate.Hibernate;
+import com.tallerwebi.presentacion.dto.ItemCompraDto;
+
+import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 @Controller
 @RequestMapping("/compras")
@@ -65,28 +63,28 @@ public class ControladorCompraHecha {
 
 
     @GetMapping("/historial")
-    public ModelAndView verMisCompras(HttpSession session, @RequestParam(defaultValue = "0") int pagina) {
+    public ModelAndView verMisCompras(HttpSession session) {
         ModelMap modelo = new ModelMap();
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
 
         if (usuario == null) {
             return new ModelAndView("redirect:/login");
         }
-//        int tamanioPorPagina = 9;
+
         List<CompraHecha> compras = servicioCompraHecha.obtenerComprasPorUsuario(usuario);
         List<CompraHechaDto> comprasDto = new ArrayList<>();
+
         for (CompraHecha compra : compras) {
-            compra.getItems().size();
-            comprasDto.add(new CompraHechaDto(compra));
+            List<ItemCompraDto> itemsDto = new ArrayList<>();
+            for (ItemCompra item : compra.getItems()) {
+                itemsDto.add(new ItemCompraDto(item));
+            }
+            comprasDto.add(new CompraHechaDto(compra, itemsDto));
         }
 
-        if (comprasDto.isEmpty()) {
-            modelo.put("compras", Collections.emptyList());
-        } else {
-            modelo.put("compras", comprasDto);
-        }
-
+        modelo.put("compras", comprasDto.isEmpty() ? Collections.emptyList() : comprasDto);
         modelo.put("usuario", usuario);
+
         return new ModelAndView("compras_historial", modelo);
     }
 

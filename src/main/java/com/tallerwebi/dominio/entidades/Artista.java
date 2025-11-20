@@ -18,6 +18,7 @@ public class Artista {
     private String urlFacebook;
     private String urlInstagram;
     private String urlTwitter;
+    private Boolean aceptaComisiones = false;
 
     @OneToOne
     @JoinColumn(name = "usuario_id", referencedColumnName = "id")
@@ -99,6 +100,14 @@ public class Artista {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public Boolean getAceptaComisiones() {
+        return aceptaComisiones;
+    }
+
+    public void setAceptaComisiones(Boolean aceptaComisiones) {
+        this.aceptaComisiones = aceptaComisiones;
     }
 
     @Override

@@ -104,7 +104,7 @@ public class ControladorUsuarioTest {
         Direccion direccion = new Direccion();
         direccion.setId(idDireccion);
         direccion.setNombreCalle("Mitre");
-        direccion.setAltura(123);
+        direccion.setAltura("123");
 
         HttpSession session = mock(HttpSession.class);
         when(session.getAttribute("usuarioLogueado")).thenReturn(usuario);
@@ -134,7 +134,7 @@ public class ControladorUsuarioTest {
 
         Direccion nuevaDireccion = new Direccion();
         nuevaDireccion.setNombreCalle("Sarmiento");
-        nuevaDireccion.setAltura(123);
+        nuevaDireccion.setAltura("123");
 
         HttpSession session = mock(HttpSession.class);
         when(session.getAttribute("usuarioLogueado")).thenReturn(usuario);

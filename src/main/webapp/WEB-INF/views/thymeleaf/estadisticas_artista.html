@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estadísticas del Artista | ArtRoom</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/perfil_artista.css}"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <!-- Google Charts -->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+</head>
+<body class="bg-gray-100 text-gray-800 flex flex-col min-h-screen">
+
+<header class="bg-gray-900 text-white shadow-md">
+    <div class="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center">
+        <h1 class="text-4xl font-bold tracking-wide">
+            <a th:href="@{/galeria}" class="hover:text-blue-500 transition">ArtRoom</a>
+        </h1>
+
+        <div class="flex items-center space-x-6">
+            <div th:if="${usuario != null}" class="flex items-center space-x-3 text-gray-200 px-2">
+                <span th:text="'Hola, ' + ${usuario.nombre}"></span>
+
+                <a th:href="@{/usuario}" class="bg-gray-200 text-gray-700 hover:bg-green-600 hover:text-white py-2 px-6 rounded-md shadow transition">
+                    <i class="fa-solid fa-user"></i>
+                </a>
+
+                <a th:href="@{/carrito}" class="bg-gray-200 text-gray-700 hover:bg-blue-600 hover:text-white py-2 px-6 rounded-md shadow transition relative">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span data-carrito-count class="hidden absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">0</span>
+                </a>
+
+                <a th:href="@{/logout}" class="bg-gray-200 text-gray-700 hover:bg-red-600 hover:text-white py-2 px-6 rounded-md shadow transition">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="flex-grow container perfil-container">
+
+    <section class="my-12">
+
+        <!-- CDN de Chart.js -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+
+            <!-- OBRAS MÁS VENDIDAS -->
+            <div th:if="${masVendidas != null and !masVendidas.isEmpty()}" class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold mb-4 text-gray-700">Obras más vendidas</h3>
+                <canvas id="chartMasVendidas"></canvas>
+            </div>
+
+            <!-- CATEGORÍAS MÁS VENDIDAS -->
+            <div th:if="${cat_masVendidas != null and !cat_masVendidas.isEmpty()}" class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold mb-4 text-gray-700">Categorías más vendidas</h3>
+                <canvas id="chartCatVendidas"></canvas>
+            </div>
+
+            <!-- OBRAS MÁS LIKEADAS -->
+            <div th:if="${masLikeadas != null and !masLikeadas.isEmpty()}" class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold mb-4 text-gray-700">Obras más likeadas</h3>
+                <canvas id="chartMasLikeadas"></canvas>
+            </div>
+
+            <!-- CATEGORÍAS MÁS LIKEADAS -->
+            <div th:if="${cat_masLikeadas != null and !cat_masLikeadas.isEmpty()}" class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold mb-4 text-gray-700">Categorías más likeadas</h3>
+                <canvas id="chartCatLikeadas"></canvas>
+            </div>
+
+        </div>
+    </section>
+
+</main>
+
+
+<footer class="bg-gray-500 text-gray-200 py-6 mt-12 text-center shadow-inner">
+    <p>&copy; 2025 Grupo 8</p>
+    <p class="text-gray-900 text-sm">Gil - Solodujin - Landín - Santillan - Torrico</p>
+</footer>
+
+<script th:inline="javascript">
+    document.addEventListener("DOMContentLoaded", () => {
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawCharts);
+
+        function drawCharts() {
+            const categoriaNombres = /*[[${categoriaNombres}]]*/ {};
+
+            // --- OBRAS MÁS VENDIDAS ---
+            const masVendidas = /*[[${masVendidas}]]*/ [];
+            const masVendidasLabels = masVendidas.map(o => o.obra.titulo);
+            const masVendidasData   = masVendidas.map(o => o.cantidad);
+
+            const mv = document.getElementById('chartMasVendidas');
+            if(mv) {
+                new Chart(mv, {
+                    type: 'bar',
+                    data: {
+                        labels: masVendidasLabels,
+                        datasets: [{
+                            label: 'Ventas',
+                            data: masVendidasData
+                        }]
+                    }
+                });
+            }
+
+            // --- OBRAS MÁS LIKEADAS ---
+            const masLikeadas = /*[[${masLikeadas}]]*/ [];
+            const masLikeadasLabels = masLikeadas.map(o => o.obra.titulo);
+            const masLikeadasData   = masLikeadas.map(o => o.cantidad);
+
+            const ml = document.getElementById('chartMasLikeadas');
+            if(ml) {
+                new Chart(ml, {
+                    type: 'bar',
+                    data: {
+                        labels: masLikeadasLabels,
+                        datasets: [{
+                            label: 'Likes',
+                            data: masLikeadasData
+                        }]
+                    }
+                });
+            }
+
+            // --- CATEGORÍAS MÁS VENDIDAS ---
+            const catVendidas = /*[[${cat_masVendidas}]]*/ [];
+            const catVendidasLabels = catVendidas.map(c => categoriaNombres[c.categoria]);
+            const catVendidasData   = catVendidas.map(c => c.cantidad);
+
+            const cv = document.getElementById('chartCatVendidas');
+            if(cv) {
+                new Chart(cv, {
+                    type: 'pie',
+                    data: {
+                        labels: catVendidasLabels,
+                        datasets: [{
+                            data: catVendidasData
+                        }]
+                    }
+                });
+            }
+
+            // --- CATEGORÍAS MÁS LIKEADAS ---
+            const catLikeadas = /*[[${cat_masLikeadas}]]*/ [];
+            const catLikeadasLabels = catLikeadas.map(c => categoriaNombres[c.categoria]);
+            const catLikeadasData   = catLikeadas.map(c => c.cantidad);
+
+            const cl = document.getElementById('chartCatLikeadas');
+            if(cl) {
+                new Chart(cl, {
+                    type: 'pie',
+                    data: {
+                        labels: catLikeadasLabels,
+                        datasets: [{
+                            data: catLikeadasData
+                        }]
+                    }
+                });
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

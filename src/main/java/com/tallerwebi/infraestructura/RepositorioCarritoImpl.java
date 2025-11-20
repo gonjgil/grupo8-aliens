@@ -81,11 +81,11 @@ public class RepositorioCarritoImpl implements RepositorioCarrito {
         Carrito carritoAct = sessionFactory.getCurrentSession().get(Carrito.class, carritoId);
         sessionFactory.getCurrentSession().refresh(carritoAct);
     }
-    @Override
-    public Carrito obtenerUltimoCarritoPorUsuario(Long usuarioId) {
+    public Carrito obtenerUltimoCarritoFinalizadoPorUsuario(Long usuarioId) {
         return (Carrito) sessionFactory.getCurrentSession()
-                .createQuery("FROM Carrito c WHERE c.usuario.id = :usuarioId ORDER BY c.fecha DESC")
+                .createQuery("FROM Carrito c WHERE c.usuario.id = :usuarioId AND c.estado = :estado ORDER BY c.fecha DESC")
                 .setParameter("usuarioId", usuarioId)
+                .setParameter("estado", EstadoCarrito.FINALIZADO)
                 .setMaxResults(1)
                 .uniqueResult();
     }

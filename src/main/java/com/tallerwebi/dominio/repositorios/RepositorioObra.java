@@ -1,6 +1,7 @@
 package com.tallerwebi.dominio.repositorios;
 
 import java.util.List;
+import java.util.Map;
 
 import com.tallerwebi.dominio.entidades.Artista;
 import com.tallerwebi.dominio.entidades.Obra;
@@ -17,4 +18,12 @@ public interface RepositorioObra {
     //List<Obra> buscarPorDescripcion(String descripcion);
     List<Obra> buscarPorString(String palabraBuscada);
     void eliminar(Obra obra);
+
+    Map<Obra, Long> obtenerMasVendidasPorArtista(Artista artista);
+    List<Obra> obtenerMasLikeadasPorArtista(Artista artista);
+    Map<Categoria, Long> obtenerTresCategoriasMasVendidasArtista(Artista artista);
+    Map<Categoria, Long> obtenerTresCategoriasMasLikeadasArtista(Artista artista);
+    List<Obra> obtenerTrendingVentasArtista(Artista artista);
+    List<Obra> obtenerTrendingLikesArtista(Artista artista);
+    Integer contarLikesDeObra(Long obraId);
 }

@@ -1,14 +1,11 @@
 package com.tallerwebi.presentacion;
 
-import com.mercadopago.client.preference.PreferenceBackUrlsRequest;
-import com.mercadopago.client.preference.PreferenceClient;
-import com.mercadopago.client.preference.PreferenceItemRequest;
-import com.mercadopago.client.preference.PreferenceRequest;
-import com.mercadopago.resources.preference.Preference;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.exceptions.MPApiException;
 import com.tallerwebi.dominio.ServicioCarrito;
 import com.tallerwebi.dominio.ServicioCompraHecha;
+import com.tallerwebi.dominio.ServicioMail;
+import com.tallerwebi.dominio.ServicioMercadoPago;
 import com.tallerwebi.dominio.entidades.Carrito;
 import com.tallerwebi.dominio.entidades.CompraHecha;
 import com.tallerwebi.dominio.entidades.Usuario;
@@ -18,14 +15,11 @@ import com.tallerwebi.dominio.excepcion.PagoNoAprobadoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +35,20 @@ public class ControladorPagos {
     @Autowired
     private ServicioCarrito servicioCarrito;
 
+    @Autowired
+    private ServicioMercadoPago servicioMercadoPago;
+
+    @Autowired
+    private ServicioMail servicioMail;
+
+    public ControladorPagos() {
+    }
+
+    public ControladorPagos(ServicioCompraHecha servicioCompraHecha, ServicioCarrito servicioCarrito, ServicioMail servicioMail) {
+        this.servicioCompraHecha = servicioCompraHecha;
+        this.servicioCarrito = servicioCarrito;
+        this.servicioMail = servicioMail;
+    }
 
     @PostConstruct
     public void init() {
@@ -58,48 +66,7 @@ public class ControladorPagos {
             // Obtener los items del carrito del request
             @SuppressWarnings("unchecked")
             List<Map<String, Object>> items = (List<Map<String, Object>>) requestBody.get("items");
-
-            // Validar que tengamos items
-            if (items == null || items.isEmpty()) {
-                Map<String, String> errorResponse = new HashMap<>();
-                errorResponse.put("error", "El carrito está vacío");
-                return ResponseEntity.badRequest().body(errorResponse);
-            }
-
-            // Crear los items para MercadoPago
-            List<PreferenceItemRequest> mpItems = new ArrayList<>();
-            for (Map<String, Object> item : items) {
-                String title = (String) item.get("title");
-                Integer quantity = ((Number) item.get("quantity")).intValue();
-                BigDecimal unitPrice = new BigDecimal(item.get("unit_price").toString());
-
-                PreferenceItemRequest mpItem = PreferenceItemRequest.builder()
-                    .title(title)
-                    .quantity(quantity)
-                    .unitPrice(unitPrice)
-                    .currencyId("ARS")
-                    .build();
-                mpItems.add(mpItem);
-            }
-
-            // Crear la preferencia para carrito
-            PreferenceRequest preferenceRequest = PreferenceRequest.builder()
-                .items(mpItems)
-                .externalReference("CARRITO-" + System.currentTimeMillis())
-                .build();
-
-            // Crear la preferencia usando el SDK real de MercadoPago
-            PreferenceClient client = new PreferenceClient();
-            Preference preference = client.create(preferenceRequest);
-
-            // Preparar la respuesta
-            Map<String, Object> response = new HashMap<>();
-            response.put("init_point", preference.getInitPoint());
-            response.put("sandbox_init_point", preference.getSandboxInitPoint());
-            response.put("id", preference.getId());
-            response.put("status", "created");
-            response.put("message", "Preferencia de carrito creada exitosamente");
-
+            Map<String, Object> response = servicioMercadoPago.crearPagoCarrito(items);
             return ResponseEntity.ok(response);
 
         } catch (MPApiException e) {
@@ -130,58 +97,7 @@ public class ControladorPagos {
             // Obtener los items del request
             @SuppressWarnings("unchecked")
             List<Map<String, Object>> items = (List<Map<String, Object>>) requestBody.get("items");
-
-            // Validar que tengamos items
-            if (items == null || items.isEmpty()) {
-                Map<String, String> errorResponse = new HashMap<>();
-                errorResponse.put("error", "No se encontraron items para procesar");
-                return ResponseEntity.badRequest().body(errorResponse);
-            }
-
-            // Crear los items para MercadoPago
-            List<PreferenceItemRequest> mpItems = new ArrayList<>();
-            for (Map<String, Object> item : items) {
-                String title = (String) item.get("title");
-                Integer quantity = ((Number) item.get("quantity")).intValue();
-                BigDecimal unitPrice = new BigDecimal(item.get("unit_price").toString());
-
-                PreferenceItemRequest mpItem = PreferenceItemRequest.builder()
-                    .title(title)
-                    .quantity(quantity)
-                    .unitPrice(unitPrice)
-                    .currencyId("ARS")
-                    .build();
-                mpItems.add(mpItem);
-            }
-
-            // Para testing local, comentamos las URLs de callback que causan problemas con localhost
-             PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder()
-                 .success(com.tallerwebi.config.MercadoPagoConfig.getSuccessUrl())
-                 .failure(com.tallerwebi.config.MercadoPagoConfig.getFailureUrl())
-                 .pending(com.tallerwebi.config.MercadoPagoConfig.getPendingUrl())
-                 .build();
-
-            // Crear la preferencia (sin autoReturn para evitar problemas con URLs localhost)
-            PreferenceRequest preferenceRequest = PreferenceRequest.builder()
-                    .items(mpItems)
-                    .backUrls(backUrls)
-                    .autoReturn("approved")
-                    .externalReference("GALERIA-" + System.currentTimeMillis())
-                    .build();
-
-
-            // Crear la preferencia usando el SDK real de MercadoPago
-            PreferenceClient client = new PreferenceClient();
-            Preference preference = client.create(preferenceRequest);
-
-            // Preparar la respuesta
-            Map<String, Object> response = new HashMap<>();
-            response.put("init_point", preference.getInitPoint());
-            response.put("sandbox_init_point", preference.getSandboxInitPoint());
-            response.put("id", preference.getId());
-            response.put("status", "created");
-            response.put("message", "Preferencia creada exitosamente en MercadoPago");
-
+            Map<String, Object> response = servicioMercadoPago.crearPago(items);
             return ResponseEntity.ok(response);
 
         } catch (MPApiException e) {
@@ -224,12 +140,11 @@ public class ControladorPagos {
             if (compra == null || compra.getId() == null) {
                 return new ModelAndView("redirect:/compras/error");
             }
+
             return new ModelAndView("redirect:/compras/historial");
 
-        } catch (CarritoVacioException | CarritoNoEncontradoException | PagoNoAprobadoException e) {
-            return new ModelAndView("redirect:/compras/error");
         } catch (Exception e) {
-//            e.printStackTrace(); // para ver el stack completo
+            e.printStackTrace();
             return new ModelAndView("redirect:/compras/error");
         }
     }

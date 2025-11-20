@@ -3,6 +3,7 @@ package com.tallerwebi.dominio.entidades;
 import com.tallerwebi.dominio.enums.Formato;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "ItemCompra")
@@ -89,4 +90,17 @@ public class ItemCompra {
     public void setPrecioUnitario(Double precioUnitario) {
         this.precioUnitario = precioUnitario;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        ItemCompra that = (ItemCompra) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
+
 }

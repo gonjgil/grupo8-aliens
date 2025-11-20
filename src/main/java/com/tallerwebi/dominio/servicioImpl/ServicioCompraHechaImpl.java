@@ -1,10 +1,5 @@
 package com.tallerwebi.dominio.servicioImpl;
 
-import com.mercadopago.MercadoPagoConfig;
-import com.mercadopago.client.payment.PaymentClient;
-import com.mercadopago.exceptions.MPApiException;
-import com.mercadopago.exceptions.MPException;
-import com.mercadopago.resources.payment.Payment;
 import com.tallerwebi.dominio.ServicioCarrito;
 import com.tallerwebi.dominio.ServicioCompraHecha;
 import com.tallerwebi.dominio.ServicioPago;
@@ -16,15 +11,12 @@ import com.tallerwebi.dominio.excepcion.CarritoVacioException;
 import com.tallerwebi.dominio.excepcion.PagoNoAprobadoException;
 import com.tallerwebi.dominio.repositorios.RepositorioCarrito;
 import com.tallerwebi.dominio.repositorios.RepositorioCompraHecha;
-import com.tallerwebi.presentacion.dto.ItemCompraDto;
-import com.tallerwebi.presentacion.dto.CompraHechaDto;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
