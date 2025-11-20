@@ -48,7 +48,6 @@ public class CargaObraE2E {
         context = browser.newContext();
         Page page = context.newPage();
 
-        // 🔥 Ninguna vista navega en su constructor
         vistaLogin = new VistaLogin(page);
         vistaGaleria = new VistaGaleria(page);
         vistaUsuario = new VistaUsuario(page);
@@ -86,12 +85,8 @@ public class CargaObraE2E {
         entoncesLaObraDeberiaHaberseCreadoCorrectamente();
     }
 
-    // ============================================================
-    // HELPERS
-    // ============================================================
-
     private void dadoQueElUsuarioIniciaSesion(String email, String clave) {
-        vistaLogin.ir();  // 🔥 AHORA SÍ navega
+        vistaLogin.ir();
         vistaLogin.escribirEMAIL(email);
         vistaLogin.escribirClave(clave);
         vistaLogin.darClickEnIniciarSesion();
@@ -154,7 +149,7 @@ public class CargaObraE2E {
 
         File imagen;
         try {
-            imagen = Paths.get(recurso.toURI()).toFile();  // ← ESTO FUNCIONA EN WINDOWS
+            imagen = Paths.get(recurso.toURI()).toFile();
         } catch (URISyntaxException e) {
             throw new RuntimeException("No se pudo cargar la imagen de prueba", e);
         }
