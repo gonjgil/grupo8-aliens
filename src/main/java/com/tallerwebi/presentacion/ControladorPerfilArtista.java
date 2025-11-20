@@ -61,15 +61,13 @@ public class ControladorPerfilArtista {
 
         try {
             PerfilArtistaDTO artista = this.servicioPerfilArtista.obtenerPerfilArtista(idArtista);
-            model.put("mostrarArtista", artista); //si la clave es "mostrarArtista" se enviará el perfil del artista
-            //  botón de editar solo se muestra si el usuario logueado es el dueño
+            model.put("mostrarArtista", artista);
             boolean esDuenio = (usuario != null && artista.getUsuarioId() != null
                     && usuario.getId().equals(artista.getUsuarioId()));
             model.put("esDuenio", esDuenio);
             return new ModelAndView("perfil_artista", model);
-            // -->Agregar lógica para saber si el usuario logueado es el dueño del perfil
-        } catch (NoExisteArtista e) { //si no lo es se lanza la excepcion
-            model.put("error", "perfil no encontrado"); //si la clave es error se envia el mensaje el artista no existe
+        } catch (NoExisteArtista e) {
+            model.put("error", "perfil no encontrado");
             return new ModelAndView("redirect:/galeria", model);
         }
 
@@ -123,7 +121,7 @@ public class ControladorPerfilArtista {
             model.put("artista", artista);
             return new ModelAndView("editar_artista", model);
         } catch (NoExisteArtista e) {
-            model.put("error", "perfil no encontrado"); //si la clave es error se envia el mensaje el artista no existe
+            model.put("error", "perfil no encontrado");
             return new ModelAndView("redirect:/galeria", model);
         }
     }
