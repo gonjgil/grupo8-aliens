@@ -86,8 +86,10 @@ public class UsuarioDto {
     public Usuario toUsuario() {
         Usuario usuario = new Usuario();
         usuario.setId(this.id);
+        usuario.setNombre(this.nombres);
         usuario.setEmail(this.email);
         usuario.setPassword(this.password);
+        usuario.setNombre(nombres);
         usuario.setRol(this.rol);
         usuario.setActivo(this.activo);
         usuario.setCategoriasFavoritas(this.categoriasFavoritas);
