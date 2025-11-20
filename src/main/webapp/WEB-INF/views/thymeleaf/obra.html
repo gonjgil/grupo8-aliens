@@ -351,6 +351,8 @@
     // Variables globales
     let formatoSeleccionado = null;
     let precioActual = 0;
+    const obraId = /*[[${obra.id}]]*/ 0;
+
 
     // Inicialización
     document.addEventListener('DOMContentLoaded', function() {
@@ -486,6 +488,10 @@
           alert('Por favor selecciona un formato antes de comprar');
           return;
         }
+
+          await fetch(`/spring/obra/${obraId}/compra-directa?formato=${formatoSeleccionado}`, {
+              method: 'POST'
+          });
 
         // Usar los datos reales de la obra con el formato seleccionado
         const items = [

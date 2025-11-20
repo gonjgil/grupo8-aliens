@@ -5,16 +5,20 @@ import com.mercadopago.exceptions.MPException;
 import com.tallerwebi.dominio.ServicioCompraHecha;
 import com.tallerwebi.dominio.entidades.*;
 import com.tallerwebi.presentacion.dto.CompraHechaDto;
+import com.tallerwebi.presentacion.dto.ItemCompraDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -166,7 +170,31 @@ public class ControladorCompraHechaTest {
 
     }
 
+    @GetMapping("/historial")
+    public ModelAndView verMisCompras(HttpSession session) {
+        ModelMap modelo = new ModelMap();
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
 
+        if (usuario == null) {
+            return new ModelAndView("redirect:/login");
+        }
+
+        List<CompraHecha> compras = servicioCompraHecha.obtenerComprasPorUsuario(usuario);
+        List<CompraHechaDto> comprasDto = new ArrayList<>();
+
+        for (CompraHecha compra : compras) {
+            List<ItemCompraDto> itemsDto = new ArrayList<>();
+            for (ItemCompra item : compra.getItems()) {
+                itemsDto.add(new ItemCompraDto(item));
+            }
+            comprasDto.add(new CompraHechaDto(compra, itemsDto));
+        }
+
+        modelo.put("compras", comprasDto.isEmpty() ? Collections.emptyList() : comprasDto);
+        modelo.put("usuario", usuario);
+
+        return new ModelAndView("compras_historial", modelo);
+    }
 
 //    @GetMapping("/error")
 //    public ModelAndView mostrarError() {
