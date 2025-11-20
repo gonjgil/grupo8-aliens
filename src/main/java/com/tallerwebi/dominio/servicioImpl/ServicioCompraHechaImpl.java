@@ -5,9 +5,7 @@ import com.mercadopago.client.payment.PaymentClient;
 import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.resources.payment.Payment;
-import com.tallerwebi.dominio.ServicioCarrito;
-import com.tallerwebi.dominio.ServicioCompraHecha;
-import com.tallerwebi.dominio.ServicioPago;
+import com.tallerwebi.dominio.*;
 import com.tallerwebi.dominio.entidades.*;
 import com.tallerwebi.dominio.enums.EstadoCarrito;
 import com.tallerwebi.dominio.enums.EstadoPago;
@@ -39,14 +37,16 @@ public class ServicioCompraHechaImpl implements ServicioCompraHecha {
     private RepositorioCarrito repositorioCarrito;
     private ServicioCarrito servicioCarrito;
     private ServicioPago servicioPago;
+    private ServicioMail servicioMail;
 
     @Autowired
-    public ServicioCompraHechaImpl(RepositorioCompraHecha repositorioOrden, RepositorioCarrito repositorioCarrito, ServicioPago servicioPago, ServicioCarrito servicioCarrito, RepositorioObra repositorioObra) {
+    public ServicioCompraHechaImpl(RepositorioCompraHecha repositorioOrden, RepositorioCarrito repositorioCarrito, ServicioPago servicioPago, ServicioCarrito servicioCarrito, RepositorioObra repositorioObra, ServicioMail servicioMail) {
         this.repositorioCompraHecha = repositorioOrden;
         this.repositorioCarrito = repositorioCarrito;
         this.servicioPago = servicioPago;
         this.servicioCarrito = servicioCarrito;
         this.repositorioObra = repositorioObra;
+        this.servicioMail = servicioMail;
     }
 
     @Override
@@ -70,7 +70,10 @@ public class ServicioCompraHechaImpl implements ServicioCompraHecha {
 
             CompraHecha guardada = repositorioCompraHecha.guardar(resumenCreado);
 
+            servicioMail.enviarMailConfirmacionCompra(carrito.getUsuario(), guardada, itemsConvertidos);
+
             servicioCarrito.finalizarCompra(carrito.getUsuario());
+
             return  guardada;
         }
 

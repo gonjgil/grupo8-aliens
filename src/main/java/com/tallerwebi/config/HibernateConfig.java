@@ -60,7 +60,7 @@ public class HibernateConfig {
         properties.setProperty("hibernate.show_sql", "true");
         properties.setProperty("hibernate.format_sql", "true");
         properties.setProperty("hibernate.hbm2ddl.auto", "create");
-        properties.setProperty("hibernate.hbm2ddl.import_files", "data.sql,artista.sql,obra.sql,formato_obra.sql,obra_categorias.sql");
+        properties.setProperty("hibernate.hbm2ddl.import_files", "artista.sql,obra.sql,formato_obra.sql,obra_categorias.sql,data.sql");
         properties.setProperty("hibernate.connection.characterEncoding", "utf8");
         properties.setProperty("hibernate.connection.CharSet", "utf8");
         properties.setProperty("hibernate.connection.useUnicode", "true");

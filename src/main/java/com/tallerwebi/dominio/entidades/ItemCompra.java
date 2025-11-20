@@ -102,4 +102,5 @@ public class ItemCompra {
     public int hashCode() {
         return Objects.hashCode(id);
     }
+
 }

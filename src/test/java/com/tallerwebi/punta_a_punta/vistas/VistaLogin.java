@@ -6,16 +6,19 @@ public class VistaLogin extends VistaWeb {
 
     public VistaLogin(Page page) {
         super(page);
-        page.navigate("localhost:8080/spring/login");
     }
 
-    public String obtenerTextoDeLaBarraDeNavegacion(){
-        return this.obtenerTextoDelElemento("nav a.navbar-brand");
+    public void ir() {
+        page.navigate("http://localhost:8080/spring/login");
     }
 
-    public String obtenerMensajeDeError(){
-        return this.obtenerTextoDelElemento("p.alert.alert-danger");
-    }
+//    public String obtenerTextoDeLaBarraDeNavegacion(){
+//        return this.obtenerTextoDelElemento("hover:text-blue-500 transition");
+//    }
+//
+//    public String obtenerMensajeDeError(){
+//        return this.obtenerTextoDelElemento("text-center text-red-600 text-sm font-medium");
+//    }
 
     public void escribirEMAIL(String email){
         this.escribirEnElElemento("#email", email);

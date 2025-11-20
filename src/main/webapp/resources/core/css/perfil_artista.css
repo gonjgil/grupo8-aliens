@@ -109,3 +109,27 @@ body {
   transform: scale(1.03);
   color: white;
 }
+
+/* Estilos para las tarjetas de obras */
+.obra-card-link {
+  display: block;
+  border-radius: 8px;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+}
+
+.obra-overlay {
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.obra-overlay h3 {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25;
+}

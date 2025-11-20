@@ -19,6 +19,10 @@ public class ServicioComentarioImpl implements ServicioComentario {
     @Autowired
     private RepositorioComentario repositorioComentario;
 
+    @Autowired
+    public ServicioComentarioImpl(RepositorioComentario repositorioComentario) {
+        this.repositorioComentario = repositorioComentario;
+    }
 
     @Override
     public void guardarComentario(Usuario usuario, Obra obra, String contenido) {

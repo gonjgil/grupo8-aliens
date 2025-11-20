@@ -1,30 +1,37 @@
 package com.tallerwebi.presentacion;
 
-import com.mercadopago.client.preference.PreferenceBackUrlsRequest;
-import com.mercadopago.client.preference.PreferenceClient;
-import com.mercadopago.client.preference.PreferenceItemRequest;
-import com.mercadopago.client.preference.PreferenceRequest;
-import com.mercadopago.resources.preference.Preference;
-import com.mercadopago.exceptions.MPException;
-import com.mercadopago.exceptions.MPApiException;
-import com.tallerwebi.dominio.ServicioCarrito;
-import com.tallerwebi.dominio.ServicioCompraHecha;
-import com.tallerwebi.dominio.entidades.Carrito;
-import com.tallerwebi.dominio.entidades.Usuario;
-import com.tallerwebi.dominio.enums.Formato;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-
-import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpSession;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.mercadopago.client.preference.PreferenceBackUrlsRequest;
+import com.mercadopago.client.preference.PreferenceClient;
+import com.mercadopago.client.preference.PreferenceItemRequest;
+import com.mercadopago.client.preference.PreferenceRequest;
+import com.mercadopago.exceptions.MPApiException;
+import com.mercadopago.exceptions.MPException;
+import com.mercadopago.resources.preference.Preference;
+import com.tallerwebi.dominio.ServicioCarrito;
+import com.tallerwebi.dominio.ServicioCompraHecha;
+import com.tallerwebi.dominio.ServicioMail;
+import com.tallerwebi.dominio.entidades.Carrito;
+import com.tallerwebi.dominio.entidades.Usuario;
+import com.tallerwebi.dominio.enums.Formato;
+import java.math.BigDecimal;
+import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/api")
@@ -37,6 +44,17 @@ public class ControladorPagos {
     @Autowired
     private ServicioCarrito servicioCarrito;
 
+    @Autowired
+    private ServicioMail servicioMail;
+
+    public ControladorPagos() {
+    }
+
+    public ControladorPagos(ServicioCompraHecha servicioCompraHecha, ServicioCarrito servicioCarrito, ServicioMail servicioMail) {
+        this.servicioCompraHecha = servicioCompraHecha;
+        this.servicioCarrito = servicioCarrito;
+        this.servicioMail = servicioMail;
+    }
 
     @PostConstruct
     public void init() {

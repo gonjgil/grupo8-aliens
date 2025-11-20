@@ -11,6 +11,8 @@ import com.tallerwebi.dominio.repositorios.RepositorioObra;
 import com.tallerwebi.dominio.servicioImpl.ServicioCompraHechaImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,6 +31,7 @@ public class ServicioCompraHechaTest {
     private RepositorioObra repositorioObra;
     private ServicioPago servicioPago;
     private ServicioCarrito servicioCarrito;
+    private ServicioMail servicioMail;
     private ServicioCompraHechaImpl servicioOrdenCompra;
 
     @BeforeEach
@@ -38,7 +41,8 @@ public class ServicioCompraHechaTest {
         this.servicioPago = mock(ServicioPago.class);
         this.servicioCarrito = mock(ServicioCarrito.class);
         this.repositorioObra = mock(RepositorioObra.class);
-        this.servicioOrdenCompra = new ServicioCompraHechaImpl(repositorioCompraHecha, repositorioCarrito,  servicioPago, servicioCarrito, repositorioObra);
+        this.servicioMail = mock(ServicioMail.class);
+        this.servicioOrdenCompra = new ServicioCompraHechaImpl(repositorioCompraHecha, repositorioCarrito,  servicioPago, servicioCarrito, repositorioObra, servicioMail);
     }
 
     @Test
@@ -81,6 +85,12 @@ public class ServicioCompraHechaTest {
         assertThat(ordenCreada.getUsuario().getEmail(), is(compraEsperada.getUsuario().getEmail()));
         assertThat(ordenCreada.getPrecioFinal(), is(compraEsperada.getPrecioFinal()));
         assertThat(ordenCreada.getPagoId(), is(compraEsperada.getPagoId()));
+        verify(servicioMail, times(1))
+                .enviarMailConfirmacionCompra(
+                        ArgumentMatchers.any(Usuario.class),
+                        ArgumentMatchers.any(CompraHecha.class),
+                        anyList()
+                );
     }
 
     @Test
