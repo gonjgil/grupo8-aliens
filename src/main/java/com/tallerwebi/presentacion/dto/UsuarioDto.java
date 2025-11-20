@@ -90,6 +90,7 @@ public class UsuarioDto {
         usuario.setPassword(this.password);
         usuario.setRol(this.rol);
         usuario.setActivo(this.activo);
+        usuario.setNombre(nombres);
         usuario.setCategoriasFavoritas(this.categoriasFavoritas);
         return usuario;
     }

@@ -25,6 +25,7 @@ public class DatabaseInitializationConfig {
         populator.addScript(new ClassPathResource("obra.sql"));
         populator.addScript(new ClassPathResource("formato_obra.sql"));
         populator.addScript(new ClassPathResource("obra_categorias.sql"));
+        populator.addScript(new ClassPathResource("setup_artistas.sql"));
 
         DataSourceInitializer initializer = new DataSourceInitializer();
         initializer.setDataSource(dataSource);
