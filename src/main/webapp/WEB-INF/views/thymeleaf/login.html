@@ -60,6 +60,7 @@
 
             <div>
                 <button
+                        id="btn-login"
                         type="submit"
                         class="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-md shadow
                            hover:bg-blue-500 transition">
@@ -75,7 +76,7 @@
 
         <p class="mt-8 text-center text-sm text-gray-600">
             ¿No tienes una cuenta?
-            <a th:href="@{/nuevo-usuario}" class="font-semibold text-blue-600 hover:text-blue-500">
+            <a th:href="@{/nuevo-usuario}" id="btn-register" class="font-semibold text-blue-600 hover:text-blue-500">
                 Regístrate
             </a>
         </p>
