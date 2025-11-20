@@ -189,9 +189,15 @@ public class ControladorUsuarioTest {
         usuario.setId(1L);
 
         List<Direccion> direcciones = new ArrayList<>();
-        Direccion d1 = new Direccion(); d1.setId(1L); d1.setPredeterminada(false);
-        Direccion d2 = new Direccion(); d2.setId(3L); d2.setPredeterminada(false);
-        Direccion d3 = new Direccion(); d3.setId(5L); d3.setPredeterminada(false);
+        Direccion d1 = new Direccion();
+        d1.setId(1L);
+        d1.setPredeterminada(false);
+        Direccion d2 = new Direccion();
+        d2.setId(3L);
+        d2.setPredeterminada(false);
+        Direccion d3 = new Direccion();
+        d3.setId(5L);
+        d3.setPredeterminada(false);
 
         direcciones.add(d1);
         direcciones.add(d2);
@@ -387,5 +393,136 @@ public class ControladorUsuarioTest {
 
         assertEquals("usuario_configuracion", mav.getViewName());
         assertEquals(usuario, mav.getModel().get("usuario"));
+    }
+
+    @Test
+    public void queCrearDireccionRedirijaALoginSiNoHayUsuario() {
+        when(session.getAttribute("usuarioLogueado")).thenReturn(null);
+
+        ModelAndView mav = controladorUsuario.crearDireccion(session);
+
+        assertEquals("redirect:/login", mav.getViewName());
+    }
+
+    @Test
+    public void queEliminarCuentaRedirijaALoginSiNoHayUsuario() {
+        when(session.getAttribute("usuarioLogueado")).thenReturn(null);
+
+        ModelAndView mav = controladorUsuario.eliminarCuenta(session);
+
+        assertEquals("redirect:/login", mav.getViewName());
+    }
+
+
+    @Test
+    public void queEliminarDireccionRedirijaALoginSiNoHayUsuario() {
+        Long idDireccion = 5L;
+        when(session.getAttribute("usuarioLogueado")).thenReturn(null);
+
+        ModelAndView mav = controladorUsuario.eliminarDireccion(idDireccion, session);
+
+        assertEquals("redirect:/login", mav.getViewName());
+    }
+
+    @Test
+    public void queAlGuardarDireccionRedirijaALoginSiNoHayUsuario() {
+
+        when(session.getAttribute("usuarioLogueado")).thenReturn(null);
+        Direccion nuevaDireccion = new Direccion();
+
+        ModelAndView mav = controladorUsuario.guardarDireccion(nuevaDireccion, session);
+
+        assertEquals("redirect:/login", mav.getViewName());
+    }
+
+    @Test
+    public void queAlMarcarDireccionComoPredeterminadaRedirijaALoginSiNoHayUsuario() {
+        Long idDireccion = 5L;
+        when(session.getAttribute("usuarioLogueado")).thenReturn(null);
+
+        ModelAndView mav = controladorUsuario.marcarComoPredeterminada(idDireccion, session);
+
+        assertEquals("redirect:/login", mav.getViewName());
+    }
+
+    @Test
+    public void queAlIntentarEditarDireccionRedirijaALoginSiNoHayUsuario() {
+        Long idDireccion = 5L;
+        when(session.getAttribute("usuarioLogueado")).thenReturn(null);
+
+        ModelAndView mav = controladorUsuario.editarDireccion(idDireccion, session);
+
+        assertEquals("redirect:/login", mav.getViewName());
+    }
+
+    @Test
+    public void queAlIntentarEditarLaDireccionRedirijaAVistaUsuarioSiNoHayDireccion() {
+
+        Long idDireccion = 99L;
+
+        Usuario usuario = new Usuario();
+        usuario.setId(1L);
+
+        HttpSession session = mock(HttpSession.class);
+        when(session.getAttribute("usuarioLogueado")).thenReturn(usuario);
+        when(servicioUsuario.buscarDireccionDelUsuario(usuario, idDireccion))
+                .thenReturn(null);
+
+        ModelAndView mav = controladorUsuario.editarDireccion(idDireccion, session);
+
+        // Assert
+        assertEquals("redirect:/usuario", mav.getViewName());
+    }
+
+    @Test
+    public void queAlIntentarCambiarPasswordRedirijaALoginSiNoHayUsuario() {
+        String passwordActual = "vieja123";
+        String nuevoPassword = "abc123";
+        String confirmarPassword = "abc123";
+        when(session.getAttribute("usuarioLogueado")).thenReturn(null);
+
+        ModelAndView mav = controladorUsuario.cambiarPassword(passwordActual,nuevoPassword, confirmarPassword, session);
+
+        assertEquals("redirect:/login", mav.getViewName());
+    }
+
+    @Test
+    public void queAlFallarElCambioDePasswordMuestreMensajeDeError() throws PasswordActualIncorrectoException, PasswordIdenticoException {
+
+        Usuario usuario = new Usuario();
+        usuario.setId(1L);
+
+        when(session.getAttribute("usuarioLogueado")).thenReturn(usuario);
+
+        // Simula excepción en el servicio
+        doThrow(new RuntimeException("Error al cambiar la contraseña"))
+                .when(servicioUsuario)
+                .cambiarPassword(usuario, "vieja", "nueva");
+
+
+        ModelAndView mav = controladorUsuario.cambiarPassword(
+                "vieja",
+                "nueva",
+                "nueva",
+                session
+        );
+
+        assertEquals("usuario_configuracion", mav.getViewName());
+        assertEquals(usuario, mav.getModel().get("usuario"));
+        assertEquals("Error al cambiar la contraseña", mav.getModel().get("error"));
+
+        verify(servicioUsuario, times(1))
+                .cambiarPassword(usuario, "vieja", "nueva");
+    }
+
+    @Test
+    public void queAlGuardarUsuarioRedirijaALoginSiNoEstaLogueado() {
+        when(session.getAttribute("usuarioLogueado")).thenReturn(null);
+
+        Usuario usuarioForm = new Usuario();
+
+        String vista = controladorUsuario.guardarUsuario(usuarioForm, session, mock(RedirectAttributes.class));
+
+        assertEquals("redirect:/login", vista);
     }
 }
